@@ -49,30 +49,8 @@
     ]
   },
   {
-    "id": "cincy",
-    "visible": false,
-    "role": "UX Designer",
-    "company": "Cincy Labs · US app studio",
-    "location": "Remote",
-    "dates": "[Dates]",
-    "type": "Contract",
-    "summary": "Designed the onboarding, login and sign-up experience for the Ruckaroo app.",
-    "highlights": []
-  },
-  {
-    "id": "gsg",
-    "visible": false,
-    "role": "Front-end Development with React — Intern",
-    "company": "Gaza Sky Geeks",
-    "location": "Ramallah, Palestine",
-    "dates": "Feb 2023 — Jun 2023",
-    "type": "Internship",
-    "summary": "Built full-stack projects with React, including a Spotify clone powered by the Spotify Web API.",
-    "highlights": []
-  },
-  {
     "id": "edtech",
-    "visible": false,
+    "visible": true,
     "role": "Artificial Intelligence Trainer",
     "company": "Palestine EdTech Hub",
     "location": "Ramallah, Palestine",
@@ -83,13 +61,35 @@
   },
   {
     "id": "pgf",
-    "visible": false,
+    "visible": true,
     "role": "Teacher Assistant & IT Coordinator",
     "company": "Paltel Group Foundation",
     "location": "Ramallah, Palestine",
     "dates": "Jul 2018 — Nov 2022",
     "type": "Part-time",
     "summary": "Mentored 80+ high-school students in programming and web development through Code for Palestine, and owned IT coordination for PGF's programs.",
+    "highlights": []
+  },
+  {
+    "id": "gsg",
+    "visible": true,
+    "role": "Front-end Development with React — Intern",
+    "company": "Gaza Sky Geeks",
+    "location": "Ramallah, Palestine",
+    "dates": "Feb 2023 — Jun 2023",
+    "type": "Internship",
+    "summary": "Built full-stack projects with React, including a Spotify clone powered by the Spotify Web API.",
+    "highlights": []
+  },
+  {
+    "id": "cincy",
+    "visible": false,
+    "role": "UX Designer",
+    "company": "Cincy Labs · US app studio",
+    "location": "Remote",
+    "dates": "[Dates]",
+    "type": "Contract",
+    "summary": "Designed the onboarding, login and sign-up experience for the Ruckaroo app.",
     "highlights": []
   }
 ]
