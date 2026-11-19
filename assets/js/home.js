@@ -402,7 +402,9 @@
       box.style.setProperty('--xp', p.toFixed(3));
     });
   }
-  fetch('data/experience.json?v=' + Date.now(), { cache: 'no-store' }).then((r) => r.json()).then(renderExperience).catch((e) => console.error(e));
+  const draftX = window.Site.previewDraft && window.Site.previewDraft();
+  if (draftX && draftX.experience) renderExperience(draftX.experience);
+  else fetch('data/experience.json?v=' + Date.now(), { cache: 'no-store' }).then((r) => r.json()).then(renderExperience).catch((e) => console.error(e));
 
   /* =============== load data =============== */
   loadProjects()

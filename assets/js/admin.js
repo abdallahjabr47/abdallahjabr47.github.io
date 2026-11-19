@@ -199,6 +199,7 @@
     show('v-edit');
     $('#ed-title').innerHTML = isNew ? 'New <em class="serif">project</em>' : `Edit <em class="serif">${esc(p.title || 'project')}</em>`;
     $('#ed-preview').href = 'project.html#' + encodeURIComponent(p.slug || '');
+    $('#ed-draft').textContent = 'Preview changes ↗';
     const r = p.responsibilities || {};
     const g = p.gallery || {};
     $('#edForm').innerHTML = `
@@ -369,6 +370,26 @@
   $('#discard').addEventListener('click', () => {
     if (!window.confirm('Discard all unpublished changes?')) return;
     projects = JSON.parse(original); experience = JSON.parse(originalExp); pending.clear(); setDirty(false); renderList();
+  });
+
+  /* ---------------- preview (nothing goes live) ---------------- */
+  function openPreview(target) {
+    collect();
+    try {
+      localStorage.setItem('pf-preview', JSON.stringify({ projects, experience, previews: Object.fromEntries(previews), ts: Date.now() }));
+    } catch (e) { toast('Preview could not be prepared — try fewer or smaller images'); return; }
+    window.open(target, '_blank');
+  }
+  $('#ed-draft').addEventListener('click', () => {
+    if (mode === 'exp') return openPreview('index.html?preview=1#experience');
+    const p = projects[editing];
+    if (p && !p.slug) p.slug = slugify(p.title);
+    openPreview('project.html?preview=1#' + encodeURIComponent((p && p.slug) || ''));
+  });
+  $('#previewHome').addEventListener('click', () => openPreview('index.html?preview=1'));
+  $('#previewBtn').addEventListener('click', () => {
+    if (editing >= 0 && mode === 'project' && projects[editing]) return $('#ed-draft').click();
+    openPreview('index.html?preview=1' + (mode === 'exp' ? '#experience' : ''));
   });
 
   /* ---------------- publish (one commit) ---------------- */

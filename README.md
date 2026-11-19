@@ -66,7 +66,8 @@ The token is stored only in your browser. Never put it in the code. If you lose 
 4. Write the story: overview, problem, responsibilities, process steps, challenges and solutions, results, and what you learned.
 
    **Empty sections are hidden automatically**, so a small project can stay short.
-5. Click **Publish to site**. Your site updates in about one minute.
+5. Click **Preview changes** (or **Preview site** on the list page) to see exactly how it will look. A yellow bar shows you're in preview mode. Nothing goes live and nobody else can see it.
+6. When you're happy, click **Publish to site**. Your site updates in about one minute.
 
 You can also reorder projects (↑ ↓), hide them without deleting them, or delete them.
 

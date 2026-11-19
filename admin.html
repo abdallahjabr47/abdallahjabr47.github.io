@@ -117,6 +117,7 @@ body::after{opacity:.04}
       <div class="r">
         <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch theme"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg></button>
         <a class="btn btn-ghost btn-sm" href="index.html" target="_blank" rel="noopener">View site <span class="arr">↗</span></a>
+        <button class="btn btn-ghost btn-sm" type="button" id="previewHome">Preview site <span class="arr">↗</span></button>
         <button class="btn btn-ghost btn-sm" type="button" id="logout">Sign out</button>
         <button class="btn btn-primary btn-sm" type="button" id="newProject">+ New project</button>
       </div>
@@ -130,7 +131,7 @@ body::after{opacity:.04}
   <section id="v-edit" class="hidden">
     <div class="adm-top">
       <div><button class="btn btn-ghost btn-sm" type="button" id="backList">← All projects</button><h1 style="margin-top:16px" id="ed-title">New project</h1></div>
-      <div class="r"><a class="btn btn-ghost btn-sm" id="ed-preview" href="#" target="_blank" rel="noopener">Preview live page <span class="arr">↗</span></a></div>
+      <div class="r"><button class="btn btn-primary btn-sm" type="button" id="ed-draft">Preview changes <span class="arr">↗</span></button><a class="btn btn-ghost btn-sm" id="ed-preview" href="#" target="_blank" rel="noopener">Open live page <span class="arr">↗</span></a></div>
     </div>
     <form class="ed" id="edForm" novalidate></form>
   </section>
@@ -139,8 +140,9 @@ body::after{opacity:.04}
 <div class="savebar hidden" id="savebar">
   <div class="in">
     <span class="msg" id="saveMsg">Unsaved changes</span>
-    <div style="display:flex;gap:10px">
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-ghost btn-sm" type="button" id="discard">Discard</button>
+      <button class="btn btn-ghost btn-sm" type="button" id="previewBtn">Preview <span class="arr">↗</span></button>
       <button class="btn btn-primary btn-sm" type="button" id="publish">Publish to site <span class="arr">↗</span></button>
     </div>
   </div>

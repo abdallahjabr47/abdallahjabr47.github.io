@@ -216,7 +216,40 @@
   }
 
   /* ---------- data ---------- */
+  /* ---------- preview mode (admin "Preview" button) ---------- */
+  const isPreview = /[?&]preview\b/.test(location.search);
+  function previewDraft() {
+    if (!isPreview) return null;
+    try {
+      const d = JSON.parse(localStorage.getItem('pf-preview') || 'null');
+      if (!d) return null;
+      const map = d.previews || {};
+      const swap = (v) => Array.isArray(v) ? v.map(swap) : (v && typeof v === 'object') ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, swap(x)])) : (typeof v === 'string' && map[v]) ? map[v] : v;
+      return { projects: swap(d.projects || []), experience: d.experience || null };
+    } catch (e) { return null; }
+  }
+  if (isPreview) {
+    const bar = document.createElement('div');
+    bar.className = 'preview-bar';
+    bar.innerHTML = '<span><b>Preview</b> — only you can see this. Nothing is live until you press Publish in the admin.</span><button type="button">Close preview</button>';
+    bar.querySelector('button').addEventListener('click', () => { location.href = location.pathname + location.hash; });
+    document.body.appendChild(bar);
+    // keep preview mode when moving between pages
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href]');
+      if (!a) return;
+      const href = a.getAttribute('href');
+      if (/^(index|project)\.html/.test(href) && !/preview/.test(href)) {
+        e.preventDefault();
+        const [p, h] = href.split('#');
+        location.href = p + '?preview=1' + (h ? '#' + h : '');
+      }
+    }, true);
+  }
+
   async function loadProjects() {
+    const draft = previewDraft();
+    if (draft) return /project\.html/.test(location.pathname) ? draft.projects : draft.projects.filter((p) => p.published !== false);
     const path = (window.SITE_CONFIG && window.SITE_CONFIG.dataPath) || 'data/projects.json';
     const res = await fetch(path + '?v=' + Date.now(), { cache: 'no-store' });
     if (!res.ok) throw new Error('Could not load ' + path);
@@ -224,6 +257,6 @@
     return list.filter((p) => p.published !== false);
   }
 
-  window.Site = { $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, reduce, fine };
+  window.Site = { $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, previewDraft, isPreview, reduce, fine };
   scan();
 })();

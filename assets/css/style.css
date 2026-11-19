@@ -830,6 +830,10 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .sig-band svg{width:min(560px,78vw);aspect-ratio:430/201;color:var(--ink);opacity:.07;transition:opacity .6s}
 .sig-band:hover svg{opacity:.14}
 
+/* ---------- preview banner ---------- */
+.preview-bar{position:fixed;left:50%;bottom:18px;z-index:150;transform:translateX(-50%);width:min(760px,calc(100% - 24px));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 14px 12px 20px;border-radius:18px;background:#F5B83D;color:#1A1204;font-size:14.5px;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+.preview-bar button{min-height:40px;padding:8px 16px;border-radius:999px;background:#1A1204;color:#fff;font-weight:700;font-size:14px}
+
 /* ---------- reduced motion ---------- */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
