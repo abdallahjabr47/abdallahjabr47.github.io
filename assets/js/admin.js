@@ -76,7 +76,7 @@
       await loadData();
     } catch (err) { msg.textContent = 'Could not sign in: ' + err.message; auth = null; }
   });
-  $('#logout').addEventListener('click', () => { if (dirty && !window.confirm('You have unpublished changes. Sign out anyway?')) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
+  $('#logout').addEventListener('click', () => { if (dirty && !window.confirm('You have unpublished changes. Lock anyway?')) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
 
   /* ---------------- load ---------------- */
   async function loadData() {
