@@ -17,7 +17,10 @@
   let tab = 'projects';     // which list is shown
   let mode = 'project';     // which editor is open
   const EXP_PATH = 'data/experience.json';
-  const changed = () => JSON.stringify(projects) !== original || JSON.stringify(experience) !== originalExp || pending.size > 0;
+  const SITE_PATH = 'data/site.json';
+  let site = {};
+  let originalSite = '{}';
+  const changed = () => JSON.stringify(projects) !== original || JSON.stringify(experience) !== originalExp || JSON.stringify(site) !== originalSite || pending.size > 0;
   let dirty = false;
 
   /* ---------------- helpers ---------------- */
@@ -93,8 +96,16 @@
       if (/Not Found/i.test(err.message)) experience = [];
       else throw err;
     }
+    try {
+      const r3 = await gh(`${repoPath()}/contents/${SITE_PATH}?ref=${encodeURIComponent(auth.branch)}`, { headers: { Accept: 'application/vnd.github.raw+json' } });
+      site = JSON.parse(await r3.text());
+    } catch (err) {
+      if (/Not Found/i.test(err.message)) site = {};
+      else throw err;
+    }
     original = JSON.stringify(projects);
     originalExp = JSON.stringify(experience);
+    originalSite = JSON.stringify(site);
     pending.clear();
     setDirty(false);
     renderList();
@@ -103,6 +114,7 @@
   /* ---------------- list ---------------- */
   function renderList() {
     editing = -1;
+    if (tab === 'profile') return openSiteEditor();
     show('v-list');
     $$('.atabs button').forEach((b) => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
@@ -245,6 +257,49 @@
       </fieldset>`;
   }
 
+  function openSiteEditor() {
+    editing = 0; mode = 'site';
+    show('v-edit');
+    $('#ed-title').innerHTML = 'Profile <em class="serif">&amp; links</em>';
+    $('#ed-preview').href = 'index.html#contact';
+    $('#ed-draft').textContent = 'Preview changes ↗';
+    $$('.atabs button').forEach((b) => { const on = b.dataset.tab === 'profile'; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
+    const cvName = site.cv ? site.cv.split('/').pop() : 'none';
+    $('#edForm').innerHTML = `
+      <fieldset><legend>Photos</legend>
+        <p class="hint">Portrait photos look best (about 4:5, at least 1000px tall). They are resized automatically. Leave empty to keep the current photo.</p>
+        <div class="g2">
+          <div><div class="f">Main photo (top of the page)</div>${imgList('photo', site.photo ? [site.photo] : [], 'wide', false, false)}</div>
+          <div><div class="f">Second photo (About section)</div>${imgList('photo2', site.photo2 ? [site.photo2] : [], 'wide', false, false)}</div>
+        </div>
+      </fieldset>
+      <fieldset><legend>Links</legend>
+        <p class="hint">Leave a link empty to hide its button on the site.</p>
+        <div class="g2">${F('Email', 'email', site.email, { type: 'email', ph: 'you@email.com' })}${F('WhatsApp number (with country code)', 'whatsapp', site.whatsapp, { ph: '970597323726' })}</div>
+        <div class="g2">${F('LinkedIn URL', 'linkedin', site.linkedin, { ph: 'https://www.linkedin.com/in/…' })}${F('Behance URL', 'behance', site.behance, { ph: 'https://www.behance.net/…' })}</div>
+        <div class="g2">${F('Dribbble URL', 'dribbble', site.dribbble, { ph: 'https://dribbble.com/…' })}${F('GitHub URL', 'github', site.github, { ph: 'https://github.com/…' })}</div>
+      </fieldset>
+      <fieldset><legend>Résumé (CV)</legend>
+        <p class="hint">Current file: <b id="cvName">${esc(cvName)}</b>. Upload a new PDF to replace it — every “View My CV” button updates.</p>
+        <label class="btn btn-ghost btn-sm" style="align-self:flex-start;cursor:pointer">Upload new CV (PDF)<input type="file" accept="application/pdf" id="cvInput" hidden></label>
+      </fieldset>`;
+    $('#cvInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 20 * 1024 * 1024) { toast('That PDF is too large (max 20 MB)'); return; }
+      const fr = new FileReader();
+      fr.onload = () => {
+        const path = 'assets/cv-' + Date.now().toString(36) + '.pdf';
+        pending.set(path, String(fr.result).split(',')[1]);
+        previews.set(path, URL.createObjectURL(file));
+        site.cv = path;
+        $('#cvName').textContent = file.name + ' (new — publish to put it live)';
+        setDirty(true);
+      };
+      fr.readAsDataURL(file);
+    });
+  }
+
   function openExpEditor(i, isNew) {
     editing = i; mode = 'exp';
     const x = experience[i];
@@ -264,6 +319,11 @@
   /* collect form -> project */
   function collect() {
     if (editing < 0) return;
+    if (mode === 'site') {
+      $$('#edForm [data-k]').forEach((el) => { site[el.dataset.k] = el.value.trim(); });
+      $$('#edForm [data-imgs]').forEach((box) => { const im = $('.im', box); site[box.dataset.imgs] = im ? im.dataset.path : ''; });
+      return;
+    }
     if (mode === 'exp') {
       const x = experience[editing];
       if (!x) return;
@@ -325,13 +385,14 @@
     const input = e.target;
     if (input.type !== 'file' || !input.files.length) return;
     const box = input.closest('[data-imgs]');
+    if (!box) return;
     const cls = box.dataset.cls, lab = box.dataset.lab === '1', multi = box.dataset.multi === '1';
     const titleEl = $('[data-k="slug"]', form);
-    const folder = slugify((titleEl && titleEl.value) || ($('[data-k="title"]', form) || {}).value || 'project');
+    const folder = mode === 'site' ? 'profile' : slugify((titleEl && titleEl.value) || ($('[data-k="title"]', form) || {}).value || 'project');
     if (!multi) $$('.im', box).forEach((x) => x.remove());
     for (const file of Array.from(input.files)) {
       try {
-        const { b64, url, ext } = await processImage(file, cls === 'sq' ? 512 : cls === 'wide' ? 2400 : 1400);
+        const { b64, url, ext } = await processImage(file, mode === 'site' ? 1400 : cls === 'sq' ? 512 : cls === 'wide' ? 2400 : 1400);
         const name = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40) || 'image';
         const path = `${CFG.imagesPath || 'assets/uploads'}/${folder}/${Date.now().toString(36)}-${name}.${ext}`;
         pending.set(path, b64); previews.set(path, url);
@@ -366,29 +427,30 @@
     });
   }
 
-  $('#backList').addEventListener('click', () => { collect(); setDirty(changed()); renderList(); });
+  $('#backList').addEventListener('click', () => { collect(); setDirty(changed()); if (mode === 'site') tab = 'projects'; renderList(); });
   $('#discard').addEventListener('click', () => {
     if (!window.confirm('Discard all unpublished changes?')) return;
-    projects = JSON.parse(original); experience = JSON.parse(originalExp); pending.clear(); setDirty(false); renderList();
+    projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); pending.clear(); setDirty(false); if (tab === 'profile') tab = 'projects'; renderList();
   });
 
   /* ---------------- preview (nothing goes live) ---------------- */
   function openPreview(target) {
     collect();
     try {
-      localStorage.setItem('pf-preview', JSON.stringify({ projects, experience, previews: Object.fromEntries(previews), ts: Date.now() }));
+      localStorage.setItem('pf-preview', JSON.stringify({ projects, experience, site, previews: Object.fromEntries(previews), ts: Date.now() }));
     } catch (e) { toast('Preview could not be prepared — try fewer or smaller images'); return; }
     window.open(target, '_blank');
   }
   $('#ed-draft').addEventListener('click', () => {
     if (mode === 'exp') return openPreview('index.html?preview=1#experience');
+    if (mode === 'site') return openPreview('index.html?preview=1');
     const p = projects[editing];
     if (p && !p.slug) p.slug = slugify(p.title);
     openPreview('project.html?preview=1#' + encodeURIComponent((p && p.slug) || ''));
   });
   $('#previewHome').addEventListener('click', () => openPreview('index.html?preview=1'));
   $('#previewBtn').addEventListener('click', () => {
-    if (editing >= 0 && mode === 'project' && projects[editing]) return $('#ed-draft').click();
+    if (editing >= 0 && (mode === 'project' || mode === 'site')) return $('#ed-draft').click();
     openPreview('index.html?preview=1' + (mode === 'exp' ? '#experience' : ''));
   });
 
@@ -406,9 +468,10 @@
     btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Publishing…';
     try {
       const json = JSON.stringify(projects, null, 2) + '\n';
-      const used = new Set(JSON.stringify(projects).match(/"[^"]+\.(?:webp|jpg|jpeg|png|svg|gif)"/g) || []);
+      const used = new Set(JSON.stringify([projects, site]).match(/"[^"]+\.(?:webp|jpg|jpeg|png|svg|gif|pdf)"/g) || []);
       const files = [];
-      if (json.trim() !== JSON.stringify(JSON.parse(original), null, 2) || pending.size) files.push({ path: CFG.dataPath || 'data/projects.json', b64: b64FromUtf8(json) });
+      if (json.trim() !== JSON.stringify(JSON.parse(original), null, 2) ) files.push({ path: CFG.dataPath || 'data/projects.json', b64: b64FromUtf8(json) });
+      if (JSON.stringify(site) !== originalSite) files.push({ path: SITE_PATH, b64: b64FromUtf8(JSON.stringify(site, null, 2) + '\n') });
       if (JSON.stringify(experience) !== originalExp) files.push({ path: EXP_PATH, b64: b64FromUtf8(JSON.stringify(experience, null, 2) + '\n') });
       if (!files.length) { msg.className = 'msg ok'; msg.textContent = 'Nothing to publish — everything is already live.'; btn.disabled = false; return; }
       pending.forEach((b64, path) => { if (used.has('"' + path + '"')) files.push({ path, b64 }); });
@@ -423,13 +486,14 @@
         tree.push({ path: files[i].path, mode: '100644', type: 'blob', sha: blob.sha });
       }
       const newTree = await (await gh(`${repoPath()}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: commit.tree.sha, tree }) })).json();
-      const cur = editing >= 0 ? (mode === 'exp' ? experience[editing] : projects[editing]) : null;
+      const cur = editing >= 0 ? (mode === 'exp' ? experience[editing] : mode === 'site' ? { title: 'profile & links' } : projects[editing]) : null;
       const label = cur ? `Update ${cur.title || cur.company}` : 'Update portfolio content';
       const newCommit = await (await gh(`${repoPath()}/git/commits`, { method: 'POST', body: JSON.stringify({ message: `${label} (via admin)`, tree: newTree.sha, parents: [baseCommit] }) })).json();
       await gh(`${repoPath()}/git/refs/heads/${encodeURIComponent(auth.branch)}`, { method: 'PATCH', body: JSON.stringify({ sha: newCommit.sha }) });
 
       original = JSON.stringify(projects);
       originalExp = JSON.stringify(experience);
+      originalSite = JSON.stringify(site);
       pending.clear();
       dirty = false;
       msg.className = 'msg ok'; msg.textContent = 'Published ✓ — your site updates in about a minute.';

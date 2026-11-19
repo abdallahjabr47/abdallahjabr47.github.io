@@ -257,6 +257,34 @@
     return list.filter((p) => p.published !== false);
   }
 
+  /* ---------- profile: photos + links from data/site.json (editable in admin → Profile) ---------- */
+  function loadImg(el, src) {
+    const im = new Image();
+    im.onload = () => { el.style.backgroundImage = 'url("' + src + '")'; el.classList.add('has-img'); };
+    im.src = src;
+  }
+  function applySite(s) {
+    if (!s) return;
+    const url = {
+      email: s.email ? 'mailto:' + s.email : '',
+      whatsapp: s.whatsapp ? 'https://wa.me/' + String(s.whatsapp).replace(/[^0-9]/g, '') : '',
+      linkedin: s.linkedin || '', behance: s.behance || '', dribbble: s.dribbble || '', github: s.github || '', cv: s.cv || ''
+    };
+    $$('[data-site-href]').forEach((a) => {
+      const v = url[a.dataset.siteHref];
+      if (v) { a.href = v; a.hidden = false; } else if (a.classList.contains('cpill')) a.hidden = true;
+    });
+    $$('[data-site-text]').forEach((el) => { const v = s[el.dataset.siteText]; if (v) el.textContent = v; });
+    $$('[data-site-img]').forEach((el) => { const v = s[el.dataset.siteImg]; if (v) loadImg(el, v); });
+  }
+  (function () {
+    if (!$('[data-site-href],[data-site-img]')) return;
+    let draft = null;
+    if (isPreview) { try { const d = JSON.parse(localStorage.getItem('pf-preview') || 'null'); if (d && d.site) { draft = d.site; const map = d.previews || {}; Object.keys(draft).forEach((k) => { if (map[draft[k]]) draft[k] = map[draft[k]]; }); } } catch (e) {} }
+    if (draft) return applySite(draft);
+    fetch('data/site.json?v=' + Date.now(), { cache: 'no-store' }).then((r) => r.ok ? r.json() : null).then(applySite).catch(() => {});
+  })();
+
   window.Site = { $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, previewDraft, isPreview, reduce, fine };
   scan();
 })();

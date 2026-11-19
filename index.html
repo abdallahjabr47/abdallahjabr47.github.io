@@ -39,7 +39,7 @@
     </nav>
     <div class="nav-right">
       <button class="theme-btn" type="button" data-theme-toggle aria-label="Switch to light mode"><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg></button>
-      <a class="btn btn-ghost btn-sm cv" href="assets/cv.pdf" target="_blank" rel="noopener">View My CV <span class="arr">↗</span></a>
+      <a class="btn btn-ghost btn-sm cv" data-site-href="cv" href="assets/cv.pdf" target="_blank" rel="noopener">View My CV <span class="arr">↗</span></a>
       <button class="burger" type="button" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
@@ -62,7 +62,7 @@
       <div class="hero-visual" data-reveal style="--d:200ms">
         <div class="portrait">
           <div class="backing" aria-hidden="true"></div>
-          <div class="arch" data-img="assets/img/profile.jpg" role="img" aria-label="Portrait of Abdallah Jabr">
+          <div class="arch" data-site-img="photo" data-img="assets/img/profile.jpg" role="img" aria-label="Portrait of Abdallah Jabr">
             <span class="ph">Add your photo:<br>assets/img/profile.jpg</span>
           </div>
           <svg class="signature" role="img" aria-label="عبدالله — Abdallah in Arabic calligraphy"><use href="#sig"/></svg>
@@ -196,7 +196,7 @@
 <section class="sec" id="about">
   <div class="container about-grid">
     <div class="photo-card" data-reveal>
-      <div class="photo" data-img="assets/img/profile-2.jpg" role="img" aria-label="Abdallah Jabr">
+      <div class="photo" data-site-img="photo2" data-img="assets/img/profile-2.jpg" role="img" aria-label="Abdallah Jabr">
         <span class="ph">Add a second photo:<br>assets/img/profile-2.jpg</span>
         <div class="name-tag"><span><b>Abdallah Jabr</b><small>Product Manager · Designer</small></span><span class="status">Ramallah</span></div>
       </div>
@@ -495,12 +495,15 @@
 <section class="container cta" id="contact">
   <span class="eyebrow" data-reveal>Let's talk</span>
   <h2 data-split>Have a product in mind? <em class="serif">Let's build it right.</em></h2>
-  <a class="cta-circle" href="https://wa.me/970597323726" target="_blank" rel="noopener" data-magnetic data-cursor="Say hi ↗"><span>Let's work<br>together ↗</span></a>
+  <a class="cta-circle" data-site-href="whatsapp" href="https://wa.me/970597323726" target="_blank" rel="noopener" data-magnetic data-cursor="Say hi ↗"><span>Let's work<br>together ↗</span></a>
   <div class="contact-pills" data-reveal>
-    <a class="cpill" href="mailto:abdallah.jabr47@gmail.com"><span class="ic" data-icon="gmail" data-fb="@"></span>abdallah.jabr47@gmail.com</a>
-    <a class="cpill" href="https://www.linkedin.com/" target="_blank" rel="noopener"><span class="ic" data-icon="linkedin" data-fb="in"></span>LinkedIn</a>
-    <a class="cpill" href="https://wa.me/970597323726" target="_blank" rel="noopener"><span class="ic" data-icon="whatsapp" data-fb="W"></span>WhatsApp</a>
-    <a class="cpill" href="assets/cv.pdf" target="_blank" rel="noopener"><span class="ic" data-icon="cv" data-fb="CV"></span>Résumé (PDF)</a>
+    <a class="cpill" data-site-href="email" href="mailto:abdallah.jabr47@gmail.com"><span class="ic" data-icon="gmail" data-fb="@"></span><span data-site-text="email">abdallah.jabr47@gmail.com</span></a>
+    <a class="cpill" data-site-href="linkedin" href="#" target="_blank" rel="noopener" hidden><span class="ic" data-icon="linkedin" data-fb="in"></span>LinkedIn</a>
+    <a class="cpill" data-site-href="whatsapp" href="https://wa.me/970597323726" target="_blank" rel="noopener"><span class="ic" data-icon="whatsapp" data-fb="W"></span>WhatsApp</a>
+    <a class="cpill" data-site-href="behance" href="#" target="_blank" rel="noopener" hidden><span class="ic" data-icon="behance" data-fb="Bē"></span>Behance</a>
+    <a class="cpill" data-site-href="dribbble" href="#" target="_blank" rel="noopener" hidden><span class="ic" data-icon="dribbble" data-fb="D"></span>Dribbble</a>
+    <a class="cpill" data-site-href="github" href="#" target="_blank" rel="noopener" hidden><span class="ic" data-icon="github" data-fb="G"></span>GitHub</a>
+    <a class="cpill" data-site-href="cv" href="assets/cv.pdf" target="_blank" rel="noopener"><span class="ic" data-icon="cv" data-fb="CV"></span>Résumé (PDF)</a>
   </div>
 </section>
 </main>

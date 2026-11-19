@@ -82,6 +82,16 @@ Roles that are currently hidden:
 - Palestine EdTech Hub
 - Paltel Group Foundation
 
+## Photos, CV and links
+
+Admin → **Profile & links** tab:
+
+- **Main photo** (top of the home page) and **Second photo** (About section). Portrait, about 4:5. Leave empty to keep the current photo.
+- **Links**: email, WhatsApp number (with country code, digits only), LinkedIn, Behance, Dribbble, GitHub. An empty link hides its button on the site.
+- **Résumé (CV)**: upload a PDF; every “View My CV” button points to the new file.
+
+Click **Preview changes** to check, then **Publish to site**. Everything is saved in `data/site.json`.
+
 ## Colours and fonts
 
 The colour palette lives at the top of `assets/css/style.css` (`:root` for dark mode, `[data-theme="light"]` for light mode). Change a colour there and it updates across the whole site.
