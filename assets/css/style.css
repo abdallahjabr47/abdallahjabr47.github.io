@@ -840,3 +840,13 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
   .js [data-split] .c,.js [data-reveal]{transform:none;opacity:1}
   .js .words .wd{opacity:1}
 }
+
+/* ---------- logo: عبدالله calligraphy + AJ, single colour ---------- */
+.logo{display:inline-flex;align-items:center;gap:12px;color:var(--ink);line-height:1}
+.logo-ar{height:36px;width:auto;display:block;overflow:visible;transform:translateY(2px);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.logo-bar{width:1px;height:26px;background:currentColor;opacity:.35;transform:rotate(14deg)}
+.logo-en{position:relative;font-weight:300;font-size:19px;letter-spacing:.22em;padding-right:2px}
+.logo-en i{position:absolute;right:-6px;top:1px;width:4px;height:4px;border-radius:50%;background:currentColor}
+.brand:hover .logo-ar{transform:translateY(2px) scale(1.04) rotate(-3deg)}
+.brand-sub{font-size:13px;font-weight:600;color:var(--muted);padding:4px 10px;border:1px solid var(--line);border-radius:999px}
+@media (max-width:720px){.logo-ar{height:30px}.logo-en{font-size:16px}.logo{gap:10px}}
