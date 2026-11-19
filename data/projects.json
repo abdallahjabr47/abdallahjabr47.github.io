@@ -1,0 +1,479 @@
+[
+  {
+    "slug": "redz",
+    "title": "Redz",
+    "headline": "From content",
+    "headlineAccent": "to series.",
+    "tagline": "A series-based content app",
+    "category": "Entertainment · Content",
+    "platform": "Mobile App",
+    "type": "mobile",
+    "year": "2024 — Now",
+    "live": true,
+    "liveUrl": "",
+    "status": "Live",
+    "published": true,
+    "summary": "A content app that grew into a series-based platform. I shipped Series, Anonymous, an in-app Wallet, and Verification and Premium subscriptions.",
+    "cover": {
+      "image": "",
+      "ghost": "REDZ",
+      "tint": "#2A1530"
+    },
+    "company": "Homyt Creative Solutions",
+    "role": "Product Manager · Product Owner · UI/UX Designer",
+    "team": "[e.g. 4 developers, 2 designers, 1 QA]",
+    "timeline": "[Start — End]",
+    "platforms": "[iOS · Android]",
+    "tags": [
+      "Product strategy",
+      "UX/UI",
+      "Mobile"
+    ],
+    "overview": "Redz started as a content app and grew into a series-based platform. As the single product decision-maker, I took its core features from concept to release: Series (solo and collaborative videos), Anonymous, an in-app Wallet, and the Redz Verification and Premium subscriptions. [Add 1–2 sentences on who Redz is for and why the move to series mattered.]",
+    "problem": "How might we turn one-off content views into a habit people return to, episode after episode?",
+    "responsibilities": {
+      "product": [
+        "Owned product strategy, requirements and roadmap end to end",
+        "Wrote user stories and acceptance criteria in Jira",
+        "Ran usability tests and A/B experiments",
+        "Led sprint planning, stand-ups, reviews and retros"
+      ],
+      "design": [
+        "Designed end-to-end flows, wireframes and high-fidelity prototypes",
+        "Defined information architecture and interaction patterns for core features",
+        "Built and maintained the shared design system",
+        "Trained and supervised designers on the team"
+      ]
+    },
+    "process": [
+      {
+        "title": "Discover",
+        "desc": "[Interviews, analytics review and a competitor scan of streaming apps.]"
+      },
+      {
+        "title": "Define",
+        "desc": "[New product vision, success metrics and a phased roadmap for series.]"
+      },
+      {
+        "title": "Design",
+        "desc": "[Flows, wireframes, then final UI on a shared design system.]"
+      },
+      {
+        "title": "Deliver",
+        "desc": "[Sprints, user stories and QA together with the developers.]"
+      },
+      {
+        "title": "Measure",
+        "desc": "[What you tracked after launch and what changed next.]"
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "[e.g. Existing users were used to a mixed feed of short content.]",
+        "solution": "[e.g. Introduced series gradually, with a “Continue watching” row at the top.]"
+      },
+      {
+        "challenge": "[e.g. Episodes were hard to find and follow in order.]",
+        "solution": "[e.g. Designed a series page with seasons, progress and next-episode autoplay.]"
+      },
+      {
+        "challenge": "[e.g. The team had to ship the pivot without pausing releases.]",
+        "solution": "[e.g. Split the roadmap into phased releases with clear acceptance criteria.]"
+      }
+    ],
+    "gallery": {
+      "before": [
+        {
+          "label": "Home feed",
+          "image": ""
+        },
+        {
+          "label": "Content card",
+          "image": ""
+        },
+        {
+          "label": "Player",
+          "image": ""
+        },
+        {
+          "label": "Search",
+          "image": ""
+        }
+      ],
+      "after": [
+        {
+          "label": "Home — series rows",
+          "image": ""
+        },
+        {
+          "label": "Series page",
+          "image": ""
+        },
+        {
+          "label": "Episode player",
+          "image": ""
+        },
+        {
+          "label": "Continue watching",
+          "image": ""
+        },
+        {
+          "label": "Search & discover",
+          "image": ""
+        },
+        {
+          "label": "Profile & library",
+          "image": ""
+        }
+      ]
+    },
+    "results": [
+      {
+        "value": "+X%",
+        "label": "[Episodes watched per user]"
+      },
+      {
+        "value": "X%",
+        "label": "[Returning users after 7 days]"
+      },
+      {
+        "value": "XK",
+        "label": "[Downloads or active users]"
+      }
+    ],
+    "learnings": "[One or two honest lessons — what you would do differently, and what you will carry into the next product.]",
+    "icon": "",
+    "screens": [],
+    "webScreens": []
+  },
+  {
+    "slug": "momyt-meet",
+    "title": "Momyt Meet",
+    "headline": "Meet people,",
+    "headlineAccent": "in real life.",
+    "tagline": "Meetups and finding new friends",
+    "category": "Social · Meetups",
+    "platform": "Mobile App",
+    "type": "mobile",
+    "year": "2024 — Now",
+    "live": true,
+    "liveUrl": "",
+    "status": "Live",
+    "published": true,
+    "summary": "A social app for meetups and new friends. I defined the end-to-end meetup flow — create, invite, join, coordinate — and the Find feature for people nearby.",
+    "cover": {
+      "image": "",
+      "ghost": "MOMYT",
+      "tint": "#14254A"
+    },
+    "company": "Homyt Creative Solutions",
+    "role": "Product Manager · Product Owner · UI/UX Designer",
+    "team": "[Team]",
+    "timeline": "[Start — End]",
+    "platforms": "[iOS · Android]",
+    "tags": [
+      "Product",
+      "UX/UI",
+      "Mobile"
+    ],
+    "overview": "Momyt Meet helps people organise meetups and find new friends. I defined and launched the end-to-end meetup flow — create, invite, join and coordinate activities — and the Find feature, which connects users with people nearby or in a location they choose. [Add who it's for and what the business needed.]",
+    "problem": "[e.g. How might we make meeting new people feel easy and safe?]",
+    "responsibilities": {
+      "product": [
+        "Defined requirements and roadmap as the single product decision-maker",
+        "Owned the backlog, user stories and acceptance criteria",
+        "Prioritised improvements from user feedback and analytics"
+      ],
+      "design": [
+        "Designed the meetup and Find flows end to end",
+        "Kept the app consistent through the shared design system"
+      ]
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": [
+        {
+          "label": "[Screen]",
+          "image": ""
+        },
+        {
+          "label": "[Screen]",
+          "image": ""
+        },
+        {
+          "label": "[Screen]",
+          "image": ""
+        }
+      ]
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": []
+  },
+  {
+    "slug": "foras",
+    "title": "Foras.ps",
+    "headline": "Rebuilding",
+    "headlineAccent": "Foras.ps",
+    "tagline": "Platform redesign and design system",
+    "category": "Platform · Web",
+    "platform": "Website",
+    "type": "web",
+    "year": "2023 — 2024",
+    "live": true,
+    "liveUrl": "",
+    "status": "Live website",
+    "published": true,
+    "summary": "Led the full redesign and rebuild of the Foras.ps platform — new sitemap, information architecture and a design system built from scratch.",
+    "cover": {
+      "image": "",
+      "ghost": "FORAS",
+      "tint": "#123A5A"
+    },
+    "company": "Foras Palestine",
+    "role": "UI/UX Designer",
+    "team": "[Team]",
+    "timeline": "Sep 2023 — Mar 2024",
+    "platforms": "Web",
+    "tags": [
+      "Redesign",
+      "Information architecture",
+      "Design system"
+    ],
+    "overview": "I led the full redesign, revamp and rebuild of the existing Foras.ps platform, from requirements to sign-off — presenting decisions to stakeholders and iterating on feedback and usability testing.",
+    "problem": "[e.g. How might we make the whole platform easier to navigate and faster to extend?]",
+    "responsibilities": {
+      "product": [
+        "Gathered and analysed requirements with stakeholders"
+      ],
+      "design": [
+        "Ran user research and competitor analysis",
+        "Created a new sitemap and information architecture for the entire platform",
+        "Built the Foras design system from scratch — components, styles and guidelines"
+      ]
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": []
+  },
+  {
+    "slug": "ruckaroo",
+    "title": "Ruckaroo",
+    "headline": "Onboarding that",
+    "headlineAccent": "gets out of the way.",
+    "tagline": "Login and sign-up flows designed to take new users from download to first value, fast.",
+    "category": "Onboarding UX · Cincy Labs (US)",
+    "platform": "Mobile App",
+    "type": "mobile",
+    "year": "[Year]",
+    "live": false,
+    "liveUrl": "",
+    "status": "Shipped for Cincy Labs",
+    "published": true,
+    "summary": "Onboarding, login and sign-up flows for a US app studio — designed to get new users from download to first value as fast as possible.",
+    "cover": {
+      "image": "",
+      "ghost": "RUCKAROO",
+      "tint": "#1D3A33"
+    },
+    "company": "Cincy Labs",
+    "role": "UX Designer",
+    "team": "[Team]",
+    "timeline": "[Start — End]",
+    "platforms": "[iOS · Android]",
+    "tags": [
+      "UX/UI",
+      "Mobile",
+      "Onboarding"
+    ],
+    "overview": "Cincy Labs, a US app studio, brought me in to design the onboarding, login and sign-up experience for the Ruckaroo app. [Add what Ruckaroo does and what the studio needed.]",
+    "problem": "[e.g. How might we get new users signed up without losing them on the way?]",
+    "responsibilities": {
+      "product": [],
+      "design": [
+        "Onboarding flow",
+        "Login and sign-up screens",
+        "[More]"
+      ]
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": [
+        {
+          "label": "Welcome",
+          "image": ""
+        },
+        {
+          "label": "Sign up",
+          "image": ""
+        },
+        {
+          "label": "Log in",
+          "image": ""
+        }
+      ]
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": []
+  },
+  {
+    "slug": "mazadak",
+    "title": "Mazadak",
+    "headline": "Mazadak",
+    "headlineAccent": "مزادك",
+    "tagline": "[One line about the auction experience.]",
+    "category": "Marketplace · Auctions",
+    "platform": "Mobile App",
+    "type": "mobile",
+    "year": "[Year]",
+    "live": false,
+    "liveUrl": "",
+    "status": "[Status]",
+    "published": true,
+    "summary": "An auction app: [one line on the bidding experience and the trust problems you solved].",
+    "cover": {
+      "image": "",
+      "ghost": "MAZADAK",
+      "tint": "#3A2814"
+    },
+    "company": "[Client]",
+    "role": "[Your role]",
+    "team": "[Team]",
+    "timeline": "[Start — End]",
+    "platforms": "[Platforms]",
+    "tags": [
+      "Product",
+      "UX/UI",
+      "Mobile"
+    ],
+    "overview": "[Overview]",
+    "problem": "",
+    "responsibilities": {
+      "product": [],
+      "design": []
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": []
+  },
+  {
+    "slug": "afyti",
+    "title": "Afyti",
+    "headline": "Afyti",
+    "headlineAccent": "for doctors.",
+    "tagline": "[One line about the product.]",
+    "category": "Healthcare · Doctors app",
+    "platform": "Mobile App",
+    "type": "mobile",
+    "year": "[Year]",
+    "live": false,
+    "liveUrl": "",
+    "status": "[Status]",
+    "published": true,
+    "summary": "A doctors app with its own design system: [one line on who it serves and what you designed].",
+    "cover": {
+      "image": "",
+      "ghost": "AFYTI",
+      "tint": "#10343F"
+    },
+    "company": "[Client]",
+    "role": "UI/UX Designer",
+    "team": "[Team]",
+    "timeline": "[Start — End]",
+    "platforms": "[Platforms]",
+    "tags": [
+      "UX/UI",
+      "Mobile",
+      "Design system"
+    ],
+    "overview": "[Overview]",
+    "problem": "",
+    "responsibilities": {
+      "product": [],
+      "design": []
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": []
+  },
+  {
+    "slug": "sip-cafe",
+    "title": "SIP Café",
+    "headline": "SIP",
+    "headlineAccent": "Café.",
+    "tagline": "[One line about the website.]",
+    "category": "Website · Food & drink",
+    "platform": "Website",
+    "type": "web",
+    "year": "[Year]",
+    "live": true,
+    "liveUrl": "",
+    "status": "Live website",
+    "published": true,
+    "summary": "A website for a specialty café: [one line on the goal of the site and the result].",
+    "cover": {
+      "image": "",
+      "ghost": "SIP",
+      "tint": "#2E1F18"
+    },
+    "company": "[Client]",
+    "role": "UI/UX Designer",
+    "team": "[Team]",
+    "timeline": "[Start — End]",
+    "platforms": "Web",
+    "tags": [
+      "UX/UI",
+      "Web"
+    ],
+    "overview": "[Overview]",
+    "problem": "",
+    "responsibilities": {
+      "product": [],
+      "design": []
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": []
+  }
+]

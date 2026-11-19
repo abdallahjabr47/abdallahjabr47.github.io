@@ -1,0 +1,229 @@
+/* Shared behaviour for every page: cursor, progress bar, nav, reveals, split text, counters, clock, toast */
+(function () {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(pointer: fine)').matches;
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  /* ---------- one rAF-throttled scroll/resize loop ---------- */
+  const scrollFns = [];
+  let ticking = false;
+  function runScroll() { ticking = false; scrollFns.forEach((f) => { try { f(); } catch (e) { console.error(e); } }); }
+  function requestTick() { if (!ticking) { ticking = true; requestAnimationFrame(runScroll); } }
+  addEventListener('scroll', requestTick, { passive: true });
+  addEventListener('resize', requestTick);
+  const onScroll = (fn) => { scrollFns.push(fn); requestTick(); };
+
+  /* ---------- split text into letters ---------- */
+  function splitText(el) {
+    if (el.dataset.splitDone) return;
+    el.dataset.splitDone = '1';
+    el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+    let i = 0;
+    const walk = (node) => {
+      Array.from(node.childNodes).forEach((n) => {
+        if (n.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+            const w = document.createElement('span');
+            w.className = 'w'; w.setAttribute('aria-hidden', 'true');
+            Array.from(part).forEach((ch) => {
+              const c = document.createElement('span');
+              c.className = 'c'; c.textContent = ch; c.style.setProperty('--i', i++);
+              w.appendChild(c);
+            });
+            frag.appendChild(w);
+          });
+          n.replaceWith(frag);
+        } else if (n.nodeType === 1) walk(n);
+      });
+    };
+    walk(el);
+  }
+
+  /* ---------- count-up ---------- */
+  function countUp(el) {
+    const end = parseFloat(el.dataset.count);
+    if (isNaN(end)) return;
+    if (reduce) { el.textContent = end; return; }
+    const dur = 1400, t0 = performance.now();
+    const step = (t) => {
+      const p = clamp((t - t0) / dur);
+      el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  /* ---------- reveal observer ---------- */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      el.classList.add('in');
+      if (el.dataset.count != null) countUp(el);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -6% 0px' });
+
+  function scan(root = document) {
+    $$('[data-split]', root).forEach((el) => { splitText(el); io.observe(el); });
+    $$('[data-reveal], [data-count]', root).forEach((el) => io.observe(el));
+    $$('[data-loop]', root).forEach((track) => {
+      if (track.dataset.looped) return;
+      track.dataset.looped = '1';
+      Array.from(track.children).forEach((c) => { const k = c.cloneNode(true); k.setAttribute('aria-hidden', 'true'); track.appendChild(k); });
+    });
+    $$('[data-icon]', root).forEach((el) => {
+      if (el.dataset.iconDone) return;
+      el.dataset.iconDone = '1';
+      const ic = (window.ICONS || {})[el.dataset.icon];
+      if (!ic) { el.textContent = el.dataset.fb || ''; return; }
+      el.classList.add('has-logo');
+      el.style.color = ic.c === 'ink' ? 'var(--ink)' : ic.c;
+      el.innerHTML = `<svg viewBox="${ic.vb}" fill="currentColor" aria-hidden="true">${ic.p}</svg>`;
+    });
+    $$('[data-img]', root).forEach((el) => {
+      if (el.dataset.imgDone) return;
+      el.dataset.imgDone = '1';
+      const src = el.dataset.img, im = new Image();
+      im.onload = () => { el.style.backgroundImage = 'url("' + src + '")'; el.classList.add('has-img'); };
+      im.src = src;
+    });
+    if (fine) {
+      $$('[data-glow]', root).forEach((el) => {
+        if (el.dataset.glowDone) return;
+        el.dataset.glowDone = '1';
+        el.addEventListener('pointermove', (ev) => {
+          const r = el.getBoundingClientRect();
+          el.style.setProperty('--mx', ev.clientX - r.left + 'px');
+          el.style.setProperty('--my', ev.clientY - r.top + 'px');
+        });
+      });
+      $$('[data-magnetic]', root).forEach((el) => {
+        if (el.dataset.magDone || reduce) return;
+        el.dataset.magDone = '1';
+        el.addEventListener('pointermove', (ev) => {
+          const r = el.getBoundingClientRect();
+          const x = ev.clientX - r.left - r.width / 2, y = ev.clientY - r.top - r.height / 2;
+          el.style.transform = `translate(${x * 0.22}px, ${y * 0.3}px)`;
+        });
+        el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+      });
+    }
+  }
+
+  /* ---------- progress bar + nav state ---------- */
+  const bar = $('.progress');
+  const nav = $('#nav');
+  onScroll(() => {
+    const h = document.documentElement.scrollHeight - innerHeight;
+    if (bar) bar.style.transform = `scaleX(${h > 0 ? clamp(scrollY / h) : 0})`;
+    if (nav) nav.classList.toggle('scrolled', scrollY > 30);
+  });
+
+  /* ---------- mobile menu ---------- */
+  const burger = $('.burger');
+  if (burger) {
+    burger.addEventListener('click', () => {
+      const open = !document.body.classList.contains('menu-open');
+      document.body.classList.toggle('menu-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+    $$('.nav-links a').forEach((a) => a.addEventListener('click', () => {
+      document.body.classList.remove('menu-open');
+      burger.setAttribute('aria-expanded', 'false');
+    }));
+  }
+
+  /* ---------- active nav link ---------- */
+  const links = $$('.nav-links a[href^="#"]');
+  if (links.length) {
+    const map = new Map();
+    links.forEach((a) => { const s = $(a.getAttribute('href')); if (s) map.set(s, a); });
+    const navIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const a = map.get(e.target);
+        if (a && e.isIntersecting) { links.forEach((l) => l.classList.remove('active')); a.classList.add('active'); }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    map.forEach((_, s) => navIO.observe(s));
+  }
+
+  /* ---------- custom cursor ---------- */
+  const ring = $('.cursor-ring'), dot = $('.cursor-dot');
+  if (fine && ring && dot) {
+    let mx = -100, my = -100, rx = -100, ry = -100, shown = false;
+    addEventListener('pointermove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+      if (!shown) { shown = true; document.documentElement.classList.add('has-cursor'); rx = mx; ry = my; }
+    }, { passive: true });
+    document.addEventListener('pointerleave', () => { document.documentElement.classList.remove('has-cursor'); shown = false; });
+    addEventListener('pointerdown', () => ring.classList.add('down'));
+    addEventListener('pointerup', () => ring.classList.remove('down'));
+    document.addEventListener('pointerover', (e) => {
+      const t = e.target.closest('[data-cursor], a, button, input, label, [role="switch"]');
+      const v = t && t.closest('[data-cursor]');
+      const btnInside = t && v && t !== v && t.closest('button, a') && v.contains(t.closest('button, a'));
+      ring.classList.remove('hover', 'view');
+      document.documentElement.classList.remove('has-view');
+      ring.textContent = '';
+      if (!t) return;
+      if (v && !btnInside) { ring.classList.add('view'); ring.textContent = v.dataset.cursor; document.documentElement.classList.add('has-view'); }
+      else ring.classList.add('hover');
+    });
+    const loop = () => {
+      rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
+      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)` + (ring.classList.contains('down') ? ' scale(.92)' : '');
+      requestAnimationFrame(loop);
+    };
+    loop();
+  }
+
+  /* ---------- theme ---------- */
+  function setTheme(t) {
+    document.documentElement.dataset.theme = t;
+    try { localStorage.setItem('theme', t); } catch (e) {}
+    $$('[data-theme-toggle]').forEach((b) => b.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'));
+    $$('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', t === 'dark' ? '#07080B' : '#F4F5F7'));
+  }
+  $$('[data-theme-toggle]').forEach((b) => b.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark')));
+  setTheme(document.documentElement.dataset.theme || 'dark');
+
+  /* ---------- clock + year ---------- */
+  function tick() {
+    let t = '';
+    try { t = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Hebron' }); }
+    catch (e) { t = new Date().toTimeString().slice(0, 5); }
+    $$('[data-clock]').forEach((el) => { el.textContent = t; });
+  }
+  tick(); setInterval(tick, 15000);
+  $$('[data-year]').forEach((el) => { el.textContent = new Date().getFullYear(); });
+
+  /* ---------- toast ---------- */
+  let toastT;
+  function toast(msg) {
+    const t = $('.g-toast');
+    if (!t) return;
+    t.textContent = msg; t.classList.add('show');
+    clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 1800);
+  }
+
+  /* ---------- data ---------- */
+  async function loadProjects() {
+    const path = (window.SITE_CONFIG && window.SITE_CONFIG.dataPath) || 'data/projects.json';
+    const res = await fetch(path + '?v=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('Could not load ' + path);
+    const list = await res.json();
+    return list.filter((p) => p.published !== false);
+  }
+
+  window.Site = { $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, reduce, fine };
+  scan();
+})();

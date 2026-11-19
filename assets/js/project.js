@@ -1,0 +1,203 @@
+/* Case study page — renders one project from data/projects.json, chosen by the #slug in the address */
+(function () {
+  const { $, $$, clamp, esc, scan, onScroll, loadProjects, reduce } = window.Site;
+  const main = $('#case');
+  let projects = [];
+
+  const has = (v) => Array.isArray(v) ? v.filter(Boolean).length > 0 : !!(v && String(v).trim());
+  const getSlug = () => {
+    const h = decodeURIComponent(location.hash.replace(/^#/, ''));
+    if (h) return h;
+    return new URLSearchParams(location.search).get('p') || '';
+  };
+  const mockScreen = (tint) => `<div class="mock" style="--tint:${tint}"><div class="mh"><b>&nbsp;</b><i></i></div><div class="mhero"><s style="width:40%"></s><s style="width:70%"></s></div><span class="ln" style="width:45%"></span><div class="row"><i></i><i></i><i></i></div><div class="btn-m"></div></div>`;
+
+  function render(p, idx) {
+    const tint = (p.cover && p.cover.tint) || '#2B3A8F';
+    const type = p.type || 'mobile';
+    document.title = `${p.title} — Case study · Abdallah Jabr`;
+    const sections = [];
+    const toc = [];
+    const add = (id, label, html) => { toc.push([id, label]); sections.push(`<section class="cs-sec" id="${id}">${html}</section>`); };
+
+    if (has(p.overview) || has(p.problem)) {
+      add('overview', 'Overview', `
+        <span class="k" data-reveal>01 · OVERVIEW</span>
+        <h2 class="h-md" data-split>The <em class="serif">story</em></h2>
+        ${has(p.overview) ? `<p class="cs-lead" data-reveal>${esc(p.overview)}</p>` : ''}
+        ${has(p.problem) ? `<div class="quote glass" data-reveal><small>THE PROBLEM</small><p>${esc(p.problem)}</p></div>` : ''}`);
+    }
+    const resp = p.responsibilities || {};
+    if (has(resp.product) || has(resp.design) || has(p.role)) {
+      const cards = [];
+      if (has(resp.product)) cards.push(`<div class="role glass" data-glow data-reveal><span class="ico" style="background:rgba(77,163,255,.14);color:var(--sky)">◎</span><h3>Product · PM / PO</h3><ul>${resp.product.filter(Boolean).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`);
+      if (has(resp.design)) cards.push(`<div class="role glass" data-glow data-reveal style="--d:120ms"><span class="ico" style="background:rgba(88,64,255,.18);color:#8B7CFF">✦</span><h3>Design · UI/UX</h3><ul>${resp.design.filter(Boolean).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`);
+      add('role', 'My role', `
+        <span class="k" data-reveal>02 · MY ROLE</span>
+        <h2 class="h-md" data-split>What I <em class="serif">owned</em></h2>
+        ${has(p.role) ? `<p class="cs-text" data-reveal>${esc(p.role)}</p>` : ''}
+        ${cards.length ? `<div class="roles">${cards.join('')}</div>` : ''}`);
+    }
+    if (has(p.process)) {
+      add('process', 'Process', `
+        <span class="k" data-reveal>03 · PROCESS</span>
+        <h2 class="h-md" data-split>How it <em class="serif">came together</em></h2>
+        <div class="timeline">${p.process.map((s, i) => `<div class="tl glass" data-reveal style="--d:${i * 90}ms"><span class="n">${String(i + 1).padStart(2, '0')}</span><h3>${esc(s.title)}</h3><p>${esc(s.desc)}</p></div>`).join('')}</div>`);
+    }
+    if (has(p.challenges)) {
+      add('challenges', 'Challenges', `
+        <span class="k" data-reveal>04 · CHALLENGES</span>
+        <h2 class="h-md" data-split>Problems <em class="serif">&amp; solutions</em></h2>
+        ${p.challenges.map((c, i) => `<div class="chal glass" data-reveal><div><small style="color:var(--red)">CHALLENGE ${String(i + 1).padStart(2, '0')}</small><p>${esc(c.challenge)}</p></div><div><small style="color:var(--green)">SOLUTION</small><p style="color:var(--ink2)">${esc(c.solution)}</p></div></div>`).join('')}`);
+    }
+    const gal = p.gallery || {};
+    const before = (gal.before || []).filter((g) => g && (g.label || g.image));
+    const after = (gal.after || []).filter((g) => g && (g.label || g.image));
+    if (before.length || after.length) {
+      const tabs = before.length && after.length
+        ? `<div class="tabs glass" role="group" aria-label="Compare versions"><span class="thumb"></span><button type="button" data-g="before">Before</button><button type="button" class="on" data-g="after">After</button></div>` : '';
+      add('designs', 'Designs', `
+        <div class="gal-head"><div style="display:flex;flex-direction:column;gap:16px"><span class="k" data-reveal>05 · DESIGNS</span><h2 class="h-md" data-split>The <em class="serif">screens</em></h2></div>${tabs}</div>
+        <div class="gallery" id="gallery"></div>`);
+    }
+    if (has(p.results) || has(p.learnings)) {
+      add('results', 'Results', `
+        <span class="k" data-reveal>06 · RESULTS</span>
+        <h2 class="h-md" data-split>The <em class="serif">impact</em></h2>
+        ${has(p.results) ? `<div class="results">${p.results.map((r, i) => `<div class="res glass" data-reveal style="--d:${i * 100}ms"><b>${esc(r.value)}</b><span>${esc(r.label)}</span></div>`).join('')}</div>` : ''}
+        ${has(p.learnings) ? `<div class="quote glass" data-reveal><small>WHAT I LEARNED</small><p style="font-weight:500;color:var(--ink2)">${esc(p.learnings)}</p></div>` : ''}`);
+    }
+
+    const next = projects[(idx + 1) % projects.length];
+    const shots = (p.screens && p.screens.length) ? p.screens : [];
+    const coverInner = p.cover && p.cover.image
+      ? `<img src="${esc(p.cover.image)}" alt="${esc(p.title)} cover">`
+      : `<span class="ghost" aria-hidden="true">${esc((p.cover && p.cover.ghost) || p.title.toUpperCase())}</span>
+         <div class="devices" style="gap:28px">
+           ${type !== 'mobile' ? `<div class="dev-desk">${p.webScreens && p.webScreens[0] ? `<img src="${esc(p.webScreens[0])}" alt="" style="width:100%;height:100%;object-fit:cover">` : 'Website'}</div>` : ''}
+           ${type !== 'web' ? [0, 1, 2].map((k) => `<div class="dev-phone" style="${k !== 1 ? 'transform:translateY(-26px);opacity:.75' : 'border-color:var(--sky)'};overflow:hidden">${shots[k] ? `<img src="${esc(shots[k])}" alt="" style="width:100%;height:100%;object-fit:cover">` : mockScreen(tint)}</div>`).join('') : ''}
+         </div>`;
+
+    const snap = [['My role', p.role], ['Company', p.company], ['Team', p.team], ['Timeline', p.timeline], ['Platform', p.platforms]].filter(([, v]) => has(v));
+
+    main.innerHTML = `
+      <section class="container cs-hero">
+        <span class="eyebrow" data-reveal>Case study ${String(idx + 1).padStart(2, '0')} · ${esc(p.category || '')}</span>
+        <h1 class="h-xl" data-split>${esc(p.headline || p.title)} ${has(p.headlineAccent) ? `<em class="serif">${esc(p.headlineAccent)}</em>` : ''}</h1>
+        ${has(p.tagline) ? `<p class="tagline" data-reveal style="--d:250ms">${esc(p.tagline)}</p>` : ''}
+        <div class="cs-meta" data-reveal style="--d:350ms">
+          ${(p.tags || []).map((t) => `<span class="pill">${esc(t)}</span>`).join('')}
+          ${p.status ? `<span class="status-pill${p.live ? ' live' : ''}">${esc(p.status)}</span>` : ''}
+          ${has(p.liveUrl) ? `<a class="btn btn-primary btn-sm" href="${esc(p.liveUrl)}" target="_blank" rel="noopener">Visit live <span class="arr">↗</span></a>` : ''}
+        </div>
+      </section>
+      <section class="container">
+        <div class="cs-cover" data-reveal style="background:radial-gradient(120% 90% at 50% 120%,${esc(tint)},transparent 65%),var(--panel)">
+          <div class="inner">${coverInner}</div>
+        </div>
+        ${snap.length ? `<div class="snap glass" data-reveal>${snap.map(([k, v]) => `<div><small>${k}</small><b>${esc(v)}</b></div>`).join('')}</div>` : ''}
+      </section>
+      <div class="container cs-body">
+        ${toc.length ? `<nav class="toc" aria-label="On this page">${toc.map(([id, l]) => `<a href="#${id}" data-toc="${id}">${l}</a>`).join('')}</nav>` : ''}
+        <div class="cs-content">${sections.join('') || '<p class="cs-text">Details for this case study are coming soon.</p>'}</div>
+      </div>
+      ${next && next.slug !== p.slug ? `
+      <section class="container" style="padding-bottom:120px">
+        <a class="next glass" href="project.html#${encodeURIComponent(next.slug)}" data-cursor="Next project ↗">
+          <span><small>NEXT PROJECT</small><strong>${esc(next.title)}</strong></span>
+          <span class="btn btn-primary">View case study <span class="arr">↗</span></span>
+        </a>
+      </section>` : ''}`;
+
+    /* gallery */
+    const galEl = $('#gallery');
+    let curList = after.length ? after : before;
+    const drawGallery = () => {
+      if (!galEl) return;
+      galEl.innerHTML = curList.map((g, i) => `<button class="shot glass" type="button" data-i="${i}" data-cursor="Open ↗" aria-label="Open ${esc(g.label || 'screen')}"><span class="scr">${g.image ? `<img src="${esc(g.image)}" alt="${esc(g.label || '')}" loading="lazy">` : mockScreen(tint)}</span><span>${esc(g.label || '')}</span></button>`).join('');
+      $$('.shot', galEl).forEach((b) => b.addEventListener('click', () => openLB(parseInt(b.dataset.i, 10))));
+    };
+    drawGallery();
+    const tabsEl = $('.tabs', main);
+    if (tabsEl) {
+      const bs = $$('button', tabsEl), th = $('.thumb', tabsEl);
+      const place = () => { const on = $('button.on', tabsEl); th.style.width = on.offsetWidth + 'px'; th.style.transform = `translateX(${on.offsetLeft - 5}px)`; };
+      bs.forEach((b) => b.addEventListener('click', () => {
+        bs.forEach((x) => x.classList.toggle('on', x === b)); place();
+        curList = b.dataset.g === 'before' ? before : after; drawGallery();
+      }));
+      requestAnimationFrame(place);
+      if (document.fonts) document.fonts.ready.then(place);
+    }
+
+    /* lightbox */
+    const lb = $('#lightbox');
+    let li = 0;
+    function showLB() {
+      const g = curList[li];
+      $('.lb-scr', lb).innerHTML = g.image ? `<img src="${esc(g.image)}" alt="${esc(g.label || '')}">` : mockScreen(tint);
+      $('.lb-label', lb).textContent = g.label || '';
+      $('.lb-count', lb).textContent = `${li + 1} / ${curList.length}`;
+    }
+    function openLB(i) { li = i; showLB(); lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false'); $('.lb-close', lb).focus(); }
+    window.__lb = { step: (d) => { li = (li + d + curList.length) % curList.length; showLB(); }, close: () => { lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true'); } };
+
+    /* toc active */
+    const tocLinks = $$('.toc a');
+    tocLinks.forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const s = document.getElementById(a.dataset.toc);
+      if (s) scrollTo({ top: s.getBoundingClientRect().top + scrollY - 100, behavior: reduce ? 'auto' : 'smooth' });
+    }));
+    if (tocLinks.length) {
+      const tio = new IntersectionObserver((es) => es.forEach((e) => {
+        if (e.isIntersecting) tocLinks.forEach((a) => a.classList.toggle('active', a.dataset.toc === e.target.id));
+      }), { rootMargin: '-40% 0px -55% 0px' });
+      toc.forEach(([id]) => { const s = document.getElementById(id); s && tio.observe(s); });
+    }
+    scan(main);
+    scrollTo(0, 0);
+  }
+
+  /* lightbox controls (bound once) */
+  const lb = $('#lightbox');
+  $('.lb-close', lb).addEventListener('click', () => window.__lb && window.__lb.close());
+  $('.lb-btn.prev', lb).addEventListener('click', () => window.__lb && window.__lb.step(-1));
+  $('.lb-btn.nxt', lb).addEventListener('click', () => window.__lb && window.__lb.step(1));
+  lb.addEventListener('click', (e) => { if (e.target === lb) window.__lb && window.__lb.close(); });
+  addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open') || !window.__lb) return;
+    if (e.key === 'Escape') window.__lb.close();
+    if (e.key === 'ArrowRight') window.__lb.step(1);
+    if (e.key === 'ArrowLeft') window.__lb.step(-1);
+  });
+
+  /* cover parallax */
+  if (!reduce) onScroll(() => {
+    const c = $('.cs-cover .inner');
+    if (!c) return;
+    const r = c.parentElement.getBoundingClientRect();
+    const p = clamp(1 - r.bottom / (innerHeight + r.height));
+    c.style.setProperty('--s', (1.08 - p * 0.08).toFixed(3));
+  });
+
+  function route() {
+    const slug = getSlug();
+    const idx = projects.findIndex((p) => p.slug === slug);
+    if (idx === -1) {
+      if (!slug && projects.length) { render(projects[0], 0); return; }
+      main.innerHTML = `<section class="container notfound"><h1 class="h-lg">Project <em class="serif">not found</em></h1><a class="btn btn-primary" href="index.html#work">Back to all work <span class="arr">↗</span></a></section>`;
+      return;
+    }
+    render(projects[idx], idx);
+  }
+  addEventListener('hashchange', () => {
+    const slug = getSlug();
+    if (projects.some((p) => p.slug === slug)) route();
+  });
+
+  loadProjects().then((list) => { projects = list; route(); }).catch((e) => {
+    console.error(e);
+    main.innerHTML = `<section class="container notfound"><h1 class="h-md">Couldn't load projects</h1><p class="muted">Open the site through a web server (see README). On GitHub Pages this works automatically.</p></section>`;
+  });
+})();

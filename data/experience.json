@@ -1,0 +1,95 @@
+[
+  {
+    "id": "homyt",
+    "visible": true,
+    "role": "Product Manager · Lead UI/UX Designer · Product Owner",
+    "company": "Homyt Creative Solutions",
+    "location": "Ramallah, Palestine",
+    "dates": "Mar 2024 — Present",
+    "type": "Full-time",
+    "summary": "Single product decision-maker for two mobile apps and one website serving 3M+ registered users — Redz and Momyt Meet.",
+    "highlights": [
+      "Own product strategy end to end for Redz and Momyt Meet, from requirements and roadmap to designing and validating the user experience.",
+      "Shipped Redz's core features from concept to release: Series (solo and collaborative videos), Anonymous, an in-app Wallet, and Verification and Premium subscriptions.",
+      "Defined and launched Momyt Meet's end-to-end meetup flow (create, invite, join, coordinate) and the Find feature that connects people nearby or in a chosen location.",
+      "Drive discovery through usability tests and A/B experiments, feeding validated findings back into product and design.",
+      "Own the Jira backlog — user stories and acceptance criteria that turn business goals into design and engineering tasks.",
+      "Lead sprint planning, stand-ups, reviews and retrospectives as both product decision-maker and design lead.",
+      "Build and maintain the shared design system (components, typography, colour, accessibility) that keeps the apps consistent.",
+      "Trained and supervised two designers."
+    ]
+  },
+  {
+    "id": "foras",
+    "visible": true,
+    "role": "UI/UX Designer",
+    "company": "Foras Palestine",
+    "location": "Ramallah, Palestine",
+    "dates": "Sep 2023 — Mar 2024",
+    "type": "Full-time",
+    "summary": "Led the full redesign, revamp and rebuild of the Foras.ps platform, from requirements to sign-off.",
+    "highlights": [
+      "Ran user research and competitor analysis and turned the findings into a new sitemap and information architecture for the whole platform.",
+      "Presented design decisions to stakeholders and iterated on feedback and usability testing.",
+      "Built the Foras design system from scratch — components, styles and guidelines — as one reusable foundation for every new page."
+    ]
+  },
+  {
+    "id": "cab",
+    "visible": true,
+    "role": "Software Systems Developer",
+    "company": "Cairo Amman Bank",
+    "location": "Ramallah, Palestine",
+    "dates": "Jun 2023 — Mar 2024",
+    "type": "Full-time",
+    "summary": "Turned requests from departments and branches across the bank into internal software tools — where my engineering mindset comes from.",
+    "highlights": [
+      "Gathered requirements directly from requesting teams and delivered new forms, system modifications and process improvements.",
+      "Maintained the tools in daily operations and improved their efficiency and documentation for easier support and handover."
+    ]
+  },
+  {
+    "id": "cincy",
+    "visible": false,
+    "role": "UX Designer",
+    "company": "Cincy Labs · US app studio",
+    "location": "Remote",
+    "dates": "[Dates]",
+    "type": "Contract",
+    "summary": "Designed the onboarding, login and sign-up experience for the Ruckaroo app.",
+    "highlights": []
+  },
+  {
+    "id": "gsg",
+    "visible": false,
+    "role": "Front-end Development with React — Intern",
+    "company": "Gaza Sky Geeks",
+    "location": "Ramallah, Palestine",
+    "dates": "Feb 2023 — Jun 2023",
+    "type": "Internship",
+    "summary": "Built full-stack projects with React, including a Spotify clone powered by the Spotify Web API.",
+    "highlights": []
+  },
+  {
+    "id": "edtech",
+    "visible": false,
+    "role": "Artificial Intelligence Trainer",
+    "company": "Palestine EdTech Hub",
+    "location": "Ramallah, Palestine",
+    "dates": "Jun 2021 — Feb 2022",
+    "type": "Part-time",
+    "summary": "Co-delivered a bootcamp with a UK Computer Science specialist, teaching programming and game development to 30+ students across two cohorts.",
+    "highlights": []
+  },
+  {
+    "id": "pgf",
+    "visible": false,
+    "role": "Teacher Assistant & IT Coordinator",
+    "company": "Paltel Group Foundation",
+    "location": "Ramallah, Palestine",
+    "dates": "Jul 2018 — Nov 2022",
+    "type": "Part-time",
+    "summary": "Mentored 80+ high-school students in programming and web development through Code for Palestine, and owned IT coordination for PGF's programs.",
+    "highlights": []
+  }
+]
