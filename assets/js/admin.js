@@ -182,7 +182,7 @@
     if (opts.select) return `<label class="f">${label}<select data-k="${key}">${opts.select.map(([ov, ol]) => `<option value="${ov}" ${String(val) === ov ? 'selected' : ''}>${ol}</option>`).join('')}</select>${hint}</label>`;
     return `<label class="f">${label}<input data-k="${key}" type="${opts.type || 'text'}" value="${v}" ${opts.ph ? `placeholder="${esc(opts.ph)}"` : ''}>${hint}</label>`;
   };
-  const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['In development', 'In development'], ['Delivered to client', 'Delivered to client'], ['Concept', 'Concept / not released'], ['Discontinued', 'Discontinued']];
+  const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['Shipped', 'Shipped'], ['In progress', 'In progress']];
   const C = (label, key, val) => `<label class="chk"><input type="checkbox" data-k="${key}" ${val ? 'checked' : ''}> ${label}</label>`;
 
   function imgItem(path, cls, withLabel, label) {

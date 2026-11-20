@@ -280,7 +280,7 @@
     "year": "[Year]",
     "live": false,
     "liveUrl": "",
-    "status": "Delivered to client",
+    "status": "Shipped",
     "published": true,
     "summary": "Onboarding, login and sign-up flows for a US app studio — designed to get new users from download to first value as fast as possible.",
     "cover": {
