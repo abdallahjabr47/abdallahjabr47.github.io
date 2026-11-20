@@ -106,14 +106,20 @@
 
   function apply(doc, data) {
     if (!data) return;
-    const hidden = data.hidden || [], text = data.text || {};
+    const hidden = data.hidden || [], text = data.text || {}, off = data.off || [];
+    hidden.forEach((k) => doc.querySelectorAll(`[data-part="${k}"]`).forEach((el) => { el.hidden = true; }));
     sections(doc).forEach((sec) => {
       if (hidden.includes(sec.key)) {
         sec.el.hidden = true;
         if (sec.el.id) doc.querySelectorAll(`a[href="#${sec.el.id}"]`).forEach((a) => { if (a.closest('nav')) a.hidden = true; });
         return;
       }
-      fields(sec).forEach((f) => { if (Object.prototype.hasOwnProperty.call(text, f.key)) setText(f.el, text[f.key]); });
+      const fs = fields(sec);
+      fs.forEach((f) => { if (Object.prototype.hasOwnProperty.call(text, f.key)) setText(f.el, text[f.key]); });
+      const firstOf = new Map();
+      fs.forEach((f) => { if (f.groupEl && !f.listEl && !firstOf.has(f.groupEl)) firstOf.set(f.groupEl, f.key); });
+      fs.forEach((f) => { if (off.includes(f.key)) (f.el.closest(ITEM) || f.el).hidden = true; });
+      firstOf.forEach((key, el) => { if (off.includes('g:' + key)) el.hidden = true; });
     });
   }
 

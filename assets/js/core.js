@@ -360,6 +360,34 @@
     siteReady.then(applySite);
   })();
 
+  /* page-to-page transition: fade out with a progress line, fade the next page in */
+  (() => {
+    const html = document.documentElement;
+    if (html.classList.contains('pv-enter')) {
+      try { sessionStorage.removeItem('pv'); } catch (e) {}
+      requestAnimationFrame(() => requestAnimationFrame(() => html.classList.add('pv-go')));
+      setTimeout(() => html.classList.remove('pv-enter', 'pv-go'), 700);
+    }
+    const norm = (p) => p.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href]');
+      if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (a.target === '_blank' || a.hasAttribute('download')) return;
+      let u; try { u = new URL(a.getAttribute('href'), location.href); } catch (err) { return; }
+      if (u.origin !== location.origin || !/(\.html|\/)$/.test(u.pathname)) return;
+      if (norm(u.pathname) === norm(location.pathname)) return;
+      e.preventDefault();
+      go(u.href);
+    });
+    function go(href) {
+      try { sessionStorage.setItem('pv', '1'); } catch (err) {}
+      html.classList.add('pv-leave');
+      setTimeout(() => { location.href = href; }, reduce ? 0 : 360);
+    }
+    window.SiteGo = go;
+    addEventListener('pageshow', (e) => { if (e.persisted) html.classList.remove('pv-leave', 'pv-enter', 'pv-go'); });
+  })();
+
   window.Site = { getSite: () => siteReady, $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, previewDraft, isPreview, reduce, fine };
   scan();
 })();

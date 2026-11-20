@@ -567,7 +567,8 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .cs-meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .cs-cover{position:relative;height:clamp(360px,48vw,660px);border-radius:32px;overflow:hidden;border:1px solid var(--line)}
 .cs-cover .inner{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;transform:scale(var(--s,1.08));transition:transform .2s linear}
-.cs-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cs-cover .inner>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cs-cover .devices img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
 .cs-cover .ghost{position:absolute;top:9%;left:0;right:0;text-align:center;font-size:clamp(70px,12vw,190px);font-weight:800;letter-spacing:.14em;line-height:1;color:transparent;background:linear-gradient(180deg,rgb(var(--fg) / .34),rgb(var(--fg) / .03));-webkit-background-clip:text;background-clip:text;white-space:nowrap}
 .cs-cover .devices{position:relative;display:flex;align-items:flex-end;padding:0 6%}
 .dev-desk{width:clamp(240px,40vw,600px);aspect-ratio:16/10.5;border-radius:16px 16px 0 0;border:2px solid rgb(var(--fg) / .18);border-bottom:0;background:rgb(var(--bgc) / .66);display:grid;place-items:center;color:var(--dim);font-size:13px;overflow:hidden}
@@ -1674,3 +1675,35 @@ html:has(.cert-view.on) .cursor-dot,html:has(.cert-view.on) .cursor-ring{opacity
 .has-cursor .cert-view .cert-img.zoom,.has-cursor .cert-view .cert-img.zoom img,.cert-img.zoom{cursor:zoom-out!important}
 .has-cursor .cert-view .cert-img img{cursor:inherit!important}
 .cert-img.zoom img{width:180%}
+/* ---------- page transitions ---------- */
+html.pv-enter body{opacity:0}
+html.pv-enter.pv-go body{opacity:1;transition:opacity .5s var(--ease)}
+html.pv-leave body{opacity:0;transition:opacity .34s ease;pointer-events:none}
+html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height:3px;width:0;border-radius:0 3px 3px 0;background:linear-gradient(90deg,#1769E0,#5C9BF5);box-shadow:0 0 12px rgb(23 105 224 / .6);animation:pvBar .9s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes pvBar{to{width:85%}}
+@media (prefers-reduced-motion:reduce){html.pv-enter body,html.pv-leave body{transition:none}}
+/* ---------- case study: identity, devices, every screen ---------- */
+.cs-id{display:flex;align-items:center;gap:16px}
+.cs-icon{width:64px;height:64px;flex:none;border-radius:18px;overflow:hidden;display:grid;place-items:center;background:var(--panel);box-shadow:0 0 0 1px var(--line2),0 14px 30px rgb(0 0 0 / .35)}
+.cs-icon img{width:100%;height:100%;object-fit:cover}
+.cs-icon.letter{background:linear-gradient(140deg,var(--tint),#0E1119);font-size:28px;font-weight:800;color:#fff}
+.cs-idt{display:flex;flex-direction:column;gap:3px}
+.cs-idt b{font-size:20px;letter-spacing:-.01em}
+.cs-idt small{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.dev-pill{display:inline-flex;align-items:center;gap:8px}
+.dev-pill span{display:inline-grid}
+.dev-pill svg,.dev-tabs svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dev-tabs button{display:inline-flex;align-items:center;gap:7px}
+.dev-grid{display:grid;gap:clamp(12px,1.6vw,20px);margin-top:28px}
+.dev-grid[hidden]{display:none}
+.dev-grid.g-mobile{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.dev-grid.g-tablet{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.dev-grid.g-desktop{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.dshot{display:block;padding:0;border-radius:20px;overflow:hidden;background:var(--panel);border:1px solid var(--line2);box-shadow:0 18px 40px rgb(0 0 0 / .25);transition:transform .5s var(--ease),border-color .3s}
+.dshot:hover{transform:translateY(-6px);border-color:rgb(92 155 245 / .5)}
+.dshot img{display:block;width:100%;height:auto}
+.g-mobile .dshot{border-radius:26px;padding:6px;background:#0A0B10}
+.g-mobile .dshot img{border-radius:20px;aspect-ratio:9/19.5;object-fit:cover}
+.g-tablet .dshot{padding:8px;background:#0A0B10}.g-tablet .dshot img{border-radius:12px;aspect-ratio:3/4;object-fit:cover}
+.g-desktop .dshot img{aspect-ratio:16/10;object-fit:cover;object-position:top}
+.cs-cover .devices{align-items:flex-end;gap:clamp(16px,3vw,40px)!important;padding-top:8%}.cs-cover .dev-phone{overflow:hidden}

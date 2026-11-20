@@ -111,7 +111,7 @@
     [prev, next].forEach((b) => b.addEventListener('click', () => { stop(false); }));
     panel.addEventListener('click', (e) => {
       if (moved || e.target.closest('button, a')) return;
-      location.href = panel.dataset.href;
+      (window.SiteGo || ((h) => { location.href = h; }))(panel.dataset.href);
     });
   }
 

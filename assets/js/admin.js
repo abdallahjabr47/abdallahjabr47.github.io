@@ -23,17 +23,17 @@
       { id: 'avail', label: 'Availability line', kind: 'site', groups: ['availability'] },
       { id: 'tools', label: 'Tools strip', kind: 'content', keys: ['tools'] }] },
     { id: 'work', label: 'Work', subs: [
-      { id: 'projects', label: 'Projects', kind: 'projects' },
+      { id: 'projects', label: 'Projects', kind: 'projects' , part: 'work', partName: 'Selected work' },
       { id: 'work-text', label: 'Selected work · text', kind: 'content', keys: ['work'] },
-      { id: 'screens-img', label: 'Screens that ship · images', kind: 'site', groups: ['showcase'] },
+      { id: 'screens-img', label: 'Screens that ship · images', kind: 'site', groups: ['showcase'] , part: 'screens', partName: 'Screens that ship' },
       { id: 'screens-text', label: 'Screens that ship · text', kind: 'content', keys: ['screens'] },
       { id: 'process', label: 'From sketch to shipped', kind: 'content', keys: ['process'] }] },
     { id: 'about', label: 'About', subs: [
       { id: 'about-text', label: 'About text & numbers', kind: 'content', keys: ['about'] },
       { id: 'photo2', label: 'About photo', kind: 'site', groups: ['photo2'] }] },
     { id: 'experience', label: 'Experience', subs: [
-      { id: 'roles', label: 'Work experience', kind: 'experience' },
-      { id: 'learning', label: 'Learning & recognition', kind: 'site', groups: ['recognition'] },
+      { id: 'roles', label: 'Work experience', kind: 'experience' , part: 'experience', partName: 'Experience' },
+      { id: 'learning', label: 'Learning & recognition', kind: 'site', groups: ['recognition'] , part: 'learning', partName: 'Learning & recognition tab' },
       { id: 'exp-text', label: 'Section text', kind: 'content', keys: ['experience'] }] },
     { id: 'product', label: 'Product', subs: [
       { id: 'product-text', label: 'Product management', kind: 'content', keys: ['product'] },
@@ -43,18 +43,26 @@
       { id: 'system', label: 'Design system', kind: 'content', keys: ['design-system'] }] },
     { id: 'beyond', label: 'Beyond', subs: [
       { id: 'beyond-text', label: 'Text', kind: 'content', keys: ['beyond'] },
-      { id: 'beyond-photos', label: 'Card photos', kind: 'site', groups: ['beyond'] }] },
+      { id: 'beyond-photos', label: 'Card photos', kind: 'site', groups: ['beyond'] , part: 'beyond', partName: 'Beyond the screen' }] },
     { id: 'contact', label: 'Contact & more', subs: [
-      { id: 'links', label: 'Links & CV', kind: 'site', groups: ['links', 'cv'] },
+      { id: 'links', label: 'Links & CV', kind: 'site', groups: ['links', 'cv'] , part: 'contact', partName: 'Contact' },
       { id: 'contact-text', label: 'Contact text', kind: 'content', keys: ['contact'] },
       { id: 'faq', label: 'FAQ', kind: 'content', keys: ['faq'] },
-      { id: 'testi', label: 'Testimonials', kind: 'site', groups: ['testimonials'] },
+      { id: 'testi', label: 'Testimonials', kind: 'site', groups: ['testimonials'] , part: 'testimonials', partName: 'Testimonials' },
       { id: 'testi-text', label: 'Testimonials · text', kind: 'content', keys: ['testimonials'] }] }];
   let page = PAGES[1], sub = PAGES[1].subs[0];
   const KIND_TAB = { projects: 'projects', experience: 'experience', site: 'profile', content: 'content' };
   function drawTabs() {
     $('#pageTabs').innerHTML = PAGES.map((p) => `<button type="button" role="tab" data-page="${p.id}" class="${p === page ? 'on' : ''}" aria-selected="${p === page}">${esc(p.label)}</button>`).join('');
+    $('#partBar').hidden = true;
     $('#subTabs').innerHTML = page.subs.map((x) => `<button type="button" data-sub="${x.id}" class="${x === sub ? 'on' : ''}" aria-pressed="${x === sub}">${esc(x.label)}</button>`).join('');
+  }
+  const partHead = () => { const on = !(content.hidden || []).includes(sub.part); return `<header class="wt-head part-sw"><div><small>Section</small><h3>${esc(sub.partName)}</h3></div><label class="wt-switch"><input type="checkbox" data-part-show="${esc(sub.part)}" ${on ? 'checked' : ''}><span></span>Show on website</label></header>`; };
+  function placePartSwitch() {
+    $$('.part-sw').forEach((x) => x.remove());
+    if (!sub.part) return;
+    if (sub.kind === 'site') { const fs = $$('#edForm fieldset[data-g]').find((f) => !f.hidden); const lg = fs && $('legend', fs); if (lg) lg.insertAdjacentHTML('afterend', partHead()); }
+    else { $('#plist').insertAdjacentHTML('beforebegin', `<div class="part-sw part-list">${partHead()}</div>`); }
   }
   function goTo(p, x) { collect(); setDirty(changed()); page = p; sub = x || p.subs[0]; tab = KIND_TAB[sub.kind]; renderList(); }
   let mode = 'project';     // which editor is open
@@ -178,6 +186,8 @@
     show('v-list');
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
+    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a project saved but off the website. Changes go live about a minute after you press <b>Publish</b>.' : 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a role saved but off the website.') + '</span>';
+    placePartSwitch();
     const el = $('#plist');
     if (tab === 'experience') {
       if (!experience.length) { el.innerHTML = '<div class="card-a glass"><p class="muted">No roles yet. Press <b>+ Add role</b>.</p></div>'; return; }
@@ -212,6 +222,7 @@
   }
   $('#plist').addEventListener('click', (e) => {
     const b = e.target.closest('button[data-a]'); if (!b) return;
+    if (b.dataset.a === 'new') { $('#newProject').click(); return; }
     const i = parseInt(b.dataset.i, 10), a = b.dataset.a;
     const arr = tab === 'projects' ? projects : experience;
     const flag = tab === 'projects' ? 'published' : 'visible';
@@ -222,6 +233,12 @@
     if (a === 'del') { if (!window.confirm(`Delete “${arr[i].title || arr[i].role}”? It disappears from the site when you publish.`)) return; arr.splice(i, 1); }
     setDirty(changed());
     renderList();
+  });
+  document.addEventListener('change', (e) => {
+    const c = e.target.closest && e.target.closest('[data-part-show]'); if (!c) return;
+    const k = c.dataset.partShow;
+    content.hidden = (content.hidden || []).filter((x) => x !== k).concat(c.checked ? [] : [k]);
+    setDirty(changed());
   });
   $('#pageTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-page]'); if (!b) return; const p = PAGES.find((x) => x.id === b.dataset.page); if (p === page && editing < 0 && tab !== 'profile' && tab !== 'content') return; goTo(p); });
   $('#subTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-sub]'); if (!b) return; const x = page.subs.find((y) => y.id === b.dataset.sub); if (x === sub && (tab === 'profile' || tab === 'content')) return; goTo(page, x); });
@@ -271,6 +288,36 @@
   }
   const rep = (kind, list, addLabel) => `<div class="rep" data-rep="${kind}">${(list || []).map((a) => repRow(kind, a)).join('')}</div><button class="btn btn-ghost btn-sm" type="button" data-add-row="${kind}" style="align-self:flex-start">+ ${addLabel}</button>`;
 
+  /* live card + section nav beside the project editor */
+  function setupSide(isProject) {
+    const side = $('#edSide'), lay = $('#edLayout');
+    side.hidden = !isProject; lay.classList.toggle('two', !!isProject);
+    if (!isProject) { side.innerHTML = ''; return; }
+    const fsets = $$('#edForm > fieldset');
+    fsets.forEach((f, n) => { f.id = 'ed-s-' + n; });
+    side.innerHTML = `<div class="ed-prev glass"><div class="ep-cover"><span class="ep-cap">Live card</span><span class="ep-flags"></span><span class="ep-logo"></span></div><div class="ep-body"><b class="ep-t"></b><small class="ep-c"></small><small class="ep-l"></small><span class="ep-st"></span></div></div>
+      <nav class="ed-nav" aria-label="Editor sections">${fsets.map((f, n) => `<a href="#ed-s-${n}" data-n="${n}"${n ? '' : ' class="on"'}><span>${String(n + 1).padStart(2, '0')}</span>${esc($('legend', f).textContent)}</a>`).join('')}</nav>`;
+    const val = (k) => { const el = $(`#edForm [data-k="${k}"]`); return el ? (el.type === 'checkbox' ? el.checked : el.value.trim()) : ''; };
+    const draw = () => {
+      const tint = val('cover.tint') || '#2B3A8F', title = val('title') || 'Untitled project';
+      const im = $('#edForm [data-imgs="icon"] .im'), icon = im && im.dataset.path;
+      $('.ep-cover', side).style.setProperty('--tint', tint);
+      $('.ep-logo', side).innerHTML = icon ? `<img src="${esc(imgURL(icon))}" alt="">` : (val('title') ? esc(title.charAt(0)) : '+');
+      $('.ep-t', side).textContent = title;
+      $('.ep-c', side).textContent = val('category') || 'Add a category';
+      $('.ep-l', side).textContent = val('tagline');
+      $('.ep-st', side).textContent = val('status');
+      $('.ep-flags', side).innerHTML = `<span class="badge-d ${val('published') ? 'on' : ''}">${val('published') ? 'Published' : 'Hidden'}</span>${val('featured') ? '<span class="badge-d feat">★ Featured</span>' : ''}`;
+    };
+    draw();
+    const form = $('#edForm');
+    form.oninput = draw; form.onchange = draw;
+    new MutationObserver(draw).observe($('#edForm [data-imgs="icon"]') || form, { childList: true, subtree: true });
+    $$('.ed-nav a', side).forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); const f = $(a.getAttribute('href')); if (f) f.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+    const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) $$('.ed-nav a', side).forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id)); }), { rootMargin: '-30% 0px -60% 0px' });
+    fsets.forEach((f) => io.observe(f));
+  }
+
   function openEditor(i, isNew) {
     unembed();
     editing = i; mode = 'project';
@@ -302,7 +349,7 @@
 
       <fieldset><legend>Case study header</legend>
         <div class="g2">${F('Big title', 'headline', p.headline, { ph: 'From content' })}${F('Italic blue part', 'headlineAccent', p.headlineAccent, { ph: 'to series.' })}</div>
-        <div class="g3">${F('Accent colour', 'cover.tint', (p.cover && p.cover.tint) || '#2B3A8F', { type: 'color' })}${F('Big background word', 'cover.ghost', p.cover && p.cover.ghost, { ph: 'REDZ' })}${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}</div>
+        <div class="g2">${F('Accent colour', 'cover.tint', (p.cover && p.cover.tint) || '#2B3A8F', { type: 'color' })}${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}</div>
         <div class="f">Cover image (optional — wide, replaces the device mock-up)</div>${imgList('cover.image', p.cover && p.cover.image ? [p.cover.image] : [], 'wide', false, false)}
         <div class="g2">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}</div>
         <div class="g3">${F('Team', 'team', p.team)}${F('Timeline', 'timeline', p.timeline)}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
@@ -326,6 +373,7 @@
       <fieldset><legend>Results</legend>${rep('results', p.results, 'Add result')}
         ${F('What I learned', 'learnings', p.learnings, { area: true, rows: 3 })}
       </fieldset>`;
+    setupSide(true);
   }
 
   /* Profile & links and Website text open right under the tabs, like the lists */
@@ -335,9 +383,10 @@
     $('#plist').hidden = true; $('#listHint').hidden = true; $('#newProject').hidden = true;
     $('#tabPanel').hidden = false;
     $('#tabPanel').appendChild($('#edForm'));
+    $('#edSide').hidden = true; $('#edLayout').classList.remove('two'); $('#edForm').oninput = null; $('#edForm').onchange = null;
   }
   function unembed() {
-    $('#v-edit').appendChild($('#edForm'));
+    $('#edLayout').appendChild($('#edForm'));
     $('#plist').hidden = false; $('#listHint').hidden = false; $('#newProject').hidden = false; $('#tabPanel').hidden = true;
   }
 
@@ -352,6 +401,8 @@
     const secs = window.SiteContent.sections(doc).filter((x) => !sub.keys || sub.keys.includes(x.key));
     const data = secs.map((sec) => ({ sec, fs: window.SiteContent.fields(sec) }));
     const valOf = (f) => (Object.prototype.hasOwnProperty.call(content.text, f.key) ? content.text[f.key] : f.text);
+    const offs = content.off || [];
+    const EYE_I = '<svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c1-1.5 5-6 10-6s9 4.5 10 6c-1 1.5-5 6-10 6S3 13.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="no" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
     const editedIn = (fs) => fs.filter((f) => valOf(f) !== f.text).length;
     form.innerHTML = `
       <div class="wt-help glass">
@@ -370,8 +421,8 @@
             </header>
             ${(() => {
               const field = (f) => { const v = valOf(f); const ed = v !== f.text; return `
-            <div class="wt-field${ed ? ' edited' : ''}">
-              <div class="wt-lab"><span>${esc(f.kind)}</span><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'}>Reset</button></div>
+            <div class="wt-field${ed ? ' edited' : ''}${offs.includes(f.key) ? ' off' : ''}">
+              <div class="wt-lab"><span>${esc(f.kind)}</span><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'}>Reset</button><button type="button" class="wt-eye${offs.includes(f.key) ? ' is-off' : ''}" data-off="${esc(f.key)}" aria-pressed="${offs.includes(f.key)}" title="Show or hide this on the website">${EYE_I}</button></div>
               <textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1">${esc(v)}</textarea>
               <p class="wt-orig"${ed ? '' : ' hidden'}>Original: ${esc(f.text)}</p>
             </div>`; };
@@ -381,7 +432,8 @@
                 if (!g) { html += field(fs[k]); k++; continue; }
                 const run = []; while (k < fs.length && fs[k].group === g) run.push(fs[k++]);
                 const isList = g.startsWith('list-');
-                html += `<div class="wt-group${isList ? ' list' : ''}"><div class="wt-gh"><b>${esc(run[0].groupLabel)}</b><small>${run.length} ${run.length === 1 ? 'text' : 'texts'}</small></div><div class="wt-gb">${run.map(field).join('')}</div></div>`;
+                const gk = 'g:' + run[0].key, goff = !isList && offs.includes(gk);
+                html += `<div class="wt-group${isList ? ' list' : ''}${goff ? ' off' : ''}"><div class="wt-gh"><b>${esc(run[0].groupLabel)}</b><small>${run.length} ${run.length === 1 ? 'text' : 'texts'}</small>${isList ? '' : `<button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button>`}</div><div class="wt-gb">${run.map(field).join('')}</div></div>`;
               }
               return html;
             })()}
@@ -406,6 +458,14 @@
       });
       sec$.addEventListener('change', (e) => { if (e.target.matches('[data-sec-show]')) { refreshMeta(n); setDirty(true); } });
       sec$.addEventListener('click', (e) => {
+        const eye = e.target.closest('[data-off]');
+        if (eye) {
+          const off = !eye.classList.contains('is-off');
+          eye.classList.toggle('is-off', off); eye.setAttribute('aria-pressed', String(off));
+          (eye.closest('.wt-gh') ? eye.closest('.wt-group') : eye.closest('.wt-field')).classList.toggle('off', off);
+          const lab = $('span', eye); if (lab) lab.textContent = off ? 'Hidden' : 'Shown';
+          setDirty(true); return;
+        }
         const r = e.target.closest('[data-reset]'); if (!r) return;
         const box = r.closest('.wt-field'), t = $('textarea', box);
         t.value = t.dataset.orig; t.dispatchEvent(new Event('input', { bubbles: true }));
@@ -461,6 +521,7 @@
         <input type="file" accept="application/pdf" id="cvInput" hidden>
       </fieldset>`;
     $$('#edForm fieldset[data-g]').forEach((f) => { f.hidden = !!(sub.groups && !sub.groups.includes(f.dataset.g)); });
+    placePartSwitch();
     const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } };
     const drawCv = () => {
       const box = $('#cvBox');
@@ -518,6 +579,7 @@
         ${F('One-line summary', 'summary', x.summary, { area: true, rows: 2 })}
         ${F('Highlights (one per line — shown when visitors open the role)', 'highlights', (x.highlights || []).join('\n'), { area: true, rows: 7 })}
       </fieldset>`;
+    setupSide(false);
   }
 
   /* collect form -> project */
@@ -531,6 +593,12 @@
       const shown = $$('#edForm [data-sec-show]');
       const here = shown.map((c) => c.dataset.secShow);
       content.hidden = content.hidden.filter((k) => !here.includes(k)).concat(shown.filter((c) => !c.checked).map((c) => c.dataset.secShow));
+      const eyes = $$('#edForm [data-off]');
+      if (eyes.length) {
+        const ks = eyes.map((b) => b.dataset.off);
+        const off = (content.off || []).filter((k) => !ks.includes(k)).concat(eyes.filter((b) => b.classList.contains('is-off')).map((b) => b.dataset.off));
+        if (off.length) content.off = off; else delete content.off;
+      }
       return;
     }
     if (mode === 'site') {
