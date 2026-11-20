@@ -14,7 +14,49 @@
   let editing = -1;         // index being edited, -1 = list view
   let experience = [];      // work history
   let originalExp = '[]';
-  let tab = 'projects';     // which list is shown
+  let tab = 'projects';     // which editor kind is shown (projects | experience | profile | content)
+  /* admin follows the website: one page tab per menu item, with sub-tabs for every section under it */
+  const PAGES = [
+    { id: 'top', label: 'Top', subs: [
+      { id: 'hero', label: 'Heading & intro', kind: 'content', keys: ['hero'] },
+      { id: 'photo', label: 'Main photo', kind: 'site', groups: ['photo'] },
+      { id: 'avail', label: 'Availability line', kind: 'site', groups: ['availability'] },
+      { id: 'tools', label: 'Tools strip', kind: 'content', keys: ['tools'] }] },
+    { id: 'work', label: 'Work', subs: [
+      { id: 'projects', label: 'Projects', kind: 'projects' },
+      { id: 'work-text', label: 'Selected work · text', kind: 'content', keys: ['work'] },
+      { id: 'screens-img', label: 'Screens that ship · images', kind: 'site', groups: ['showcase'] },
+      { id: 'screens-text', label: 'Screens that ship · text', kind: 'content', keys: ['screens'] },
+      { id: 'process', label: 'From sketch to shipped', kind: 'content', keys: ['process'] }] },
+    { id: 'about', label: 'About', subs: [
+      { id: 'about-text', label: 'About text & numbers', kind: 'content', keys: ['about'] },
+      { id: 'photo2', label: 'About photo', kind: 'site', groups: ['photo2'] }] },
+    { id: 'experience', label: 'Experience', subs: [
+      { id: 'roles', label: 'Work experience', kind: 'experience' },
+      { id: 'learning', label: 'Learning & recognition', kind: 'site', groups: ['recognition'] },
+      { id: 'exp-text', label: 'Section text', kind: 'content', keys: ['experience'] }] },
+    { id: 'product', label: 'Product', subs: [
+      { id: 'product-text', label: 'Product management', kind: 'content', keys: ['product'] },
+      { id: 'principles', label: 'Principles', kind: 'content', keys: ['principles'] }] },
+    { id: 'skills', label: 'Skills', subs: [
+      { id: 'skills-text', label: 'Skills', kind: 'content', keys: ['skills'] },
+      { id: 'system', label: 'Design system', kind: 'content', keys: ['design-system'] }] },
+    { id: 'beyond', label: 'Beyond', subs: [
+      { id: 'beyond-text', label: 'Text', kind: 'content', keys: ['beyond'] },
+      { id: 'beyond-photos', label: 'Card photos', kind: 'site', groups: ['beyond'] }] },
+    { id: 'contact', label: 'Contact & more', subs: [
+      { id: 'links', label: 'Links & CV', kind: 'site', groups: ['links', 'cv'] },
+      { id: 'contact-text', label: 'Contact text', kind: 'content', keys: ['contact'] },
+      { id: 'faq', label: 'FAQ', kind: 'content', keys: ['faq'] },
+      { id: 'testi', label: 'Testimonials', kind: 'site', groups: ['testimonials'] },
+      { id: 'testi-text', label: 'Testimonials · text', kind: 'content', keys: ['testimonials'] }] }];
+  let page = PAGES[1], sub = PAGES[1].subs[0];
+  const KIND_TAB = { projects: 'projects', experience: 'experience', site: 'profile', content: 'content' };
+  function drawTabs() {
+    $('#pageTabs').innerHTML = PAGES.map((p) => `<button type="button" role="tab" data-page="${p.id}" class="${p === page ? 'on' : ''}" aria-selected="${p === page}">${esc(p.label)}</button>`).join('');
+    $('#subTabs').innerHTML = page.subs.map((x) => `<button type="button" data-sub="${x.id}" class="${x === sub ? 'on' : ''}" aria-pressed="${x === sub}">${esc(x.label)}</button>`).join('');
+  }
+  function goTo(p, x) { collect(); setDirty(changed()); page = p; sub = x || p.subs[0]; tab = KIND_TAB[sub.kind]; renderList(); }
   let mode = 'project';     // which editor is open
   const EXP_PATH = 'data/experience.json';
   const SITE_PATH = 'data/site.json';
@@ -23,7 +65,9 @@
   const CONTENT_PATH = 'data/content.json';
   let content = { text: {}, hidden: [] };
   let originalContent = '{}';
-  const changed = () => JSON.stringify(projects) !== original || JSON.stringify(experience) !== originalExp || JSON.stringify(site) !== originalSite || JSON.stringify(content) !== originalContent || pending.size > 0;
+  const canon = (v) => Array.isArray(v) ? v.map(canon) : v && typeof v === 'object' ? Object.keys(v).sort().reduce((o, k) => { o[k] = canon(v[k]); return o; }, {}) : v;
+  const same = (a, b) => JSON.stringify(canon(a)) === JSON.stringify(canon(JSON.parse(b)));
+  const changed = () => !same(projects, original) || !same(experience, originalExp) || !same(site, originalSite) || !same(content, originalContent) || pending.size > 0;
   let dirty = false;
 
   /* ---------------- helpers ---------------- */
@@ -126,13 +170,14 @@
   /* ---------------- list ---------------- */
   function renderList() {
     editing = -1;
+    tab = KIND_TAB[sub.kind];
+    drawTabs();
     if (tab === 'profile') return openSiteEditor();
     if (tab === 'content') return openContentEditor();
     unembed();
     show('v-list');
-    $$('.atabs button').forEach((b) => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
-    $('#list-title').innerHTML = tab === 'projects' ? 'Your <em class="serif">projects</em>' : 'Your <em class="serif">experience</em>';
+    $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
     const el = $('#plist');
     if (tab === 'experience') {
       if (!experience.length) { el.innerHTML = '<div class="card-a glass"><p class="muted">No roles yet. Press <b>+ Add role</b>.</p></div>'; return; }
@@ -178,7 +223,8 @@
     setDirty(changed());
     renderList();
   });
-  $$('.atabs button').forEach((b) => b.addEventListener('click', () => { if (b.dataset.tab === tab && (tab === 'profile' || tab === 'content')) return; collect(); setDirty(changed()); tab = b.dataset.tab; renderList(); }));
+  $('#pageTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-page]'); if (!b) return; const p = PAGES.find((x) => x.id === b.dataset.page); if (p === page && editing < 0 && tab !== 'profile' && tab !== 'content') return; goTo(p); });
+  $('#subTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-sub]'); if (!b) return; const x = page.subs.find((y) => y.id === b.dataset.sub); if (x === sub && (tab === 'profile' || tab === 'content')) return; goTo(page, x); });
   $('#newProject').addEventListener('click', () => {
     if (tab === 'experience') {
       experience.unshift({ id: 'role-' + Date.now().toString(36), visible: true, role: '', company: '', location: '', dates: '', type: 'Full-time', summary: '', highlights: [] });
@@ -285,11 +331,10 @@
   /* Profile & links and Website text open right under the tabs, like the lists */
   function embedPanel(tabName, title) {
     show('v-list');
-    $('#list-title').innerHTML = title;
+    $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
     $('#plist').hidden = true; $('#listHint').hidden = true; $('#newProject').hidden = true;
     $('#tabPanel').hidden = false;
     $('#tabPanel').appendChild($('#edForm'));
-    $$('.atabs button').forEach((b) => { const on = b.dataset.tab === tabName; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
   }
   function unembed() {
     $('#v-edit').appendChild($('#edForm'));
@@ -304,16 +349,16 @@
     let doc;
     try { doc = new DOMParser().parseFromString(await (await fetch('index.html?v=' + Date.now(), { cache: 'no-store' })).text(), 'text/html'); }
     catch (e) { form.innerHTML = '<p class="hint">Could not load the page text. Refresh and try again.</p>'; return; }
-    const secs = window.SiteContent.sections(doc);
+    const secs = window.SiteContent.sections(doc).filter((x) => !sub.keys || sub.keys.includes(x.key));
     const data = secs.map((sec) => ({ sec, fs: window.SiteContent.fields(sec) }));
     const valOf = (f) => (Object.prototype.hasOwnProperty.call(content.text, f.key) ? content.text[f.key] : f.text);
     const editedIn = (fs) => fs.filter((f) => valOf(f) !== f.text).length;
     form.innerHTML = `
       <div class="wt-help glass">
-        <div><b>How it works</b><span>Pick a section on the left, change any text, then press <b>Preview</b> or <b>Publish</b> at the bottom.</span></div>
+        <div><b>How it works</b><span>Change any text below, then press <b>Preview</b> or <b>Publish</b> at the bottom.</span></div>
         <div class="wt-keys"><span><code>*word*</code> blue italic</span><span><code>**words**</code> highlight</span><span><kbd>Enter</kbd> new line</span><span>Empty field = hidden</span></div>
       </div>
-      <div class="wt">
+      <div class="wt${data.length < 2 ? ' single' : ''}">
         <aside class="wt-nav" role="tablist" aria-label="Page sections">${data.map(({ sec, fs }, n) => `
           <button type="button" class="wt-tab${n === 0 ? ' on' : ''}" data-wt="${n}" role="tab"><span class="wt-n">${String(n + 1).padStart(2, '0')}</span><span class="wt-l"><b>${esc(sec.name)}</b><small data-wt-meta="${n}">${fs.length} texts${editedIn(fs) ? ` · <i>${editedIn(fs)} edited</i>` : ''}${content.hidden.includes(sec.key) ? ' · hidden' : ''}</small></span></button>`).join('')}
         </aside>
@@ -373,47 +418,49 @@
     editing = 0; mode = 'site';
     embedPanel('profile', 'Profile <em class="serif">&amp; links</em>');
     $('#edForm').innerHTML = `
-      <fieldset><legend>Photos</legend>
-        <p class="hint">Portrait photos work best (about 4:5). They're resized automatically. Hover a photo to replace or remove it.</p>
-        <div class="ph-grid">
-          <div class="ph-card"><div class="ph-top"><span class="ph-badge">01</span><span><b>Main photo</b><small>Top of the home page, next to your title</small></span></div>${imgList('photo', site.photo ? [site.photo] : [], 'pt', false, false)}</div>
-          <div class="ph-card"><div class="ph-top"><span class="ph-badge">02</span><span><b>About photo</b><small>About section, beside your story</small></span></div>${imgList('photo2', site.photo2 ? [site.photo2] : [], 'pt', false, false)}</div>
-        </div>
+      <fieldset data-g="photo"><legend>Main photo</legend>
+        <p class="hint">Top of the home page, next to your title. Portrait photos work best (about 4:5); they're resized automatically. Hover the photo to replace or remove it.</p>
+        <div class="ph-grid"><div class="ph-card"><div class="ph-top"><span class="ph-badge">01</span><span><b>Main photo</b><small>Top of the home page</small></span></div>${imgList('photo', site.photo ? [site.photo] : [], 'pt', false, false)}</div></div>
       </fieldset>
-      <fieldset><legend>Screens gallery</legend>
+      <fieldset data-g="photo2"><legend>About photo</legend>
+        <p class="hint">Shown in the About section, beside your story. Portrait works best.</p>
+        <div class="ph-grid"><div class="ph-card"><div class="ph-top"><span class="ph-badge">02</span><span><b>About photo</b><small>About section</small></span></div>${imgList('photo2', site.photo2 ? [site.photo2] : [], 'pt', false, false)}</div></div>
+      </fieldset>
+      <fieldset data-g="showcase"><legend>Screens gallery</legend>
         <p class="hint">Screenshots for the big “Screens that ship” wall on the home page — app screens, web pages, anything you designed. Add as many as you like (10+ looks best), use ← → to order them. Phone and web screenshots can be mixed. If empty, screens from your projects are used.</p>
         ${imgList('showcase', site.showcase || [], '', false, true)}
       </fieldset>
-      <fieldset><legend>Availability</legend>
+      <fieldset data-g="availability"><legend>Availability</legend>
         <div class="av-row">
           <p class="hint" style="margin:0">One short line under the buttons at the top of the page, with a green dot.</p>
           <label class="wt-switch"><input type="checkbox" data-k="availabilityOn" ${site.availabilityOn === false ? '' : 'checked'}><span></span>Show on website</label>
         </div>
         ${F('Availability line', 'availability', site.availability, { ph: 'Open to Product Manager / Product Owner roles · Ramallah or remote' })}
       </fieldset>
-      <fieldset><legend>Beyond the screen — photos (optional)</legend>
+      <fieldset data-g="beyond"><legend>Beyond the screen — card photos (optional)</legend>
         <p class="hint">Each card on the home page has a small animation. Upload a photo or a GIF to show your own work there instead (square-ish, e.g. 1200×900). A GIF plays like a short video.</p>
-        <div class="ph-grid">${[['ui', 'UI & mobile'], ['brand', 'Graphic & branding'], ['logo', 'Logos'], ['motion', 'Motion'], ['film', 'Filmmaking & editing'], ['fashion', 'Fashion'], ['sport', 'Sport & gym'], ['health', 'Health']].map(([k, l]) => `<div class="ph-card"><div class="ph-top"><span><b>${l}</b></span></div>${imgList('int_' + k, site['int_' + k] ? [site['int_' + k]] : [], 'wide', false, false)}</div>`).join('')}</div>
+        <div class="ph-grid">${[['ui', 'UI & mobile'], ['brand', 'Graphic & drawing'], ['logo', 'Branding & logos'], ['motion', 'Motion'], ['film', 'Filmmaking & editing'], ['fashion', 'Fashion, scent & style'], ['sport', 'Sport'], ['health', 'Health']].map(([k, l]) => `<div class="ph-card"><div class="ph-top"><span><b>${l}</b></span></div>${imgList('int_' + k, site['int_' + k] ? [site['int_' + k]] : [], 'wide', false, false)}</div>`).join('')}</div>
       </fieldset>
-      <fieldset><legend>Learning &amp; recognition</legend>
+      <fieldset data-g="recognition"><legend>Learning &amp; recognition</legend>
         <p class="hint">Degrees, certificates, hackathons and community roles. They show under Experience → “Learning &amp; recognition” tab, in three columns, in this order. Leave the list empty to hide the section.</p>
         ${rep('recognition', site.recognition, 'Add item')}
       </fieldset>
-      <fieldset><legend>Testimonials</legend>
+      <fieldset data-g="testimonials"><legend>Testimonials</legend>
         <p class="hint">Short quotes from managers, developers or clients. The section shows on the home page only when at least one is added.</p>
         ${rep('testimonials', site.testimonials, 'Add testimonial')}
       </fieldset>
-      <fieldset><legend>Links</legend>
+      <fieldset data-g="links"><legend>Links</legend>
         <p class="hint">Leave a link empty to hide its button on the site.</p>
         <div class="g2">${F('Email', 'email', site.email, { type: 'email', ph: 'you@email.com' })}${F('WhatsApp number (with country code)', 'whatsapp', site.whatsapp, { ph: '970597323726' })}</div>
         <div class="g2">${F('LinkedIn URL', 'linkedin', site.linkedin, { ph: 'https://www.linkedin.com/in/…' })}${F('Behance URL', 'behance', site.behance, { ph: 'https://www.behance.net/…' })}</div>
         <div class="g2">${F('Dribbble URL', 'dribbble', site.dribbble, { ph: 'https://dribbble.com/…' })}${F('GitHub URL', 'github', site.github, { ph: 'https://github.com/…' })}</div>
       </fieldset>
-      <fieldset><legend>Résumé (CV)</legend>
+      <fieldset data-g="cv"><legend>Résumé (CV)</legend>
         <p class="hint">Every “View My CV” button on the site opens this file. Removing it hides those buttons.</p>
         <div id="cvBox"></div>
         <input type="file" accept="application/pdf" id="cvInput" hidden>
       </fieldset>`;
+    $$('#edForm fieldset[data-g]').forEach((f) => { f.hidden = !!(sub.groups && !sub.groups.includes(f.dataset.g)); });
     const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } };
     const drawCv = () => {
       const box = $('#cvBox');
@@ -478,16 +525,18 @@
     if (editing < 0) return;
     if (mode === 'content') {
       if (!$('#edForm [data-ckey]')) return;
-      const text = {};
-      $$('#edForm [data-ckey]').forEach((t) => { const v = t.value.replace(/\r/g, ''); if (v.trim() !== t.dataset.orig.trim()) text[t.dataset.ckey] = v.trim(); });
+      const text = Object.assign({}, content.text);
+      $$('#edForm [data-ckey]').forEach((t) => { delete text[t.dataset.ckey]; const v = t.value.replace(/\r/g, ''); if (v.trim() !== t.dataset.orig.trim()) text[t.dataset.ckey] = v.trim(); });
       content.text = text;
-      content.hidden = $$('#edForm [data-sec-show]').filter((c) => !c.checked).map((c) => c.dataset.secShow);
+      const shown = $$('#edForm [data-sec-show]');
+      const here = shown.map((c) => c.dataset.secShow);
+      content.hidden = content.hidden.filter((k) => !here.includes(k)).concat(shown.filter((c) => !c.checked).map((c) => c.dataset.secShow));
       return;
     }
     if (mode === 'site') {
       $$('#edForm [data-k]').forEach((el) => { site[el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value.trim(); });
       $$('#edForm [data-rep]').forEach((box) => { site[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); return o; }).filter((o) => Object.values(o).some(Boolean)); });
-      $$('#edForm [data-imgs]').forEach((box) => { if (box.dataset.multi === '1') { site[box.dataset.imgs] = $$('.im', box).map((im) => im.dataset.path).filter(Boolean); return; } const im = $('.im', box); const v = im ? im.dataset.path : ''; if (v || box.dataset.imgs in site) site[box.dataset.imgs] = v; });
+      $$('#edForm [data-imgs]').forEach((box) => { if (box.dataset.multi === '1') { const arr = $$('.im', box).map((im) => im.dataset.path).filter(Boolean); if (arr.length || box.dataset.imgs in site) site[box.dataset.imgs] = arr; return; } const im = $('.im', box); const v = im ? im.dataset.path : ''; if (v || box.dataset.imgs in site) site[box.dataset.imgs] = v; });
       return;
     }
     if (mode === 'exp') {
@@ -630,10 +679,10 @@
     });
   }
 
-  $('#backList').addEventListener('click', () => { collect(); setDirty(changed()); if (mode === 'site' || mode === 'content') tab = 'projects'; renderList(); });
+  $('#backList').addEventListener('click', () => { collect(); setDirty(changed()); renderList(); });
   $('#discard').addEventListener('click', () => {
     if (!window.confirm('Discard all unpublished changes?')) return;
-    projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent); pending.clear(); setDirty(false); if (tab === 'profile' || tab === 'content') tab = 'projects'; renderList();
+    projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent); pending.clear(); setDirty(false); renderList();
   });
 
   /* ---------------- preview (nothing goes live) ---------------- */

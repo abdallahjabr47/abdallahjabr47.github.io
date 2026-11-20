@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261120185408">
+<link rel="stylesheet" href="assets/css/style.css?v=20261120190203">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 </head>
 <body>
@@ -38,8 +38,8 @@
     <nav class="nav-links" aria-label="Main">
       <a href="#work"><span class="roll"><span>Work</span><span>Work</span></span></a>
       <a href="#about"><span class="roll"><span>About</span><span>About</span></span></a>
-      <a href="#product"><span class="roll"><span>Product</span><span>Product</span></span></a>
       <a href="#experience"><span class="roll"><span>Experience</span><span>Experience</span></span></a>
+      <a href="#product"><span class="roll"><span>Product</span><span>Product</span></span></a>
       <a href="#skills"><span class="roll"><span>Skills</span><span>Skills</span></span></a>
       <a href="#beyond"><span class="roll"><span>Beyond</span><span>Beyond</span></span></a>
     </nav>
@@ -138,7 +138,7 @@
 </section>
 
 <!-- ================= SCREENS GALLERY + INDEX ================= -->
-<section class="container" id="screens" aria-label="Screens gallery">
+<section class="container" id="screens" data-nav="work" aria-label="Screens gallery">
   <div class="screens" data-reveal>
     <div class="tilt" aria-hidden="true"><div class="tcol" data-speed="-260"></div><div class="tcol" data-speed="220"></div><div class="tcol" data-speed="-200"></div><div class="tcol" data-speed="180"></div><div class="tcol" data-speed="-150"></div></div>
     <div class="screens-veil" aria-hidden="true"></div>
@@ -151,7 +151,7 @@
 </section>
 
 <!-- ================= PROCESS (scroll: wireframe → shipped) ================= -->
-<section class="proc" id="process" aria-labelledby="proc-h">
+<section class="proc" id="process" data-nav="work" aria-labelledby="proc-h">
   <div class="proc-sticky"><div class="container">
     <div class="proc-head">
       <span class="eyebrow" data-reveal>How I design · scroll</span>
@@ -215,29 +215,28 @@
 </section>
 
 <!-- ================= PRODUCT (PM + PO) ================= -->
-<section class="sec beyond" id="beyond" aria-labelledby="beyond-h">
+<!-- ================= PRINCIPLES ================= -->
+<!-- ================= EXPERIENCE ================= -->
+<section class="sec" id="experience">
   <div class="container">
-    <div class="by-panel">
-      <div class="sec-head">
-        <div class="left">
-          <span class="eyebrow" data-reveal>Beyond the screen</span>
-          <h2 class="h-lg" id="beyond-h" data-split>Design doesn't stop <em class="serif">at screens</em></h2>
-        </div>
-        <p class="side" data-reveal>Design in all its forms: drawing, branding, motion, film and style. Off the desk, it's the gym and football.</p>
+    <div class="sec-head">
+      <div class="left">
+        <span class="eyebrow" data-reveal>Career</span>
+        <h2 class="h-lg" data-split>Experi<em class="serif">ence</em></h2>
       </div>
-      <div class="int-grid">
-        <article class="int" style="--ac:#7FA6E8;--ac2:#B57BEE;--d:0ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-ui"><div class="ph"><i></i><i></i><i></i></div></div></div><div class="int-media" data-site-img="int_ui" aria-hidden="true"></div></div><div class="int-txt"><h3>UI &amp; mobile</h3><p>Screens that feel obvious.</p></div></article>
-        <article class="int" style="--ac:#E879C9;--ac2:#F4A261;--d:70ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-draw"><svg viewBox="0 0 100 60" aria-hidden="true"><path pathLength="100" d="M8 44c10-22 22-30 30-18s14 22 24 6 14-24 30-10"/></svg><span class="pen"></span><span class="sw"><i></i><i></i><i></i></span></div></div><div class="int-media" data-site-img="int_brand" aria-hidden="true"></div></div><div class="int-txt"><h3>Graphic &amp; drawing</h3><p>Sketching, layouts and colour.</p></div></article>
-        <article class="int" style="--ac:#D8A960;--ac2:#E879C9;--d:140ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-logo"><i></i><b>brand</b></div></div><div class="int-media" data-site-img="int_logo" aria-hidden="true"></div></div><div class="int-txt"><h3>Branding &amp; logos</h3><p>Big ideas, small marks.</p></div></article>
-        <article class="int" style="--ac:#A497DB;--ac2:#5FC4C9;--d:210ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-motion"><i></i><b></b></div></div><div class="int-media" data-site-img="int_motion" aria-hidden="true"></div></div><div class="int-txt"><h3>Motion</h3><p>Movement with a purpose.</p></div></article>
-        <article class="int" style="--ac:#E4705F;--ac2:#A497DB;--d:280ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-film"><div class="strip"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="rec">REC</span></div></div><div class="int-media" data-site-img="int_film" aria-hidden="true"></div></div><div class="int-txt"><h3>Filmmaking &amp; editing</h3><p>Stories, cuts and colour.</p></div></article>
-        <article class="int" style="--ac:#E879C9;--ac2:#D8A960;--d:350ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-fashion"><svg class="hg" viewBox="0 0 64 40" aria-hidden="true"><path d="M32 8a4 4 0 1 1 4 4c-2 0-4 1-4 3v1L6 32h52L32 16"/></svg><svg class="pf" viewBox="0 0 24 34" aria-hidden="true"><rect x="9" y="2" width="6" height="5" rx="1.2"/><rect x="3" y="9" width="18" height="23" rx="5"/><path d="M8 17h8"/></svg><span class="mist"><i></i><i></i><i></i></span></div></div><div class="int-media" data-site-img="int_fashion" aria-hidden="true"></div></div><div class="int-txt"><h3>Fashion, scent &amp; style</h3><p>Style is design you wear.</p></div></article>
-        <article class="int" style="--ac:#5FB894;--ac2:#7FA6E8;--d:420ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-sport"><div class="bar"><i></i><i></i></div><span class="ball"></span></div></div><div class="int-media" data-site-img="int_sport" aria-hidden="true"></div></div><div class="int-txt"><h3>Sport</h3><p>Gym days, football and match nights.</p></div></article>
-        <article class="int" style="--ac:#5FC4C9;--ac2:#5FB894;--d:490ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-health"><svg viewBox="0 0 120 40" aria-hidden="true"><path class="bg" d="M0 22h34l6-12 8 24 7-18 5 6h60"/><path class="fg" pathLength="100" d="M0 22h34l6-12 8 24 7-18 5 6h60"/></svg></div></div><div class="int-media" data-site-img="int_health" aria-hidden="true"></div></div><div class="int-txt"><h3>Health</h3><p>Energy for everything else.</p></div></article>
-      </div>
+      <p class="side" data-reveal>Developer → Designer → Product. Open a role for the details, or get the full story in my CV.</p>
+    </div>
+    <div class="xp-tabs-row" data-reveal><div class="tabs glass xp-tabs" role="tablist" aria-label="Experience and learning"><span class="thumb" aria-hidden="true"></span><button type="button" class="on" role="tab" aria-selected="true" data-xp-tab="work">Work experience</button><button type="button" role="tab" aria-selected="false" data-xp-tab="learn">Learning &amp; recognition</button></div></div>
+    <div class="xp-pane" data-xp-pane="work">
+    <div class="xp" id="xp" aria-live="polite"></div>
+    <div class="xp-cv" data-reveal><span>Every role, tool and result in one page.</span><a class="btn btn-ghost btn-sm" data-site-href="cv" href="assets/cv.pdf" target="_blank" rel="noopener">Download my CV <span class="arr">↓</span></a></div>
+    </div>
+    <div class="xp-pane" data-xp-pane="learn" hidden>
+      <div class="rec-grid" id="recGrid"></div>
     </div>
   </div>
 </section>
+
 
 <section class="sec" id="product">
   <div class="container">
@@ -308,7 +307,6 @@
   </div>
 </section>
 
-<!-- ================= PRINCIPLES ================= -->
 <section class="sec" aria-labelledby="details">
   <div class="container">
     <div class="sec-head">
@@ -372,27 +370,6 @@
         <input type="range" min="0" max="100" value="50" aria-label="Compare before and after">
         <span class="ba-handle"></span>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= EXPERIENCE ================= -->
-<section class="sec" id="experience">
-  <div class="container">
-    <div class="sec-head">
-      <div class="left">
-        <span class="eyebrow" data-reveal>Career</span>
-        <h2 class="h-lg" data-split>Experi<em class="serif">ence</em></h2>
-      </div>
-      <p class="side" data-reveal>Developer → Designer → Product. Open a role for the details, or get the full story in my CV.</p>
-    </div>
-    <div class="xp-tabs-row" data-reveal><div class="tabs glass xp-tabs" role="tablist" aria-label="Experience and learning"><span class="thumb" aria-hidden="true"></span><button type="button" class="on" role="tab" aria-selected="true" data-xp-tab="work">Work experience</button><button type="button" role="tab" aria-selected="false" data-xp-tab="learn">Learning &amp; recognition</button></div></div>
-    <div class="xp-pane" data-xp-pane="work">
-    <div class="xp" id="xp" aria-live="polite"></div>
-    <div class="xp-cv" data-reveal><span>Every role, tool and result in one page.</span><a class="btn btn-ghost btn-sm" data-site-href="cv" href="assets/cv.pdf" target="_blank" rel="noopener">Download my CV <span class="arr">↓</span></a></div>
-    </div>
-    <div class="xp-pane" data-xp-pane="learn" hidden>
-      <div class="rec-grid" id="recGrid"></div>
     </div>
   </div>
 </section>
@@ -481,6 +458,31 @@
   </div>
 </section>
 
+
+<section class="sec beyond" id="beyond" aria-labelledby="beyond-h">
+  <div class="container">
+    <div class="by-panel">
+      <div class="sec-head">
+        <div class="left">
+          <span class="eyebrow" data-reveal>Beyond the screen</span>
+          <h2 class="h-lg" id="beyond-h" data-split>Design doesn't stop <em class="serif">at screens</em></h2>
+        </div>
+        <p class="side" data-reveal>Design in all its forms: drawing, branding, motion, film and style. Off the desk, it's the gym and football.</p>
+      </div>
+      <div class="int-grid">
+        <article class="int" style="--ac:#7FA6E8;--ac2:#B57BEE;--d:0ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-ui"><div class="ph"><i></i><i></i><i></i></div></div></div><div class="int-media" data-site-img="int_ui" aria-hidden="true"></div></div><div class="int-txt"><h3>UI &amp; mobile</h3><p>Screens that feel obvious.</p></div></article>
+        <article class="int" style="--ac:#E879C9;--ac2:#F4A261;--d:70ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-draw"><svg viewBox="0 0 100 60" aria-hidden="true"><path pathLength="100" d="M8 44c10-22 22-30 30-18s14 22 24 6 14-24 30-10"/></svg><span class="pen"></span><span class="sw"><i></i><i></i><i></i></span></div></div><div class="int-media" data-site-img="int_brand" aria-hidden="true"></div></div><div class="int-txt"><h3>Graphic &amp; drawing</h3><p>Sketching, layouts and colour.</p></div></article>
+        <article class="int" style="--ac:#D8A960;--ac2:#E879C9;--d:140ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-logo"><i></i><b>brand</b></div></div><div class="int-media" data-site-img="int_logo" aria-hidden="true"></div></div><div class="int-txt"><h3>Branding &amp; logos</h3><p>Big ideas, small marks.</p></div></article>
+        <article class="int" style="--ac:#A497DB;--ac2:#5FC4C9;--d:210ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-motion"><i></i><b></b></div></div><div class="int-media" data-site-img="int_motion" aria-hidden="true"></div></div><div class="int-txt"><h3>Motion</h3><p>Movement with a purpose.</p></div></article>
+        <article class="int" style="--ac:#E4705F;--ac2:#A497DB;--d:280ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-film"><div class="strip"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="rec">REC</span></div></div><div class="int-media" data-site-img="int_film" aria-hidden="true"></div></div><div class="int-txt"><h3>Filmmaking &amp; editing</h3><p>Stories, cuts and colour.</p></div></article>
+        <article class="int" style="--ac:#E879C9;--ac2:#D8A960;--d:350ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-fashion"><svg class="hg" viewBox="0 0 64 40" aria-hidden="true"><path d="M32 8a4 4 0 1 1 4 4c-2 0-4 1-4 3v1L6 32h52L32 16"/></svg><svg class="pf" viewBox="0 0 24 34" aria-hidden="true"><rect x="9" y="2" width="6" height="5" rx="1.2"/><rect x="3" y="9" width="18" height="23" rx="5"/><path d="M8 17h8"/></svg><span class="mist"><i></i><i></i><i></i></span></div></div><div class="int-media" data-site-img="int_fashion" aria-hidden="true"></div></div><div class="int-txt"><h3>Fashion, scent &amp; style</h3><p>Style is design you wear.</p></div></article>
+        <article class="int" style="--ac:#5FB894;--ac2:#7FA6E8;--d:420ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-sport"><div class="bar"><i></i><i></i></div><span class="ball"></span></div></div><div class="int-media" data-site-img="int_sport" aria-hidden="true"></div></div><div class="int-txt"><h3>Sport</h3><p>Gym days, football and match nights.</p></div></article>
+        <article class="int" style="--ac:#5FC4C9;--ac2:#5FB894;--d:490ms" data-reveal><div class="int-vis"><span class="int-back" aria-hidden="true"></span><div class="int-front"><div class="iv iv-health"><svg viewBox="0 0 120 40" aria-hidden="true"><path class="bg" d="M0 22h34l6-12 8 24 7-18 5 6h60"/><path class="fg" pathLength="100" d="M0 22h34l6-12 8 24 7-18 5 6h60"/></svg></div></div><div class="int-media" data-site-img="int_health" aria-hidden="true"></div></div><div class="int-txt"><h3>Health</h3><p>Energy for everything else.</p></div></article>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ================= FAQ ================= -->
 <section class="sec testi-sec" id="testimonials" hidden>
   <div class="container">
@@ -542,11 +544,11 @@
   </div>
 </footer>
 
-<script src="assets/js/content.js?v=20261120185408"></script>
-<script src="assets/js/config.js?v=20261120185408"></script>
-<script src="assets/js/icons.js?v=20261120185408"></script>
-<script src="assets/js/core.js?v=20261120185408"></script>
-<script src="assets/js/fx.js?v=20261120185408" defer></script>
-<script src="assets/js/home.js?v=20261120185408"></script>
+<script src="assets/js/content.js?v=20261120190203"></script>
+<script src="assets/js/config.js?v=20261120190203"></script>
+<script src="assets/js/icons.js?v=20261120190203"></script>
+<script src="assets/js/core.js?v=20261120190203"></script>
+<script src="assets/js/fx.js?v=20261120190203" defer></script>
+<script src="assets/js/home.js?v=20261120190203"></script>
 </body>
 </html>

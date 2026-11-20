@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261120185408">
+<link rel="stylesheet" href="assets/css/style.css?v=20261120190203">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -231,6 +231,13 @@ body::after{opacity:.04}
 .atabs::-webkit-scrollbar{display:none}
 .atabs button{white-space:nowrap;flex:none;min-height:42px;padding:8px 20px;border-radius:999px;font-weight:600;font-size:15px;color:var(--muted)}
 .atabs button.on{background:var(--tab-on);color:var(--tab-on-ink)}
+.atabs{margin-bottom:12px}
+.asub{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;padding-left:4px}
+.asub button{min-height:38px;padding:7px 15px;border-radius:12px;border:1px solid var(--line2);font-weight:600;font-size:14px;color:var(--muted);transition:background .25s,color .25s,border-color .25s}
+.asub button:hover{color:var(--ink)}
+.asub button.on{color:var(--ink);border-color:var(--sky);background:rgb(23 105 224 / .1)}
+fieldset[hidden]{display:none!important}
+.wt.single{grid-template-columns:minmax(0,1fr)}.wt.single .wt-nav{display:none}
 .prow .bdgs{display:flex;gap:6px;flex-wrap:wrap}.prow .bdgs .badge-d.feat{margin-left:0}
 @media (max-width:640px){.prow{flex-wrap:wrap}.prow .t{flex:1 1 calc(100% - 64px);min-width:0}.prow .bdgs{width:100%;padding-left:64px}.prow .acts{width:100%}.rep-item,.rep-item.two{grid-template-columns:minmax(0,1fr)}}
 .steps-help{display:flex;flex-direction:column;gap:10px;color:var(--muted);font-size:14.5px;padding-left:20px}
@@ -304,7 +311,8 @@ body::after{opacity:.04}
     <div class="adm-top">
       <div><h1 id="list-title">Your <em class="serif">projects</em></h1></div>
     </div>
-    <div class="atabs glass" role="tablist" aria-label="Content"><button type="button" class="on" data-tab="projects" role="tab" aria-selected="true">Projects</button><button type="button" data-tab="experience" role="tab" aria-selected="false">Experience</button><button type="button" data-tab="profile" role="tab" aria-selected="false">Profile &amp; links</button><button type="button" data-tab="content" role="tab" aria-selected="false">Website text</button></div>
+    <div class="atabs glass" id="pageTabs" role="tablist" aria-label="Website pages"></div>
+    <div class="asub" id="subTabs" aria-label="Sections on this page"></div>
     <p class="muted" id="listHint" style="margin-bottom:18px">Use ↑ ↓ to set the order. <b>Hide</b> keeps an item saved but off the website. Changes go live about a minute after you press <b>Publish</b>.</p>
     <div class="list" id="plist"></div>
     <div id="tabPanel" hidden></div>
@@ -331,10 +339,10 @@ body::after{opacity:.04}
   </div>
 </div>
 
-<script src="assets/js/config.js?v=20261120185408"></script>
-<script src="assets/js/icons.js?v=20261120185408"></script>
-<script src="assets/js/content.js?v=20261120185408"></script>
-<script src="assets/js/core.js?v=20261120185408"></script>
-<script src="assets/js/admin.js?v=20261120185408"></script>
+<script src="assets/js/config.js?v=20261120190203"></script>
+<script src="assets/js/icons.js?v=20261120190203"></script>
+<script src="assets/js/content.js?v=20261120190203"></script>
+<script src="assets/js/core.js?v=20261120190203"></script>
+<script src="assets/js/admin.js?v=20261120190203"></script>
 </body>
 </html>

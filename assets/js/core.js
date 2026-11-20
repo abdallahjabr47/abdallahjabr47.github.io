@@ -147,6 +147,7 @@
   if (links.length) {
     const map = new Map();
     links.forEach((a) => { const s = $(a.getAttribute('href')); if (s) map.set(s, a); });
+    $$('section[data-nav]').forEach((s) => { const a = links.find((l) => l.getAttribute('href') === '#' + s.dataset.nav); if (a) map.set(s, a); });
     const navIO = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         const a = map.get(e.target);
