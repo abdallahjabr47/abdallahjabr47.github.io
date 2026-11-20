@@ -377,23 +377,23 @@
     box.innerHTML = rows.map((x, i) => {
       const current = /present|now/i.test(x.dates || '');
       const hl = (x.highlights || []).length;
+      const more = hl || x.summary;
+      const meta = [x.company, x.location, x.type].filter(Boolean).map(esc).join('<i aria-hidden="true">·</i>');
       return `
-      <div class="xp-row${hl ? ' has-hl' : ''}" data-reveal>
-        <div class="xp-main">
-          <h3>${esc(x.role)}</h3>
-          ${x.summary ? `<p>${esc(x.summary)}</p>` : ''}
-          ${hl ? `<button class="more" type="button" aria-expanded="false" aria-controls="xp-hl-${i}">Highlights <i aria-hidden="true">+</i></button>
-          <div class="xp-hl" id="xp-hl-${i}"><div><ul>${x.highlights.map((h) => `<li>${esc(h)}</li>`).join('')}</ul></div></div>` : ''}
+      <div class="xp-row${more ? ' has-hl' : ''}" data-reveal>
+        <div class="xp-head">
+          <div class="xp-main"><h3>${esc(x.role)}</h3><p class="xp-meta">${meta}</p></div>
+          <span class="xp-date${current ? ' now' : ''}">${esc(x.dates)}</span>
+          ${more ? `<button class="xp-tog" type="button" aria-expanded="false" aria-controls="xp-hl-${i}" aria-label="Show details for ${esc(x.role)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>` : '<span></span>'}
         </div>
-        <span class="xp-co">${esc(x.company)}${x.location ? `<small>${esc(x.location)}${x.type ? ' · ' + esc(x.type) : ''}</small>` : ''}</span>
-        <span class="xp-date${current ? ' now' : ''}">${esc(x.dates)}</span>
+        ${more ? `<div class="xp-hl" id="xp-hl-${i}"><div class="xp-body">${x.summary ? `<p>${esc(x.summary)}</p>` : ''}${hl ? `<ul>${x.highlights.map((h) => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}</div></div>` : ''}
       </div>`;
     }).join('');
     $$('.xp-row', box).forEach((row) => {
-      const btn = $('.more', row);
+      const btn = $('.xp-tog', row);
       if (!btn) return;
       const toggle = () => { const open = !row.classList.contains('open'); row.classList.toggle('open', open); btn.setAttribute('aria-expanded', String(open)); slide($('.xp-hl', row), open); };
-      row.addEventListener('click', (e) => { if (e.target.closest('a')) return; toggle(); });
+      $('.xp-head', row).addEventListener('click', (e) => { if (e.target.closest('a')) return; toggle(); });
     });
     scan(box);
     onScroll(() => {
