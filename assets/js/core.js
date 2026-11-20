@@ -190,7 +190,7 @@
   /* ---------- glass letters near the mouse ---------- */
   (function () {
     if (!fine || reduce) return;
-    const R = 95;
+    const R = 80;
     let active = null, chars = [], raf = 0, px = 0, py = 0;
     const clear = () => { chars.forEach((c) => { c.style.removeProperty('--g'); c.classList.remove('gr'); }); chars = []; active = null; };
     const paint = () => {
@@ -200,9 +200,9 @@
         const r = c.getBoundingClientRect();
         const dx = Math.max(r.left - px, 0, px - r.right), dy = Math.max(r.top - py, 0, py - r.bottom);
         const d = Math.hypot(dx, dy);
-        const g = d >= R ? 0 : Math.pow(1 - d / R, 1.3);
+        const g = d >= R ? 0 : Math.min(1, (1 - d / R) * 2.6);
         if (g > 0.01) c.style.setProperty('--g', g.toFixed(2)); else c.style.removeProperty('--g');
-        c.classList.toggle('gr', g > 0.7);
+        c.classList.toggle('gr', g > 0.95);
       });
     };
     addEventListener('pointermove', (e) => {
