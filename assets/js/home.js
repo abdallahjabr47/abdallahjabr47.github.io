@@ -490,12 +490,31 @@
         <div class="rec-h"><span class="rec-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${c.ic}</svg></span><h3>${c.name}</h3><span class="rec-n">${list.length}</span></div>
         <ol class="rec-list">${list.map((r, k) => {
           const head = `<span class="rec-b"><b>${esc(r.title)}</b><small>${esc(r.org || '')}</small></span><span class="rec-y">${esc(r.year || '')}</span>`;
+          const cls = k >= 3 ? ' class="more" hidden' : '';
+          if (r.image) return `<li${cls}><button type="button" class="rec-row rec-cert" data-cert="${esc(r.image)}" data-title="${esc(r.title)}" data-org="${esc([r.org, r.year].filter(Boolean).join(' · '))}" data-note="${esc(r.note || '')}" data-link="${esc(r.link || '')}" data-cursor="View ↗"><span class="rec-thumb" style="background-image:url('${esc(r.image)}')"></span>${head}<span class="rec-chev cert" aria-hidden="true"></span></button></li>`;
           const extra = r.note || r.link;
-          return `<li${k >= 3 ? ' class="more" hidden' : ''}>${extra ? `<details><summary>${head}<span class="rec-chev" aria-hidden="true"></span></summary><div class="rec-x">${r.note ? `<p>${esc(r.note)}</p>` : ''}${r.link ? `<a href="${esc(r.link)}" target="_blank" rel="noopener">View certificate <span class="arr">↗</span></a>` : ''}</div></details>` : `<div class="rec-row">${head}<span class="rec-chev none" aria-hidden="true"></span></div>`}</li>`;
+          return `<li${cls}>${extra ? `<details><summary>${head}<span class="rec-chev" aria-hidden="true"></span></summary><div class="rec-x">${r.note ? `<p>${esc(r.note)}</p>` : ''}${r.link ? `<a href="${esc(r.link)}" target="_blank" rel="noopener">View certificate <span class="arr">↗</span></a>` : ''}</div></details>` : `<div class="rec-row">${head}<span class="rec-chev none" aria-hidden="true"></span></div>`}</li>`;
         }).join('')}</ol>
         ${list.length > 3 ? `<button class="rec-more" type="button" data-n="${list.length - 3}">Show ${list.length - 3} more</button>` : ''}
       </div>`;
     }).join('');
+    /* certificate viewer */
+    let cv = $('#certView');
+    if (!cv) {
+      document.body.insertAdjacentHTML('beforeend', '<div class="cert-view" id="certView" role="dialog" aria-modal="true" aria-label="Certificate" hidden><div class="cv-card"><button class="cv-x" type="button" aria-label="Close">✕</button><img alt=""><div class="cv-meta"><b></b><small></small><p></p><a target="_blank" rel="noopener">Open original <span class="arr">↗</span></a></div></div></div>');
+      cv = $('#certView');
+      const close = () => { cv.classList.remove('on'); setTimeout(() => { cv.hidden = true; }, 250); };
+      cv.addEventListener('click', (e) => { if (e.target === cv || e.target.closest('.cv-x')) close(); });
+      addEventListener('keydown', (e) => { if (e.key === 'Escape' && !cv.hidden) close(); });
+    }
+    box.addEventListener('click', (e) => {
+      const b = e.target.closest('.rec-cert'); if (!b) return;
+      $('img', cv).src = b.dataset.cert; $('img', cv).alt = b.dataset.title;
+      $('.cv-meta b', cv).textContent = b.dataset.title; $('.cv-meta small', cv).textContent = b.dataset.org;
+      const p = $('.cv-meta p', cv); p.textContent = b.dataset.note; p.hidden = !b.dataset.note;
+      const a = $('.cv-meta a', cv); a.href = b.dataset.link || '#'; a.hidden = !b.dataset.link;
+      cv.hidden = false; requestAnimationFrame(() => cv.classList.add('on')); $('.cv-x', cv).focus();
+    });
     $$('.rec-more', box).forEach((btn) => btn.addEventListener('click', () => {
       const col = btn.closest('.rec-col'); const open = col.classList.toggle('open');
       $$('li.more', col).forEach((li) => { li.hidden = !open; });

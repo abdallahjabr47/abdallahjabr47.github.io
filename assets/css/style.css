@@ -1591,3 +1591,21 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 @media (max-width:1000px){.proc{height:330vh}}
 #beyond .sec-head .side{max-width:760px}
 .cs-sum{max-width:760px;margin-top:14px;font-size:clamp(16px,1.3vw,18px);line-height:1.6;color:var(--muted)}
+/* certificates with images */
+.rec-list li>.rec-cert{display:grid;grid-template-columns:64px minmax(0,1fr) auto 18px;gap:14px;align-items:center;width:100%;text-align:left;padding:12px 6px;color:inherit;font:inherit}
+.rec-cert:hover{background:rgb(var(--fg) / .04)}
+.rec-thumb{width:64px;height:46px;border-radius:9px;background:#fff center/cover no-repeat;box-shadow:0 0 0 1px var(--line2),0 6px 14px rgb(0 0 0 / .25);transition:transform .4s var(--ease)}
+.rec-cert:hover .rec-thumb{transform:scale(1.06) rotate(-2deg)}
+.rec-chev.cert::before{content:"";position:absolute;inset:0;margin:auto;width:12px;height:12px;background:var(--muted);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7'/%3E%3C/svg%3E") center/contain no-repeat;transform:none;border:0}
+.rec-cert:hover .rec-chev.cert::before{background:var(--ac)}
+.cert-view{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:24px;background:rgb(5 6 10 / .78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;transition:opacity .25s}
+.cert-view.on{opacity:1}
+.cert-view[hidden]{display:none}
+.cv-card{position:relative;width:min(880px,100%);max-height:92vh;display:flex;flex-direction:column;border-radius:22px;overflow:hidden;background:var(--panel);border:1px solid var(--line2);box-shadow:0 40px 100px rgb(0 0 0 / .5);transform:translateY(12px) scale(.98);transition:transform .35s var(--ease)}
+.cert-view.on .cv-card{transform:none}
+.cv-card img{display:block;width:100%;max-height:68vh;object-fit:contain;background:#fff}
+.cv-meta{display:flex;flex-direction:column;gap:4px;padding:18px 22px 20px}
+.cv-meta b{font-size:18px}.cv-meta small{color:var(--muted);font-size:14px}.cv-meta p{font-size:14.5px;color:var(--ink2);margin-top:4px}
+.cv-meta a{align-self:flex-start;margin-top:8px;font-weight:600;font-size:14.5px;color:var(--sky)}
+.cv-meta [hidden]{display:none}
+.cv-x{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgb(0 0 0 / .55);color:#fff;font-size:15px;display:grid;place-items:center}

@@ -218,7 +218,7 @@
     if (kind === 'testimonials') return `<div class="rep-item" data-row><label class="f">Quote<textarea data-r="quote" placeholder="What they said about working with you">${esc(a.quote || '')}</textarea></label><div style="display:flex;flex-direction:column;gap:12px"><label class="f">Name<input data-r="name" value="${esc(a.name || '')}" placeholder="Full name"></label><label class="f">Role &amp; company<input data-r="role" value="${esc(a.role || '')}" placeholder="CTO, Homyt"></label></div><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     if (kind === 'recognition') {
       const K = [['certificate', 'Certificate'], ['education', 'Degree / education'], ['award', 'Hackathon, award or fellowship'], ['leadership', 'Leadership & community']];
-      return `<div class="rep-item rec-row" data-row><div class="g2"><label class="f">Type<select data-r="kind">${K.map(([v, l]) => `<option value="${v}"${(a.kind || 'certificate') === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Year<input data-r="year" value="${esc(a.year || '')}" placeholder="2024 or 2022 — 2024"></label></div><label class="f">Title<input data-r="title" value="${esc(a.title || '')}" placeholder="Google UX Design Professional Certificate"></label><div class="g2"><label class="f">Organisation · place<input data-r="org" value="${esc(a.org || '')}" placeholder="Google · Online"></label><label class="f">Link (optional)<input data-r="link" value="${esc(a.link || '')}" placeholder="https://… certificate link"></label></div><label class="f">Short note (optional)<input data-r="note" value="${esc(a.note || '')}" placeholder="Selected from 300+ applicants"></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
+      return `<div class="rep-item rec-row" data-row><div class="g2"><label class="f">Type<select data-r="kind">${K.map(([v, l]) => `<option value="${v}"${(a.kind || 'certificate') === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Year<input data-r="year" value="${esc(a.year || '')}" placeholder="2024 or 2022 — 2024"></label></div><label class="f">Title<input data-r="title" value="${esc(a.title || '')}" placeholder="Google UX Design Professional Certificate"></label><div class="g2"><label class="f">Organisation · place<input data-r="org" value="${esc(a.org || '')}" placeholder="Google · Online"></label><label class="f">Link (optional)<input data-r="link" value="${esc(a.link || '')}" placeholder="https://… certificate link"></label></div><div class="f">Certificate image (optional)<div class="rec-img"><input type="hidden" data-r="image" value="${esc(a.image || '')}"><span class="rec-th"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}>${a.image ? '' : 'No image'}</span><span class="rec-acts"><label class="btn btn-ghost btn-sm">${a.image ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${a.image ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}</span></div><small class="hint" style="margin:0">Shown as a small preview on the site; visitors can click to see it full size.</small></div><label class="f">Short note (optional)<input data-r="note" value="${esc(a.note || '')}" placeholder="Selected from 300+ applicants"></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     }
     if (kind === 'results') return `<div class="rep-item" data-row><label class="f">Value<input data-r="value" value="${esc(a.value || '')}" placeholder="+35%"></label><label class="f">What it measures<input data-r="label" value="${esc(a.label || '')}" placeholder="Weekly active users"></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     return '';
@@ -552,8 +552,25 @@
   const grow = (t) => { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight + 2, 640) + 'px'; };
   form.addEventListener('input', (e) => { if (e.target.tagName === 'TEXTAREA') grow(e.target); });
   new MutationObserver(() => requestAnimationFrame(() => $$('textarea', form).forEach(grow))).observe(form, { childList: true });
+  const drawRecImg = (wrap, path) => {
+    $('[data-r="image"]', wrap).value = path || '';
+    const th = $('.rec-th', wrap); th.style.backgroundImage = path ? `url('${imgURL(path)}')` : ''; th.textContent = path ? '' : 'No image';
+    $('.rec-acts', wrap).innerHTML = `<label class="btn btn-ghost btn-sm">${path ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${path ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}`;
+  };
+  form.addEventListener('click', (e) => { const b = e.target.closest('[data-rec-rm]'); if (!b) return; drawRecImg(b.closest('.rec-img'), ''); setDirty(true); });
   form.addEventListener('change', async (e) => {
     const input = e.target;
+    if (input.classList && input.classList.contains('rec-file') && input.files.length) {
+      const file = input.files[0], wrap = input.closest('.rec-img');
+      try {
+        const { b64, url, ext } = await processImage(file, 1600);
+        const name = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40) || 'certificate';
+        const path = `${CFG.imagesPath || 'assets/uploads'}/certs/${Date.now().toString(36)}-${name}.${ext}`;
+        pending.set(path, b64); previews.set(path, url);
+        drawRecImg(wrap, path); setDirty(true);
+      } catch (err) { toast('Could not read ' + file.name); }
+      return;
+    }
     if (input.type !== 'file' || !input.files.length) return;
     const box = input.closest('[data-imgs]');
     if (!box) return;
