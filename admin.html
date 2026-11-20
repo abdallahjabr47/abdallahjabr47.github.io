@@ -67,6 +67,20 @@ body::after{opacity:.04}
 .addimg:hover{border-color:var(--sky);color:var(--ink)}
 .addimg.wide{width:220px;height:138px}.addimg.sq{width:96px;height:96px}
 .addimg input{display:none}
+.im.pt,.im.pt .th{width:200px}.im.pt .th{height:250px;background-position:center 20%}
+.addimg.pt{width:200px;height:250px}
+.imgs[data-multi="0"]{align-items:flex-end}
+.imgs[data-multi="0"] [data-im="left"],.imgs[data-multi="0"] [data-im="right"]{display:none}
+.imgs[data-multi="0"] .im ~ .addimg{width:auto;height:32px;padding:0 14px;border-radius:9px;border:1px solid var(--line2);font-size:0;align-self:start}
+.imgs[data-multi="0"] .im ~ .addimg::after{content:"Replace";font-size:13px}
+.imgs[data-multi="0"] .im .ctl button{flex:0 0 auto;width:auto;padding:0 12px}
+.imgs[data-multi="0"] .im .ctl button[data-im="del"]::after{content:" Remove";font-size:13px}
+.imgs[data-multi="0"]{flex-direction:column;align-items:flex-start;gap:8px}
+.imgs[data-multi="0"] .im{flex-direction:column}
+.imgs[data-multi="0"]:has(.im){display:grid;grid-template-columns:auto auto;justify-content:start;align-items:end;column-gap:8px}
+.imgs[data-multi="0"]:has(.im) .im{grid-column:1/-1;display:contents}
+.imgs[data-multi="0"]:has(.im) .im .th{grid-column:1/-1;margin-bottom:4px}
+
 .savebar{position:fixed;left:0;right:0;bottom:0;z-index:80;padding:14px var(--pad);background:rgb(var(--bgc) / .88);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:flex;justify-content:center}
 .savebar .in{width:100%;max-width:1120px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
 .savebar .msg{color:var(--muted);font-size:14px}

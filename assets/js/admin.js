@@ -269,8 +269,8 @@
       <fieldset><legend>Photos</legend>
         <p class="hint">Portrait photos look best (about 4:5, at least 1000px tall). They are resized automatically. Leave empty to keep the current photo.</p>
         <div class="g2">
-          <div><div class="f">Main photo (top of the page)</div>${imgList('photo', site.photo ? [site.photo] : [], 'wide', false, false)}</div>
-          <div><div class="f">Second photo (About section)</div>${imgList('photo2', site.photo2 ? [site.photo2] : [], 'wide', false, false)}</div>
+          <div><div class="f">Main photo (top of the page)</div>${imgList('photo', site.photo ? [site.photo] : [], 'pt', false, false)}</div>
+          <div><div class="f">Second photo (About section)</div>${imgList('photo2', site.photo2 ? [site.photo2] : [], 'pt', false, false)}</div>
         </div>
       </fieldset>
       <fieldset><legend>Links</legend>
