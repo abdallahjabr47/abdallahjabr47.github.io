@@ -954,3 +954,6 @@ h1[data-split] .c.gr,h2[data-split] .c.gr{background-image:url("data:image/svg+x
 @keyframes twinkle{0%,100%{opacity:0;transform:scale(.4) rotate(0)}45%{opacity:.9;transform:scale(1) rotate(90deg)}60%{opacity:.6}}
 .hero-h{position:relative}
 @media (prefers-reduced-motion:reduce){.orbits *,.sparks i{animation:none!important}.sparks{display:none}}
+/* active nav tab: very light blue instead of grey */
+.nav-links a.active{background:rgba(120,175,255,.24);color:#E4EEFF}
+[data-theme="light"] .nav-links a.active{background:#E3EEFF;color:#1259C2}
