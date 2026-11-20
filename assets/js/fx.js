@@ -14,11 +14,20 @@
     try { seen = sessionStorage.getItem('intro-seen') === '1'; sessionStorage.setItem('intro-seen', '1'); } catch (e) {}
     if (seen) return;
     const d = src.getAttribute('d');
+    const lg = $('#logo'), lp = lg && lg.querySelector('path');
+    const vb = (lg && lg.getAttribute('viewBox')) || '0 0 430.5 201';
     const ov = document.createElement('div');
     ov.className = 'intro';
     ov.setAttribute('aria-hidden', 'true');
     ov.innerHTML = `<span class="ip t"></span><span class="ip b"></span>
-      <svg viewBox="0 0 430.5 201" class="intro-sig"><path class="fill" d="${d}" fill-rule="evenodd"/></svg>`;
+      <svg viewBox="${vb}" class="intro-sig">
+        <defs>
+          <mask id="im-ar" maskUnits="userSpaceOnUse" x="-60" y="-40" width="600" height="300"><rect class="mk mk-ar" x="-60" y="-40" width="600" height="300" fill="#fff"/></mask>
+          <mask id="im-en" maskUnits="userSpaceOnUse" x="-60" y="-40" width="600" height="300"><rect class="mk mk-en" x="-60" y="-40" width="600" height="300" fill="#fff"/></mask>
+        </defs>
+        ${lp ? `<g mask="url(#im-en)"><path class="en" d="${lp.getAttribute('d')}" mask="url(#logoKo)"/></g>` : ''}
+        <g mask="url(#im-ar)"><path class="fill" d="${d}" fill-rule="evenodd"/></g>
+      </svg>`;
     document.body.appendChild(ov);
     const html = document.documentElement;
     html.classList.add('intro-on');
@@ -28,18 +37,13 @@
       const sig = $('.intro-sig', ov), logo = $('.brand .logo');
       if (sig && logo) {
         const a = sig.getBoundingClientRect(), b = logo.getBoundingClientRect();
-        // the logo's calligraphy sits inside a wider viewBox; aim at its calligraphy part
-        const vb = (logo.getAttribute('viewBox') || '0 0 430.5 201').split(/\s+/).map(Number);
-        const k = b.height / vb[3];
-        const tw = 430.5 * k, tx = b.left + (0 - vb[0]) * k, ty = b.top + (0 - vb[1]) * k;
-        const s = tw / a.width;
-        sig.style.transform = `translate(${tx - a.left}px, ${ty - a.top}px) scale(${s})`;
+        sig.style.transform = `translate(${b.left - a.left}px, ${b.top - a.top}px) scale(${b.width / a.width})`;
       }
       ov.classList.add('out');
       setTimeout(() => html.classList.remove('intro-on'), 150);
       setTimeout(() => ov.remove(), 1300);
     };
-    setTimeout(finish, 1150);
+    setTimeout(finish, 1500);
     ov.addEventListener('click', finish);
   })();
 

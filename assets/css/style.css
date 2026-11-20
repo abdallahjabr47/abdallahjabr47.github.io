@@ -965,12 +965,15 @@ html.js-smooth{scroll-behavior:auto}
 .intro{position:fixed;inset:0;z-index:300;display:grid;place-items:center;cursor:pointer}
 .intro .ip{position:absolute;left:0;right:0;height:50.5%;background:var(--bg);transition:transform .8s cubic-bezier(.76,0,.24,1)}
 .intro .ip.t{top:0}.intro .ip.b{bottom:0}
-.intro-sig{position:relative;width:min(46vw,300px);overflow:visible;transform-origin:0 0;transition:transform .8s cubic-bezier(.76,0,.24,1);
-  -webkit-mask-image:linear-gradient(270deg,#000 45%,transparent 55%);mask-image:linear-gradient(270deg,#000 45%,transparent 55%);
-  -webkit-mask-size:240% 100%;mask-size:240% 100%;-webkit-mask-position:0 0;mask-position:0 0;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-.intro-sig .fill{fill:var(--ink)}
-.intro.go .intro-sig{animation:inkwrite .95s cubic-bezier(.55,.1,.35,1) forwards}
-@keyframes inkwrite{to{-webkit-mask-position:100% 0;mask-position:100% 0}}
+.intro-sig{position:relative;width:min(56vw,380px);overflow:visible;transform-origin:0 0;transition:transform .8s cubic-bezier(.76,0,.24,1);color:var(--ink)}
+.intro-sig .fill{fill:currentColor}
+.intro-sig .en{fill:currentColor;opacity:.45}
+.intro-sig .mk{transform-box:fill-box;transform:scaleX(0)}
+.intro-sig .mk-ar{transform-origin:100% 50%}
+.intro-sig .mk-en{transform-origin:0 50%}
+.intro.go .mk-ar{animation:inkwrite .9s cubic-bezier(.55,.1,.35,1) forwards}
+.intro.go .mk-en{animation:inkwrite .8s cubic-bezier(.55,.1,.35,1) .45s forwards}
+@keyframes inkwrite{to{transform:scaleX(1)}}
 .intro.out{pointer-events:none}
 .intro.out .ip.t{transform:translateY(-100%)}.intro.out .ip.b{transform:translateY(100%)}
 html.intro-on{overflow:hidden}
