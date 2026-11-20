@@ -187,6 +187,42 @@
     loop();
   }
 
+  /* ---------- floating dots: slow drifting particles that lean away from the mouse ---------- */
+  (function () {
+    const cv = $('canvas.dots');
+    if (!cv || reduce) return;
+    const ctx = cv.getContext('2d');
+    let W = 0, H = 0, dpr = 1, pts = [], mx = -9999, my = -9999;
+    const make = () => {
+      dpr = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.round(Math.min(90, W * H / 16000));
+      pts = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .18, vy: -(.05 + Math.random() * .22), r: .6 + Math.random() * 1.6, a: .15 + Math.random() * .45, tw: Math.random() * 6.28, blue: Math.random() < .3 }));
+    };
+    make(); addEventListener('resize', make);
+    addEventListener('pointermove', (e) => { mx = e.clientX; my = e.clientY; }, { passive: true });
+    let last = 0;
+    const tick = (t) => {
+      requestAnimationFrame(tick);
+      if (document.hidden || t - last < 30) return; last = t;
+      const light = document.documentElement.dataset.theme === 'light';
+      ctx.clearRect(0, 0, W, H);
+      const sy = scrollY * .04;
+      pts.forEach((p) => {
+        p.x += p.vx; p.y += p.vy; p.tw += .03;
+        const dx = p.x - mx, dy = p.y - my, d2 = dx * dx + dy * dy;
+        if (d2 < 14400) { const f = (1 - d2 / 14400) * .9; p.x += dx / Math.sqrt(d2 + 1) * f; p.y += dy / Math.sqrt(d2 + 1) * f; }
+        if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+        if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10;
+        const al = p.a * (.6 + .4 * Math.sin(p.tw));
+        ctx.beginPath(); ctx.arc(p.x, (p.y - sy % H + H) % H, p.r, 0, 6.283);
+        ctx.fillStyle = p.blue ? `rgba(92,155,245,${al})` : (light ? `rgba(20,24,34,${al * .5})` : `rgba(255,255,255,${al * .7})`);
+        ctx.fill();
+      });
+    };
+    requestAnimationFrame(tick);
+  })();
+
   /* ---------- theme ---------- */
   function setTheme(t) {
     document.documentElement.dataset.theme = t;
