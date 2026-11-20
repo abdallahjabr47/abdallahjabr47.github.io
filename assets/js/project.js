@@ -68,7 +68,6 @@
         ${has(p.learnings) ? `<div class="quote glass" data-reveal><small>WHAT I LEARNED</small><p style="font-weight:500;color:var(--ink2)">${esc(p.learnings)}</p></div>` : ''}`);
     }
 
-    const next = projects[(idx + 1) % projects.length];
     const shots = (p.screens && p.screens.length) ? p.screens : [];
     const coverInner = p.cover && p.cover.image
       ? `<img src="${esc(p.cover.image)}" alt="${esc(p.title)} cover">`
@@ -101,14 +100,7 @@
         ${toc.length ? `<nav class="toc" aria-label="On this page">${toc.map(([id, l]) => `<a href="#${id}" data-toc="${id}">${l}</a>`).join('')}</nav>` : ''}
         <div class="cs-content">${sections.join('') || '<p class="cs-text">Details for this case study are coming soon.</p>'}</div>
       </div>
-      ${next && next.slug !== p.slug ? `
-      <section class="container" style="padding-bottom:120px">
-        <a class="next glass" href="project.html#${encodeURIComponent(next.slug)}" data-cursor="Next project ↗" style="--ntint:${esc((next.cover && next.cover.tint) || '#1769E0')}">
-          <span class="n-ic">${next.icon ? `<img src="${esc(next.icon)}" alt="">` : esc((next.title || '?')[0])}</span>
-          <span class="n-txt"><small>NEXT PROJECT</small><strong>${esc(next.title)}</strong>${next.tagline ? `<em>${esc(next.tagline)}</em>` : ''}</span>
-          <span class="btn btn-primary">View case study <span class="arr">↗</span></span>
-        </a>
-      </section>` : ''}`;
+`;
 
     /* gallery */
     const galEl = $('#gallery');
