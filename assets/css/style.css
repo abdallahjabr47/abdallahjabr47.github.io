@@ -1617,3 +1617,5 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 [data-theme="light"] .xp-row.k-full{--tc:#1769E0}[data-theme="light"] .xp-row.k-part{--tc:#1F8A5E}[data-theme="light"] .xp-row.k-intern{--tc:#A9741C}[data-theme="light"] .xp-row.k-contract{--tc:#6A58C4}
 .xp-row::before{content:"";position:absolute;left:-1px;top:22%;bottom:22%;width:3px;border-radius:3px;background:var(--tc);opacity:0;transition:opacity .35s}
 .xp-row:hover::before,.xp-row.open::before{opacity:1}
+.sec{padding-block:clamp(64px,8vw,110px)}.cta3{padding-top:clamp(70px,8vw,110px)}
+.nav-links a.active{font-weight:600}.nav-links a{transition:color .3s,background .3s,font-weight .2s}
