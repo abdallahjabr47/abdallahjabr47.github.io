@@ -520,4 +520,35 @@
     sec.hidden = false;
     scan(sec);
   })();
+
+  /* =============== contact: build a brief, send it as an email =============== */
+  const brief = $('#brief');
+  if (brief) {
+    const sum = $('#brSum'), send = $('#brSend'), note = $('#brNote');
+    const no = $('#brNo'); if (no) no.textContent = String(new Date().getDate() * 7 + new Date().getMonth() + 100).padStart(3, '0');
+    const picked = (g) => $$(`[data-group="${g}"] .br-chip.on`, brief).map((c) => c.textContent.trim());
+    const update = () => {
+      const need = picked('need'), when = picked('when');
+      const n = need.length + when.length;
+      sum.textContent = n ? [need.join(', '), when[0]].filter(Boolean).join(' · ') : 'Nothing picked yet';
+      brief.classList.toggle('ready', n > 0);
+    };
+    $$('.br-chips', brief).forEach((g) => g.addEventListener('click', (e) => {
+      const c = e.target.closest('.br-chip'); if (!c) return;
+      if (g.hasAttribute('data-single')) $$('.br-chip', g).forEach((x) => { if (x !== c) { x.classList.remove('on'); x.setAttribute('aria-pressed', 'false'); } });
+      c.classList.toggle('on'); c.setAttribute('aria-pressed', String(c.classList.contains('on')));
+      update();
+    }));
+    $$('.br-chip', brief).forEach((c) => c.setAttribute('aria-pressed', 'false'));
+    brief.addEventListener('submit', (e) => e.preventDefault());
+    send.addEventListener('click', () => {
+      const base = (send.getAttribute('href') || '').split('?')[0];
+      const need = picked('need'), when = picked('when');
+      const subject = need.length ? `Brief: ${need.join(', ')}` : "Let's work together";
+      const lines = [need.length ? `I'm looking for: ${need.join(', ')}` : '', when.length ? `Timeline: ${when[0]}` : '', note.value.trim()].filter(Boolean);
+      const body = ['Hi Abdallah,', '', ...lines, ...(lines.length ? [''] : []), 'Thanks!'].join('\n');
+      send.setAttribute('href', `${base}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+    });
+    update();
+  }
 })();
