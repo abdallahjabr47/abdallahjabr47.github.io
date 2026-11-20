@@ -41,7 +41,7 @@
       </div>
       <div class="pc-foot">
         <p>${esc(p.summary || '')}</p>
-        ${p.status ? `<span class="status-pill${p.live ? ' live' : ''}">${esc(p.status)}</span>` : ''}
+        ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In development': 'dev', 'Delivered to client': 'done' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
       </div>
     </article>`;
   }

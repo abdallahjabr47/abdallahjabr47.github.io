@@ -87,7 +87,7 @@
         ${has(p.tagline) ? `<p class="tagline" data-reveal style="--d:250ms">${esc(p.tagline)}</p>` : ''}
         <div class="cs-meta" data-reveal style="--d:350ms">
           ${(p.tags || []).map((t) => `<span class="pill">${esc(t)}</span>`).join('')}
-          ${p.status ? `<span class="status-pill${p.live ? ' live' : ''}">${esc(p.status)}</span>` : ''}
+          ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In development': 'dev', 'Delivered to client': 'done' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
           ${has(p.liveUrl) ? `<a class="btn btn-primary btn-sm" href="${esc(p.liveUrl)}" target="_blank" rel="noopener">Visit live <span class="arr">↗</span></a>` : ''}
         </div>
       </section>

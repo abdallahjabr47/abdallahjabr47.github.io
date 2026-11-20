@@ -245,6 +245,12 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .pc-head p{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .status-pill{display:inline-flex;align-items:center;gap:8px;padding:0;background:none;color:var(--muted);font-size:14.5px;font-weight:600;letter-spacing:.01em}
 .status-pill.live{color:var(--ok)}
+.status-pill.dev{color:#E8A33D}
+.status-pill.dev::before{content:"";width:7px;height:7px;border-radius:50%;background:#E8A33D}
+.status-pill.done{color:var(--sky)}
+.status-pill.done::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--sky)}
+.status-pill.muted::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--dim)}
+[data-theme="light"] .status-pill.dev{color:#B26B00}
 .status-pill.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
 /* mock screens (shown until real screenshots are uploaded) */
 .mock{height:100%;display:flex;flex-direction:column;gap:9px;padding:34px 12px 12px;background:#0B0D14;color:#fff}

@@ -182,6 +182,7 @@
     if (opts.select) return `<label class="f">${label}<select data-k="${key}">${opts.select.map(([ov, ol]) => `<option value="${ov}" ${String(val) === ov ? 'selected' : ''}>${ol}</option>`).join('')}</select>${hint}</label>`;
     return `<label class="f">${label}<input data-k="${key}" type="${opts.type || 'text'}" value="${v}" ${opts.ph ? `placeholder="${esc(opts.ph)}"` : ''}>${hint}</label>`;
   };
+  const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['In development', 'In development'], ['Delivered to client', 'Delivered to client'], ['Concept', 'Concept / not released'], ['Discontinued', 'Discontinued']];
   const C = (label, key, val) => `<label class="chk"><input type="checkbox" data-k="${key}" ${val ? 'checked' : ''}> ${label}</label>`;
 
   function imgItem(path, cls, withLabel, label) {
@@ -218,7 +219,7 @@
         <div class="g2">${F('Project name *', 'title', p.title)}${F('URL name (slug)', 'slug', p.slug, { hint: 'Auto-filled from the name. Used in the link: project.html#slug' })}</div>
         <div class="g2">${F('Card one-liner', 'tagline', p.tagline, { hint: 'Shown under the name on the card and on the case study.' })}${F('Category', 'category', p.category, { ph: 'Entertainment · Series platform' })}</div>
         <div class="g3">${F('Type', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Website + mobile app']] })}${F('Platform label', 'platform', p.platform, { ph: 'Mobile App' })}${F('Year', 'year', p.year)}</div>
-        <div class="g3">${F('Status pill', 'status', p.status, { ph: 'Live on App Store' })}${F('Live link (optional)', 'liveUrl', p.liveUrl, { ph: 'https://…' })}<div style="display:flex;flex-direction:column;justify-content:flex-end">${C('It is live (green dot)', 'live', p.live)}${C('Show on the website', 'published', p.published !== false)}</div></div>
+        <div class="g3">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES, hint: 'Shown on the card and case study.' })}${F('Live link (optional)', 'liveUrl', p.liveUrl, { ph: 'https://…', hint: 'Adds a “Visit live” button.' })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}</div></div>
         ${F('Short summary (card)', 'summary', p.summary, { area: true, rows: 3 })}
       </fieldset>
 
@@ -347,6 +348,7 @@
       if (k.startsWith('responsibilities.')) v = v.split('\n').map((s) => s.trim()).filter(Boolean);
       setPath(p, k, v);
     });
+    p.live = p.status === 'Live';
     if (!p.slug) p.slug = slugify(p.title);
     p.slug = slugify(p.slug);
     $$('[data-rep]', form).forEach((box) => {

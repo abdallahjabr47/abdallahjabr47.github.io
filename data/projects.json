@@ -226,7 +226,7 @@
     "year": "2023 — 2024",
     "live": true,
     "liveUrl": "",
-    "status": "Live website",
+    "status": "Live",
     "published": true,
     "summary": "Led the full redesign and rebuild of the Foras.ps platform — new sitemap, information architecture and a design system built from scratch.",
     "cover": {
@@ -280,7 +280,7 @@
     "year": "[Year]",
     "live": false,
     "liveUrl": "",
-    "status": "Shipped for Cincy Labs",
+    "status": "Delivered to client",
     "published": true,
     "summary": "Onboarding, login and sign-up flows for a US app studio — designed to get new users from download to first value as fast as possible.",
     "cover": {
@@ -345,7 +345,7 @@
     "year": "[Year]",
     "live": false,
     "liveUrl": "",
-    "status": "[Status]",
+    "status": "",
     "published": true,
     "summary": "An auction app: [one line on the bidding experience and the trust problems you solved].",
     "cover": {
@@ -393,7 +393,7 @@
     "year": "[Year]",
     "live": false,
     "liveUrl": "",
-    "status": "[Status]",
+    "status": "",
     "published": true,
     "summary": "A doctors app with its own design system: [one line on who it serves and what you designed].",
     "cover": {
@@ -441,7 +441,7 @@
     "year": "[Year]",
     "live": true,
     "liveUrl": "",
-    "status": "Live website",
+    "status": "Live",
     "published": true,
     "summary": "A website for a specialty café: [one line on the goal of the site and the result].",
     "cover": {
