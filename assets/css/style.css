@@ -1570,3 +1570,23 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
   .beyond .int{flex:0 0 72%;scroll-snap-align:center}
 }
 #beyond h2 .serif,#beyond .serif .c{color:#E879C9}[data-theme="light"] #beyond h2 .serif,[data-theme="light"] #beyond .serif .c{color:#C2349A}
+/* experience tabs */
+.xp-tabs-row{display:flex;margin-bottom:clamp(22px,3vw,36px)}
+.xp-tabs{display:inline-flex}
+.xp-pane[hidden]{display:none}
+@media (max-width:560px){.xp-tabs button{padding:8px 14px;font-size:14px}}
+#beyond h2[data-split] .serif .c{--base:#E879C9;--sheen:linear-gradient(180deg,rgba(255,190,235,.5),rgba(232,121,201,.1) 55%,rgba(232,121,201,.25));--gs:rgba(240,150,215,.95)}
+[data-theme="light"] #beyond h2[data-split] .serif .c{--base:#C2349A;--gs:rgba(194,52,154,.85)}
+/* bigger tap targets on touch screens */
+@media (pointer:coarse){
+  .pr-act,.mini-seg button,.tk-st{min-height:40px;display:inline-flex;align-items:center}
+  .back-link{min-height:40px;align-items:center}
+  .cmp .switch,[role=switch]{min-height:36px}
+}
+/* light mode: cleaner card backgrounds and lighter device shadows */
+[data-theme="light"] .stage-panel{background:radial-gradient(120% 80% at 50% 110%,color-mix(in srgb,var(--tint,#2B3A8F) 22%,transparent),transparent 60%),var(--panel)}
+[data-theme="light"] .phone-f,[data-theme="light"] .tablet-f{box-shadow:0 24px 50px rgba(18,20,27,.18),inset 0 0 0 2px #1C1F28}
+[data-theme="light"] .laptop-f .lid{box-shadow:0 20px 44px rgba(18,20,27,.16)}
+/* shorter scroll on phones */
+@media (max-width:1000px){.proc{height:330vh}}
+#beyond .sec-head .side{max-width:760px}

@@ -396,7 +396,7 @@
         <div class="ph-grid">${[['ui', 'UI & mobile'], ['brand', 'Graphic & branding'], ['logo', 'Logos'], ['motion', 'Motion'], ['film', 'Filmmaking & editing'], ['fashion', 'Fashion'], ['sport', 'Sport & gym'], ['health', 'Health']].map(([k, l]) => `<div class="ph-card"><div class="ph-top"><span><b>${l}</b></span></div>${imgList('int_' + k, site['int_' + k] ? [site['int_' + k]] : [], 'wide', false, false)}</div>`).join('')}</div>
       </fieldset>
       <fieldset><legend>Learning &amp; recognition</legend>
-        <p class="hint">Degrees, certificates, hackathons and community roles. They show on the home page in three columns, in this order. Leave the list empty to hide the section.</p>
+        <p class="hint">Degrees, certificates, hackathons and community roles. They show under Experience → “Learning &amp; recognition” tab, in three columns, in this order. Leave the list empty to hide the section.</p>
         ${rep('recognition', site.recognition, 'Add item')}
       </fieldset>
       <fieldset><legend>Testimonials</legend>
