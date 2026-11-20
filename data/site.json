@@ -13,93 +13,93 @@
   "recognition": [
     {
       "kind": "education",
+      "year": "2018 — 2022",
       "title": "B.Sc. Computer Science",
       "org": "Birzeit University",
-      "year": "2018 — 2022",
-      "note": "",
       "link": "",
-      "image": ""
+      "image": "",
+      "note": ""
     },
     {
       "kind": "certificate",
+      "year": "2024",
       "title": "Google UX Design Professional Certificate",
       "org": "Google · Online",
-      "year": "2024",
-      "note": "",
       "link": "https://coursera.org/verify/professional-cert/OG33YPLM15K1",
-      "image": "assets/uploads/certs/google-ux.jpg"
+      "image": "assets/uploads/certs/google-ux.jpg",
+      "note": ""
     },
     {
       "kind": "certificate",
+      "year": "2023",
       "title": "Front-end Development with React",
       "org": "Gaza Sky Geeks · Nablus",
-      "year": "2023",
-      "note": "",
       "link": "https://drive.google.com/file/d/1t72JJkfJUiSb18QiIg7W8_ktQV3xmnIc/view",
-      "image": "assets/uploads/certs/react.jpg"
+      "image": "assets/uploads/certs/react.jpg",
+      "note": ""
     },
     {
       "kind": "certificate",
+      "year": "2022",
       "title": "Employability & Business English Training",
       "org": "Amideast · Ramallah",
-      "year": "2022",
-      "note": "120 hours of employability training + 20 hours of business English",
       "link": "https://drive.google.com/file/d/12ZXlfF_49Y7wtqUCwGxIbVtGEs36c4sl/view",
-      "image": "assets/uploads/certs/amideast.jpg"
+      "image": "assets/uploads/certs/amideast.jpg",
+      "note": "120 hours of employability training + 20 hours of business English"
     },
     {
       "kind": "certificate",
+      "year": "2021",
       "title": "Google Digital & Social Media Marketing",
       "org": "Google · Online",
-      "year": "2021",
-      "note": "",
       "link": "",
-      "image": "assets/uploads/certs/google-digital.jpg"
+      "image": "assets/uploads/certs/google-digital.jpg",
+      "note": ""
     },
     {
       "kind": "award",
+      "year": "2019",
       "title": "KOICA Startup Support Program Global Hackathon",
       "org": "KOICA · Seoul, South Korea",
-      "year": "2019",
-      "note": "Selected by Paltel Group Foundation for a tech and cultural exchange with Korean entrepreneur students",
       "link": "https://drive.google.com/file/d/1nGaOxUThLWoWMY1iMhFc-RccyKNOqvex/view",
-      "image": "assets/uploads/certs/koica.jpg"
+      "image": "assets/uploads/certs/koica.jpg",
+      "note": "Selected by Paltel Group Foundation for a tech and cultural exchange with Korean entrepreneur students"
     },
     {
       "kind": "award",
+      "year": "2022",
       "title": "Professional Development Immersion Program",
       "org": "Amideast & Legacy International · Washington, D.C. / New York",
-      "year": "2022",
-      "note": "Chosen to represent emerging Palestinian youth in the USA",
       "link": "https://drive.google.com/file/d/1p3YQfrs35-vt9l5rmg8w8ufdvuGRrDcy/view",
-      "image": "assets/uploads/certs/pdip.jpg"
+      "image": "assets/uploads/certs/pdip.jpg",
+      "note": "Chosen to represent emerging Palestinian youth in the USA"
     },
     {
       "kind": "award",
+      "year": "2015 — 2017",
       "title": "Code for Palestine Graduate",
       "org": "Paltel Group Foundation · 3-year tech program",
-      "year": "2015 — 2017",
-      "note": "Selected from 300+ applicants",
       "link": "",
-      "image": "assets/uploads/certs/code-for-palestine.jpg"
+      "image": "assets/uploads/certs/code-for-palestine.jpg",
+      "note": "Selected from 300+ applicants"
     },
     {
       "kind": "leadership",
+      "year": "2022 — 2024",
       "title": "Co-founder, Birzeit Hub",
       "org": "Global Shapers · World Economic Forum",
-      "year": "2022 — 2024",
-      "note": "Co-led the hub, turning youth ideas into local community projects",
       "link": "",
-      "image": ""
+      "image": "",
+      "note": "Co-led the hub, turning youth ideas into local community projects"
     },
     {
       "kind": "leadership",
+      "year": "2021 — 2022",
       "title": "Designer, Marketing Team",
       "org": "Google Developer Student Clubs · Birzeit University",
-      "year": "2021 — 2022",
-      "note": "Visual materials and branding for university tech events",
       "link": "",
-      "image": ""
+      "image": "",
+      "note": "Visual materials and branding for university tech events"
     }
   ],
   "availabilityOn": false
