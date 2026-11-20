@@ -48,7 +48,7 @@
     return `
     <article class="pcard type-${type} show-${pref}" data-type="${type}" style="--tint:${esc(tint)}" data-reveal>
       <div class="stage-panel" data-cursor="Explore case ↗" data-href="${href}" data-n="${count}">
-        <div class="sp-badges"><span class="l"></span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
+        <div class="sp-badges"><span class="l"><span class="lb lb-${type}">${({ mobile: 'Mobile app', web: 'Website', both: 'Web + app' })[type] || 'Mobile app'}</span>${catShort ? `<span class="lb lb-cat">${esc(catShort)}</span>` : ''}</span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
         <div class="devices2">${laptop}${phone}</div>
         <button class="sp-arrow a-prev" type="button" aria-label="Previous screen of ${esc(p.title)}" disabled>←</button>
         <button class="sp-arrow a-next" type="button" aria-label="Next screen of ${esc(p.title)}"${count < 2 ? ' disabled' : ''}>→</button>
@@ -56,7 +56,7 @@
       </div>
       <div class="pc-head">
         <span class="app-icon">${icon}</span>
-        <div class="nm"><h3>${esc(p.title)}</h3><p>${esc(p.tagline || p.category || '')}</p><span class="pc-tags">${catShort ? `<span class="pc-cat">${esc(catShort)}</span>` : ''}${devChips ? `<span class="pc-devs" title="${esc(p.platform || (type === 'web' ? 'Website' : 'Mobile App'))}">${devChips}</span>` : ''}</span></div>
+        <div class="nm"><h3>${esc(p.title)}</h3><p>${esc(p.tagline || p.category || '')}</p></div>
         ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
       </div>
     </article>`;
