@@ -128,9 +128,9 @@
         <span class="acts">
           <button class="ib" type="button" data-a="up" data-i="${i}" aria-label="Move up" ${i === 0 ? 'disabled' : ''}>↑</button>
           <button class="ib" type="button" data-a="down" data-i="${i}" aria-label="Move down" ${i === experience.length - 1 ? 'disabled' : ''}>↓</button>
-          <button class="ib" type="button" data-a="toggle" data-i="${i}">${x.visible !== false ? 'Hide' : 'Show'}</button>
-          <button class="ib" type="button" data-a="edit" data-i="${i}">Edit</button>
-          <button class="ib danger" type="button" data-a="del" data-i="${i}">Delete</button>
+          <button class="ib ${x.visible !== false ? 'hide' : 'show'}" type="button" data-a="toggle" data-i="${i}">${x.visible !== false ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>Hide' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c1-1.5 5-6 10-6s9 4.5 10 6c-1 1.5-5 6-10 6S3 13.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Show'}</button>
+          <button class="ib edit" type="button" data-a="edit" data-i="${i}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg>Edit</button>
+          <button class="ib danger" type="button" data-a="del" data-i="${i}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>Delete</button>
         </span></div>`).join('');
       return;
     }
@@ -145,9 +145,9 @@
         <span class="acts">
           <button class="ib" type="button" data-a="up" data-i="${i}" aria-label="Move ${esc(p.title)} up" ${i === 0 ? 'disabled' : ''}>↑</button>
           <button class="ib" type="button" data-a="down" data-i="${i}" aria-label="Move ${esc(p.title)} down" ${i === projects.length - 1 ? 'disabled' : ''}>↓</button>
-          <button class="ib" type="button" data-a="toggle" data-i="${i}">${p.published !== false ? 'Hide' : 'Show'}</button>
-          <button class="ib" type="button" data-a="edit" data-i="${i}">Edit</button>
-          <button class="ib danger" type="button" data-a="del" data-i="${i}" aria-label="Delete ${esc(p.title)}">Delete</button>
+          <button class="ib ${p.published !== false ? 'hide' : 'show'}" type="button" data-a="toggle" data-i="${i}">${p.published !== false ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>Hide' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c1-1.5 5-6 10-6s9 4.5 10 6c-1 1.5-5 6-10 6S3 13.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Show'}</button>
+          <button class="ib edit" type="button" data-a="edit" data-i="${i}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg>Edit</button>
+          <button class="ib danger" type="button" data-a="del" data-i="${i}" aria-label="Delete ${esc(p.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>Delete</button>
         </span></div>`;
     }).join('');
   }
