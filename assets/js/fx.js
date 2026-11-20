@@ -168,7 +168,8 @@
 
   /* ---------- 6. smooth wheel scrolling (mouse wheels and trackpads; keyboard and touch untouched) ---------- */
   (function smooth() {
-    if (!fine || reduce) return;
+    /* Safari already scrolls smoothly (and trackpads have their own momentum); taking over the wheel there makes it feel stuck */
+    if (!fine || reduce || document.documentElement.classList.contains('is-safari')) return;
     document.documentElement.classList.add('js-smooth');
     let target = scrollY, current = scrollY, running = false;
     const max = () => document.documentElement.scrollHeight - innerHeight;

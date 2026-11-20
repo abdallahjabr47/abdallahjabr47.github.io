@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261120224831">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121001320">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -349,6 +349,76 @@ fieldset[hidden]{display:none!important}
 fieldset>.wt-head.part-sw{padding-top:0;margin-bottom:16px}
 .part-list .wt-head{padding:4px 0 14px;margin-bottom:16px}
 #listHint{margin-bottom:18px}
+
+/* ---- admin polish: search, sub-tabs, dots, folding cards, hidden sections ---- */
+.asearch{position:relative;width:min(340px,100%)}
+.asearch svg{position:absolute;left:14px;top:50%;width:17px;height:17px;transform:translateY(-50%);fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;pointer-events:none}
+.asearch input{width:100%;height:46px;padding:0 16px 0 42px;border-radius:14px;border:1px solid var(--line2);background:var(--field);color:var(--ink);font:15px 'Inter',sans-serif}
+.asearch input:focus{outline:2px solid var(--sky);outline-offset:1px;border-color:transparent}
+.sres{position:absolute;right:0;top:calc(100% + 8px);z-index:60;width:min(460px,92vw);max-height:420px;overflow:auto;padding:6px;border-radius:16px;box-shadow:0 20px 50px rgb(0 0 0 / .35)}
+.sres button{display:flex;flex-direction:column;gap:3px;width:100%;padding:10px 12px;border-radius:11px;text-align:left}
+.sres button:hover,.sres button:focus-visible{background:rgb(var(--fg) / .06)}
+.sres small{font-size:12px;font-weight:600;color:var(--dim)}
+.sres small i{font-style:normal;color:var(--sky);margin-left:4px}
+.sres span{font-size:14px;color:var(--ink);line-height:1.45}
+.sres mark{background:rgb(23 105 224 / .3);color:inherit;border-radius:3px;padding:0 1px}
+.sres p{padding:12px;color:var(--muted);font-size:14px;margin:0}
+.asub{gap:6px;padding:6px;border-radius:16px;border:1px solid var(--line);background:rgb(var(--fg) / .02);width:fit-content;max-width:100%}
+.asub button{min-height:42px;padding:8px 18px;border:0;border-radius:11px;font-size:14.5px}
+.asub button:hover{background:rgb(var(--fg) / .05)}
+.asub button.on{background:var(--tab-on);color:var(--tab-on-ink);border:0}
+.tdot{display:inline-block;width:7px;height:7px;margin-left:7px;border-radius:50%;background:#E8A33D;vertical-align:middle;box-shadow:0 0 0 3px rgb(232 163 61 / .18)}
+.wt{grid-template-columns:250px minmax(0,1fr)}
+.wt-jumps{display:flex;flex-direction:column;gap:1px;margin:2px 0 8px 22px;padding-left:12px;border-left:1px solid var(--line2)}
+.wt-jh{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 6px}
+.wt-jh small{font-size:12px;color:var(--dim)}
+.wt-jh button{font-size:12.5px;font-weight:600;color:var(--sky)}
+.wt-jumps a{padding:6px 8px;border-radius:9px;font-size:13.5px;color:var(--muted);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wt-jumps a:hover{color:var(--ink);background:rgb(var(--fg) / .05)}
+.wt-tips{margin-top:8px;padding:10px 12px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.wt-tips summary{cursor:pointer;font-weight:600;color:var(--ink);list-style:none}
+.wt-tips summary::before{content:"?";display:inline-grid;place-items:center;width:18px;height:18px;margin-right:8px;border-radius:50%;border:1px solid var(--line2);font-size:11px;color:var(--sky)}
+.wt-tips p{margin:8px 0 0}
+.wt-tips code,.wt-tips kbd{font:600 12px ui-monospace,Menlo,monospace;color:var(--sky);margin-right:4px}
+.wt-gh[data-fold]{cursor:pointer;user-select:none}
+.wt-gh[data-fold]:hover{background:rgb(var(--fg) / .06)}
+.wt-gh[data-fold]:focus-visible{outline:2px solid var(--sky);outline-offset:-2px}
+.wt-chev{width:16px;height:16px;flex:none;fill:none;stroke:var(--muted);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transform:rotate(90deg);transition:transform .25s}
+.wt-group.closed .wt-chev{transform:none}
+.wt-gh b{flex:none}
+.wt-peek{flex:1;min-width:0;font-size:13.5px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s}
+.wt-group.closed .wt-peek{opacity:1}
+.wt-gh small{margin-left:auto;flex:none}
+.wt-group.closed .wt-gb{display:none}
+.wt-group.closed .wt-gh{border-bottom:0}
+.wt-group,.wt-field{scroll-margin-top:24px}
+@keyframes wtFlash{0%,40%{box-shadow:0 0 0 3px rgb(92 155 245 / .55)}100%{box-shadow:0 0 0 3px rgb(92 155 245 / 0)}}
+.wt-group.flash,.wt-field.flash{animation:wtFlash 1.6s ease-out;border-radius:14px}
+.off-note{display:flex;align-items:center;gap:10px;margin:4px 0 12px;padding:11px 14px;border-radius:12px;background:rgb(232 163 61 / .1);border:1px solid rgb(232 163 61 / .35);color:#E8A33D;font-size:14px;font-weight:600}
+.off-note::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.wt-sec.sec-off .wt-field,.wt-sec.sec-off .wt-group,.is-part-off>*:not(legend):not(.part-sw):not(.off-note),#plist.is-part-off{opacity:.45;transition:opacity .25s}
+.wt-sec.sec-off .wt-field:focus-within,.wt-sec.sec-off .wt-group:focus-within{opacity:1}
+@media (max-width:860px){.wt{grid-template-columns:minmax(0,1fr)}.wt.one .wt-nav{display:none}.wt-jumps,.wt-tips{display:none!important}.asearch{width:100%}.asub{width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.asub button{flex:none}.wt-peek{display:none}}
+
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin:14px 0 4px}
+.tgrid .wt-group.tcard{margin:0;border-radius:14px}
+.tcard .wt-gh{align-items:center;gap:12px;padding:10px 10px 10px 12px;background:none;border:0}
+.tc-ic{width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:10px;background:rgb(var(--fg) / .06);border:1px solid var(--line)}
+.tc-ic svg{width:20px;height:20px}
+.tc-fb{font-weight:700;color:var(--muted)}
+.tc-f{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.tcard .wt-field.tf{position:relative;padding:0;border:0}
+.tcard .wt-field.tf textarea{display:block;min-height:0;padding:3px 24px 3px 6px;border:1px solid transparent;border-radius:7px;background:none;font-size:14.5px;font-weight:600;line-height:1.35}
+.tcard .wt-field.tf+.wt-field.tf textarea{font-size:13px;font-weight:400;color:var(--muted)}
+.tcard .wt-field.tf textarea:hover{border-color:var(--line2)}
+.tcard .wt-field.tf textarea:focus{background:var(--field)}
+.tcard .wt-field.tf.edited textarea{border-color:rgba(92,155,245,.45)}
+.tcard .tf .wt-reset{position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:14px}
+.tcard .wt-orig{display:none!important}
+.tcard .wt-eye{align-self:center}.tcard .wt-eye span{display:none}
+.tcard.off .tc-ic,.tcard.off .tc-f{opacity:.4}
+.tcard.off>.wt-gh b::after{content:none}
+@media (max-width:640px){.tgrid{grid-template-columns:1fr 1fr;gap:8px}.tcard .wt-gh{flex-wrap:wrap;gap:8px;padding:10px;position:relative}.tc-ic{width:32px;height:32px}.tc-f{flex-basis:100%}.tcard .wt-eye{position:absolute;top:10px;right:10px}.tcard .wt-field.tf textarea{padding-left:2px}}
 </style>
 </head>
 <body>
@@ -393,6 +463,7 @@ fieldset>.wt-head.part-sw{padding-top:0;margin-bottom:16px}
   <section id="v-list" class="hidden">
     <div class="adm-top">
       <div><h1 id="list-title">Your <em class="serif">projects</em></h1></div>
+      <div class="asearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="adminSearch" type="search" placeholder="Search any text…" aria-label="Search all texts" autocomplete="off"><div class="sres glass" id="searchRes" hidden></div></div>
     </div>
     <div class="atabs glass" id="pageTabs" role="tablist" aria-label="Website pages"></div>
     <div class="asub" id="subTabs" aria-label="Sections on this page"></div>
@@ -423,10 +494,10 @@ fieldset>.wt-head.part-sw{padding-top:0;margin-bottom:16px}
   </div>
 </div>
 
-<script src="assets/js/config.js?v=20261120224831"></script>
-<script src="assets/js/icons.js?v=20261120224831"></script>
-<script src="assets/js/content.js?v=20261120224831"></script>
-<script src="assets/js/core.js?v=20261120224831"></script>
-<script src="assets/js/admin.js?v=20261120224831"></script>
+<script src="assets/js/config.js?v=20261121001320"></script>
+<script src="assets/js/icons.js?v=20261121001320"></script>
+<script src="assets/js/content.js?v=20261121001320"></script>
+<script src="assets/js/core.js?v=20261121001320"></script>
+<script src="assets/js/admin.js?v=20261121001320"></script>
 </body>
 </html>

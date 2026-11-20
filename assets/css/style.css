@@ -1728,3 +1728,11 @@ html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height
   .sp-badges .l{flex-wrap:nowrap;min-width:0;overflow:hidden}
   .lb{font-size:11px;padding:4px 8px}
 }
+
+/* ---- performance: Safari gets the same look without live blur; off-screen loops pause ---- */
+.ambient i{filter:none;will-change:transform}
+.is-away,.is-away *{animation-play-state:paused!important}
+.is-safari body::after{animation:none;inset:0}
+.is-safari .glass,.is-safari .pill,.is-safari .beyond .int,.is-safari .lb,.is-safari .sp-badges .tag,.is-safari .float-card,.is-safari .name-tag,.is-safari .nav-links,.is-safari .sp-arrow,.is-safari .explore{-webkit-backdrop-filter:none;backdrop-filter:none}
+.is-safari .beyond .int{background:rgb(var(--bgc) / .8)}
+.is-safari .proc-glow,.is-safari .orbits .glow{filter:none}

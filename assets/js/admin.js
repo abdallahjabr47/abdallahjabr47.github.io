@@ -53,9 +53,9 @@
   let page = PAGES[1], sub = PAGES[1].subs[0];
   const KIND_TAB = { projects: 'projects', experience: 'experience', site: 'profile', content: 'content' };
   function drawTabs() {
-    $('#pageTabs').innerHTML = PAGES.map((p) => `<button type="button" role="tab" data-page="${p.id}" class="${p === page ? 'on' : ''}" aria-selected="${p === page}">${esc(p.label)}</button>`).join('');
+    $('#pageTabs').innerHTML = PAGES.map((p) => `<button type="button" role="tab" data-page="${p.id}" class="${p === page ? 'on' : ''}" aria-selected="${p === page}">${esc(p.label)}${p.subs.some((x) => touched.has(p.id + '/' + x.id)) ? '<i class="tdot" title="Unpublished changes"></i>' : ''}</button>`).join('');
     $('#partBar').hidden = true;
-    $('#subTabs').innerHTML = page.subs.map((x) => `<button type="button" data-sub="${x.id}" class="${x === sub ? 'on' : ''}" aria-pressed="${x === sub}">${esc(x.label)}</button>`).join('');
+    $('#subTabs').innerHTML = page.subs.map((x) => `<button type="button" data-sub="${x.id}" class="${x === sub ? 'on' : ''}" aria-pressed="${x === sub}">${esc(x.label)}${touched.has(page.id + '/' + x.id) ? '<i class="tdot" title="Unpublished changes"></i>' : ''}</button>`).join('');
   }
   const partHead = () => { const on = !(content.hidden || []).includes(sub.part); return `<header class="wt-head part-sw"><div><small>Section</small><h3>${esc(sub.partName)}</h3></div><label class="wt-switch"><input type="checkbox" data-part-show="${esc(sub.part)}" ${on ? 'checked' : ''}><span></span>Show on website</label></header>`; };
   function placePartSwitch() {
@@ -63,8 +63,19 @@
     if (!sub.part) return;
     if (sub.kind === 'site') { const fs = $$('#edForm fieldset[data-g]').find((f) => !f.hidden); const lg = fs && $('legend', fs); if (lg) lg.insertAdjacentHTML('afterend', partHead()); }
     else { $('#plist').insertAdjacentHTML('beforebegin', `<div class="part-sw part-list">${partHead()}</div>`); }
+    markPartOff();
   }
-  function goTo(p, x) { collect(); setDirty(changed()); page = p; sub = x || p.subs[0]; tab = KIND_TAB[sub.kind]; renderList(); }
+  const OFF_NOTE = '<p class="off-note">Hidden on the website — visitors won’t see this section. Your edits are kept.</p>';
+  function markPartOff() {
+    $$('.is-part-off').forEach((x) => x.classList.remove('is-part-off'));
+    $$('.off-note.pn').forEach((x) => x.remove());
+    const sw = $('.part-sw'); if (!sw) return;
+    const off = !$('[data-part-show]', sw).checked;
+    const target = sub.kind === 'site' ? sw.closest('fieldset') : $('#plist');
+    if (target) target.classList.toggle('is-part-off', off);
+    if (off) sw.insertAdjacentHTML(sw.tagName === 'HEADER' ? 'afterend' : 'beforeend', OFF_NOTE.replace('off-note', 'off-note pn'));
+  }
+  function goTo(p, x) { collect(); setDirty(changed(), false); page = p; sub = x || p.subs[0]; tab = KIND_TAB[sub.kind]; renderList(); }
   let mode = 'project';     // which editor is open
   const EXP_PATH = 'data/experience.json';
   const SITE_PATH = 'data/site.json';
@@ -83,8 +94,11 @@
   const slugify = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9؀-ۿ]+/g, '-').replace(/^-+|-+$/g, '') || 'project-' + Date.now().toString(36);
   const imgURL = (path) => previews.get(path) || path;
   const b64FromUtf8 = (str) => { const bytes = new TextEncoder().encode(str); let bin = ''; bytes.forEach((b) => { bin += String.fromCharCode(b); }); return btoa(bin); };
-  function setDirty(v) {
+  const touched = new Set();   // "page/sub" ids with unpublished edits, shown as dots on the tabs
+  function setDirty(v, mark = true) {
     dirty = v;
+    if (!v) touched.clear(); else if (mark && page && sub) touched.add(page.id + '/' + sub.id);
+    if ($('#pageTabs').children.length) drawTabs();
     $('#savebar').classList.toggle('hidden', !v);
     if (v) { const m = $('#saveMsg'); m.className = 'msg'; m.textContent = 'Unsaved changes — press Publish to put them live'; }
   }
@@ -180,6 +194,7 @@
     editing = -1;
     tab = KIND_TAB[sub.kind];
     drawTabs();
+    $$('.part-sw').forEach((x) => x.remove());
     if (tab === 'profile') return openSiteEditor();
     if (tab === 'content') return openContentEditor();
     unembed();
@@ -238,7 +253,7 @@
     const c = e.target.closest && e.target.closest('[data-part-show]'); if (!c) return;
     const k = c.dataset.partShow;
     content.hidden = (content.hidden || []).filter((x) => x !== k).concat(c.checked ? [] : [k]);
-    setDirty(changed());
+    setDirty(changed()); markPartOff();
   });
   $('#pageTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-page]'); if (!b) return; const p = PAGES.find((x) => x.id === b.dataset.page); if (p === page && editing < 0 && tab !== 'profile' && tab !== 'content') return; goTo(p); });
   $('#subTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-sub]'); if (!b) return; const x = page.subs.find((y) => y.id === b.dataset.sub); if (x === sub && (tab === 'profile' || tab === 'content')) return; goTo(page, x); });
@@ -378,6 +393,7 @@
 
   /* Profile & links and Website text open right under the tabs, like the lists */
   function embedPanel(tabName, title) {
+    if (wtUnbind) wtUnbind();
     show('v-list');
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
     $('#plist').hidden = true; $('#listHint').hidden = true; $('#newProject').hidden = true;
@@ -386,10 +402,12 @@
     $('#edSide').hidden = true; $('#edLayout').classList.remove('two'); $('#edForm').oninput = null; $('#edForm').onchange = null;
   }
   function unembed() {
+    if (wtUnbind) wtUnbind();
     $('#edLayout').appendChild($('#edForm'));
     $('#plist').hidden = false; $('#listHint').hidden = false; $('#newProject').hidden = false; $('#tabPanel').hidden = true;
   }
 
+  let wtUnbind = null;
   async function openContentEditor() {
     editing = 0; mode = 'content';
     embedPanel('content', 'Website <em class="serif">text</em>');
@@ -405,16 +423,12 @@
     const EYE_I = '<svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c1-1.5 5-6 10-6s9 4.5 10 6c-1 1.5-5 6-10 6S3 13.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="no" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
     const editedIn = (fs) => fs.filter((f) => valOf(f) !== f.text).length;
     form.innerHTML = `
-      <div class="wt-help glass">
-        <div><b>How it works</b><span>Change any text below, then press <b>Preview</b> or <b>Publish</b> at the bottom.</span></div>
-        <div class="wt-keys"><span><code>*word*</code> blue italic</span><span><code>**words**</code> highlight</span><span><kbd>Enter</kbd> new line</span><span>Empty field = hidden</span></div>
-      </div>
-      <div class="wt${data.length < 2 ? ' single' : ''}">
+      <div class="wt${data.length < 2 ? ' one' : ''}">
         <aside class="wt-nav" role="tablist" aria-label="Page sections">${data.map(({ sec, fs }, n) => `
           <button type="button" class="wt-tab${n === 0 ? ' on' : ''}" data-wt="${n}" role="tab"><span class="wt-n">${String(n + 1).padStart(2, '0')}</span><span class="wt-l"><b>${esc(sec.name)}</b><small data-wt-meta="${n}">${fs.length} texts${editedIn(fs) ? ` · <i>${editedIn(fs)} edited</i>` : ''}${content.hidden.includes(sec.key) ? ' · hidden' : ''}</small></span></button>`).join('')}
         </aside>
         <div class="wt-body">${data.map(({ sec, fs }, n) => `
-          <section class="wt-sec" data-wt-sec="${n}"${n ? ' hidden' : ''}>
+          <section class="wt-sec${content.hidden.includes(sec.key) ? ' sec-off' : ''}" data-wt-sec="${n}"${n ? ' hidden' : ''}>
             <header class="wt-head">
               <div><small>Section ${String(n + 1).padStart(2, '0')}</small><h3>${esc(sec.name)}</h3></div>
               <label class="wt-switch"><input type="checkbox" data-sec-show="${esc(sec.key)}" ${content.hidden.includes(sec.key) ? '' : 'checked'}><span></span>Show on website</label>
@@ -426,14 +440,21 @@
               <textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1">${esc(v)}</textarea>
               <p class="wt-orig"${ed ? '' : ' hidden'}>Original: ${esc(f.text)}</p>
             </div>`; };
-              let html = '', k = 0;
+              /* tools: small cards with the logo, name and one line each */
+              const logo = (el) => { const ic = el && (window.ICONS || {})[el.dataset.icon]; if (!ic) return `<span class="tc-fb">${esc((el && el.dataset.fb) || '•')}</span>`; if (ic.full) return `<svg viewBox="${ic.fvb}" aria-hidden="true">${ic.full}</svg>`; return `<svg viewBox="${ic.vb}" fill="currentColor" style="color:${ic.c === 'ink' ? 'var(--ink)' : ic.c}" aria-hidden="true">${ic.p}</svg>`; };
+              const mini = (f, ph) => { const v = valOf(f); const ed = v !== f.text; return `<div class="wt-field tf${ed ? ' edited' : ''}"><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1" placeholder="${ph}">${esc(v)}</textarea><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'} title="Back to original">↺</button><p class="wt-orig" hidden></p></div>`; };
+              const tcard = (run) => { const tool = run[0].el.closest('.tool'); const gk = 'g:' + run[0].key, goff = offs.includes(gk); return `<div class="wt-group tcard${goff ? ' off' : ''}"><div class="wt-gh"><span class="tc-ic">${logo(tool && tool.querySelector('[data-icon]'))}</span><div class="tc-f">${run.map((f, i) => mini(f, i ? 'Short line' : 'Name')).join('')}</div><button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}" title="Show / hide this tool">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button></div></div>`; };
+              let html = '', k = 0, inGrid = false;
               while (k < fs.length) {
                 const g = fs[k].group;
+                const isTool = g && fs[k].el.closest('.tool');
+                if (!isTool && inGrid) { html += '</div>'; inGrid = false; }
                 if (!g) { html += field(fs[k]); k++; continue; }
                 const run = []; while (k < fs.length && fs[k].group === g) run.push(fs[k++]);
+                if (isTool) { if (!inGrid) { html += '<div class="tgrid">'; inGrid = true; } html += tcard(run); if (k >= fs.length) { html += '</div>'; inGrid = false; } continue; }
                 const isList = g.startsWith('list-');
                 const gk = 'g:' + run[0].key, goff = !isList && offs.includes(gk);
-                html += `<div class="wt-group${isList ? ' list' : ''}${goff ? ' off' : ''}"><div class="wt-gh"><b>${esc(run[0].groupLabel)}</b><small>${run.length} ${run.length === 1 ? 'text' : 'texts'}</small>${isList ? '' : `<button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button>`}</div><div class="wt-gb">${run.map(field).join('')}</div></div>`;
+                html += `<div class="wt-group${isList ? ' list' : ''}${goff ? ' off' : ''}"><div class="wt-gh"${isList ? '' : ' data-fold'}>${isList ? '' : '<svg class="wt-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>'}<b>${esc(run[0].groupLabel)}</b>${isList ? '' : '<span class="wt-peek"></span>'}<small>${run.length} ${run.length === 1 ? 'text' : 'texts'}</small>${isList ? '' : `<button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button>`}</div><div class="wt-gb">${run.map(field).join('')}</div></div>`;
               }
               return html;
             })()}
@@ -441,10 +462,37 @@
         </div>
       </div>`;
     const grow = (t) => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; };
+    /* sections that are switched off: dim them and say so */
+    const markSec = (sec$) => { const off = !$('[data-sec-show]', sec$).checked; sec$.classList.toggle('sec-off', off); const note = $('.off-note', sec$); if (off && !note) $('.wt-head', sec$).insertAdjacentHTML('afterend', OFF_NOTE); if (!off && note) note.remove(); };
+    $$('.wt-sec', form).forEach(markSec);
+    /* long sections: fold the cards, with a jump list on the side */
+    const peek = (g) => { const t = $('textarea', g); const p = $('.wt-peek', g); if (!p) return; const v = t ? t.value.replace(/[*\n]+/g, ' ').trim() : ''; const lab = ($('.wt-gh b', g).textContent || '').toLowerCase(); p.textContent = v && !lab.includes(v.toLowerCase()) ? v : ''; };
+    const fold = (g, closed) => { g.classList.toggle('closed', closed); const h = $('[data-fold]', g); if (h) h.setAttribute('aria-expanded', String(!closed)); if (!closed) $$('textarea', g).forEach(grow); };
+    $$('.wt-sec', form).forEach((sec$, n) => {
+      const groups = $$('.wt-group:not(.list):not(.tcard)', sec$);
+      groups.forEach((g, i) => { g.id = `wt-g-${n}-${i}`; peek(g); const h = $('[data-fold]', g); if (h) { h.tabIndex = 0; h.setAttribute('role', 'button'); } if (groups.length > 3) fold(g, true); });
+      const tabBtn = $(`.wt-tab[data-wt="${n}"]`, form);
+      if (groups.length > 1) tabBtn.insertAdjacentHTML('afterend', `<div class="wt-jumps" data-jumps="${n}"${n ? ' hidden' : ''}><div class="wt-jh"><small>${groups.length} cards</small><button type="button" data-fold-all="${n}">${groups.length > 3 ? 'Open all' : 'Close all'}</button></div>${groups.map((g, i) => `<a href="#wt-g-${n}-${i}" data-jump>${esc($('.wt-gh b', g).textContent)}</a>`).join('')}</div>`);
+    });
+    $('.wt-nav', form).insertAdjacentHTML('beforeend', `<details class="wt-tips"><summary>Writing tips</summary><p><code>*word*</code> blue italic</p><p><code>**words**</code> highlight</p><p><kbd>Enter</kbd> new line</p><p>Empty field = hidden</p><p>Then press <b>Preview</b> or <b>Publish</b> at the bottom.</p></details>`);
+    if (wtUnbind) wtUnbind();
+    const onClick = (e) => {
+      const fa = e.target.closest('[data-fold-all]');
+      if (fa) { const sec$ = $(`[data-wt-sec="${fa.dataset.foldAll}"]`, form); const open = fa.textContent === 'Open all'; $$('.wt-group:not(.list):not(.tcard)', sec$).forEach((g) => fold(g, !open)); fa.textContent = open ? 'Close all' : 'Open all'; return; }
+      const j = e.target.closest('[data-jump]');
+      if (j) { e.preventDefault(); const g = $(j.getAttribute('href'), form); if (!g) return; fold(g, false); g.scrollIntoView({ behavior: 'smooth', block: 'start' }); g.classList.remove('flash'); void g.offsetWidth; g.classList.add('flash'); return; }
+      const h = e.target.closest('[data-fold]');
+      if (h && !e.target.closest('[data-off]')) fold(h.parentElement, !h.parentElement.classList.contains('closed'));
+    };
+    const onKey = (e) => { const h = e.target.closest && e.target.closest('[data-fold]'); if (h && e.target === h && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); h.click(); } };
+    const onIn = (e) => { const g = e.target.closest('.wt-group'); if (g && $('textarea', g) === e.target) peek(g); };
+    form.addEventListener('click', onClick); form.addEventListener('keydown', onKey); form.addEventListener('input', onIn);
+    wtUnbind = () => { form.removeEventListener('click', onClick); form.removeEventListener('keydown', onKey); form.removeEventListener('input', onIn); wtUnbind = null; };
     const refreshMeta = (n) => { const { sec, fs } = data[n]; const sec$ = $(`[data-wt-sec="${n}"]`, form); const ed = $$('.wt-field.edited', sec$).length; const hid = !$('[data-sec-show]', sec$).checked; $(`[data-wt-meta="${n}"]`, form).innerHTML = `${fs.length} texts${ed ? ` · <i>${ed} edited</i>` : ''}${hid ? ' · hidden' : ''}`; };
     $$('.wt-tab', form).forEach((b) => b.addEventListener('click', () => {
       $$('.wt-tab', form).forEach((x) => x.classList.toggle('on', x === b));
       $$('.wt-sec', form).forEach((x) => { x.hidden = x.dataset.wtSec !== b.dataset.wt; });
+      $$('.wt-jumps', form).forEach((x) => { x.hidden = x.dataset.jumps !== b.dataset.wt; });
       $$(`[data-wt-sec="${b.dataset.wt}"] textarea`, form).forEach(grow);
     }));
     $$('.wt-sec', form).forEach((sec$) => {
@@ -456,7 +504,7 @@
         box.classList.toggle('edited', ed); $('[data-reset]', box).hidden = !ed; $('.wt-orig', box).hidden = !ed;
         refreshMeta(n); setDirty(true);
       });
-      sec$.addEventListener('change', (e) => { if (e.target.matches('[data-sec-show]')) { refreshMeta(n); setDirty(true); } });
+      sec$.addEventListener('change', (e) => { if (e.target.matches('[data-sec-show]')) { refreshMeta(n); markSec(sec$); setDirty(true); } });
       sec$.addEventListener('click', (e) => {
         const eye = e.target.closest('[data-off]');
         if (eye) {
@@ -747,11 +795,63 @@
     });
   }
 
-  $('#backList').addEventListener('click', () => { collect(); setDirty(changed()); renderList(); });
+  $('#backList').addEventListener('click', () => { collect(); setDirty(changed(), false); renderList(); });
   $('#discard').addEventListener('click', () => {
     if (!window.confirm('Discard all unpublished changes?')) return;
     projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent); pending.clear(); setDirty(false); renderList();
   });
+
+  /* ---------------- search every text in the admin ---------------- */
+  let searchDoc = null;
+  async function searchIndex() {
+    if (!searchDoc) searchDoc = new DOMParser().parseFromString(await (await fetch('index.html?v=' + Date.now(), { cache: 'no-store' })).text(), 'text/html');
+    const out = [];
+    const secs = window.SiteContent.sections(searchDoc);
+    PAGES.forEach((p) => p.subs.forEach((x) => {
+      if (x.kind === 'content') secs.filter((sec) => !x.keys || x.keys.includes(sec.key)).forEach((sec) => window.SiteContent.fields(sec).forEach((f) => {
+        const v = Object.prototype.hasOwnProperty.call(content.text, f.key) ? content.text[f.key] : f.text;
+        out.push({ p, x, text: v, kind: f.kind, go: { ckey: f.key } });
+      }));
+      if (x.kind === 'projects') projects.forEach((pr, i) => out.push({ p, x, text: [pr.title, pr.tagline, pr.category].filter(Boolean).join(' · '), kind: 'Project', go: { project: i } }));
+      if (x.kind === 'experience') experience.forEach((r, i) => out.push({ p, x, text: [r.role, r.company].filter(Boolean).join(' · '), kind: 'Role', go: { role: i } }));
+    }));
+    return out;
+  }
+  const sBox = $('#adminSearch'), sRes = $('#searchRes');
+  if (sBox) {
+    let timer = 0, hits = [];
+    const hl = (t, q) => { const i = t.toLowerCase().indexOf(q); const a = Math.max(0, i - 40); const cut = (a ? '…' : '') + t.slice(a, i + q.length + 60) + (i + q.length + 60 < t.length ? '…' : ''); return esc(cut).replace(new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'ig'), (m) => `<mark>${m}</mark>`); };
+    const run = async () => {
+      const q = sBox.value.trim().toLowerCase();
+      if (q.length < 2) { sRes.hidden = true; return; }
+      let all; try { all = await searchIndex(); } catch (e) { return; }
+      hits = all.filter((h) => h.text && h.text.toLowerCase().includes(q)).slice(0, 8);
+      sRes.innerHTML = hits.length ? hits.map((h, i) => `<button type="button" data-hit="${i}"><small>${esc(h.p.label)} · ${esc(h.x.label)} <i>${esc(h.kind)}</i></small><span>${hl(h.text, q)}</span></button>`).join('') : '<p>Nothing found</p>';
+      sRes.hidden = false;
+    };
+    sBox.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(run, 160); });
+    sBox.addEventListener('focus', run);
+    sBox.addEventListener('keydown', (e) => { if (e.key === 'Escape') { sBox.value = ''; sRes.hidden = true; sBox.blur(); } if (e.key === 'Enter') { const b = $('[data-hit]', sRes); if (b) b.click(); } });
+    document.addEventListener('click', (e) => { if (!e.target.closest('.asearch')) sRes.hidden = true; });
+    sRes.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-hit]'); if (!b) return;
+      const h = hits[+b.dataset.hit]; sRes.hidden = true; sBox.value = ''; sBox.blur();
+      goTo(h.p, h.x);
+      if (h.go.project != null) return openEditor(h.go.project);
+      if (h.go.role != null) return openExpEditor(h.go.role);
+      let tries = 0;
+      const find = () => {
+        const t = $(`#edForm textarea[data-ckey="${CSS.escape(h.go.ckey)}"]`);
+        if (!t) { if (++tries < 40) setTimeout(find, 60); return; }
+        const sec$ = t.closest('.wt-sec'); if (sec$ && sec$.hidden) { const tb = $(`.wt-tab[data-wt="${sec$.dataset.wtSec}"]`); if (tb) tb.click(); }
+        const g = t.closest('.wt-group.closed'); if (g) $('[data-fold]', g).click();
+        const box = t.closest('.wt-field');
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' }); box.classList.remove('flash'); void box.offsetWidth; box.classList.add('flash');
+        setTimeout(() => t.focus({ preventScroll: true }), 350);
+      };
+      find();
+    });
+  }
 
   /* ---------------- preview (nothing goes live) ---------------- */
   function openPreview(target) {

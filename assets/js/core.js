@@ -3,6 +3,9 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Safari (Mac + iPhone) struggles with live blur on many layers: it gets a lighter render path */
+  const safari = /^((?!chrome|chromium|crios|fxios|edg|android).)*safari/i.test(navigator.userAgent);
+  if (safari) document.documentElement.classList.add('is-safari');
   const fine = matchMedia('(pointer: fine)').matches;
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -160,6 +163,12 @@
     $$('main > section[id]').filter((s) => !map.has(s) && s.id !== 'hero').forEach((s) => free.observe(s));
   }
 
+  /* ---------- pause looping animations in sections you can't see ---------- */
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle('is-away', !e.isIntersecting)), { rootMargin: '200px 0px' });
+    $$('main > section, main > div, footer').forEach((s) => io.observe(s));
+  }
+
   /* ---------- custom cursor ---------- */
   const ring = $('.cursor-ring'), dot = $('.cursor-dot');
   if (fine && ring && dot) {
@@ -184,9 +193,11 @@
       else ring.classList.add('hover');
     });
     const loop = () => {
+      requestAnimationFrame(loop);
+      if (Math.abs(mx - rx) < 0.1 && Math.abs(my - ry) < 0.1 && ring.dataset.d === String(ring.classList.contains('down'))) return;
+      ring.dataset.d = String(ring.classList.contains('down'));
       rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
       ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)` + (ring.classList.contains('down') ? ' scale(.92)' : '');
-      requestAnimationFrame(loop);
     };
     loop();
   }
@@ -228,9 +239,9 @@
     const ctx = cv.getContext('2d');
     let W = 0, H = 0, dpr = 1, pts = [], mx = -9999, my = -9999;
     const make = () => {
-      dpr = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+      dpr = safari ? 1 : Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
       cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const n = Math.round(Math.min(90, W * H / 16000));
+      const n = Math.round(Math.min(safari ? 50 : 90, W * H / 16000));
       pts = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .18, vy: -(.05 + Math.random() * .22), r: .6 + Math.random() * 1.6, a: .15 + Math.random() * .45, tw: Math.random() * 6.28, blue: Math.random() < .3 }));
     };
     make(); addEventListener('resize', make);
@@ -238,7 +249,7 @@
     let last = 0;
     const tick = (t) => {
       requestAnimationFrame(tick);
-      if (document.hidden || t - last < 30) return; last = t;
+      if (document.hidden || t - last < (safari ? 45 : 30)) return; last = t;
       const light = document.documentElement.dataset.theme === 'light';
       ctx.clearRect(0, 0, W, H);
       const sy = scrollY * .04;

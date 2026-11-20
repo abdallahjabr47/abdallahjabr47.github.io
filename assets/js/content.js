@@ -7,7 +7,7 @@
     n.tagName === 'EM' || n.tagName === 'BR' || n.tagName === 'SUP' ||
     (n.tagName === 'SPAN' && /\b(hl|arr|pm)\b/.test(n.className)) || (n.tagName === 'SPAN' && n.hasAttribute('data-count'))));
   const KEEP = (n) => n.nodeType === 1 && n.tagName === 'SPAN' && /\b(arr|pm)\b/.test(n.className);
-  const SKIP = '.swipe-hint, .ph, [data-site-text], .cpill, .clock, #projects, #xp, #indexList, #hoverPreview, #testi, .tilt, .sparks, .orbits, .badge-ring, svg, script, style, .sp-arrow, .phone, .cursor-ring, [data-c-skip]';
+  const SKIP = '.swipe-hint, .int-front, .pr-demo, .ph, [data-site-text], .cpill, .clock, #projects, #xp, #indexList, #hoverPreview, #testi, .tilt, .sparks, .orbits, .badge-ring, svg, script, style, .sp-arrow, .phone, .cursor-ring, [data-c-skip]';
   const ITEM = '.faq-item, .stat, .sk-card, .tool, .item, .edu, .pr, .pm-card, .role-card, .cpill, li';
   const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 36) || 'x';
 
