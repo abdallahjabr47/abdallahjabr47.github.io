@@ -1661,3 +1661,7 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .iv-foot .bar{position:absolute;left:8%;top:16%;width:40%;height:4px;border-radius:4px;background:rgb(var(--fg) / .5);animation:ivLift 2s ease-in-out infinite}
 .iv-foot .bar i{position:absolute;top:50%;width:9px;height:22px;margin-top:-11px;border-radius:3px;background:var(--ac)}
 .iv-foot .bar i:first-child{left:-3px}.iv-foot .bar i:last-child{right:-3px}
+/* Beyond tab takes the section's pink */
+.nav-links a[href$="#beyond"].active{background:rgb(232 121 201 / .22);color:#F6C6EA}
+[data-theme="light"] .nav-links a[href$="#beyond"].active{background:#FBD3EE;color:#A8287F}
+.nav-links a[href$="#beyond"]:focus-visible{outline-color:rgb(232 121 201 / .7)}
