@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261120170223">
+<link rel="stylesheet" href="assets/css/style.css?v=20261120171544">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 </head>
 <body>
@@ -159,20 +159,16 @@
     <p class="side" data-reveal>Keep scrolling — watch one screen go from wireframe to shipped.</p>
   </div>
 </div>
-<section class="stages" id="process" aria-label="From idea to product">
-  <div class="stages-sticky">
-    <div class="container stages-grid">
-      <div class="steps">
-        <ol>
-          <span class="rail" aria-hidden="true"></span>
-          <li><button class="step active" type="button" data-step="0"><span class="k">01 · WIREFRAME</span><span class="t">Structure before style</span><span class="d">What the user needs, in the order they need it — before any colour.</span></button></li>
-          <li><button class="step" type="button" data-step="1"><span class="k">02 · LAYOUT</span><span class="t">Grid &amp; spacing</span><span class="d">A 4-column grid and an 8pt scale give every screen rhythm and alignment.</span></button></li>
-          <li><button class="step" type="button" data-step="2"><span class="k">03 · VISUAL DESIGN</span><span class="t">The brand comes alive</span><span class="d">Colour, type and imagery through tokens, so the product stays consistent.</span></button></li>
-          <li><button class="step" type="button" data-step="3"><span class="k">04 · SHIP &amp; MEASURE</span><span class="t">Release &amp; learn</span><span class="d">Interaction, feedback and real metrics — then into the next iteration.</span></button></li>
-        </ol>
-        <div class="legend"><span><i style="background:#D9DCE3"></i>Wireframe</span><span><i style="background:#FF4D8D"></i>Grid &amp; redlines</span><span><i style="background:#5C9BF5"></i>Brand tokens</span><span><i style="background:#3DDC97"></i>Ship &amp; measure</span></div>
-      </div>
-      <div class="phone-wrap">
+<section class="sec proc" id="process" aria-labelledby="proc-h">
+  <div class="container">
+    <div class="proc-head">
+      <span class="eyebrow" data-reveal>How I design</span>
+      <h2 class="h-xl" id="proc-h" data-split>From sketch to <em class="serif">shipped</em></h2>
+    </div>
+    <div class="proc-grid">
+      <div class="proc-col l"><button class="pnote l active" type="button" data-step="0" style="--ac:#7FA6E8"><span class="pn-top"><span class="pn-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke-dasharray="3 2.6"/><path d="M7.5 8h6M7.5 12h9M7.5 16h4"/></svg></span><span class="k">01 · WIREFRAME</span></span><span class="t">Structure before style</span><span class="d">What the user needs, in the order they need it — before any colour.</span><span class="pn-bar" aria-hidden="true"><i></i></span></button><button class="pnote l" type="button" data-step="1" style="--ac:#E47AA0"><span class="pn-top"><span class="pn-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17"/></svg></span><span class="k">02 · LAYOUT</span></span><span class="t">Grid &amp; spacing</span><span class="d">A 4-column grid and an 8pt scale give every screen rhythm and alignment.</span><span class="pn-bar" aria-hidden="true"><i></i></span></button></div>
+      <div class="proc-phone">
+        <span class="proc-glow" aria-hidden="true"></span>
         <div class="phone" data-stage="0" role="img" aria-label="A streaming app screen being built from wireframe to final product">
           <div class="screen">
             <div class="sbar"><span>9:41</span><span class="island"></span><span>●●●</span></div>
@@ -199,6 +195,7 @@
           </div>
         </div>
       </div>
+      <div class="proc-col r"><button class="pnote r" type="button" data-step="2" style="--ac:#A497DB"><span class="pn-top"><span class="pn-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.2 0 1.8-.9 1.4-1.9-.5-1.1.2-2.3 1.4-2.3h1.7a4 4 0 0 0 4-4c0-4.9-3.8-8.8-8.5-8.8Z"/><circle cx="7.8" cy="11" r="1.1"/><circle cx="10.5" cy="7.5" r="1.1"/><circle cx="14.8" cy="7.8" r="1.1"/></svg></span><span class="k">03 · VISUAL DESIGN</span></span><span class="t">The brand comes alive</span><span class="d">Colour, type and imagery through tokens, so the product stays consistent.</span><span class="pn-bar" aria-hidden="true"><i></i></span></button><button class="pnote r" type="button" data-step="3" style="--ac:#5FB894"><span class="pn-top"><span class="pn-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19.5h16"/><path d="M7 16v-4M12 16V8M17 16v-7"/><path d="m5 9 5-4 4 3 5-4"/></svg></span><span class="k">04 · SHIP &amp; MEASURE</span></span><span class="t">Release &amp; learn</span><span class="d">Interaction, feedback and real metrics — then into the next iteration.</span><span class="pn-bar" aria-hidden="true"><i></i></span></button></div>
     </div>
   </div>
 </section>
@@ -529,11 +526,11 @@
   </div>
 </footer>
 
-<script src="assets/js/content.js?v=20261120170223"></script>
-<script src="assets/js/config.js?v=20261120170223"></script>
-<script src="assets/js/icons.js?v=20261120170223"></script>
-<script src="assets/js/core.js?v=20261120170223"></script>
-<script src="assets/js/fx.js?v=20261120170223" defer></script>
-<script src="assets/js/home.js?v=20261120170223"></script>
+<script src="assets/js/content.js?v=20261120171544"></script>
+<script src="assets/js/config.js?v=20261120171544"></script>
+<script src="assets/js/icons.js?v=20261120171544"></script>
+<script src="assets/js/core.js?v=20261120171544"></script>
+<script src="assets/js/fx.js?v=20261120171544" defer></script>
+<script src="assets/js/home.js?v=20261120171544"></script>
 </body>
 </html>

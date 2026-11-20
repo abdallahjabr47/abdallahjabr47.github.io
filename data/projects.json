@@ -144,7 +144,8 @@
     "learnings": "[One or two honest lessons — what you would do differently, and what you will carry into the next product.]",
     "icon": "",
     "screens": [],
-    "webScreens": []
+    "webScreens": [],
+    "featured": true
   },
   {
     "slug": "momyt-meet",
@@ -212,7 +213,8 @@
     "learnings": "",
     "icon": "",
     "screens": [],
-    "webScreens": []
+    "webScreens": [],
+    "featured": true
   },
   {
     "slug": "foras",
@@ -266,7 +268,8 @@
     "learnings": "",
     "icon": "",
     "screens": [],
-    "webScreens": []
+    "webScreens": [],
+    "featured": true
   },
   {
     "slug": "ruckaroo",
@@ -331,7 +334,8 @@
     "learnings": "",
     "icon": "",
     "screens": [],
-    "webScreens": []
+    "webScreens": [],
+    "featured": true
   },
   {
     "slug": "mazadak",
@@ -474,6 +478,7 @@
     "learnings": "",
     "icon": "",
     "screens": [],
-    "webScreens": []
+    "webScreens": [],
+    "featured": true
   }
 ]

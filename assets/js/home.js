@@ -27,23 +27,33 @@
     const icon = p.icon ? `<img src="${esc(p.icon)}" alt="">` : esc((p.title || '?').charAt(0));
     return `
     <article class="pcard type-${type}" data-type="${type}" style="--tint:${esc(tint)}" data-reveal>
-      <div class="pc-head">
-        <span class="app-icon">${icon}</span>
-        <div class="nm"><h3>${esc(p.title)}</h3><p>${esc(p.tagline || p.category || '')}</p></div>
-        <span class="meta">${esc(catShort)}${p.year ? ' · ' + esc(p.year) : ''}</span>
-      </div>
       <div class="stage-panel" data-cursor="Explore case ↗" data-href="${href}" data-n="${count}">
-        <div class="sp-badges"><span class="l"><span class="tag">${String(i + 1).padStart(2, '0')}</span><span class="tag">${esc(p.platform || (type === 'web' ? 'Website' : 'Mobile App'))}</span></span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
+        <div class="sp-badges"><span class="l"><span class="tag">${esc(p.platform || (type === 'web' ? 'Website' : 'Mobile App'))}</span></span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
         <div class="devices2">${laptop}${phone}</div>
         <button class="sp-arrow a-prev" type="button" aria-label="Previous screen of ${esc(p.title)}" disabled>←</button>
         <button class="sp-arrow a-next" type="button" aria-label="Next screen of ${esc(p.title)}"${count < 2 ? ' disabled' : ''}>→</button>
         <a class="explore" href="${href}">Explore case <span aria-hidden="true">↗</span></a>
       </div>
-      <div class="pc-foot">
-        <p>${esc(p.summary || '')}</p>
+      <div class="pc-head">
+        <span class="app-icon">${icon}</span>
+        <div class="nm"><h3>${esc(p.title)}</h3><p>${esc(p.tagline || p.category || '')}</p></div>
         ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
       </div>
     </article>`;
+  }
+
+  function seeAllHTML(list, rest) {
+    const ic = (p) => `<span class="app-icon" style="--tint:${esc((p.cover && p.cover.tint) || '#2B3A8F')}">${p.icon ? `<img src="${esc(p.icon)}" alt="">` : esc((p.title || '?').charAt(0))}</span>`;
+    return `
+    <a class="pcard see-all" href="work.html" data-reveal>
+      <div class="sa-panel">
+        <span class="sa-icons">${rest.slice(0, 4).map(ic).join('')}${rest.length > 4 ? `<span class="app-icon more">+${rest.length - 4}</span>` : ''}</span>
+        <b>${rest.length} more project${rest.length > 1 ? 's' : ''}</b>
+        <small>${rest.map((p) => esc(p.title)).slice(0, 3).join(' · ')}${rest.length > 3 ? ' …' : ''}</small>
+        <span class="btn btn-primary sa-btn">See all ${list.length} projects <span class="arr">↗</span></span>
+      </div>
+      <div class="pc-head"><div class="nm"><h3>All work</h3><p>Every app, website and case study</p></div></div>
+    </a>`;
   }
 
   function wireCard(card) {
@@ -68,6 +78,17 @@
       const dx = e.clientX - x0; x0 = null;
       if (Math.abs(dx) > 40) { moved = true; go(i + (dx < 0 ? 1 : -1)); }
     });
+    /* motion: screens play like a thumbnail — on hover (desktop) or while in view (touch) */
+    let timer = null;
+    const play = () => { if (timer || n < 2 || reduce) return; timer = setInterval(() => go(i >= n - 1 ? 0 : i + 1), 1700); };
+    const stop = (reset) => { clearInterval(timer); timer = null; if (reset) go(0); };
+    if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+      panel.addEventListener('mouseenter', () => { go(i >= n - 1 ? 0 : i + 1); play(); });
+      panel.addEventListener('mouseleave', () => stop(true));
+    } else if ('IntersectionObserver' in window) {
+      new IntersectionObserver((es) => es.forEach((en) => en.isIntersecting ? play() : stop(false)), { threshold: .6 }).observe(panel);
+    }
+    [prev, next].forEach((b) => b.addEventListener('click', () => { stop(false); }));
     panel.addEventListener('click', (e) => {
       if (moved || e.target.closest('button, a')) return;
       location.href = panel.dataset.href;
@@ -77,8 +98,16 @@
   function renderProjects(list) {
     const grid = $('#projects');
     if (!list.length) { grid.innerHTML = '<p class="muted">No projects yet — add your first one from the admin page.</p>'; return; }
-    grid.innerHTML = list.map(cardHTML).join('');
-    $$('.pcard', grid).forEach(wireCard);
+    const all = grid.hasAttribute('data-all');
+    let shown = list, rest = [];
+    if (!all && list.length > 6) {
+      const feat = list.filter((p) => p.featured);
+      const pick = (feat.length ? feat.concat(list.filter((p) => !p.featured)) : list).slice(0, 5);
+      shown = list.filter((p) => pick.includes(p));
+      rest = list.filter((p) => !pick.includes(p));
+    }
+    grid.innerHTML = shown.map(cardHTML).join('') + (rest.length ? seeAllHTML(list, rest) : '');
+    $$('.pcard:not(.see-all)', grid).forEach(wireCard);
     scan(grid);
     const stat = $('#stat-projects'); if (stat) stat.dataset.count = list.length;
   }
@@ -98,6 +127,7 @@
       const f = b.dataset.filter;
       $$('.pcard').forEach((c) => {
         const t = c.dataset.type;
+        if (!t) { c.classList.toggle('hide', f !== 'all'); return; }
         const show = f === 'all' || t === f || t === 'both';
         c.classList.toggle('hide', !show);
       });
@@ -138,32 +168,37 @@
     });
   }
 
-  /* =============== scroll-driven phone =============== */
-  const stagesEl = $('.stages');
-  const phone = $('.phone');
-  const steps = $$('.step');
-  const stepsOl = $('.steps ol');
-  if (stagesEl && phone) {
-    let cur = -1;
-    onScroll(() => {
-      const r = stagesEl.getBoundingClientRect();
-      const total = r.height - innerHeight;
-      const p = total > 0 ? clamp(-r.top / total) : 0;
-      const s = Math.min(3, Math.floor(p * 4));
-      if (stepsOl) stepsOl.style.setProperty('--p', p.toFixed(3));
-      $('.rail') && $('.rail').style.setProperty('--p', p.toFixed(3));
-      if (s !== cur) {
-        cur = s;
-        phone.dataset.stage = String(s);
-        steps.forEach((b, j) => { b.classList.toggle('active', j === s); b.setAttribute('aria-current', j === s ? 'step' : 'false'); });
+  /* =============== process: phone builds itself, notes around it =============== */
+  const proc = $('.proc');
+  const phone = proc && $('.phone', proc);
+  if (proc && phone) {
+    const notes = $$('.pnote', proc);
+    const DUR = 3200;
+    let cur = 0, timer = null, inView = false, held = false;
+    const set = (s) => {
+      cur = s;
+      phone.dataset.stage = String(s);
+      notes.forEach((n, j) => {
+        n.classList.toggle('active', j === s);
+        n.classList.toggle('done', j < s);
+        n.setAttribute('aria-pressed', String(j === s));
+        const bar = $('.pn-bar i', n);
+        bar.style.transition = 'none'; bar.style.transform = 'scaleX(0)';
+      });
+      if (inView && !held && !reduce) {
+        const bar = $('.pn-bar i', notes[s]);
+        void bar.offsetWidth;
+        bar.style.transition = `transform ${DUR}ms linear`; bar.style.transform = 'scaleX(1)';
       }
+    };
+    const run = () => { clearTimeout(timer); if (!inView || held || reduce) return; timer = setTimeout(() => { set((cur + 1) % notes.length); run(); }, DUR); };
+    notes.forEach((n) => {
+      n.addEventListener('click', () => { held = false; set(+n.dataset.step); run(); });
+      n.addEventListener('mouseenter', () => { held = true; clearTimeout(timer); set(+n.dataset.step); });
+      n.addEventListener('mouseleave', () => { held = false; set(cur); run(); });
     });
-    steps.forEach((b) => b.addEventListener('click', () => {
-      const j = parseInt(b.dataset.step, 10);
-      const top = stagesEl.getBoundingClientRect().top + scrollY;
-      const total = stagesEl.offsetHeight - innerHeight;
-      scrollTo({ top: top + total * ((j + 0.5) / 4), behavior: reduce ? 'auto' : 'smooth' });
-    }));
+    new IntersectionObserver((es) => es.forEach((e) => { inView = e.isIntersecting; if (inView) { set(cur); run(); } else clearTimeout(timer); }), { threshold: .35 }).observe(proc);
+    set(0);
   }
 
   /* =============== about: words light up while scrolling =============== */
