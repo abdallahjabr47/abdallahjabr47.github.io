@@ -488,12 +488,19 @@
       if (!list.length) return '';
       return `<div class="rec-col" style="--ac:${c.ac};--d:${ci * 100}ms" data-reveal>
         <div class="rec-h"><span class="rec-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${c.ic}</svg></span><h3>${c.name}</h3><span class="rec-n">${list.length}</span></div>
-        <ol class="rec-list">${list.map((r) => {
-          const inner = `<span class="rec-y">${esc(r.year || '')}</span><span class="rec-b"><b>${esc(r.title)}${r.link ? ' <span class="arr" aria-hidden="true">↗</span>' : ''}</b><small>${esc(r.org || '')}</small>${r.note ? `<em>${esc(r.note)}</em>` : ''}${tag[r.kind] ? `<i class="rec-t">${tag[r.kind]}</i>` : ''}</span>`;
-          return `<li>${r.link ? `<a href="${esc(r.link)}" target="_blank" rel="noopener">${inner}</a>` : `<div>${inner}</div>`}</li>`;
+        <ol class="rec-list">${list.map((r, k) => {
+          const head = `<span class="rec-b"><b>${esc(r.title)}</b><small>${esc(r.org || '')}</small></span><span class="rec-y">${esc(r.year || '')}</span>`;
+          const extra = r.note || r.link;
+          return `<li${k >= 3 ? ' class="more" hidden' : ''}>${extra ? `<details><summary>${head}<span class="rec-chev" aria-hidden="true"></span></summary><div class="rec-x">${r.note ? `<p>${esc(r.note)}</p>` : ''}${r.link ? `<a href="${esc(r.link)}" target="_blank" rel="noopener">View certificate <span class="arr">↗</span></a>` : ''}</div></details>` : `<div class="rec-row">${head}<span class="rec-chev none" aria-hidden="true"></span></div>`}</li>`;
         }).join('')}</ol>
+        ${list.length > 3 ? `<button class="rec-more" type="button" data-n="${list.length - 3}">Show ${list.length - 3} more</button>` : ''}
       </div>`;
     }).join('');
+    $$('.rec-more', box).forEach((btn) => btn.addEventListener('click', () => {
+      const col = btn.closest('.rec-col'); const open = col.classList.toggle('open');
+      $$('li.more', col).forEach((li) => { li.hidden = !open; });
+      btn.textContent = open ? 'Show less' : `Show ${btn.dataset.n} more`;
+    }));
     scan(sec);
   })();
 
