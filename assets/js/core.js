@@ -84,6 +84,7 @@
       const ic = (window.ICONS || {})[el.dataset.icon];
       if (!ic) { el.textContent = el.dataset.fb || ''; return; }
       el.classList.add('has-logo');
+      if (ic.full) { el.classList.add('full'); el.innerHTML = `<svg viewBox="${ic.fvb}" aria-hidden="true">${ic.full}</svg>`; return; }
       el.style.color = ic.c === 'ink' ? 'var(--ink)' : ic.c;
       el.innerHTML = `<svg viewBox="${ic.vb}" fill="currentColor" aria-hidden="true">${ic.p}</svg>`;
     });

@@ -185,6 +185,7 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .tool{display:flex;align-items:center;gap:14px;margin-right:16px;padding:15px 22px;border-radius:18px;min-width:260px;background:var(--card);border:1px solid var(--line)}
 .tool .ic{width:42px;height:42px;flex:none;border-radius:12px;background:rgb(var(--fg) / .06);display:grid;place-items:center;font-weight:800;font-size:15px;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
 .ic svg{width:52%;height:52%}
+.ic.full svg{width:58%;height:58%}
 .tool b{display:block;font-size:16px;font-weight:600}
 .tool small{display:block;font-size:13px;color:var(--muted)}
 
@@ -866,3 +867,7 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .xp-body ul{padding-top:12px}
 .xp-cv{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:22px;padding:18px 22px;border-radius:18px;border:1px dashed var(--line2);color:var(--muted);font-size:15px}
 @media (max-width:640px){.xp-head{grid-template-columns:minmax(0,1fr) 44px;gap:10px 14px}.xp-date{grid-row:2;justify-self:start}.xp-tog{grid-column:2;grid-row:1}}
+/* dark-mode legibility for logos whose official colours are very dark */
+[data-theme="dark"] .ic.full [fill="#00546B" i]{fill:#5BA8CC}
+[data-theme="dark"] .ic.full [fill="#5382A1" i]{fill:#8FB8DD}
+[data-theme="dark"] .ic.full [fill="#000000" i],[data-theme="dark"] .ic.full [fill="#000" i]{fill:#fff}
