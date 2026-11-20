@@ -914,15 +914,13 @@ h1,h2,h3,.h-xl,.h-lg,.h-md,.ix-t,.stat b{letter-spacing:-.035em}
 .big-mq .item.ghost b{font-style:italic;font-weight:500;color:rgb(var(--fg) / .03);-webkit-text-stroke:1.2px rgb(var(--fg) / .45)}
 .big-mq .item:hover b{color:rgb(var(--fg) / .06);-webkit-text-stroke:1.2px rgb(var(--fg) / .7)}
 .big-mq .item.ghost:hover b{color:var(--ink);-webkit-text-stroke-color:transparent}
-/* hover a letter in a big title: it turns into frosted glass (grainy fill + light border), then fades back */
-@media (pointer:fine){
-  h1[data-split] .c,h2[data-split] .c{-webkit-text-stroke:1px transparent;background-repeat:repeat;
-    transition:transform 1s var(--ease),color .9s ease,-webkit-text-stroke-color .9s ease}
-  h1[data-split].in .c:hover,h2[data-split].in .c:hover{color:rgb(var(--fg) / .07);-webkit-text-stroke-color:rgb(var(--fg) / .32);
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");-webkit-background-clip:text;background-clip:text;animation:glassgrain .6s steps(3) infinite;
-    transition:transform 1s var(--ease),color .15s ease,-webkit-text-stroke-color .15s ease}
-  [data-theme="light"] h1[data-split].in .c:hover,[data-theme="light"] h2[data-split].in .c:hover{color:rgb(var(--fg) / .05);-webkit-text-stroke-color:rgb(var(--fg) / .3);filter:invert(0)}
-}
+/* glass letters: every letter near the mouse turns into frosted glass, strongest at the centre and fading out with distance */
+h1[data-split] .c,h2[data-split] .c{--base:var(--ink);--g:0;
+  color:color-mix(in srgb,var(--base) calc((1 - var(--g)) * 100%),rgb(var(--fg) / .06));
+  -webkit-text-stroke:1px color-mix(in srgb,rgb(var(--fg) / .34) calc(var(--g) * 100%),transparent);
+  transition:transform 1s var(--ease),color .5s ease,-webkit-text-stroke-color .5s ease}
+h1[data-split] .serif .c,h2[data-split] .serif .c{--base:var(--coral-ink)}
+h1[data-split] .c.gr,h2[data-split] .c.gr{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");-webkit-background-clip:text;background-clip:text;animation:glassgrain .6s steps(3) infinite}
 @keyframes glassgrain{0%{background-position:0 0}33%{background-position:-23px 17px}66%{background-position:31px -12px}100%{background-position:0 0}}
 
 /* hero title: three lines on desktop */
