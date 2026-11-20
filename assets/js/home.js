@@ -115,7 +115,7 @@
     let imgs = [];
     try { const s = await window.Site.getSite(); if (s && Array.isArray(s.showcase)) imgs = s.showcase.filter(Boolean); } catch (e) {}
     if (!imgs.length) list.forEach((p) => { (p.webScreens || []).forEach((s) => imgs.push(s)); (p.screens || []).forEach((s) => imgs.push(s)); ((p.gallery && p.gallery.after) || []).forEach((g) => g.image && imgs.push(g.image)); });
-    const perCol = Math.max(7, Math.ceil(imgs.length / cols.length));
+    const perCol = Math.max(5, Math.ceil(imgs.length / cols.length));
     let k = 0;
     cols.forEach((col, ci) => {
       let html = '';
@@ -123,7 +123,7 @@
         const img = imgs.length ? imgs[(k * 7 + ci) % imgs.length] : '';
         html += img
           ? `<div class="tile has-img"><img src="${esc(img)}" alt="" loading="lazy" decoding="async"></div>`
-          : `<div class="tile" style="--tbg:${tints[k % tints.length]}33;--tacc:${accents[(k + ci) % accents.length]}"><div class="tb"><i style="width:28%"></i><i style="width:36%;opacity:.5"></i></div><div class="hero-blk"><i style="width:44%"></i><i style="width:66%;opacity:.6"></i></div><div class="row"><i></i><i></i><i></i></div></div>`;
+          : `<div class="tile ph-tile" style="--tbg:${tints[k % tints.length]}33;--tacc:${accents[(k + ci) % accents.length]}"><div class="sb"><b>9:41</b><span></span></div><div class="tb"><i style="width:42%"></i><i class="av"></i></div><div class="hero-blk"><i style="width:52%"></i><i style="width:74%;opacity:.6"></i></div><div class="lst">${'<div><i class="th"></i><span><i style="width:70%"></i><i style="width:45%;opacity:.5"></i></span></div>'.repeat(3)}</div><div class="nav"><i></i><i></i><i></i><i></i></div></div>`;
       }
       col.innerHTML = html;
     });

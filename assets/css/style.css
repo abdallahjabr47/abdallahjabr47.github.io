@@ -278,7 +278,7 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 
 /* ---------- screens gallery ---------- */
 .screens{position:relative;height:clamp(760px,165vh,1600px);border-radius:32px;overflow:hidden;border:1px solid var(--line);background:var(--panel2)}
-.tilt{position:absolute;inset:-25% -12%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;transform:rotate(-7deg)}
+.tilt{position:absolute;inset:-25% -12%;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:22px;transform:rotate(-7deg)}
 .tcol{display:flex;flex-direction:column;gap:24px;will-change:transform}
 .tile{border-radius:20px;overflow:hidden;border:1px solid rgb(var(--fg) / .1);background:var(--tbg,#11141C);aspect-ratio:4/3.1;padding:16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 30px 60px rgba(0,0,0,.4)}
 .tile img{width:100%;height:100%;object-fit:cover;margin:-16px;width:calc(100% + 32px);height:calc(100% + 32px)}
@@ -890,3 +890,21 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .faq-q .pm::before,.faq-q .pm::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:2px;border-radius:2px;background:currentColor;transform:translate(-50%,-50%)}
 .faq-q .pm::after{transform:translate(-50%,-50%) rotate(90deg)}
 h1,h2,h3,.h-xl,.h-lg,.h-md,.ix-t,.stat b{letter-spacing:-.035em}
+
+/* screens wall: every tile is a phone screen */
+.tile{aspect-ratio:9/19.5;border-radius:30px;border:5px solid #1B1E26;padding:12px 12px 10px;gap:10px;background:linear-gradient(180deg,color-mix(in srgb,var(--tbg,#11141C) 100%,transparent),#0E1016)}
+.tile.has-img{aspect-ratio:9/19.5;padding:0;background:#0d0f14}
+.tile.has-img img{width:100%;height:100%;object-fit:cover;object-position:top}
+.ph-tile .sb{display:flex;justify-content:space-between;align-items:center;font-size:9px;color:rgb(var(--fg)/.7);padding:2px 6px 0}
+.ph-tile .sb span{width:26px;height:7px;border-radius:3px;background:rgb(var(--fg)/.35)}
+.ph-tile .tb{padding:0 4px}
+.ph-tile .tb .av{width:20px!important;height:20px!important;border-radius:50%}
+.ph-tile .hero-blk{flex:0 0 34%}
+.ph-tile .lst{display:flex;flex-direction:column;gap:8px;flex:1}
+.ph-tile .lst>div{display:flex;gap:8px;align-items:center}
+.ph-tile .lst .th{width:30px;height:30px;border-radius:9px;background:rgb(var(--fg)/.1);flex:none}
+.ph-tile .lst span{flex:1;display:flex;flex-direction:column;gap:5px}
+.ph-tile .lst span i{display:block;height:6px;border-radius:3px;background:rgb(var(--fg)/.2)}
+.ph-tile .nav{display:flex;justify-content:space-around;padding:6px 0 2px;border-top:1px solid rgb(var(--fg)/.08)}
+.ph-tile .nav i{width:14px;height:14px;border-radius:5px;background:rgb(var(--fg)/.18)}
+@media (max-width:900px){.tilt .tcol:nth-child(n+4){display:none}}
