@@ -158,6 +158,7 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .badge-ring b{font-size:20px;color:#fff}
 @keyframes spin{to{transform:rotate(360deg)}}
 .arch{position:absolute;inset:0;border-radius:36px;transform:rotate(-3deg);box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden;background:linear-gradient(180deg,var(--ph1),var(--ph2)) center/cover no-repeat;border:1px solid var(--line);display:grid;place-items:center}
+.arch::after{content:"";position:absolute;left:0;right:0;bottom:0;height:42%;background:linear-gradient(to top,rgba(0,0,0,.45),rgba(0,0,0,.18) 45%,transparent);pointer-events:none}
 .arch.has-img .ph,.photo.has-img .ph{display:none}
 .ph{font-size:14px;color:var(--dim);text-align:center;padding:12px}
 .signature{position:absolute;right:26px;bottom:20px;z-index:2;width:44%;height:auto;aspect-ratio:430/201;color:#fff;transform:rotate(-4deg);filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
