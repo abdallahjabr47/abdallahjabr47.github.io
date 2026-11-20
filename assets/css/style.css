@@ -1429,3 +1429,19 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 [data-theme="light"] .lb-web{color:#1F7A55;background:#DDF3E9}
 [data-theme="light"] .lb-both{color:#5B4BB0;background:#ECE8FB}
 .pcard.show-mobile .phone-f{margin-top:22px}
+/* ---------- contact v3: soft "say hello" + a list of ways to reach me ---------- */
+.cta3{padding-block:clamp(100px,12vw,160px) clamp(40px,5vw,64px)}
+.cta3 .ct-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}
+@media (max-width:960px){.cta3 .ct-grid{grid-template-columns:minmax(0,1fr)}}
+.ct-list{display:flex;flex-direction:column;border-radius:28px;border:1px solid var(--line2);background:var(--panel);overflow:hidden}
+.ct-list .ct-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:20px clamp(18px,2.4vw,28px);border:0;border-radius:0;background:none;min-height:0;font-size:inherit;transition:background .3s}
+.ct-list .ct-row[hidden]{display:none}
+.ct-list .ct-row+.ct-row{border-top:1px solid var(--line)}
+.ct-list .ct-row:hover{background:rgb(var(--fg) / .04)}
+.ct-row .ic{width:46px;height:46px;border-radius:14px}
+.ct-t{display:flex;flex-direction:column;gap:3px;min-width:0}
+.ct-t b{font-size:17px;letter-spacing:-.01em}
+.ct-t small{font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ct-go{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:15px;border:1px solid var(--line2);color:var(--muted);transition:background .3s,color .3s,border-color .3s,transform .4s var(--ease)}
+.ct-row:hover .ct-go{background:var(--blue);border-color:var(--blue);color:#fff;transform:rotate(45deg) scale(1.05)}
+.ct-row:hover .ct-go{transform:none}

@@ -337,7 +337,7 @@
     if (!s) return;
     const url = {
       email: s.email ? 'mailto:' + s.email : '',
-      emailcta: s.email ? 'mailto:' + s.email + '?subject=' + encodeURIComponent("Let's work together") : '',
+      emailcta: s.email ? 'mailto:' + s.email + '?subject=' + encodeURIComponent("Hello Abdallah") : '',
       whatsapp: s.whatsapp ? 'https://wa.me/' + String(s.whatsapp).replace(/[^0-9]/g, '') : '',
       linkedin: s.linkedin || '', behance: s.behance || '', dribbble: s.dribbble || '', github: s.github || '', cv: s.cv || ''
     };
