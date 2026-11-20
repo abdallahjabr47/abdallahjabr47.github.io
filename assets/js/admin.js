@@ -353,7 +353,6 @@
   function openSiteEditor() {
     editing = 0; mode = 'site';
     embedPanel('profile', 'Profile <em class="serif">&amp; links</em>');
-    const cvName = site.cv ? site.cv.split('/').pop() : 'none';
     $('#edForm').innerHTML = `
       <fieldset><legend>Photos</legend>
         <p class="hint">Portrait photos work best (about 4:5). They're resized automatically. Hover a photo to replace or remove it.</p>
@@ -367,7 +366,10 @@
         ${imgList('showcase', site.showcase || [], '', false, true)}
       </fieldset>
       <fieldset><legend>Availability</legend>
-        <p class="hint">One short line under the buttons at the top of the page, with a green dot. Leave empty to hide it.</p>
+        <div class="av-row">
+          <p class="hint" style="margin:0">One short line under the buttons at the top of the page, with a green dot.</p>
+          <label class="wt-switch"><input type="checkbox" data-k="availabilityOn" ${site.availabilityOn === false ? '' : 'checked'}><span></span>Show on website</label>
+        </div>
         ${F('Availability line', 'availability', site.availability, { ph: 'Open to Product Manager / Product Owner roles · Ramallah or remote' })}
       </fieldset>
       <fieldset><legend>Testimonials</legend>
@@ -381,9 +383,36 @@
         <div class="g2">${F('Dribbble URL', 'dribbble', site.dribbble, { ph: 'https://dribbble.com/…' })}${F('GitHub URL', 'github', site.github, { ph: 'https://github.com/…' })}</div>
       </fieldset>
       <fieldset><legend>Résumé (CV)</legend>
-        <p class="hint">Current file: <b id="cvName">${esc(cvName)}</b>. Upload a new PDF to replace it — every “View My CV” button updates.</p>
-        <label class="btn btn-ghost btn-sm" style="align-self:flex-start;cursor:pointer">Upload new CV (PDF)<input type="file" accept="application/pdf" id="cvInput" hidden></label>
+        <p class="hint">Every “View My CV” button on the site opens this file. Removing it hides those buttons.</p>
+        <div id="cvBox"></div>
+        <input type="file" accept="application/pdf" id="cvInput" hidden>
       </fieldset>`;
+    const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } };
+    const drawCv = () => {
+      const box = $('#cvBox');
+      if (!site.cv) {
+        box.innerHTML = `<label class="cv-empty" for="cvInput"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4M7 9l5-5 5 5M5 20h14"/></svg><b>Upload your CV</b><small>PDF, up to 20 MB</small></label>`;
+        return;
+      }
+      const isNew = pending.has(site.cv);
+      const name = site.cvName || site.cv.split('/').pop();
+      const when = site.cvUpdated ? `Updated ${fmtDate(site.cvUpdated)}` : 'Uploaded';
+      box.innerHTML = `<div class="cv-card">
+        <span class="cv-ic" aria-hidden="true">PDF</span>
+        <span class="cv-meta"><b>${esc(name)}</b><small>${when}${isNew ? ' · <i>new — publish to put it live</i>' : ' · <i class="ok">Live on the site</i>'}</small></span>
+        <span class="cv-act">
+          <a class="ib" href="${esc(previews.get(site.cv) || site.cv)}" target="_blank" rel="noopener">View</a>
+          <label class="ib edit" for="cvInput" style="cursor:pointer">Replace</label>
+          <button class="ib danger" type="button" id="cvRemove">Remove</button>
+        </span></div>`;
+      $('#cvRemove').addEventListener('click', () => {
+        if (!window.confirm('Remove the CV? The “View My CV” buttons will be hidden on the site after you publish.')) return;
+        if (pending.has(site.cv)) pending.delete(site.cv);
+        site.cv = ''; site.cvName = ''; site.cvUpdated = '';
+        drawCv(); setDirty(true);
+      });
+    };
+    drawCv();
     $('#cvInput').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -393,9 +422,9 @@
         const path = 'assets/cv-' + Date.now().toString(36) + '.pdf';
         pending.set(path, String(fr.result).split(',')[1]);
         previews.set(path, URL.createObjectURL(file));
-        site.cv = path;
-        $('#cvName').textContent = file.name + ' (new — publish to put it live)';
-        setDirty(true);
+        site.cv = path; site.cvName = file.name; site.cvUpdated = new Date().toISOString();
+        e.target.value = '';
+        drawCv(); setDirty(true);
       };
       fr.readAsDataURL(file);
     });
@@ -429,7 +458,7 @@
       return;
     }
     if (mode === 'site') {
-      $$('#edForm [data-k]').forEach((el) => { site[el.dataset.k] = el.value.trim(); });
+      $$('#edForm [data-k]').forEach((el) => { site[el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value.trim(); });
       $$('#edForm [data-rep]').forEach((box) => { site[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); return o; }).filter((o) => Object.values(o).some(Boolean)); });
       $$('#edForm [data-imgs]').forEach((box) => { if (box.dataset.multi === '1') { site[box.dataset.imgs] = $$('.im', box).map((im) => im.dataset.path).filter(Boolean); return; } const im = $('.im', box); site[box.dataset.imgs] = im ? im.dataset.path : ''; });
       return;

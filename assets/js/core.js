@@ -339,9 +339,10 @@
     };
     $$('[data-site-href]').forEach((a) => {
       const v = url[a.dataset.siteHref];
-      if (v) { a.href = v; a.hidden = false; } else if (a.classList.contains('cpill')) a.hidden = true;
+      if (v) { a.href = v; a.hidden = false; if (a.closest('.xp-cv')) a.closest('.xp-cv').hidden = false; }
+      else if (a.classList.contains('cpill') || a.dataset.siteHref === 'cv') { a.hidden = true; if (a.closest('.xp-cv')) a.closest('.xp-cv').hidden = true; }
     });
-    $$('[data-site-text]').forEach((el) => { const v = s[el.dataset.siteText]; const slot = el.classList.contains('avail') ? $('span', el) : el; if (v) { slot.textContent = v; el.hidden = false; } else if (el.classList.contains('avail')) el.hidden = true; });
+    $$('[data-site-text]').forEach((el) => { const v = s[el.dataset.siteText]; const slot = el.classList.contains('avail') ? $('span', el) : el; if (el.classList.contains('avail') && s.availabilityOn === false) { el.hidden = true; return; } if (v) { slot.textContent = v; el.hidden = false; } else if (el.classList.contains('avail')) el.hidden = true; });
     $$('[data-site-img]').forEach((el) => { const v = s[el.dataset.siteImg]; if (v) loadImg(el, v); });
   }
   let siteReady = Promise.resolve(null);

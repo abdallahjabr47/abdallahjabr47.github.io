@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261120160510">
+<link rel="stylesheet" href="assets/css/style.css?v=20261120160702">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -89,6 +89,20 @@ body::after{opacity:.04}
 .addimg:hover{border-color:var(--sky);color:var(--ink)}
 .addimg.wide{width:220px;height:138px}.addimg.sq{width:96px;height:96px}
 .addimg input{display:none}
+/* availability + cv */
+.av-row{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.cv-card{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 16px;border-radius:16px;border:1px solid var(--line2);background:rgb(var(--fg) / .03)}
+.cv-ic{width:46px;height:56px;border-radius:10px;display:grid;place-items:end center;padding-bottom:9px;font:800 11px 'Inter',sans-serif;letter-spacing:.06em;color:#fff;background:linear-gradient(160deg,#F0566F,#C02640);flex:none;clip-path:polygon(0 0,72% 0,100% 22%,100% 100%,0 100%)}
+.cv-meta{flex:1;min-width:180px;display:flex;flex-direction:column;gap:3px}
+.cv-meta b{font-size:15px;word-break:break-all}
+.cv-meta small{font-size:13px;color:var(--muted)}
+.cv-meta i{font-style:normal;color:#E8A33D}.cv-meta i.ok{color:var(--ok)}
+.cv-act{display:flex;gap:8px}
+.cv-act .ib{display:inline-flex;align-items:center;text-decoration:none;color:inherit}
+.cv-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px;border-radius:16px;border:1.5px dashed var(--line2);color:var(--muted);cursor:pointer;transition:border-color .2s,color .2s}
+.cv-empty:hover{border-color:var(--sky);color:var(--ink)}
+.cv-empty svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cv-empty small{font-size:12.5px}
 /* profile photos */
 .ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,280px));gap:18px}
 .ph-card{display:flex;flex-direction:column;gap:12px;padding:12px;border-radius:20px;border:1px solid var(--line);background:rgb(var(--fg) / .025)}
@@ -258,10 +272,10 @@ body::after{opacity:.04}
   </div>
 </div>
 
-<script src="assets/js/config.js?v=20261120160510"></script>
-<script src="assets/js/icons.js?v=20261120160510"></script>
-<script src="assets/js/content.js?v=20261120160510"></script>
-<script src="assets/js/core.js?v=20261120160510"></script>
-<script src="assets/js/admin.js?v=20261120160510"></script>
+<script src="assets/js/config.js?v=20261120160702"></script>
+<script src="assets/js/icons.js?v=20261120160702"></script>
+<script src="assets/js/content.js?v=20261120160702"></script>
+<script src="assets/js/core.js?v=20261120160702"></script>
+<script src="assets/js/admin.js?v=20261120160702"></script>
 </body>
 </html>
