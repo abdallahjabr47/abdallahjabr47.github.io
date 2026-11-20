@@ -416,4 +416,21 @@
       buildGallery([]);
       $('#projects').innerHTML = '<p class="muted">Projects could not be loaded. If you opened this file directly, run a local server (see README) — on GitHub Pages it works automatically.</p>';
     });
+
+  /* =============== testimonials (from Profile & links in the admin) =============== */
+  (async () => {
+    const sec = $('#testimonials'), box = $('#testi');
+    if (!sec || !box || !window.Site.getSite) return;
+    const s = await window.Site.getSite();
+    const list = ((s && s.testimonials) || []).filter((t) => t && t.quote);
+    if (!list.length) return;
+    box.innerHTML = list.map((t, i) => `
+      <figure class="tq glass" data-reveal style="--d:${i * 90}ms">
+        <span class="qm" aria-hidden="true">“</span>
+        <blockquote>${esc(t.quote)}</blockquote>
+        <figcaption><span class="av" aria-hidden="true">${esc((t.name || '?').trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase())}</span><span><b>${esc(t.name || '')}</b><small>${esc(t.role || '')}</small></span></figcaption>
+      </figure>`).join('');
+    sec.hidden = false;
+    scan(sec);
+  })();
 })();

@@ -341,7 +341,7 @@
       const v = url[a.dataset.siteHref];
       if (v) { a.href = v; a.hidden = false; } else if (a.classList.contains('cpill')) a.hidden = true;
     });
-    $$('[data-site-text]').forEach((el) => { const v = s[el.dataset.siteText]; if (v) el.textContent = v; });
+    $$('[data-site-text]').forEach((el) => { const v = s[el.dataset.siteText]; const slot = el.classList.contains('avail') ? $('span', el) : el; if (v) { slot.textContent = v; el.hidden = false; } else if (el.classList.contains('avail')) el.hidden = true; });
     $$('[data-site-img]').forEach((el) => { const v = s[el.dataset.siteImg]; if (v) loadImg(el, v); });
   }
   let siteReady = Promise.resolve(null);

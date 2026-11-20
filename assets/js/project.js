@@ -103,8 +103,9 @@
       </div>
       ${next && next.slug !== p.slug ? `
       <section class="container" style="padding-bottom:120px">
-        <a class="next glass" href="project.html#${encodeURIComponent(next.slug)}" data-cursor="Next project ↗">
-          <span><small>NEXT PROJECT</small><strong>${esc(next.title)}</strong></span>
+        <a class="next glass" href="project.html#${encodeURIComponent(next.slug)}" data-cursor="Next project ↗" style="--ntint:${esc((next.cover && next.cover.tint) || '#1769E0')}">
+          <span class="n-ic">${next.icon ? `<img src="${esc(next.icon)}" alt="">` : esc((next.title || '?')[0])}</span>
+          <span class="n-txt"><small>NEXT PROJECT</small><strong>${esc(next.title)}</strong>${next.tagline ? `<em>${esc(next.tagline)}</em>` : ''}</span>
           <span class="btn btn-primary">View case study <span class="arr">↗</span></span>
         </a>
       </section>` : ''}`;

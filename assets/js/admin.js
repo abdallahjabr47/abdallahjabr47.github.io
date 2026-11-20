@@ -201,6 +201,7 @@
   function repRow(kind, a = {}) {
     if (kind === 'process') return `<div class="rep-item" data-row><label class="f">Step<input data-r="title" value="${esc(a.title || '')}"></label><label class="f">Description<textarea data-r="desc">${esc(a.desc || '')}</textarea></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     if (kind === 'challenges') return `<div class="rep-item two" data-row><label class="f">Challenge<textarea data-r="challenge">${esc(a.challenge || '')}</textarea></label><label class="f">Solution<textarea data-r="solution">${esc(a.solution || '')}</textarea></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
+    if (kind === 'testimonials') return `<div class="rep-item" data-row><label class="f">Quote<textarea data-r="quote" placeholder="What they said about working with you">${esc(a.quote || '')}</textarea></label><div style="display:flex;flex-direction:column;gap:12px"><label class="f">Name<input data-r="name" value="${esc(a.name || '')}" placeholder="Full name"></label><label class="f">Role &amp; company<input data-r="role" value="${esc(a.role || '')}" placeholder="CTO, Homyt"></label></div><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     if (kind === 'results') return `<div class="rep-item" data-row><label class="f">Value<input data-r="value" value="${esc(a.value || '')}" placeholder="+35%"></label><label class="f">What it measures<input data-r="label" value="${esc(a.label || '')}" placeholder="Weekly active users"></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     return '';
   }
@@ -277,6 +278,14 @@
         <p class="hint">Screenshots for the big “Screens that ship” wall on the home page — app screens, web pages, anything you designed. Add as many as you like (10+ looks best), use ← → to order them. Phone and web screenshots can be mixed. If empty, screens from your projects are used.</p>
         ${imgList('showcase', site.showcase || [], '', false, true)}
       </fieldset>
+      <fieldset><legend>Availability</legend>
+        <p class="hint">One short line under the buttons at the top of the page, with a green dot. Leave empty to hide it.</p>
+        ${F('Availability line', 'availability', site.availability, { ph: 'Open to Product Manager / Product Owner roles · Ramallah or remote' })}
+      </fieldset>
+      <fieldset><legend>Testimonials</legend>
+        <p class="hint">Short quotes from managers, developers or clients. The section shows on the home page only when at least one is added.</p>
+        ${rep('testimonials', site.testimonials, 'Add testimonial')}
+      </fieldset>
       <fieldset><legend>Links</legend>
         <p class="hint">Leave a link empty to hide its button on the site.</p>
         <div class="g2">${F('Email', 'email', site.email, { type: 'email', ph: 'you@email.com' })}${F('WhatsApp number (with country code)', 'whatsapp', site.whatsapp, { ph: '970597323726' })}</div>
@@ -324,6 +333,7 @@
     if (editing < 0) return;
     if (mode === 'site') {
       $$('#edForm [data-k]').forEach((el) => { site[el.dataset.k] = el.value.trim(); });
+      $$('#edForm [data-rep]').forEach((box) => { site[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); return o; }).filter((o) => Object.values(o).some(Boolean)); });
       $$('#edForm [data-imgs]').forEach((box) => { if (box.dataset.multi === '1') { site[box.dataset.imgs] = $$('.im', box).map((im) => im.dataset.path).filter(Boolean); return; } const im = $('.im', box); site[box.dataset.imgs] = im ? im.dataset.path : ''; });
       return;
     }
