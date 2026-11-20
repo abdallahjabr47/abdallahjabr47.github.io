@@ -1665,3 +1665,9 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .nav-links a[href$="#beyond"].active{background:rgb(232 121 201 / .22);color:#F6C6EA}
 [data-theme="light"] .nav-links a[href$="#beyond"].active{background:#FBD3EE;color:#A8287F}
 .nav-links a[href$="#beyond"]:focus-visible{outline-color:rgb(232 121 201 / .7)}
+/* certificate viewer: use the normal mouse pointer, hide the custom cursor */
+html:has(.cert-view.on) .cursor-dot,html:has(.cert-view.on) .cursor-ring{opacity:0!important}
+.has-cursor .cert-view,.has-cursor .cert-view *{cursor:auto!important}
+.has-cursor .cert-view a,.has-cursor .cert-view button{cursor:pointer!important}
+.has-cursor .cert-view{cursor:zoom-out!important}
+.has-cursor .cert-view .cert-card,.has-cursor .cert-view .cert-card *:not(a):not(button){cursor:default!important}
