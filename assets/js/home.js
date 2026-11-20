@@ -333,6 +333,7 @@
     const apply = (k) => {
       btns.forEach((b) => { const on = b.dataset.lens === k; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
       placeThumb(lens);
+      flow.dataset.lens = k;
       flow.classList.toggle('filtering', k !== 'all');
       $$('li', flow).forEach((li) => li.classList.toggle('hit', k !== 'all' && li.dataset.who.split(' ').includes(k)));
     };

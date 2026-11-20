@@ -658,8 +658,8 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .po-card{position:relative;padding:clamp(26px,3vw,40px);border-radius:28px;display:flex;flex-direction:column;gap:18px;overflow:hidden}
 .po-card .role-tag{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:700;letter-spacing:.06em}
 .po-card.pm .role-tag{background:rgba(23,105,224,.14);color:var(--sky)}
-.po-card.po .role-tag{background:rgba(23,105,224,.16);color:#5C9BF5}
-[data-theme="light"] .po-card.po .role-tag{color:#1769E0}
+.po-card.po .role-tag{background:rgb(95 184 148 / .16);color:#6FD1A6}
+[data-theme="light"] .po-card.po .role-tag{color:#1F7A55;background:#DDF3E9}
 .po-card h3{font-size:clamp(24px,2.4vw,32px);letter-spacing:-.03em;line-height:1.05}
 .po-card>p{color:var(--muted)}
 .po-card ul{list-style:none;display:flex;flex-direction:column;gap:12px}
@@ -1628,3 +1628,15 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .iv-health .bar{position:relative;width:56%;height:4px;justify-self:center;border-radius:4px;background:rgb(var(--fg) / .5);animation:ivLift 2s ease-in-out infinite}
 .iv-health .bar i{position:absolute;top:50%;width:9px;height:24px;margin-top:-12px;border-radius:3px;background:var(--ac2)}
 .iv-health .bar i:first-child{left:-3px}.iv-health .bar i:last-child{right:-3px}
+/* role colours: PM blue, PO green, Design orange */
+.who .pm{background:rgb(92 155 245 / .15);color:#7FB0FF}
+.who .po{background:rgb(95 184 148 / .16);color:#6FD1A6}
+.who .ds{background:rgb(240 152 82 / .16);color:#F4A867}
+[data-theme="light"] .who .pm{background:#E3EEFF;color:#1259C2}
+[data-theme="light"] .who .po{background:#DDF3E9;color:#1F7A55}
+[data-theme="light"] .who .ds{background:#FDEBDD;color:#B4561A}
+.flow{--lc:92 155 245}
+.flow[data-lens="po"]{--lc:95 184 148}.flow[data-lens="ds"]{--lc:240 152 82}
+.flow.filtering li.hit{border-color:rgb(var(--lc) / .55);background:rgb(var(--lc) / .07)}
+.lens button[data-lens="pm"].on{color:#7FB0FF}.lens button[data-lens="po"].on{color:#6FD1A6}.lens button[data-lens="ds"].on{color:#F4A867}
+[data-theme="light"] .lens button[data-lens="pm"].on{color:#1259C2}[data-theme="light"] .lens button[data-lens="po"].on{color:#1F7A55}[data-theme="light"] .lens button[data-lens="ds"].on{color:#B4561A}
