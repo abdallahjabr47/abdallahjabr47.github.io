@@ -1445,3 +1445,77 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .ct-go{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:15px;border:1px solid var(--line2);color:var(--muted);transition:background .3s,color .3s,border-color .3s,transform .4s var(--ease)}
 .ct-row:hover .ct-go{background:var(--blue);border-color:var(--blue);color:#fff;transform:rotate(45deg) scale(1.05)}
 .ct-row:hover .ct-go{transform:none}
+/* ---------- beyond the screen: interest cards, each with a small looping motion ---------- */
+.int-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(12px,1.4vw,18px)}
+@media (max-width:1000px){.int-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.int{position:relative;display:flex;flex-direction:column;border-radius:24px;border:1px solid var(--line);background:rgb(var(--fg) / .025);overflow:hidden;transition:border-color .4s,transform .5s var(--ease)}
+.int:hover{border-color:color-mix(in srgb,var(--ac) 45%,transparent);transform:translateY(-4px)}
+.int-vis{position:relative;aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden;background:radial-gradient(90% 80% at 50% 100%,color-mix(in srgb,var(--ac) 22%,transparent),transparent 70%),rgb(var(--fg) / .02)}
+.int-media{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .5s,transform .8s var(--ease)}
+.int-media.has-img{opacity:1}
+.int-media.has-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgb(0 0 0 / .35))}
+.int:hover .int-media.has-img{transform:scale(1.05)}
+.int-vis:has(.int-media.has-img) .iv{opacity:0}
+.int-txt{padding:16px 18px 18px;display:flex;flex-direction:column;gap:4px}
+.int-txt h3{font-size:16.5px;letter-spacing:-.01em}
+.int-txt p{font-size:14px;color:var(--muted)}
+.iv{position:relative;width:62%;height:62%;display:grid;place-items:center;color:var(--ac)}
+@media (prefers-reduced-motion:reduce){.iv *,.iv{animation:none!important}}
+/* ui: phone with cards sliding up */
+.iv-ui .ph{width:44%;height:100%;border-radius:14px;border:2px solid color-mix(in srgb,var(--ac) 70%,transparent);padding:8px 6px;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+.iv-ui .ph i{flex:none;height:34%;border-radius:7px;background:color-mix(in srgb,var(--ac) 30%,transparent);animation:ivUp 3.2s var(--ease) infinite}
+.iv-ui .ph i:nth-child(2){animation-delay:.15s;opacity:.7}.iv-ui .ph i:nth-child(3){animation-delay:.3s;opacity:.45}
+@keyframes ivUp{0%,15%{transform:translateY(0)}45%,65%{transform:translateY(-120%)}95%,100%{transform:translateY(0)}}
+/* brand: type + swatches */
+.iv-brand{grid-template-columns:auto auto auto;grid-template-rows:1fr auto;gap:8px}
+.iv-brand span{grid-column:1/-1;font-size:clamp(34px,4vw,52px);font-weight:800;letter-spacing:-.04em;color:var(--ink);animation:ivType 4s ease-in-out infinite}
+.iv-brand i{width:22px;height:22px;border-radius:50%;background:var(--ac);animation:ivPop 4s ease-in-out infinite}
+.iv-brand i:nth-of-type(2){background:#7FA6E8;animation-delay:.2s}.iv-brand i:nth-of-type(3){background:#D8A960;animation-delay:.4s}
+@keyframes ivType{0%,100%{font-style:normal;font-weight:800}50%{font-style:italic;font-weight:300}}
+@keyframes ivPop{0%,100%{transform:scale(1)}50%{transform:scale(.6)}}
+/* logo: shape morph */
+.iv-logo i{width:46%;aspect-ratio:1;background:var(--ac);animation:ivMorph 5s ease-in-out infinite}
+@keyframes ivMorph{0%,100%{border-radius:50%;transform:rotate(0)}33%{border-radius:18%;transform:rotate(90deg)}66%{border-radius:50% 0 50% 0;transform:rotate(180deg)}}
+/* motion: ball with easing + shadow */
+.iv-motion{align-items:end}
+.iv-motion i{position:absolute;bottom:22%;left:10%;width:24px;height:24px;border-radius:50%;background:var(--ac);animation:ivBall 2.4s cubic-bezier(.5,0,.5,1) infinite}
+.iv-motion b{position:absolute;bottom:16%;left:8%;right:8%;height:2px;border-radius:2px;background:rgb(var(--fg) / .12)}
+@keyframes ivBall{0%{transform:translate(0,0)}25%{transform:translate(40%,-180%)}50%{transform:translate(400%,0) scale(1.15,.85)}75%{transform:translate(260%,-150%)}100%{transform:translate(0,0)}}
+/* film: strip + REC */
+.iv-film{width:100%;overflow:hidden}
+.iv-film .strip{display:flex;gap:8px;padding:10px 0;border-block:6px dotted rgb(var(--fg) / .25);animation:ivStrip 6s linear infinite}
+.iv-film .strip i{flex:none;width:58px;height:40px;border-radius:6px;background:linear-gradient(140deg,color-mix(in srgb,var(--ac) 55%,transparent),rgb(var(--fg) / .06))}
+.iv-film .strip i:nth-child(even){background:linear-gradient(140deg,#7FA6E8aa,rgb(var(--fg) / .06))}
+.iv-film .rec{position:absolute;top:8%;right:6%;font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--ac);display:flex;align-items:center;gap:6px}
+.iv-film .rec::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ac);animation:pulse 1.4s infinite}
+@keyframes ivStrip{to{transform:translateX(-50%)}}
+/* fashion: swinging hanger */
+.iv-fashion svg{width:70%;fill:none;stroke:var(--ac);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transform-origin:50% 10%;animation:ivSwing 3s ease-in-out infinite}
+@keyframes ivSwing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+/* sport: barbell lift + reps */
+.iv-sport{grid-template-rows:1fr auto;gap:10px}
+.iv-sport .bar{position:relative;width:80%;height:4px;border-radius:4px;background:rgb(var(--fg) / .5);animation:ivLift 2s ease-in-out infinite}
+.iv-sport .bar i{position:absolute;top:50%;width:12px;height:34px;margin-top:-17px;border-radius:4px;background:var(--ac)}
+.iv-sport .bar i:first-child{left:-4px}.iv-sport .bar i:last-child{right:-4px}
+.iv-sport .reps{display:flex;gap:6px}
+.iv-sport .reps i{width:9px;height:9px;border-radius:50%;background:rgb(var(--fg) / .15);animation:ivRep 10s steps(1) infinite}
+.iv-sport .reps i:nth-child(2){animation-delay:2s}.iv-sport .reps i:nth-child(3){animation-delay:4s}.iv-sport .reps i:nth-child(4){animation-delay:6s}.iv-sport .reps i:nth-child(5){animation-delay:8s}
+@keyframes ivLift{0%,100%{transform:translateY(22px)}50%{transform:translateY(-14px)}}
+@keyframes ivRep{0%{background:var(--ac)}100%{background:var(--ac)}}
+/* health: heartbeat line */
+.iv-health svg{width:100%;fill:none;stroke:var(--ac);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:180;animation:ivBeat 2.2s linear infinite}
+@keyframes ivBeat{from{stroke-dashoffset:180}to{stroke-dashoffset:-180}}
+/* process phone: real tab bar icons */
+.v-tabs span{display:flex;flex-direction:column;align-items:center;gap:3px;color:#6B7280;transition:color .4s}
+.v-tabs svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.v-tabs small{font-size:9px;font-weight:600;letter-spacing:.01em}
+.v-tabs span:nth-child(2){color:var(--sky)}
+.phone[data-stage="3"] .v-tabs span:nth-child(2){color:#6B7280}
+.phone[data-stage="3"] .v-tabs span:nth-child(4){color:var(--sky)}
+/* health line fix */
+.iv-health svg{stroke-dasharray:100 100;animation:ivBeat2 2.4s linear infinite}
+@keyframes ivBeat2{from{stroke-dashoffset:100}to{stroke-dashoffset:-100}}
+.iv-health svg{stroke-dasharray:none;animation:none}
+.iv-health .bg{stroke:color-mix(in srgb,var(--ac) 28%,transparent)}
+.iv-health .fg{stroke-dasharray:38 62;animation:ivBeat3 2s linear infinite;filter:drop-shadow(0 0 6px var(--ac))}
+@keyframes ivBeat3{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}

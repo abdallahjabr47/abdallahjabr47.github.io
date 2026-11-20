@@ -391,6 +391,10 @@
         </div>
         ${F('Availability line', 'availability', site.availability, { ph: 'Open to Product Manager / Product Owner roles · Ramallah or remote' })}
       </fieldset>
+      <fieldset><legend>Beyond the screen — photos (optional)</legend>
+        <p class="hint">Each card on the home page has a small animation. Upload a photo or a GIF to show your own work there instead (square-ish, e.g. 1200×900). A GIF plays like a short video.</p>
+        <div class="ph-grid">${[['ui', 'UI & mobile'], ['brand', 'Graphic & branding'], ['logo', 'Logos'], ['motion', 'Motion'], ['film', 'Filmmaking & editing'], ['fashion', 'Fashion'], ['sport', 'Sport & gym'], ['health', 'Health']].map(([k, l]) => `<div class="ph-card"><div class="ph-top"><span><b>${l}</b></span></div>${imgList('int_' + k, site['int_' + k] ? [site['int_' + k]] : [], 'wide', false, false)}</div>`).join('')}</div>
+      </fieldset>
       <fieldset><legend>Learning &amp; recognition</legend>
         <p class="hint">Degrees, certificates, hackathons and community roles. They show on the home page in three columns, in this order. Leave the list empty to hide the section.</p>
         ${rep('recognition', site.recognition, 'Add item')}
@@ -483,7 +487,7 @@
     if (mode === 'site') {
       $$('#edForm [data-k]').forEach((el) => { site[el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value.trim(); });
       $$('#edForm [data-rep]').forEach((box) => { site[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); return o; }).filter((o) => Object.values(o).some(Boolean)); });
-      $$('#edForm [data-imgs]').forEach((box) => { if (box.dataset.multi === '1') { site[box.dataset.imgs] = $$('.im', box).map((im) => im.dataset.path).filter(Boolean); return; } const im = $('.im', box); site[box.dataset.imgs] = im ? im.dataset.path : ''; });
+      $$('#edForm [data-imgs]').forEach((box) => { if (box.dataset.multi === '1') { site[box.dataset.imgs] = $$('.im', box).map((im) => im.dataset.path).filter(Boolean); return; } const im = $('.im', box); const v = im ? im.dataset.path : ''; if (v || box.dataset.imgs in site) site[box.dataset.imgs] = v; });
       return;
     }
     if (mode === 'exp') {
