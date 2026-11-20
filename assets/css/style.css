@@ -243,7 +243,8 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .pc-foot{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
 .pc-foot p{color:var(--ink2);font-size:17px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pc-head p{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
-.status-pill{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:var(--pill-bg);color:var(--pill-ink);font-size:14.5px;font-weight:500}
+.status-pill{display:inline-flex;align-items:center;gap:8px;padding:0;background:none;color:var(--muted);font-size:14.5px;font-weight:600;letter-spacing:.01em}
+.status-pill.live{color:var(--ok)}
 .status-pill.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s infinite}
 /* mock screens (shown until real screenshots are uploaded) */
 .mock{height:100%;display:flex;flex-direction:column;gap:9px;padding:34px 12px 12px;background:#0B0D14;color:#fff}
