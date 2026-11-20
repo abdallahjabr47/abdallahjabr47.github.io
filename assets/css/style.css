@@ -1054,3 +1054,34 @@ html.intro-on .hero .avail{opacity:0}
 .pr-card .pr-act:hover{border-color:var(--ac);color:var(--ac)}
 [data-theme="light"] .pr-card{--ac-l:1}
 [data-theme="light"] .pr-card .pr-n{color:color-mix(in srgb,var(--ac) 70%,#000)}
+
+/* principles: compact */
+.pr-grid{gap:14px}
+.pr-card{border-radius:22px}
+.pr-card .pr-demo{height:190px;gap:12px;transform:scale(1);overflow:hidden}
+.pr-card .pr-demo > *:not(.pr-act){transform:scale(.88)}
+.pr-card .pr-txt{padding:18px 20px 22px;gap:8px}
+.pr-card .pr-txt h3{font-size:18.5px}
+.pr-card .pr-txt p{font-size:14.5px;line-height:1.55}
+.pr-card .pr-n{font-size:10.5px;padding:4px 9px}
+.pr-card .pr-act{top:10px;right:10px;min-height:30px;padding:4px 11px;font-size:11px}
+.pr-card::before{height:2px;opacity:.7}
+.pr-card .pr-demo{background:radial-gradient(120% 90% at 50% 0%,color-mix(in srgb,var(--ac) 10%,transparent),transparent 70%),rgb(var(--fg) / .02)}
+@media (max-width:1100px){.pr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.pr-grid{grid-template-columns:1fr}}
+/* skills + education: same muted accent family, a bit more compact */
+.sk-card:nth-child(1),.edu-card:nth-child(1){--ac:#7FA6E8}
+.sk-card:nth-child(2),.edu-card:nth-child(2){--ac:#5FB894}
+.sk-card:nth-child(3),.edu-card:nth-child(3){--ac:#D8A960}
+.sk-card:nth-child(4),.edu-card:nth-child(4){--ac:#A497DB}
+.sk-card{position:relative;overflow:hidden;min-height:0;padding:24px;border-radius:22px;gap:14px;transition:transform .4s var(--ease),border-color .4s}
+.sk-card::before,.edu-card::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--ac),transparent 85%);opacity:.7}
+.sk-card:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--ac) 40%,transparent)}
+.sk-card .sk-ic,.sk-card:nth-child(even) .sk-ic{width:46px;height:46px;border-radius:14px;background:color-mix(in srgb,var(--ac) 16%,transparent);color:var(--ac);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ac) 35%,transparent)}
+.sk-card h3{font-size:19px}
+.sk-card li{font-size:14.5px}
+.sk-card li::before{background:var(--ac)}
+.edu-card{position:relative;overflow:hidden}
+.edu-card small{color:var(--ac)}
+[data-theme="light"] .sk-card .sk-ic{color:color-mix(in srgb,var(--ac) 70%,#000)}
+[data-theme="light"] .edu-card small{color:color-mix(in srgb,var(--ac) 65%,#000)}
