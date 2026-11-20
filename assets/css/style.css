@@ -399,7 +399,7 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .p-card li{padding:7px 12px;border-radius:10px;background:rgb(var(--fg) / .05);font-size:13px;color:var(--ink2)}
 .big-mq{margin-top:clamp(56px,7vw,90px);display:flex;flex-direction:column;gap:6px;border-block:1px solid var(--line);padding:26px 0}
 .big-mq .item{display:flex;align-items:center;gap:36px;padding-right:36px;font-size:clamp(34px,4.6vw,64px);font-weight:700;letter-spacing:-.025em;white-space:nowrap}
-.big-mq .rev .item{color:transparent;-webkit-text-stroke:1px rgb(var(--fg) / .3)}
+
 .big-mq .item em{font-style:normal;color:var(--sky);font-size:.5em;-webkit-text-stroke:0}
 
 /* glow-follow cards */
@@ -909,13 +909,13 @@ h1,h2,h3,.h-xl,.h-lg,.h-md,.ix-t,.stat b{letter-spacing:-.035em}
 .ph-tile .nav i{width:14px;height:14px;border-radius:5px;background:rgb(var(--fg)/.18)}
 @media (max-width:900px){.tilt .tcol:nth-child(n+4){display:none}}
 
-/* heading hover: the cursor becomes a glass lens and the letters under it light up in colour */
-.cursor-ring.lens{width:150px;height:150px;border:1px solid rgba(255,255,255,.28);background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.14),rgba(255,255,255,0) 42%,rgba(23,105,224,.06) 100%);
-  backdrop-filter:saturate(1.6) brightness(1.12);-webkit-backdrop-filter:saturate(1.6) brightness(1.12);
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.35),inset 0 -10px 24px rgba(23,105,224,.12),0 10px 30px rgba(0,0,0,.18)}
-.cursor-ring.lens~.cursor-dot{opacity:0}
-[data-theme="light"] .cursor-ring.lens{border-color:rgba(23,105,224,.28);background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.3),rgba(255,255,255,0) 45%,rgba(23,105,224,.05) 100%);box-shadow:inset 0 1px 1px rgba(255,255,255,.8),0 10px 30px rgba(23,105,224,.12)}
+/* glass text: outlined letters with a faint frosted fill (marquee words + headings on hover) */
+.big-mq .item b{font-weight:700;transition:color .45s var(--ease),-webkit-text-stroke-color .45s var(--ease)}
+.big-mq .item.ghost b{font-style:italic;font-weight:500;color:rgb(var(--fg) / .03);-webkit-text-stroke:1.2px rgb(var(--fg) / .45)}
+.big-mq .item:hover b{color:rgb(var(--fg) / .06);-webkit-text-stroke:1.2px rgb(var(--fg) / .7)}
+.big-mq .item.ghost:hover b{color:var(--ink);-webkit-text-stroke-color:transparent}
 @media (pointer:fine){
-  .lit .c{background-image:radial-gradient(circle 75px at var(--cx,-999px) var(--cy,-999px),#7DB4FF 0%,#1769E0 99%,transparent 100%);background-attachment:fixed;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-    background-color:currentColor}
+  h1[data-split] .c,h2[data-split] .c{transition:transform 1s var(--ease),color .45s var(--ease),-webkit-text-stroke-color .45s var(--ease);-webkit-text-stroke:1.2px transparent}
+  h1[data-split]:hover .c,h2[data-split]:hover .c{color:rgb(var(--fg) / .05);-webkit-text-stroke-color:rgb(var(--fg) / .75)}
+  h1[data-split]:hover .serif .c,h2[data-split]:hover .serif .c{color:rgba(92,155,245,.08);-webkit-text-stroke-color:var(--coral-ink)}
 }
