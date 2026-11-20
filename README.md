@@ -88,6 +88,7 @@ Admin → **Profile & links** tab:
 
 - **Main photo** (top of the home page) and **Second photo** (About section). Portrait, about 4:5. Leave empty to keep the current photo.
 - **Links**: email, WhatsApp number (with country code, digits only), LinkedIn, Behance, Dribbble, GitHub. An empty link hides its button on the site.
+- **Screens gallery**: screenshots for the “Screens that ship” wall (phone and web mixed, 10+ looks best). Empty = screens from your projects.
 - **Résumé (CV)**: upload a PDF; every “View My CV” button points to the new file.
 
 Click **Preview changes** to check, then **Publish to site**. Everything is saved in `data/site.json`.

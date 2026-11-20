@@ -109,18 +109,20 @@
 
   /* =============== tilted screens gallery =============== */
   const cols = $$('.tcol');
-  function buildGallery(list) {
+  async function buildGallery(list) {
     const tints = list.length ? list.map((p) => (p.cover && p.cover.tint) || '#2B3A8F') : ['#2A1530', '#14254A', '#1D3A33', '#3A2814', '#10343F', '#2E1F18'];
     const accents = ['linear-gradient(140deg,#2B3A8F,#E2577A)', 'linear-gradient(140deg,#1D6F6A,#0F2F3A)', 'linear-gradient(140deg,#5840FF,#1A2050)', 'linear-gradient(140deg,#8C5A1E,#3A230F)', 'linear-gradient(140deg,#4DA3FF,#0E1119)', 'linear-gradient(140deg,#6A2E8C,#12131E)'];
-    const imgs = [];
-    list.forEach((p) => { (p.webScreens || []).forEach((s) => imgs.push(s)); ((p.gallery && p.gallery.after) || []).forEach((g) => g.image && imgs.push(g.image)); });
+    let imgs = [];
+    try { const s = await window.Site.getSite(); if (s && Array.isArray(s.showcase)) imgs = s.showcase.filter(Boolean); } catch (e) {}
+    if (!imgs.length) list.forEach((p) => { (p.webScreens || []).forEach((s) => imgs.push(s)); (p.screens || []).forEach((s) => imgs.push(s)); ((p.gallery && p.gallery.after) || []).forEach((g) => g.image && imgs.push(g.image)); });
+    const perCol = Math.max(7, Math.ceil(imgs.length / cols.length));
     let k = 0;
     cols.forEach((col, ci) => {
       let html = '';
-      for (let j = 0; j < 6; j++, k++) {
-        const img = imgs.length ? imgs[k % imgs.length] : '';
+      for (let j = 0; j < perCol; j++, k++) {
+        const img = imgs.length ? imgs[(k * 7 + ci) % imgs.length] : '';
         html += img
-          ? `<div class="tile"><img src="${esc(img)}" alt="" loading="lazy"></div>`
+          ? `<div class="tile has-img"><img src="${esc(img)}" alt="" loading="lazy" decoding="async"></div>`
           : `<div class="tile" style="--tbg:${tints[k % tints.length]}33;--tacc:${accents[(k + ci) % accents.length]}"><div class="tb"><i style="width:28%"></i><i style="width:36%;opacity:.5"></i></div><div class="hero-blk"><i style="width:44%"></i><i style="width:66%;opacity:.6"></i></div><div class="row"><i></i><i></i><i></i></div></div>`;
       }
       col.innerHTML = html;

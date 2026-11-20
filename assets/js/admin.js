@@ -273,6 +273,10 @@
           <div><div class="f">Second photo (About section)</div>${imgList('photo2', site.photo2 ? [site.photo2] : [], 'pt', false, false)}</div>
         </div>
       </fieldset>
+      <fieldset><legend>Screens gallery</legend>
+        <p class="hint">Screenshots for the big “Screens that ship” wall on the home page — app screens, web pages, anything you designed. Add as many as you like (10+ looks best), use ← → to order them. Phone and web screenshots can be mixed. If empty, screens from your projects are used.</p>
+        ${imgList('showcase', site.showcase || [], '', false, true)}
+      </fieldset>
       <fieldset><legend>Links</legend>
         <p class="hint">Leave a link empty to hide its button on the site.</p>
         <div class="g2">${F('Email', 'email', site.email, { type: 'email', ph: 'you@email.com' })}${F('WhatsApp number (with country code)', 'whatsapp', site.whatsapp, { ph: '970597323726' })}</div>
@@ -321,7 +325,7 @@
     if (editing < 0) return;
     if (mode === 'site') {
       $$('#edForm [data-k]').forEach((el) => { site[el.dataset.k] = el.value.trim(); });
-      $$('#edForm [data-imgs]').forEach((box) => { const im = $('.im', box); site[box.dataset.imgs] = im ? im.dataset.path : ''; });
+      $$('#edForm [data-imgs]').forEach((box) => { if (box.dataset.multi === '1') { site[box.dataset.imgs] = $$('.im', box).map((im) => im.dataset.path).filter(Boolean); return; } const im = $('.im', box); site[box.dataset.imgs] = im ? im.dataset.path : ''; });
       return;
     }
     if (mode === 'exp') {
@@ -388,7 +392,7 @@
     if (!box) return;
     const cls = box.dataset.cls, lab = box.dataset.lab === '1', multi = box.dataset.multi === '1';
     const titleEl = $('[data-k="slug"]', form);
-    const folder = mode === 'site' ? 'profile' : slugify((titleEl && titleEl.value) || ($('[data-k="title"]', form) || {}).value || 'project');
+    const folder = mode === 'site' ? (box.dataset.imgs === 'showcase' ? 'showcase' : 'profile') : slugify((titleEl && titleEl.value) || ($('[data-k="title"]', form) || {}).value || 'project');
     if (!multi) $$('.im', box).forEach((x) => x.remove());
     for (const file of Array.from(input.files)) {
       try {

@@ -278,14 +278,16 @@
     $$('[data-site-text]').forEach((el) => { const v = s[el.dataset.siteText]; if (v) el.textContent = v; });
     $$('[data-site-img]').forEach((el) => { const v = s[el.dataset.siteImg]; if (v) loadImg(el, v); });
   }
+  let siteReady = Promise.resolve(null);
   (function () {
     if (!$('[data-site-href],[data-site-img]')) return;
     let draft = null;
-    if (isPreview) { try { const d = JSON.parse(localStorage.getItem('pf-preview') || 'null'); if (d && d.site) { draft = d.site; const map = d.previews || {}; Object.keys(draft).forEach((k) => { if (map[draft[k]]) draft[k] = map[draft[k]]; }); } } catch (e) {} }
-    if (draft) return applySite(draft);
-    fetch('data/site.json?v=' + Date.now(), { cache: 'no-store' }).then((r) => r.ok ? r.json() : null).then(applySite).catch(() => {});
+    if (isPreview) { try { const d = JSON.parse(localStorage.getItem('pf-preview') || 'null'); if (d && d.site) { draft = d.site; const map = d.previews || {}; Object.keys(draft).forEach((k) => { if (Array.isArray(draft[k])) draft[k] = draft[k].map((v) => map[v] || v); else if (map[draft[k]]) draft[k] = map[draft[k]]; }); } } catch (e) {} }
+    if (draft) { siteReady = Promise.resolve(draft); return applySite(draft); }
+    siteReady = fetch('data/site.json?v=' + Date.now(), { cache: 'no-store' }).then((r) => r.ok ? r.json() : null).catch(() => null);
+    siteReady.then(applySite);
   })();
 
-  window.Site = { $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, previewDraft, isPreview, reduce, fine };
+  window.Site = { getSite: () => siteReady, $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, previewDraft, isPreview, reduce, fine };
   scan();
 })();
