@@ -25,8 +25,7 @@
     { id: 'work', label: 'Work', subs: [
       { id: 'projects', label: 'Projects', kind: 'projects' , part: 'work', partName: 'Selected work' },
       { id: 'work-text', label: 'Selected work · text', kind: 'content', keys: ['work'] },
-      { id: 'screens-img', label: 'Screens that ship · images', kind: 'site', groups: ['showcase'] , part: 'screens', partName: 'Screens that ship' },
-      { id: 'screens-text', label: 'Screens that ship · text', kind: 'content', keys: ['screens'] },
+      { id: 'screens', label: 'Screens that ship', kind: 'site', groups: ['showcase'], keys: ['screens'] },
       { id: 'process', label: 'From sketch to shipped', kind: 'content', keys: ['process'] }] },
     { id: 'about', label: 'About', subs: [
       { id: 'about-text', label: 'About text & numbers', kind: 'content', keys: ['about'] },
@@ -42,14 +41,12 @@
       { id: 'skills-text', label: 'Skills', kind: 'content', keys: ['skills'] },
       { id: 'system', label: 'Design system', kind: 'content', keys: ['design-system'] }] },
     { id: 'beyond', label: 'Beyond', subs: [
-      { id: 'beyond-text', label: 'Text', kind: 'content', keys: ['beyond'] },
-      { id: 'beyond-photos', label: 'Card photos', kind: 'site', groups: ['beyond'] , part: 'beyond', partName: 'Beyond the screen' }] },
+      { id: 'beyond', label: 'Beyond the screen', kind: 'site', groups: ['beyond'], keys: ['beyond'] }] },
     { id: 'contact', label: 'Contact & more', subs: [
       { id: 'links', label: 'Links & CV', kind: 'site', groups: ['links', 'cv'] , part: 'contact', partName: 'Contact' },
       { id: 'contact-text', label: 'Contact text', kind: 'content', keys: ['contact'] },
       { id: 'faq', label: 'FAQ', kind: 'content', keys: ['faq'] },
-      { id: 'testi', label: 'Testimonials', kind: 'site', groups: ['testimonials'] , part: 'testimonials', partName: 'Testimonials' },
-      { id: 'testi-text', label: 'Testimonials · text', kind: 'content', keys: ['testimonials'] }] }];
+      { id: 'testi', label: 'Testimonials', kind: 'site', groups: ['testimonials'], keys: ['testimonials'] }] }];
   let page = PAGES[1], sub = PAGES[1].subs[0];
   const KIND_TAB = { projects: 'projects', experience: 'experience', site: 'profile', content: 'content' };
   function drawTabs() {
@@ -90,6 +87,21 @@
   let dirty = false;
 
   /* ---------------- helpers ---------------- */
+  /* our own confirm popup (instead of the browser's) — resolves true / false */
+  function ask({ title, text = '', ok = 'OK', cancel = 'Cancel', tone = '' }) {
+    const d = $('#askDlg');
+    if (!d || !d.showModal) return Promise.resolve(window.confirm(title + (text ? '\n\n' + text : '')));
+    $('.ask-t', d).textContent = title; $('.ask-p', d).textContent = text; $('.ask-p', d).hidden = !text;
+    const yes = $('[data-ask="ok"]', d), no = $('[data-ask="no"]', d);
+    yes.textContent = ok; no.textContent = cancel; d.dataset.tone = tone;
+    d.showModal(); no.focus();
+    return new Promise((res) => {
+      const done = (v) => { d.removeEventListener('click', onClick); d.removeEventListener('cancel', onCancel); d.classList.add('closing'); setTimeout(() => { d.classList.remove('closing'); d.close(); }, 140); res(v); };
+      const onClick = (e) => { if (e.target === yes) done(true); else if (e.target === no || e.target === d) done(false); };
+      const onCancel = (e) => { e.preventDefault(); done(false); };
+      d.addEventListener('click', onClick); d.addEventListener('cancel', onCancel);
+    });
+  }
   const show = (id) => { ['v-login', 'v-list', 'v-edit'].forEach((v) => $('#' + v).classList.toggle('hidden', v !== id)); $('#nav').hidden = id === 'v-login'; };
   const slugify = (s) => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9؀-ۿ]+/g, '-').replace(/^-+|-+$/g, '') || 'project-' + Date.now().toString(36);
   const imgURL = (path) => previews.get(path) || path;
@@ -145,7 +157,7 @@
       await loadData();
     } catch (err) { msg.textContent = 'Could not sign in: ' + err.message; auth = null; }
   });
-  if ($('#logout')) $('#logout').addEventListener('click', () => { if (dirty && !window.confirm('You have unpublished changes. Lock anyway?')) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
+  if ($('#logout')) $('#logout').addEventListener('click', async () => { if (dirty && !(await ask({ title: 'Lock the editor?', text: 'You have changes that aren’t published yet. They’ll be lost if you lock now.', ok: 'Lock anyway', tone: 'danger' }))) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
 
   /* ---------------- load ---------------- */
   async function loadData() {
@@ -235,7 +247,7 @@
         </span></div>`;
     }).join('');
   }
-  $('#plist').addEventListener('click', (e) => {
+  $('#plist').addEventListener('click', async (e) => {
     const b = e.target.closest('button[data-a]'); if (!b) return;
     if (b.dataset.a === 'new') { $('#newProject').click(); return; }
     const i = parseInt(b.dataset.i, 10), a = b.dataset.a;
@@ -245,7 +257,7 @@
     if (a === 'up' && i > 0) [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
     if (a === 'down' && i < arr.length - 1) [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]];
     if (a === 'toggle') arr[i][flag] = arr[i][flag] === false;
-    if (a === 'del') { if (!window.confirm(`Delete “${arr[i].title || arr[i].role}”? It disappears from the site when you publish.`)) return; arr.splice(i, 1); }
+    if (a === 'del') { if (!(await ask({ title: `Delete “${arr[i].title || arr[i].role}”?`, text: 'It disappears from the website when you publish. Until then you can still press Discard.', ok: 'Delete', tone: 'danger' }))) return; arr.splice(i, 1); }
     setDirty(changed());
     renderList();
   });
@@ -408,21 +420,21 @@
   }
 
   let wtUnbind = null;
-  async function openContentEditor() {
-    editing = 0; mode = 'content';
-    embedPanel('content', 'Website <em class="serif">text</em>');
+  async function openContentEditor(host) {
+    if (!host) { editing = 0; mode = 'content'; embedPanel('content', 'Website <em class="serif">text</em>'); }
     const form = $('#edForm');
-    form.innerHTML = '<p class="hint">Loading the page text…</p>';
+    host = host || form;
+    host.innerHTML = '<p class="hint">Loading the page text…</p>';
     let doc;
     try { doc = new DOMParser().parseFromString(await (await fetch('index.html?v=' + Date.now(), { cache: 'no-store' })).text(), 'text/html'); }
-    catch (e) { form.innerHTML = '<p class="hint">Could not load the page text. Refresh and try again.</p>'; return; }
+    catch (e) { host.innerHTML = '<p class="hint">Could not load the page text. Refresh and try again.</p>'; return; }
     const secs = window.SiteContent.sections(doc).filter((x) => !sub.keys || sub.keys.includes(x.key));
     const data = secs.map((sec) => ({ sec, fs: window.SiteContent.fields(sec) }));
     const valOf = (f) => (Object.prototype.hasOwnProperty.call(content.text, f.key) ? content.text[f.key] : f.text);
     const offs = content.off || [];
     const EYE_I = '<svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c1-1.5 5-6 10-6s9 4.5 10 6c-1 1.5-5 6-10 6S3 13.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="no" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
     const editedIn = (fs) => fs.filter((f) => valOf(f) !== f.text).length;
-    form.innerHTML = `
+    host.innerHTML = `
       <div class="wt${data.length < 2 ? ' one' : ''}">
         <aside class="wt-nav" role="tablist" aria-label="Page sections">${data.map(({ sec, fs }, n) => `
           <button type="button" class="wt-tab${n === 0 ? ' on' : ''}" data-wt="${n}" role="tab"><span class="wt-n">${String(n + 1).padStart(2, '0')}</span><span class="wt-l"><b>${esc(sec.name)}</b><small data-wt-meta="${n}">${fs.length} texts${editedIn(fs) ? ` · <i>${editedIn(fs)} edited</i>` : ''}${content.hidden.includes(sec.key) ? ' · hidden' : ''}</small></span></button>`).join('')}
@@ -434,6 +446,12 @@
               <label class="wt-switch"><input type="checkbox" data-sec-show="${esc(sec.key)}" ${content.hidden.includes(sec.key) ? '' : 'checked'}><span></span>Show on website</label>
             </header>
             ${(() => {
+              const isShort = (f) => !/\n/.test(f.text) && f.text.length <= 48 && !/Paragraph|Main heading|FAQ answer/.test(f.kind);
+              const PLURAL = { 'Button / tab': 'Buttons & tabs', Button: 'Buttons', Text: 'Texts', Title: 'Titles', 'Small text': 'Small texts', Heading: 'Headings', 'Number caption': 'Number captions', 'Number (counts up)': 'Numbers' };
+              /* compact field: no label row, reset + eye sit inside the box */
+              const cfield = (f) => { const v = valOf(f); const ed = v !== f.text; const off = offs.includes(f.key); return `<div class="wt-field c${ed ? ' edited' : ''}${off ? ' off' : ''}"><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1">${esc(v)}</textarea><span class="c-act"><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'} title="Back to: ${esc(f.text)}">↺</button><button type="button" class="wt-eye${off ? ' is-off' : ''}" data-off="${esc(f.key)}" aria-pressed="${off}" title="Show or hide this on the website">${EYE_I}</button></span><p class="wt-orig" hidden></p></div>`; };
+              /* lay out a list of fields: same-kind short texts in a row, other short ones two per line */
+              const flow = (list) => { let out = '', i = 0; while (i < list.length) { const f = list[i]; if (isShort(f)) { let j = i; while (j < list.length && isShort(list[j]) && list[j].kind === f.kind) j++; if (j - i >= 2) { out += `<div class="wt-run"><div class="wt-run-h">${esc(PLURAL[f.kind] || f.kind + 's')}<small>${j - i}</small></div><div class="wt-run-b">${list.slice(i, j).map(cfield).join('')}</div></div>`; i = j; continue; } out += field(f).replace('class="wt-field', 'class="wt-field half'); i++; continue; } out += field(f); i++; } return out; };
               const field = (f) => { const v = valOf(f); const ed = v !== f.text; return `
             <div class="wt-field${ed ? ' edited' : ''}${offs.includes(f.key) ? ' off' : ''}">
               <div class="wt-lab"><span>${esc(f.kind)}</span><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'}>Reset</button><button type="button" class="wt-eye${offs.includes(f.key) ? ' is-off' : ''}" data-off="${esc(f.key)}" aria-pressed="${offs.includes(f.key)}" title="Show or hide this on the website">${EYE_I}</button></div>
@@ -444,19 +462,28 @@
               const logo = (el) => { const ic = el && (window.ICONS || {})[el.dataset.icon]; if (!ic) return `<span class="tc-fb">${esc((el && el.dataset.fb) || '•')}</span>`; if (ic.full) return `<svg viewBox="${ic.fvb}" aria-hidden="true">${ic.full}</svg>`; return `<svg viewBox="${ic.vb}" fill="currentColor" style="color:${ic.c === 'ink' ? 'var(--ink)' : ic.c}" aria-hidden="true">${ic.p}</svg>`; };
               const mini = (f, ph) => { const v = valOf(f); const ed = v !== f.text; return `<div class="wt-field tf${ed ? ' edited' : ''}"><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1" placeholder="${ph}">${esc(v)}</textarea><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'} title="Back to original">↺</button><p class="wt-orig" hidden></p></div>`; };
               const tcard = (run) => { const tool = run[0].el.closest('.tool'); const gk = 'g:' + run[0].key, goff = offs.includes(gk); return `<div class="wt-group tcard${goff ? ' off' : ''}"><div class="wt-gh"><span class="tc-ic">${logo(tool && tool.querySelector('[data-icon]'))}</span><div class="tc-f">${run.map((f, i) => mini(f, i ? 'Short line' : 'Name')).join('')}</div><button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}" title="Show / hide this tool">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button></div></div>`; };
-              let html = '', k = 0, inGrid = false;
+              let html = '', k = 0, grid = '';
+              const openGrid = (cls) => { if (grid !== cls) { if (grid) html += '</div>'; if (cls) html += `<div class="${cls}">`; grid = cls; } };
               while (k < fs.length) {
                 const g = fs[k].group;
                 const isTool = g && fs[k].el.closest('.tool');
-                if (!isTool && inGrid) { html += '</div>'; inGrid = false; }
-                if (!g) { html += field(fs[k]); k++; continue; }
+                if (!g) { openGrid(''); const loose = []; while (k < fs.length && !fs[k].group) loose.push(fs[k++]); html += flow(loose); continue; }
                 const run = []; while (k < fs.length && fs[k].group === g) run.push(fs[k++]);
-                if (isTool) { if (!inGrid) { html += '<div class="tgrid">'; inGrid = true; } html += tcard(run); if (k >= fs.length) { html += '</div>'; inGrid = false; } continue; }
+                if (isTool) { openGrid('tgrid'); html += tcard(run); continue; }
                 const isList = g.startsWith('list-');
+                if (!isList) {
+                  /* cards side by side, always open */
+                  openGrid('cgrid');
+                  const gk = 'g:' + run[0].key, goff = offs.includes(gk);
+                  html += `<div class="wt-group card${goff ? ' off' : ''}"><div class="wt-gh"><b>${esc(run[0].groupLabel)}</b><button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}" title="Show or hide this card on the website">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button></div><div class="wt-gb">${run.map((f, i) => field(f.kind === 'Text' ? Object.assign({}, f, { kind: f.text.length > 55 || (i === run.length - 1 && i > 0 && f.text.length > 25) ? 'Description' : i === 0 && run.length >= 3 ? 'Label' : 'Title' }) : f)).join('')}</div></div>`;
+                  continue;
+                }
+                openGrid('');
                 const gk = 'g:' + run[0].key, goff = !isList && offs.includes(gk);
-                html += `<div class="wt-group${isList ? ' list' : ''}${goff ? ' off' : ''}"><div class="wt-gh"${isList ? '' : ' data-fold'}>${isList ? '' : '<svg class="wt-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>'}<b>${esc(run[0].groupLabel)}</b>${isList ? '' : '<span class="wt-peek"></span>'}<small>${run.length} ${run.length === 1 ? 'text' : 'texts'}</small>${isList ? '' : `<button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button>`}</div><div class="wt-gb">${run.map(field).join('')}</div></div>`;
+                html += `<div class="wt-group${isList ? ' list' : ''}${goff ? ' off' : ''}"><div class="wt-gh"${isList ? '' : ' data-fold'}>${isList ? '' : '<svg class="wt-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>'}<b>${esc(run[0].groupLabel)}</b>${isList ? '' : '<span class="wt-peek"></span>'}<small>${run.length} ${run.length === 1 ? 'text' : 'texts'}</small>${isList ? '' : `<button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button>`}</div><div class="wt-gb${isList ? '' : ' wt-flow'}">${isList ? run.map(field).join('') : flow(run)}</div></div>`;
               }
-              return html;
+              openGrid('');
+              return `<div class="wt-flow">${html}</div>`;
             })()}
           </section>`).join('')}
         </div>
@@ -469,15 +496,15 @@
     const peek = (g) => { const t = $('textarea', g); const p = $('.wt-peek', g); if (!p) return; const v = t ? t.value.replace(/[*\n]+/g, ' ').trim() : ''; const lab = ($('.wt-gh b', g).textContent || '').toLowerCase(); p.textContent = v && !lab.includes(v.toLowerCase()) ? v : ''; };
     const fold = (g, closed) => { g.classList.toggle('closed', closed); const h = $('[data-fold]', g); if (h) h.setAttribute('aria-expanded', String(!closed)); if (!closed) $$('textarea', g).forEach(grow); };
     $$('.wt-sec', form).forEach((sec$, n) => {
-      const groups = $$('.wt-group:not(.list):not(.tcard)', sec$);
-      groups.forEach((g, i) => { g.id = `wt-g-${n}-${i}`; peek(g); const h = $('[data-fold]', g); if (h) { h.tabIndex = 0; h.setAttribute('role', 'button'); } if (groups.length > 3) fold(g, true); });
+      const groups = $$('.wt-group.card', sec$);
+      groups.forEach((g, i) => { g.id = `wt-g-${n}-${i}`; peek(g); const h = $('[data-fold]', g); if (h) { h.tabIndex = 0; h.setAttribute('role', 'button'); } });
       const tabBtn = $(`.wt-tab[data-wt="${n}"]`, form);
-      if (groups.length > 1) tabBtn.insertAdjacentHTML('afterend', `<div class="wt-jumps" data-jumps="${n}"${n ? ' hidden' : ''}><div class="wt-jh"><small>${groups.length} cards</small><button type="button" data-fold-all="${n}">${groups.length > 3 ? 'Open all' : 'Close all'}</button></div>${groups.map((g, i) => `<a href="#wt-g-${n}-${i}" data-jump>${esc($('.wt-gh b', g).textContent)}</a>`).join('')}</div>`);
+      if (groups.length > 5) tabBtn.insertAdjacentHTML('afterend', `<div class="wt-jumps" data-jumps="${n}"${n ? ' hidden' : ''}><div class="wt-jh"><small>${groups.length} cards</small></div>${groups.map((g, i) => `<a href="#wt-g-${n}-${i}" data-jump>${esc($('.wt-gh b', g).textContent)}</a>`).join('')}</div>`);
     });
     if (wtUnbind) wtUnbind();
     const onClick = (e) => {
       const fa = e.target.closest('[data-fold-all]');
-      if (fa) { const sec$ = $(`[data-wt-sec="${fa.dataset.foldAll}"]`, form); const open = fa.textContent === 'Open all'; $$('.wt-group:not(.list):not(.tcard)', sec$).forEach((g) => fold(g, !open)); fa.textContent = open ? 'Close all' : 'Open all'; return; }
+      if (fa) { const sec$ = $(`[data-wt-sec="${fa.dataset.foldAll}"]`, form); const open = fa.textContent === 'Open all'; $$('.wt-group.card', sec$).forEach((g) => fold(g, !open)); fa.textContent = open ? 'Close all' : 'Open all'; return; }
       const j = e.target.closest('[data-jump]');
       if (j) { e.preventDefault(); const g = $(j.getAttribute('href'), form); if (!g) return; fold(g, false); g.scrollIntoView({ behavior: 'smooth', block: 'start' }); g.classList.remove('flash'); void g.offsetWidth; g.classList.add('flash'); return; }
       const h = e.target.closest('[data-fold]');
@@ -570,6 +597,8 @@
       </fieldset>`;
     $$('#edForm fieldset[data-g]').forEach((f) => { f.hidden = !!(sub.groups && !sub.groups.includes(f.dataset.g)); });
     placePartSwitch();
+    /* sections whose text and images live on one admin page: the text editor goes first */
+    if (sub.keys) { const host = document.createElement('div'); host.className = 'combo-text'; $('#edForm').prepend(host); openContentEditor(host); }
     const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } };
     const drawCv = () => {
       const box = $('#cvBox');
@@ -588,8 +617,8 @@
           <label class="ib edit" for="cvInput" style="cursor:pointer">Replace</label>
           <button class="ib danger" type="button" id="cvRemove">Remove</button>
         </span></div>`;
-      $('#cvRemove').addEventListener('click', () => {
-        if (!window.confirm('Remove the CV? The “View My CV” buttons will be hidden on the site after you publish.')) return;
+      $('#cvRemove').addEventListener('click', async () => {
+        if (!(await ask({ title: 'Remove the CV?', text: 'The “View My CV” button will be hidden on the website after you publish.', ok: 'Remove', tone: 'danger' }))) return;
         if (pending.has(site.cv)) pending.delete(site.cv);
         site.cv = ''; site.cvName = ''; site.cvUpdated = '';
         drawCv(); setDirty(true);
@@ -633,6 +662,7 @@
   /* collect form -> project */
   function collect() {
     if (editing < 0) return;
+    if (mode === 'site' && $('#edForm [data-ckey]')) { const m = mode; mode = 'content'; collect(); mode = m; }
     if (mode === 'content') {
       if (!$('#edForm [data-ckey]')) return;
       const text = Object.assign({}, content.text);
@@ -796,8 +826,8 @@
   }
 
   $('#backList').addEventListener('click', () => { collect(); setDirty(changed(), false); renderList(); });
-  $('#discard').addEventListener('click', () => {
-    if (!window.confirm('Discard all unpublished changes?')) return;
+  $('#discard').addEventListener('click', async () => {
+    if (!(await ask({ title: 'Discard all changes?', text: 'Everything you changed since the last publish goes back to how it is on the live website. This can’t be undone.', ok: 'Discard changes', tone: 'danger' }))) return;
     projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent); pending.clear(); setDirty(false); renderList();
   });
 
@@ -815,7 +845,7 @@
     const out = [];
     const secs = window.SiteContent.sections(searchDoc);
     PAGES.forEach((p) => p.subs.forEach((x) => {
-      if (x.kind === 'content') secs.filter((sec) => !x.keys || x.keys.includes(sec.key)).forEach((sec) => window.SiteContent.fields(sec).forEach((f) => {
+      if (x.keys) secs.filter((sec) => !x.keys || x.keys.includes(sec.key)).forEach((sec) => window.SiteContent.fields(sec).forEach((f) => {
         const v = Object.prototype.hasOwnProperty.call(content.text, f.key) ? content.text[f.key] : f.text;
         out.push({ p, x, text: v, kind: f.kind, go: { ckey: f.key } });
       }));

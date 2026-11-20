@@ -57,7 +57,7 @@
     });
     /* group fields that belong together (one FAQ, one card, one stat…) so the admin can box them */
     const first = (el) => (typeof el.className === 'string' && el.className.trim() ? el.className.trim().split(/\s+/)[0] : el.tagName === 'LI' ? 'li' : '');
-    const NICE = { 'faq-item': 'Question', stat: 'Number', tool: 'Tool', item: 'Word', 'pr-card': 'Principle', 'edu-card': 'Education', 'sk-card': 'Skill group', 'sys-panel': 'Panel', 'ts-row': 'Type row', step: 'Step', 'pm-card': 'Role card', 'role-card': 'Role card', cpill: 'Link', btn: 'Button', 'po-card': 'Role card', 'cl-btn': 'Button', 'ba-pane': 'Before / after side', ss: 'Item', 'skill-cloud': 'Skill tags', 'sk-list': 'Skills', marquee: 'Moving words row', 'ba-label': 'Before / after labels' };
+    const NICE = { pnote: 'Step', int: 'Card', 'faq-item': 'Question', stat: 'Number', tool: 'Tool', item: 'Word', 'pr-card': 'Principle', 'edu-card': 'Education', 'sk-card': 'Skill group', 'sys-panel': 'Panel', 'ts-row': 'Type row', step: 'Step', 'pm-card': 'Role card', 'role-card': 'Role card', cpill: 'Link', btn: 'Button', 'po-card': 'Role card', 'cl-btn': 'Button', 'ba-pane': 'Before / after side', ss: 'Item', 'skill-cloud': 'Skill tags', 'sk-list': 'Skills', marquee: 'Moving words row', 'ba-label': 'Before / after labels' };
     const nice = (cls, el) => (cls === 'li' && el ? (el.closest('.steps, ol') ? 'Step' : el.closest('.skill-cloud') ? 'Skill tag' : 'Point') : NICE[cls]) || (cls ? cls.replace(/[-_]+/g, ' ').replace(/^./, (m) => m.toUpperCase()) : 'Item');
     picked.forEach((f) => {
       const cands = [];
