@@ -82,6 +82,17 @@
     "highlights": []
   },
   {
+    "id": "blue",
+    "visible": true,
+    "role": "Front-end Developer — Intern",
+    "company": "Blue Ltd. Inc.",
+    "location": "Ramallah, Palestine",
+    "dates": "Jun 2021 — Aug 2021",
+    "type": "Internship",
+    "summary": "Built front-end projects from design files and connected them to MySQL through PHP.",
+    "highlights": []
+  },
+  {
     "id": "cincy",
     "visible": false,
     "role": "UX Designer",

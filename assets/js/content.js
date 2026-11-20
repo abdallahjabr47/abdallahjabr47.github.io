@@ -34,7 +34,7 @@
       let key = s.id || (eb ? slug(eb.textContent) : '') || slug(s.getAttribute('aria-label') || '') || 'section-' + i;
       if (used[key]) key += '-' + (++used[key]); else used[key] = 1;
       const h = s.querySelector('h1, h2');
-      const NAMES = { hero: 'Top of the page (hero)', tools: 'Tools strip', work: 'Selected work (titles)', screens: 'Screens wall', process: 'Process animation', about: 'About', product: 'Product management', experience: 'Experience (titles)', skills: 'Skills', testimonials: 'Testimonials (titles)', faq: 'FAQ', contact: 'Contact' };
+      const NAMES = { hero: 'Top of the page (hero)', tools: 'Tools strip', work: 'Selected work (titles)', screens: 'Screens wall', process: 'Process animation', about: 'About', product: 'Product management', experience: 'Experience (titles)', recognition: 'Learning & recognition (titles)', skills: 'Skills', testimonials: 'Testimonials (titles)', faq: 'FAQ', contact: 'Contact' };
       const name = NAMES[s.id] || (eb && eb.textContent.trim()) || (h && h.textContent.trim()) || s.getAttribute('aria-label') || key;
       return { el: s, key, name };
     });

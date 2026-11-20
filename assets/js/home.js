@@ -460,6 +460,32 @@
       $('#projects').innerHTML = '<p class="muted">Projects could not be loaded. If you opened this file directly, run a local server (see README) — on GitHub Pages it works automatically.</p>';
     });
 
+  /* =============== learning & recognition (from Profile & links in the admin) =============== */
+  (async () => {
+    const box = $('#recGrid'), sec = $('#recognition');
+    if (!box || !window.Site.getSite) return;
+    const s = await window.Site.getSite();
+    const items = ((s && s.recognition) || []).filter((r) => r && r.title);
+    if (!items.length) { sec.hidden = true; return; }
+    const COLS = [
+      { kinds: ['education', 'certificate'], name: 'Education & certificates', ac: '#7FA6E8', ic: '<path d="M2.5 9 12 4.5 21.5 9 12 13.5Z"/><path d="M6.5 11v4.5c0 1.6 2.5 3 5.5 3s5.5-1.4 5.5-3V11M21.5 9v5"/>' },
+      { kinds: ['award'], name: 'Hackathons & fellowships', ac: '#A497DB', ic: '<path d="M7.5 4.5h9v4a4.5 4.5 0 0 1-9 0Z"/><path d="M7.5 6.5h-3a3 3 0 0 0 3 3.5M16.5 6.5h3a3 3 0 0 1-3 3.5M12 13v3.5M8.5 19.5h7M9.5 16.5h5v3h-5Z"/>' },
+      { kinds: ['leadership'], name: 'Leadership & community', ac: '#5FB894', ic: '<circle cx="9" cy="8.5" r="3"/><path d="M3.5 19c.6-3 2.8-5 5.5-5s4.9 2 5.5 5"/><circle cx="16.5" cy="9.5" r="2.4"/><path d="M15.8 14.2c2.3.2 4 2 4.6 4.8"/>' }];
+    const tag = { education: 'Degree', certificate: 'Certificate', award: '', leadership: '' };
+    box.innerHTML = COLS.map((c, ci) => {
+      const list = items.filter((r) => c.kinds.includes(r.kind || 'certificate'));
+      if (!list.length) return '';
+      return `<div class="rec-col" style="--ac:${c.ac};--d:${ci * 100}ms" data-reveal>
+        <div class="rec-h"><span class="rec-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${c.ic}</svg></span><h3>${c.name}</h3><span class="rec-n">${list.length}</span></div>
+        <ol class="rec-list">${list.map((r) => {
+          const inner = `<span class="rec-y">${esc(r.year || '')}</span><span class="rec-b"><b>${esc(r.title)}${r.link ? ' <span class="arr" aria-hidden="true">↗</span>' : ''}</b><small>${esc(r.org || '')}</small>${r.note ? `<em>${esc(r.note)}</em>` : ''}${tag[r.kind] ? `<i class="rec-t">${tag[r.kind]}</i>` : ''}</span>`;
+          return `<li>${r.link ? `<a href="${esc(r.link)}" target="_blank" rel="noopener">${inner}</a>` : `<div>${inner}</div>`}</li>`;
+        }).join('')}</ol>
+      </div>`;
+    }).join('');
+    scan(sec);
+  })();
+
   /* =============== testimonials (from Profile & links in the admin) =============== */
   (async () => {
     const sec = $('#testimonials'), box = $('#testi');
