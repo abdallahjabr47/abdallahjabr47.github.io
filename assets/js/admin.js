@@ -474,7 +474,6 @@
       const tabBtn = $(`.wt-tab[data-wt="${n}"]`, form);
       if (groups.length > 1) tabBtn.insertAdjacentHTML('afterend', `<div class="wt-jumps" data-jumps="${n}"${n ? ' hidden' : ''}><div class="wt-jh"><small>${groups.length} cards</small><button type="button" data-fold-all="${n}">${groups.length > 3 ? 'Open all' : 'Close all'}</button></div>${groups.map((g, i) => `<a href="#wt-g-${n}-${i}" data-jump>${esc($('.wt-gh b', g).textContent)}</a>`).join('')}</div>`);
     });
-    $('.wt-nav', form).insertAdjacentHTML('beforeend', `<details class="wt-tips"><summary>Writing tips</summary><p><code>*word*</code> blue italic</p><p><code>**words**</code> highlight</p><p><kbd>Enter</kbd> new line</p><p>Empty field = hidden</p><p>Then press <b>Preview</b> or <b>Publish</b> at the bottom.</p></details>`);
     if (wtUnbind) wtUnbind();
     const onClick = (e) => {
       const fa = e.target.closest('[data-fold-all]');
@@ -486,6 +485,7 @@
     };
     const onKey = (e) => { const h = e.target.closest && e.target.closest('[data-fold]'); if (h && e.target === h && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); h.click(); } };
     const onIn = (e) => { const g = e.target.closest('.wt-group'); if (g && $('textarea', g) === e.target) peek(g); };
+    if (data.length < 2 && !$('.wt-jumps', form)) $('.wt', form).classList.add('flat');
     form.addEventListener('click', onClick); form.addEventListener('keydown', onKey); form.addEventListener('input', onIn);
     wtUnbind = () => { form.removeEventListener('click', onClick); form.removeEventListener('keydown', onKey); form.removeEventListener('input', onIn); wtUnbind = null; };
     const refreshMeta = (n) => { const { sec, fs } = data[n]; const sec$ = $(`[data-wt-sec="${n}"]`, form); const ed = $$('.wt-field.edited', sec$).length; const hid = !$('[data-sec-show]', sec$).checked; $(`[data-wt-meta="${n}"]`, form).innerHTML = `${fs.length} texts${ed ? ` · <i>${ed} edited</i>` : ''}${hid ? ' · hidden' : ''}`; };
@@ -800,6 +800,13 @@
     if (!window.confirm('Discard all unpublished changes?')) return;
     projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent); pending.clear(); setDirty(false); renderList();
   });
+
+  /* ---------------- guide (the ⓘ button in the top bar) ---------------- */
+  const helpDlg = $('#helpDlg');
+  if (helpDlg && $('#helpBtn')) {
+    $('#helpBtn').addEventListener('click', () => { if (helpDlg.showModal) helpDlg.showModal(); else helpDlg.setAttribute('open', ''); });
+    helpDlg.addEventListener('click', (e) => { if (e.target === helpDlg || e.target.closest('[data-help-close]')) helpDlg.close ? helpDlg.close() : helpDlg.removeAttribute('open'); });
+  }
 
   /* ---------------- search every text in the admin ---------------- */
   let searchDoc = null;
