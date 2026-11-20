@@ -85,6 +85,19 @@
   let dirty = false;
 
   /* ---------------- helpers ---------------- */
+  /* every fieldset gets the same visible header (built from its legend) */
+  const headFieldsets = () => {
+    const sets = $$('#edForm > fieldset');
+    sets.forEach((f, n) => {
+      const lg = $(':scope > legend', f); if (!lg) return;
+      let h = $(':scope > .fs-head', f);
+      if (!h) { h = document.createElement('div'); h.className = 'fs-head'; lg.after(h); }
+      const num = $('#edLayout').classList.contains('two') ? ' ' + String(n + 1).padStart(2, '0') : '';
+      h.innerHTML = `<small>Section${num}</small><h3>${esc(lg.textContent)}</h3>`;
+    });
+  };
+  new MutationObserver(() => headFieldsets()).observe($('#edForm'), { childList: true });
+  new MutationObserver(() => headFieldsets()).observe($('#edLayout'), { attributes: true, attributeFilter: ['class'] });
   /* our own confirm popup (instead of the browser's) — resolves true / false */
   function ask({ title, text = '', ok = 'OK', cancel = 'Cancel', tone = '' }) {
     const d = $('#askDlg');
