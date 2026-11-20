@@ -49,11 +49,38 @@
       const kids = Array.from(el.childNodes);
       if (!kids.length || !kids.every(ALLOWED)) return;
       const txt = toText(el);
-      if (!txt || txt.length < 2) return;
+      if (!txt || (txt.length < 2 && !/\d/.test(txt))) return;
       let key = sec.key + ':' + el.tagName.toLowerCase() + ':' + slug(txt);
       if (seen[key]) key += '-' + (++seen[key]); else seen[key] = 1;
       const kind = el.closest('.faq-a') ? 'FAQ answer' : el.closest('.faq-q') ? 'FAQ question' : el.tagName === 'H1' ? 'Main heading' : /^H[23]$/.test(el.tagName) ? 'Heading' : el.classList.contains('eyebrow') ? 'Small label above heading' : el.classList.contains('btn') || el.tagName === 'A' ? 'Button' : el.tagName === 'BUTTON' ? 'Button / tab' : el.closest('.stat') && el.tagName === 'B' ? 'Number (counts up)' : el.closest('.stat') ? 'Number caption' : el.tagName === 'SMALL' ? 'Small text' : el.tagName === 'B' || el.tagName === 'STRONG' ? 'Title' : txt.length > 90 ? 'Paragraph' : 'Text';
       picked.push({ el, key, text: txt, kind });
+    });
+    /* group fields that belong together (one FAQ, one card, one stat…) so the admin can box them */
+    const first = (el) => (typeof el.className === 'string' && el.className.trim() ? el.className.trim().split(/\s+/)[0] : el.tagName === 'LI' ? 'li' : '');
+    const NICE = { 'faq-item': 'Question', stat: 'Number', tool: 'Tool', item: 'Word', 'pr-card': 'Principle', 'edu-card': 'Education', 'sk-card': 'Skill group', 'sys-panel': 'Panel', 'ts-row': 'Type row', step: 'Step', 'pm-card': 'Role card', 'role-card': 'Role card', cpill: 'Link', btn: 'Button', 'po-card': 'Role card', 'cl-btn': 'Button', 'ba-pane': 'Before / after side', ss: 'Item', 'skill-cloud': 'Skill tags', 'sk-list': 'Skills', marquee: 'Moving words row', 'ba-label': 'Before / after labels' };
+    const nice = (cls, el) => (cls === 'li' && el ? (el.closest('.steps, ol') ? 'Step' : el.closest('.skill-cloud') ? 'Skill tag' : 'Point') : NICE[cls]) || (cls ? cls.replace(/[-_]+/g, ' ').replace(/^./, (m) => m.toUpperCase()) : 'Item');
+    picked.forEach((f) => {
+      const cands = [];
+      for (let a = f.el; a && a !== sec.el; a = a.parentElement) {
+        const cls = first(a);
+        if (!cls || !a.parentElement) continue;
+        const sib = Array.from(a.parentElement.children).filter((x) => first(x) === cls);
+        if (sib.length >= 2) cands.push({ a, cls, idx: sib.indexOf(a) + 1 });
+      }
+      const hit = cands.find((c) => picked.filter((g) => c.a.contains(g.el)).length >= 2);
+      if (hit) { f.groupEl = hit.a; f.groupCls = hit.cls; }
+      else if (cands.length) { f.listEl = cands[0].a.parentElement; f.groupCls = cands[0].cls; f.groupEl = cands[0].a; }
+    });
+    const seenG = new Map(), counts = {};
+    picked.forEach((f) => {
+      if (f.listEl) {
+        f.group = 'list-' + picked.findIndex((g) => g.listEl === f.listEl);
+        f.groupLabel = NICE[first(f.listEl)] || nice(f.groupCls, f.groupEl) + 's';
+      } else if (f.groupEl) {
+        if (!seenG.has(f.groupEl)) { const base = nice(f.groupCls, f.groupEl); counts[base] = (counts[base] || 0) + 1; const t1 = f.text.replace(/[*\n]/g, ' ').trim(); seenG.set(f.groupEl, base + ' ' + counts[base] + (t1.length <= 26 && !/^\d/.test(t1) ? ' · ' + t1 : '')); }
+        f.group = 'g-' + picked.findIndex((g) => g.groupEl === f.groupEl && !g.listEl);
+        f.groupLabel = seenG.get(f.groupEl);
+      }
     });
     return picked;
   }

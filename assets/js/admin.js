@@ -315,12 +315,23 @@
               <div><small>Section ${String(n + 1).padStart(2, '0')}</small><h3>${esc(sec.name)}</h3></div>
               <label class="wt-switch"><input type="checkbox" data-sec-show="${esc(sec.key)}" ${content.hidden.includes(sec.key) ? '' : 'checked'}><span></span>Show on website</label>
             </header>
-            ${fs.map((f) => { const v = valOf(f); const ed = v !== f.text; return `
+            ${(() => {
+              const field = (f) => { const v = valOf(f); const ed = v !== f.text; return `
             <div class="wt-field${ed ? ' edited' : ''}">
               <div class="wt-lab"><span>${esc(f.kind)}</span><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'}>Reset</button></div>
               <textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1">${esc(v)}</textarea>
               <p class="wt-orig"${ed ? '' : ' hidden'}>Original: ${esc(f.text)}</p>
-            </div>`; }).join('')}
+            </div>`; };
+              let html = '', k = 0;
+              while (k < fs.length) {
+                const g = fs[k].group;
+                if (!g) { html += field(fs[k]); k++; continue; }
+                const run = []; while (k < fs.length && fs[k].group === g) run.push(fs[k++]);
+                const isList = g.startsWith('list-');
+                html += `<div class="wt-group${isList ? ' list' : ''}"><div class="wt-gh"><b>${esc(run[0].groupLabel)}</b><small>${run.length} ${run.length === 1 ? 'text' : 'texts'}</small></div><div class="wt-gb">${run.map(field).join('')}</div></div>`;
+              }
+              return html;
+            })()}
           </section>`).join('')}
         </div>
       </div>`;

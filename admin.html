@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261120161401">
+<link rel="stylesheet" href="assets/css/style.css?v=20261120162457">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -169,6 +169,16 @@ body::after{opacity:.04}
 .wt-field textarea:focus{outline:2px solid var(--sky);outline-offset:1px;border-color:transparent}
 .wt-field.edited textarea{border-color:rgba(92,155,245,.5)}
 .wt-orig{margin:8px 0 0;font-size:13px;color:var(--dim)}
+.wt-group{margin:14px 0;border:1px solid var(--line2);border-radius:16px;background:rgb(var(--fg) / .025);overflow:hidden}
+.wt-gh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 16px;background:rgb(var(--fg) / .04);border-bottom:1px solid var(--line)}
+.wt-gh b{font-size:14px;display:flex;align-items:center;gap:9px}
+.wt-gh b::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--blue);transform:rotate(45deg)}
+.wt-gh small{font-size:12.5px;color:var(--dim)}
+.wt-gb{padding:0 16px}
+.wt-group.list .wt-gb{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0 14px}
+.wt-group.list .wt-field{border-bottom:0;padding:10px 0}
+.wt-group.list .wt-lab{display:none}
+.wt-group.list .wt-field.edited .wt-lab{display:flex}
 @media (max-width:860px){.wt{grid-template-columns:1fr}.wt-nav{position:static;flex-direction:row;overflow-x:auto;max-height:none}.wt-tab{flex:none}.wt-l small{display:none}}
 .csec{border:1px solid var(--line);border-radius:18px;background:rgb(var(--fg) / .02)}
 .csec+.csec{margin-top:12px}
@@ -305,10 +315,10 @@ body::after{opacity:.04}
   </div>
 </div>
 
-<script src="assets/js/config.js?v=20261120161401"></script>
-<script src="assets/js/icons.js?v=20261120161401"></script>
-<script src="assets/js/content.js?v=20261120161401"></script>
-<script src="assets/js/core.js?v=20261120161401"></script>
-<script src="assets/js/admin.js?v=20261120161401"></script>
+<script src="assets/js/config.js?v=20261120162457"></script>
+<script src="assets/js/icons.js?v=20261120162457"></script>
+<script src="assets/js/content.js?v=20261120162457"></script>
+<script src="assets/js/core.js?v=20261120162457"></script>
+<script src="assets/js/admin.js?v=20261120162457"></script>
 </body>
 </html>
