@@ -20,7 +20,7 @@
   function splitText(el) {
     if (el.dataset.splitDone) return;
     el.dataset.splitDone = '1';
-    el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+    el.setAttribute('aria-label', (el.innerText || el.textContent).replace(/\s+/g, ' ').trim());
     let i = 0;
     const walk = (node) => {
       Array.from(node.childNodes).forEach((n) => {

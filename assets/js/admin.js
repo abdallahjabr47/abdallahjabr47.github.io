@@ -20,7 +20,10 @@
   const SITE_PATH = 'data/site.json';
   let site = {};
   let originalSite = '{}';
-  const changed = () => JSON.stringify(projects) !== original || JSON.stringify(experience) !== originalExp || JSON.stringify(site) !== originalSite || pending.size > 0;
+  const CONTENT_PATH = 'data/content.json';
+  let content = { text: {}, hidden: [] };
+  let originalContent = '{}';
+  const changed = () => JSON.stringify(projects) !== original || JSON.stringify(experience) !== originalExp || JSON.stringify(site) !== originalSite || JSON.stringify(content) !== originalContent || pending.size > 0;
   let dirty = false;
 
   /* ---------------- helpers ---------------- */
@@ -103,9 +106,18 @@
       if (/Not Found/i.test(err.message)) site = {};
       else throw err;
     }
+    try {
+      const r4 = await gh(`${repoPath()}/contents/${CONTENT_PATH}?ref=${encodeURIComponent(auth.branch)}`, { headers: { Accept: 'application/vnd.github.raw+json' } });
+      content = JSON.parse(await r4.text());
+    } catch (err) {
+      if (/Not Found/i.test(err.message)) content = { text: {}, hidden: [] };
+      else throw err;
+    }
+    content.text = content.text || {}; content.hidden = content.hidden || [];
     original = JSON.stringify(projects);
     originalExp = JSON.stringify(experience);
     originalSite = JSON.stringify(site);
+    originalContent = JSON.stringify(content);
     pending.clear();
     setDirty(false);
     renderList();
@@ -115,6 +127,7 @@
   function renderList() {
     editing = -1;
     if (tab === 'profile') return openSiteEditor();
+    if (tab === 'content') return openContentEditor();
     show('v-list');
     $$('.atabs button').forEach((b) => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
@@ -259,6 +272,31 @@
       </fieldset>`;
   }
 
+  async function openContentEditor() {
+    editing = 0; mode = 'content';
+    show('v-edit');
+    $('#ed-title').innerHTML = 'Website <em class="serif">text</em>';
+    $('#ed-draft').textContent = 'Preview changes ↗';
+    $$('.atabs button').forEach((b) => { const on = b.dataset.tab === 'content'; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
+    const form = $('#edForm');
+    form.innerHTML = '<p class="hint">Loading the page text…</p>';
+    let doc;
+    try { doc = new DOMParser().parseFromString(await (await fetch('index.html?v=' + Date.now(), { cache: 'no-store' })).text(), 'text/html'); }
+    catch (e) { form.innerHTML = '<p class="hint">Could not load the page text. Refresh and try again.</p>'; return; }
+    const secs = window.SiteContent.sections(doc);
+    form.innerHTML = `<p class="hint" style="margin-bottom:6px">Every text on the home page, section by section. Type <b>*word*</b> for the blue italic accent, <b>**words**</b> for a highlight, and press Enter for a new line. <b>Empty a field</b> to hide that item. Untick a section to hide it from the site. Projects, experience, photos and links have their own tabs.</p>` +
+      secs.map((sec) => {
+        const fs = window.SiteContent.fields(sec);
+        const shown = !content.hidden.includes(sec.key);
+        return `<details class="csec"${sec.key === secs[0].key ? ' open' : ''}><summary><span class="cs-name">${esc(sec.name)}</span><span class="cs-count">${fs.length} texts</span><label class="chk cs-show" onclick="event.stopPropagation()"><input type="checkbox" data-sec-show="${esc(sec.key)}" ${shown ? 'checked' : ''}> Show</label></summary>
+          <div class="cs-fields">${fs.map((f) => {
+            const val = Object.prototype.hasOwnProperty.call(content.text, f.key) ? content.text[f.key] : f.text;
+            const rows = Math.min(8, Math.max(1, Math.ceil(val.length / 70) + (val.match(/\n/g) || []).length));
+            return `<label class="f"><span class="ck">${esc(f.kind)}${val !== f.text ? ' <i>edited</i>' : ''}</span><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="${rows}">${esc(val)}</textarea></label>`;
+          }).join('')}</div></details>`;
+      }).join('');
+  }
+
   function openSiteEditor() {
     editing = 0; mode = 'site';
     show('v-edit');
@@ -331,6 +369,14 @@
   /* collect form -> project */
   function collect() {
     if (editing < 0) return;
+    if (mode === 'content') {
+      if (!$('#edForm [data-ckey]')) return;
+      const text = {};
+      $$('#edForm [data-ckey]').forEach((t) => { const v = t.value.replace(/\r/g, ''); if (v.trim() !== t.dataset.orig.trim()) text[t.dataset.ckey] = v.trim(); });
+      content.text = text;
+      content.hidden = $$('#edForm [data-sec-show]').filter((c) => !c.checked).map((c) => c.dataset.secShow);
+      return;
+    }
     if (mode === 'site') {
       $$('#edForm [data-k]').forEach((el) => { site[el.dataset.k] = el.value.trim(); });
       $$('#edForm [data-rep]').forEach((box) => { site[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); return o; }).filter((o) => Object.values(o).some(Boolean)); });
@@ -459,30 +505,30 @@
     });
   }
 
-  $('#backList').addEventListener('click', () => { collect(); setDirty(changed()); if (mode === 'site') tab = 'projects'; renderList(); });
+  $('#backList').addEventListener('click', () => { collect(); setDirty(changed()); if (mode === 'site' || mode === 'content') tab = 'projects'; renderList(); });
   $('#discard').addEventListener('click', () => {
     if (!window.confirm('Discard all unpublished changes?')) return;
-    projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); pending.clear(); setDirty(false); if (tab === 'profile') tab = 'projects'; renderList();
+    projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent); pending.clear(); setDirty(false); if (tab === 'profile' || tab === 'content') tab = 'projects'; renderList();
   });
 
   /* ---------------- preview (nothing goes live) ---------------- */
   function openPreview(target) {
     collect();
     try {
-      localStorage.setItem('pf-preview', JSON.stringify({ projects, experience, site, previews: Object.fromEntries(previews), ts: Date.now() }));
+      localStorage.setItem('pf-preview', JSON.stringify({ projects, experience, site, content, previews: Object.fromEntries(previews), ts: Date.now() }));
     } catch (e) { toast('Preview could not be prepared — try fewer or smaller images'); return; }
     window.open(target, '_blank');
   }
   $('#ed-draft').addEventListener('click', () => {
     if (mode === 'exp') return openPreview('index.html?preview=1#experience');
-    if (mode === 'site') return openPreview('index.html?preview=1');
+    if (mode === 'site' || mode === 'content') return openPreview('index.html?preview=1');
     const p = projects[editing];
     if (p && !p.slug) p.slug = slugify(p.title);
     openPreview('project.html?preview=1#' + encodeURIComponent((p && p.slug) || ''));
   });
   $('#previewHome').addEventListener('click', () => openPreview('index.html?preview=1'));
   $('#previewBtn').addEventListener('click', () => {
-    if (editing >= 0 && (mode === 'project' || mode === 'site')) return $('#ed-draft').click();
+    if (editing >= 0 && (mode === 'project' || mode === 'site' || mode === 'content')) return $('#ed-draft').click();
     openPreview('index.html?preview=1' + (mode === 'exp' ? '#experience' : ''));
   });
 
@@ -503,6 +549,7 @@
       const used = new Set(JSON.stringify([projects, site]).match(/"[^"]+\.(?:webp|jpg|jpeg|png|svg|gif|pdf)"/g) || []);
       const files = [];
       if (json.trim() !== JSON.stringify(JSON.parse(original), null, 2) ) files.push({ path: CFG.dataPath || 'data/projects.json', b64: b64FromUtf8(json) });
+      if (JSON.stringify(content) !== originalContent) files.push({ path: CONTENT_PATH, b64: b64FromUtf8(JSON.stringify(content, null, 2) + '\n') });
       if (JSON.stringify(site) !== originalSite) files.push({ path: SITE_PATH, b64: b64FromUtf8(JSON.stringify(site, null, 2) + '\n') });
       if (JSON.stringify(experience) !== originalExp) files.push({ path: EXP_PATH, b64: b64FromUtf8(JSON.stringify(experience, null, 2) + '\n') });
       if (!files.length) { msg.className = 'msg ok'; msg.textContent = 'Nothing to publish — everything is already live.'; btn.disabled = false; return; }
@@ -518,7 +565,7 @@
         tree.push({ path: files[i].path, mode: '100644', type: 'blob', sha: blob.sha });
       }
       const newTree = await (await gh(`${repoPath()}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: commit.tree.sha, tree }) })).json();
-      const cur = editing >= 0 ? (mode === 'exp' ? experience[editing] : mode === 'site' ? { title: 'profile & links' } : projects[editing]) : null;
+      const cur = editing >= 0 ? (mode === 'exp' ? experience[editing] : mode === 'site' ? { title: 'profile & links' } : mode === 'content' ? { title: 'website text' } : projects[editing]) : null;
       const label = cur ? `Update ${cur.title || cur.company}` : 'Update portfolio content';
       const newCommit = await (await gh(`${repoPath()}/git/commits`, { method: 'POST', body: JSON.stringify({ message: `${label} (via admin)`, tree: newTree.sha, parents: [baseCommit] }) })).json();
       await gh(`${repoPath()}/git/refs/heads/${encodeURIComponent(auth.branch)}`, { method: 'PATCH', body: JSON.stringify({ sha: newCommit.sha }) });
@@ -526,6 +573,7 @@
       original = JSON.stringify(projects);
       originalExp = JSON.stringify(experience);
       originalSite = JSON.stringify(site);
+      originalContent = JSON.stringify(content);
       pending.clear();
       dirty = false;
       msg.className = 'msg ok'; msg.textContent = 'Published ✓ — your site updates in about a minute.';
