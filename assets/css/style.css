@@ -908,3 +908,14 @@ h1,h2,h3,.h-xl,.h-lg,.h-md,.ix-t,.stat b{letter-spacing:-.035em}
 .ph-tile .nav{display:flex;justify-content:space-around;padding:6px 0 2px;border-top:1px solid rgb(var(--fg)/.08)}
 .ph-tile .nav i{width:14px;height:14px;border-radius:5px;background:rgb(var(--fg)/.18)}
 @media (max-width:900px){.tilt .tcol:nth-child(n+4){display:none}}
+
+/* heading hover: the cursor becomes a glass lens and the letters under it light up in colour */
+.cursor-ring.lens{width:150px;height:150px;border:1px solid rgba(255,255,255,.28);background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.14),rgba(255,255,255,0) 42%,rgba(23,105,224,.06) 100%);
+  backdrop-filter:saturate(1.6) brightness(1.12);-webkit-backdrop-filter:saturate(1.6) brightness(1.12);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.35),inset 0 -10px 24px rgba(23,105,224,.12),0 10px 30px rgba(0,0,0,.18)}
+.cursor-ring.lens~.cursor-dot{opacity:0}
+[data-theme="light"] .cursor-ring.lens{border-color:rgba(23,105,224,.28);background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.3),rgba(255,255,255,0) 45%,rgba(23,105,224,.05) 100%);box-shadow:inset 0 1px 1px rgba(255,255,255,.8),0 10px 30px rgba(23,105,224,.12)}
+@media (pointer:fine){
+  .lit .c{background-image:radial-gradient(circle 75px at var(--cx,-999px) var(--cy,-999px),#7DB4FF 0%,#1769E0 99%,transparent 100%);background-attachment:fixed;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    background-color:currentColor}
+}

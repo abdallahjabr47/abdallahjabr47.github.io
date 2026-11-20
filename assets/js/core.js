@@ -159,7 +159,8 @@
   /* ---------- custom cursor ---------- */
   const ring = $('.cursor-ring'), dot = $('.cursor-dot');
   if (fine && ring && dot) {
-    let mx = -100, my = -100, rx = -100, ry = -100, shown = false;
+    let mx = -100, my = -100, rx = -100, ry = -100, shown = false, litEl = null;
+    const rootStyle = document.documentElement.style;
     addEventListener('pointermove', (e) => {
       mx = e.clientX; my = e.clientY;
       dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
@@ -169,6 +170,9 @@
     addEventListener('pointerdown', () => ring.classList.add('down'));
     addEventListener('pointerup', () => ring.classList.remove('down'));
     document.addEventListener('pointerover', (e) => {
+      const hd = e.target.closest('h1[data-split], h2[data-split], .h-xl, .h-lg');
+      if (hd !== litEl) { if (litEl) litEl.classList.remove('lit'); litEl = hd; if (hd) hd.classList.add('lit'); }
+      ring.classList.toggle('lens', !!hd && !e.target.closest('a, button'));
       const t = e.target.closest('[data-cursor], a, button, input, label, [role="switch"]');
       const v = t && t.closest('[data-cursor]');
       const btnInside = t && v && t !== v && t.closest('button, a') && v.contains(t.closest('button, a'));
@@ -182,6 +186,7 @@
     const loop = () => {
       rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
       ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)` + (ring.classList.contains('down') ? ' scale(.92)' : '');
+      if (litEl) { rootStyle.setProperty('--cx', rx.toFixed(1) + 'px'); rootStyle.setProperty('--cy', ry.toFixed(1) + 'px'); }
       requestAnimationFrame(loop);
     };
     loop();
