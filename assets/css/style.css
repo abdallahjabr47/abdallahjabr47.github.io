@@ -1707,3 +1707,24 @@ html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height
 .g-tablet .dshot{padding:8px;background:#0A0B10}.g-tablet .dshot img{border-radius:12px;aspect-ratio:3/4;object-fit:cover}
 .g-desktop .dshot img{aspect-ratio:16/10;object-fit:cover;object-position:top}
 .cs-cover .devices{align-items:flex-end;gap:clamp(16px,3vw,40px)!important;padding-top:8%}.cs-cover .dev-phone{overflow:hidden}
+/* ---------- mobile: long lists become swipe rows ---------- */
+@media (max-width:640px){
+  .pgrid:not([data-all]),.pr-grid,.sk-grid{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-inline:calc(-1 * var(--pad,20px));padding:4px var(--pad,20px) 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .pgrid:not([data-all])::-webkit-scrollbar,.pr-grid::-webkit-scrollbar,.sk-grid::-webkit-scrollbar,.skill-cloud::-webkit-scrollbar{display:none}
+  .pgrid:not([data-all])>*{flex:0 0 82%;scroll-snap-align:center}
+  .pr-grid>*,.sk-grid>*{flex:0 0 80%;scroll-snap-align:center}
+  .pgrid:not([data-all]) .pcard.hide{display:none}
+  .skill-cloud{display:grid;grid-template-rows:repeat(3,auto);grid-auto-flow:column;grid-auto-columns:max-content;overflow-x:auto;gap:10px;margin-inline:calc(-1 * var(--pad,20px));padding:2px var(--pad,20px) 12px;scrollbar-width:none}
+  .skill-cloud li{white-space:nowrap}
+  .swipe-hint{display:flex;align-items:center;gap:8px;margin:-2px 0 10px;font-size:12.5px;font-weight:600;color:var(--muted)}
+  .swipe-hint::after{content:"→";animation:swHint 1.6s ease-in-out infinite}
+}
+@media (min-width:641px){.swipe-hint{display:none}}
+@keyframes swHint{0%,100%{transform:none}50%{transform:translateX(5px)}}
+.lb{white-space:nowrap}
+@media (max-width:640px){
+  .skill-cloud{justify-items:start}
+  .sp-badges{left:12px;right:12px;top:12px}
+  .sp-badges .l{flex-wrap:nowrap;min-width:0;overflow:hidden}
+  .lb{font-size:11px;padding:4px 8px}
+}
