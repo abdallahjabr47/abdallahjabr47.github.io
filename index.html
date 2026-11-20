@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261120164640">
+<link rel="stylesheet" href="assets/css/style.css?v=20261120164952">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 </head>
 <body>
@@ -456,13 +456,11 @@
           <span class="seg" style="--n:2;--c-field:rgba(255,255,255,.06);--c-line:transparent;--c-muted:#A3A9B6" role="group" aria-label="Component theme" id="themeSeg"><span class="thumb"></span><button type="button" class="on" data-v="dark">Dark</button><button type="button" data-v="light">Light</button></span>
         </h3>
         <div class="cmp" id="cmp" data-theme="dark">
-          <div class="ticket"><div class="tk-top"><span class="tk-id">RDZ-142</span><span class="tk-pt">5 pts</span></div><b>Autoplay next episode</b><div class="tk-bar"><i style="width:68%"></i></div><div class="tk-foot"><span class="tk-av">AJ</span><span class="tk-st">In review</span></div></div>
+          <div class="tk-wrap"><div class="ticket"><div class="tk-top"><span class="tk-id">RDZ-142</span><span class="tk-pt">5 pts</span></div><b>Autoplay next episode</b><div class="tk-bar"><i id="tkBar" style="width:66%"></i></div><div class="tk-foot"><span class="tk-av">AJ</span><button type="button" class="tk-st" id="tkSt" data-i="2" title="Tap to move the ticket">In review</button></div></div>
+          <small class="cmp-hint">Tap the status to move the ticket</small></div>
           <div class="btns"><span class="b1">Primary</span><span class="b2">Secondary</span></div>
           <div class="seg" style="--n:3" role="group" aria-label="Range" id="rangeSeg"><span class="thumb"></span><button type="button" class="on">Day</button><button type="button">Week</button><button type="button">Month</button></div>
-          <label class="fld">Email<input type="email" placeholder="you@company.com"></label>
           <div class="tg-row">Release notifications<button class="switch" type="button" role="switch" aria-checked="true" aria-label="Release notifications"><i></i></button></div>
-          <div class="tg-row">Weekly digest<button class="switch" type="button" role="switch" aria-checked="false" aria-label="Weekly digest"><i></i></button></div>
-          <div class="badges"><span class="bd" style="--ac:#5FB894">Shipped</span><span class="bd" style="--ac:#7FA6E8">In sprint</span><span class="bd" style="--ac:#D8A960">Backlog</span></div>
         </div>
       </div>
     </div>
@@ -531,11 +529,11 @@
   </div>
 </footer>
 
-<script src="assets/js/content.js?v=20261120164640"></script>
-<script src="assets/js/config.js?v=20261120164640"></script>
-<script src="assets/js/icons.js?v=20261120164640"></script>
-<script src="assets/js/core.js?v=20261120164640"></script>
-<script src="assets/js/fx.js?v=20261120164640" defer></script>
-<script src="assets/js/home.js?v=20261120164640"></script>
+<script src="assets/js/content.js?v=20261120164952"></script>
+<script src="assets/js/config.js?v=20261120164952"></script>
+<script src="assets/js/icons.js?v=20261120164952"></script>
+<script src="assets/js/core.js?v=20261120164952"></script>
+<script src="assets/js/fx.js?v=20261120164952" defer></script>
+<script src="assets/js/home.js?v=20261120164952"></script>
 </body>
 </html>

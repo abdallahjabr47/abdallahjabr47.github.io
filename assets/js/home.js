@@ -240,6 +240,14 @@
   }
   wireSeg($('#themeSeg'), (b) => { const c = $('#cmp'); if (c) c.dataset.theme = b.dataset.v; });
   wireSeg($('#rangeSeg'));
+  (function () {
+    const st = $('#tkSt'), bar = $('#tkBar');
+    if (!st) return;
+    const S = [['Backlog', '#D8A960', 4], ['In sprint', '#7FA6E8', 33], ['In review', '#A497DB', 66], ['Shipped', '#5FB894', 100]];
+    const paint = (k) => { const [t, c, w] = S[k]; st.textContent = t; st.style.setProperty('--ac', c); bar.style.width = w + '%'; bar.style.background = k === 3 ? c : ''; };
+    paint(+st.dataset.i);
+    st.addEventListener('click', () => { const k = (+st.dataset.i + 1) % S.length; st.dataset.i = k; paint(k); });
+  })();
   $$('.switch').forEach((s) => s.addEventListener('click', () => s.setAttribute('aria-checked', String(s.getAttribute('aria-checked') !== 'true'))));
 
   /* =============== smooth open / close (works in every browser) =============== */
