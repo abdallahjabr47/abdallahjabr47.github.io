@@ -439,7 +439,7 @@
       </fieldset>
       <fieldset data-g="beyond"><legend>Beyond the screen — card photos (optional)</legend>
         <p class="hint">Each card on the home page has a small animation. Upload a photo or a GIF to show your own work there instead (square-ish, e.g. 1200×900). A GIF plays like a short video.</p>
-        <div class="ph-grid">${[['ui', 'UI & mobile'], ['brand', 'Graphic & drawing'], ['logo', 'Branding & logos'], ['motion', 'Motion'], ['film', 'Filmmaking & editing'], ['fashion', 'Fashion, scent & style'], ['sport', 'Football'], ['health', 'Gym & health']].map(([k, l]) => `<div class="ph-card"><div class="ph-top"><span><b>${l}</b></span></div>${imgList('int_' + k, site['int_' + k] ? [site['int_' + k]] : [], 'wide', false, false)}</div>`).join('')}</div>
+        <div class="ph-grid">${[['ui', 'Product & UX'], ['motion', 'Interaction & motion'], ['graphic', 'Graphic & advertising'], ['brand', 'Brand & visual identity'], ['photo', 'Photography & editing'], ['film', 'Filmmaking & directing'], ['fashion', 'Fashion & style'], ['sport', 'Sport & gym']].map(([k, l]) => `<div class="ph-card"><div class="ph-top"><span><b>${l}</b></span></div>${imgList('int_' + k, site['int_' + k] ? [site['int_' + k]] : [], 'wide', false, false)}</div>`).join('')}</div>
       </fieldset>
       <fieldset data-g="recognition"><legend>Learning &amp; recognition</legend>
         <p class="hint">Degrees, certificates, hackathons and community roles. They show under Experience → “Learning &amp; recognition” tab, in three columns, in this order. Leave the list empty to hide the section.</p>

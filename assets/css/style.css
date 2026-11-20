@@ -1640,3 +1640,24 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .flow.filtering li.hit{border-color:rgb(var(--lc) / .55);background:rgb(var(--lc) / .07)}
 .lens button[data-lens="pm"].on{color:#7FB0FF}.lens button[data-lens="po"].on{color:#6FD1A6}.lens button[data-lens="ds"].on{color:#F4A867}
 [data-theme="light"] .lens button[data-lens="pm"].on{color:#1259C2}[data-theme="light"] .lens button[data-lens="po"].on{color:#1F7A55}[data-theme="light"] .lens button[data-lens="ds"].on{color:#B4561A}
+/* interaction: tap ring follows the ball */
+.iv-motion .tap{position:absolute;left:10%;bottom:22%;width:24px;height:24px;border-radius:50%;border:2px solid var(--ac2);opacity:0;animation:ivTap 2.4s ease-out infinite}
+@keyframes ivTap{0%{opacity:.9;transform:scale(.6)}30%{opacity:0;transform:scale(2.2)}100%{opacity:0}}
+/* graphic & advertising: AD sticker */
+.iv-draw .ad{position:absolute;top:6%;left:6%;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;letter-spacing:.08em;color:#1c1f28;background:var(--ac2);transform:rotate(-8deg);animation:ivPop 3s ease-in-out infinite}
+/* photography: viewfinder, focus, shutter */
+.iv-photo{width:84%;height:74%}
+.iv-photo .vf{position:absolute;inset:0}
+.iv-photo .vf i{position:absolute;width:16px;height:16px;border-color:rgb(var(--fg) / .7);border-style:solid;border-width:0}
+.iv-photo .vf i:nth-child(1){top:0;left:0;border-top-width:2px;border-left-width:2px}
+.iv-photo .vf i:nth-child(2){top:0;right:0;border-top-width:2px;border-right-width:2px}
+.iv-photo .vf i:nth-child(3){bottom:0;left:0;border-bottom-width:2px;border-left-width:2px}
+.iv-photo .vf i:nth-child(4){bottom:0;right:0;border-bottom-width:2px;border-right-width:2px}
+.iv-photo .fc{width:30%;aspect-ratio:1;border:2px solid var(--ac);border-radius:6px;animation:ivFocus 3s ease-in-out infinite}
+.iv-photo .ex{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font:600 10px ui-monospace,Menlo,monospace;color:rgb(var(--fg) / .7);white-space:nowrap}
+.iv-photo .flash{position:absolute;inset:-10%;border-radius:10px;background:#fff;opacity:0;animation:ivFlash 3s ease-out infinite}
+@keyframes ivFocus{0%,100%{transform:scale(1.25);opacity:.6}35%,70%{transform:scale(1);opacity:1}}
+@keyframes ivFlash{0%,72%{opacity:0}75%{opacity:.55}90%,100%{opacity:0}}
+.iv-foot .bar{position:absolute;left:8%;top:16%;width:40%;height:4px;border-radius:4px;background:rgb(var(--fg) / .5);animation:ivLift 2s ease-in-out infinite}
+.iv-foot .bar i{position:absolute;top:50%;width:9px;height:22px;margin-top:-11px;border-radius:3px;background:var(--ac)}
+.iv-foot .bar i:first-child{left:-3px}.iv-foot .bar i:last-child{right:-3px}
