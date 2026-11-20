@@ -356,10 +356,10 @@
     const cvName = site.cv ? site.cv.split('/').pop() : 'none';
     $('#edForm').innerHTML = `
       <fieldset><legend>Photos</legend>
-        <p class="hint">Portrait photos look best (about 4:5, at least 1000px tall). They are resized automatically. Leave empty to keep the current photo.</p>
-        <div class="g2">
-          <div><div class="f">Main photo (top of the page)</div>${imgList('photo', site.photo ? [site.photo] : [], 'pt', false, false)}</div>
-          <div><div class="f">Second photo (About section)</div>${imgList('photo2', site.photo2 ? [site.photo2] : [], 'pt', false, false)}</div>
+        <p class="hint">Portrait photos work best (about 4:5). They're resized automatically. Hover a photo to replace or remove it.</p>
+        <div class="ph-grid">
+          <div class="ph-card"><div class="ph-top"><span class="ph-badge">01</span><span><b>Main photo</b><small>Top of the home page, next to your title</small></span></div>${imgList('photo', site.photo ? [site.photo] : [], 'pt', false, false)}</div>
+          <div class="ph-card"><div class="ph-top"><span class="ph-badge">02</span><span><b>About photo</b><small>About section, beside your story</small></span></div>${imgList('photo2', site.photo2 ? [site.photo2] : [], 'pt', false, false)}</div>
         </div>
       </fieldset>
       <fieldset><legend>Screens gallery</legend>
