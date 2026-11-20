@@ -528,7 +528,7 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .faq-item{border-radius:22px;overflow:hidden;transition:border-color .3s,background .3s}
 .faq-item.open{border-color:rgba(77,163,255,.35);background:rgba(77,163,255,.05)}
 .faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:24px 26px;text-align:left;font-size:19px;font-weight:600}
-.faq-q .pm{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;color:var(--sky);font-size:22px;transition:transform .4s var(--ease),background .3s}
+.faq-q .pm{flex:none;position:relative;width:36px;height:36px;border-radius:50%;border:1px solid var(--line2);display:block;color:var(--sky);font-size:0;transition:transform .4s var(--ease),background .3s}
 .faq-item.open .pm{transform:rotate(45deg);background:var(--blue);color:var(--on-accent);border-color:var(--blue)}
 .faq-a,.xp-hl{height:0;overflow:hidden;transition:height .45s var(--ease)}
 .faq-a p{padding:0 26px 24px;color:var(--muted);font-size:16px;line-height:1.7}
@@ -880,3 +880,5 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .tile.has-img img{display:block;margin:0;width:100%;height:auto;object-fit:initial}
 @media (max-width:900px){.tilt{grid-template-columns:repeat(3,minmax(0,1fr))}.tilt .tcol:nth-child(4){display:none}}
 [data-theme="light"] .stat b sup{color:var(--blue)}
+.faq-q .pm::before,.faq-q .pm::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:2px;border-radius:2px;background:currentColor;transform:translate(-50%,-50%)}
+.faq-q .pm::after{transform:translate(-50%,-50%) rotate(90deg)}
