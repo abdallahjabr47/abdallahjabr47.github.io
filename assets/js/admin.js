@@ -455,7 +455,7 @@
         <div class="g2">${F('LinkedIn URL', 'linkedin', site.linkedin, { ph: 'https://www.linkedin.com/in/…' })}${F('Behance URL', 'behance', site.behance, { ph: 'https://www.behance.net/…' })}</div>
         <div class="g2">${F('Dribbble URL', 'dribbble', site.dribbble, { ph: 'https://dribbble.com/…' })}${F('GitHub URL', 'github', site.github, { ph: 'https://github.com/…' })}</div>
       </fieldset>
-      <fieldset data-g="cv"><legend>Résumé (CV)</legend>
+      <fieldset data-g="cv"><legend>CV</legend>
         <p class="hint">The “View My CV” button in the top bar opens this file. Removing it hides the button.</p>
         <div id="cvBox"></div>
         <input type="file" accept="application/pdf" id="cvInput" hidden>

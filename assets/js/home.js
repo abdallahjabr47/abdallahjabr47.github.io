@@ -503,19 +503,19 @@
     /* certificate viewer */
     let cv = $('#certView');
     if (!cv) {
-      document.body.insertAdjacentHTML('beforeend', '<div class="cert-view" id="certView" role="dialog" aria-modal="true" aria-label="Certificate" hidden><div class="cv-card"><button class="cv-x" type="button" aria-label="Close">✕</button><img alt=""><div class="cv-meta"><b></b><small></small><p></p><a target="_blank" rel="noopener">Open original <span class="arr">↗</span></a></div></div></div>');
+      document.body.insertAdjacentHTML('beforeend', '<div class="cert-view" id="certView" role="dialog" aria-modal="true" aria-label="Certificate" hidden><div class="cert-card"><button class="cert-x" type="button" aria-label="Close">✕</button><img alt=""><div class="cert-meta"><b></b><small></small><p></p><a target="_blank" rel="noopener">Open original <span class="arr">↗</span></a></div></div></div>');
       cv = $('#certView');
       const close = () => { cv.classList.remove('on'); setTimeout(() => { cv.hidden = true; }, 250); };
-      cv.addEventListener('click', (e) => { if (e.target === cv || e.target.closest('.cv-x')) close(); });
+      cv.addEventListener('click', (e) => { if (e.target === cv || e.target.closest('.cert-x')) close(); });
       addEventListener('keydown', (e) => { if (e.key === 'Escape' && !cv.hidden) close(); });
     }
     box.addEventListener('click', (e) => {
       const b = e.target.closest('.rec-cert'); if (!b) return;
       $('img', cv).src = b.dataset.cert; $('img', cv).alt = b.dataset.title;
-      $('.cv-meta b', cv).textContent = b.dataset.title; $('.cv-meta small', cv).textContent = b.dataset.org;
-      const p = $('.cv-meta p', cv); p.textContent = b.dataset.note; p.hidden = !b.dataset.note;
-      const a = $('.cv-meta a', cv); a.href = b.dataset.link || '#'; a.hidden = !b.dataset.link;
-      cv.hidden = false; requestAnimationFrame(() => cv.classList.add('on')); $('.cv-x', cv).focus();
+      $('.cert-meta b', cv).textContent = b.dataset.title; $('.cert-meta small', cv).textContent = b.dataset.org;
+      const p = $('.cert-meta p', cv); p.textContent = b.dataset.note; p.hidden = !b.dataset.note;
+      const a = $('.cert-meta a', cv); a.href = b.dataset.link || '#'; a.hidden = !b.dataset.link;
+      cv.hidden = false; requestAnimationFrame(() => cv.classList.add('on')); $('.cert-x', cv).focus();
     });
     $$('.rec-more', box).forEach((btn) => btn.addEventListener('click', () => {
       const col = btn.closest('.rec-col'); const open = col.classList.toggle('open');
