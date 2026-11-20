@@ -1288,3 +1288,11 @@ html.intro-on .hero .avail{opacity:0}
 .kit{padding:18px 20px;border-radius:20px;border:1px dashed var(--line2)}
 .kit-k{display:block;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sky);margin-bottom:8px}
 .kit p{font-size:15px;line-height:1.55;color:var(--ink2)}
+/* smaller laptop in web cards; compact, high-contrast Explore pill */
+.type-web .laptop-f{width:74%;left:13%}
+.type-both .laptop-f{width:78%;left:6%}
+.explore{font-size:13.5px;font-weight:600;padding:9px 16px;gap:6px;bottom:18px;background:#fff;color:#0B0D14;box-shadow:0 8px 22px rgba(0,0,0,.35)}
+[data-theme="light"] .explore{background:#12141B;color:#fff;box-shadow:0 8px 22px rgba(18,20,27,.22)}
+/* cursor label ("Explore case ↗"): compact pill that stands out from the card */
+.cursor-ring.view{height:38px;padding:0 15px;font-size:13.5px;font-weight:600;background:#fff;color:#0B0D14;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 4px rgb(255 255 255 / .08)}
+[data-theme="light"] .cursor-ring.view{background:#12141B;color:#fff;box-shadow:0 8px 24px rgba(18,20,27,.25),0 0 0 4px rgb(18 20 27 / .06)}
