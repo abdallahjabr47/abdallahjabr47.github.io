@@ -52,7 +52,7 @@
       if (!txt || txt.length < 2) return;
       let key = sec.key + ':' + el.tagName.toLowerCase() + ':' + slug(txt);
       if (seen[key]) key += '-' + (++seen[key]); else seen[key] = 1;
-      const kind = /^H[1-3]$/.test(el.tagName) ? 'Heading' : el.classList.contains('eyebrow') ? 'Label' : el.classList.contains('btn') || el.tagName === 'BUTTON' ? 'Button / question' : el.closest('.stat') && el.tagName === 'B' ? 'Number' : el.tagName === 'SMALL' ? 'Small text' : txt.length > 90 ? 'Paragraph' : 'Text';
+      const kind = el.closest('.faq-a') ? 'FAQ answer' : el.closest('.faq-q') ? 'FAQ question' : el.tagName === 'H1' ? 'Main heading' : /^H[23]$/.test(el.tagName) ? 'Heading' : el.classList.contains('eyebrow') ? 'Small label above heading' : el.classList.contains('btn') || el.tagName === 'A' ? 'Button' : el.tagName === 'BUTTON' ? 'Button / tab' : el.closest('.stat') && el.tagName === 'B' ? 'Number (counts up)' : el.closest('.stat') ? 'Number caption' : el.tagName === 'SMALL' ? 'Small text' : el.tagName === 'B' || el.tagName === 'STRONG' ? 'Title' : txt.length > 90 ? 'Paragraph' : 'Text';
       picked.push({ el, key, text: txt, kind });
     });
     return picked;

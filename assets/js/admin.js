@@ -128,6 +128,7 @@
     editing = -1;
     if (tab === 'profile') return openSiteEditor();
     if (tab === 'content') return openContentEditor();
+    unembed();
     show('v-list');
     $$('.atabs button').forEach((b) => { const on = b.dataset.tab === tab; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
@@ -177,7 +178,7 @@
     setDirty(changed());
     renderList();
   });
-  $$('.atabs button').forEach((b) => b.addEventListener('click', () => { tab = b.dataset.tab; renderList(); }));
+  $$('.atabs button').forEach((b) => b.addEventListener('click', () => { if (b.dataset.tab === tab && (tab === 'profile' || tab === 'content')) return; collect(); setDirty(changed()); tab = b.dataset.tab; renderList(); }));
   $('#newProject').addEventListener('click', () => {
     if (tab === 'experience') {
       experience.unshift({ id: 'role-' + Date.now().toString(36), visible: true, role: '', company: '', location: '', dates: '', type: 'Full-time', summary: '', highlights: [] });
@@ -221,6 +222,7 @@
   const rep = (kind, list, addLabel) => `<div class="rep" data-rep="${kind}">${(list || []).map((a) => repRow(kind, a)).join('')}</div><button class="btn btn-ghost btn-sm" type="button" data-add-row="${kind}" style="align-self:flex-start">+ ${addLabel}</button>`;
 
   function openEditor(i, isNew) {
+    unembed();
     editing = i; mode = 'project';
     const p = projects[i];
     show('v-edit');
@@ -272,37 +274,85 @@
       </fieldset>`;
   }
 
+  /* Profile & links and Website text open right under the tabs, like the lists */
+  function embedPanel(tabName, title) {
+    show('v-list');
+    $('#list-title').innerHTML = title;
+    $('#plist').hidden = true; $('#listHint').hidden = true; $('#newProject').hidden = true;
+    $('#tabPanel').hidden = false;
+    $('#tabPanel').appendChild($('#edForm'));
+    $$('.atabs button').forEach((b) => { const on = b.dataset.tab === tabName; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
+  }
+  function unembed() {
+    $('#v-edit').appendChild($('#edForm'));
+    $('#plist').hidden = false; $('#listHint').hidden = false; $('#newProject').hidden = false; $('#tabPanel').hidden = true;
+  }
+
   async function openContentEditor() {
     editing = 0; mode = 'content';
-    show('v-edit');
-    $('#ed-title').innerHTML = 'Website <em class="serif">text</em>';
-    $('#ed-draft').textContent = 'Preview changes ↗';
-    $$('.atabs button').forEach((b) => { const on = b.dataset.tab === 'content'; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
+    embedPanel('content', 'Website <em class="serif">text</em>');
     const form = $('#edForm');
     form.innerHTML = '<p class="hint">Loading the page text…</p>';
     let doc;
     try { doc = new DOMParser().parseFromString(await (await fetch('index.html?v=' + Date.now(), { cache: 'no-store' })).text(), 'text/html'); }
     catch (e) { form.innerHTML = '<p class="hint">Could not load the page text. Refresh and try again.</p>'; return; }
     const secs = window.SiteContent.sections(doc);
-    form.innerHTML = `<p class="hint" style="margin-bottom:6px">Every text on the home page, section by section. Type <b>*word*</b> for the blue italic accent, <b>**words**</b> for a highlight, and press Enter for a new line. <b>Empty a field</b> to hide that item. Untick a section to hide it from the site. Projects, experience, photos and links have their own tabs.</p>` +
-      secs.map((sec) => {
-        const fs = window.SiteContent.fields(sec);
-        const shown = !content.hidden.includes(sec.key);
-        return `<details class="csec"${sec.key === secs[0].key ? ' open' : ''}><summary><span class="cs-name">${esc(sec.name)}</span><span class="cs-count">${fs.length} texts</span><label class="chk cs-show" onclick="event.stopPropagation()"><input type="checkbox" data-sec-show="${esc(sec.key)}" ${shown ? 'checked' : ''}> Show</label></summary>
-          <div class="cs-fields">${fs.map((f) => {
-            const val = Object.prototype.hasOwnProperty.call(content.text, f.key) ? content.text[f.key] : f.text;
-            const rows = Math.min(8, Math.max(1, Math.ceil(val.length / 70) + (val.match(/\n/g) || []).length));
-            return `<label class="f"><span class="ck">${esc(f.kind)}${val !== f.text ? ' <i>edited</i>' : ''}</span><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="${rows}">${esc(val)}</textarea></label>`;
-          }).join('')}</div></details>`;
-      }).join('');
+    const data = secs.map((sec) => ({ sec, fs: window.SiteContent.fields(sec) }));
+    const valOf = (f) => (Object.prototype.hasOwnProperty.call(content.text, f.key) ? content.text[f.key] : f.text);
+    const editedIn = (fs) => fs.filter((f) => valOf(f) !== f.text).length;
+    form.innerHTML = `
+      <div class="wt-help glass">
+        <div><b>How it works</b><span>Pick a section on the left, change any text, then press <b>Preview</b> or <b>Publish</b> at the bottom.</span></div>
+        <div class="wt-keys"><span><code>*word*</code> blue italic</span><span><code>**words**</code> highlight</span><span><kbd>Enter</kbd> new line</span><span>Empty field = hidden</span></div>
+      </div>
+      <div class="wt">
+        <aside class="wt-nav" role="tablist" aria-label="Page sections">${data.map(({ sec, fs }, n) => `
+          <button type="button" class="wt-tab${n === 0 ? ' on' : ''}" data-wt="${n}" role="tab"><span class="wt-n">${String(n + 1).padStart(2, '0')}</span><span class="wt-l"><b>${esc(sec.name)}</b><small data-wt-meta="${n}">${fs.length} texts${editedIn(fs) ? ` · <i>${editedIn(fs)} edited</i>` : ''}${content.hidden.includes(sec.key) ? ' · hidden' : ''}</small></span></button>`).join('')}
+        </aside>
+        <div class="wt-body">${data.map(({ sec, fs }, n) => `
+          <section class="wt-sec" data-wt-sec="${n}"${n ? ' hidden' : ''}>
+            <header class="wt-head">
+              <div><small>Section ${String(n + 1).padStart(2, '0')}</small><h3>${esc(sec.name)}</h3></div>
+              <label class="wt-switch"><input type="checkbox" data-sec-show="${esc(sec.key)}" ${content.hidden.includes(sec.key) ? '' : 'checked'}><span></span>Show on website</label>
+            </header>
+            ${fs.map((f) => { const v = valOf(f); const ed = v !== f.text; return `
+            <div class="wt-field${ed ? ' edited' : ''}">
+              <div class="wt-lab"><span>${esc(f.kind)}</span><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'}>Reset</button></div>
+              <textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1">${esc(v)}</textarea>
+              <p class="wt-orig"${ed ? '' : ' hidden'}>Original: ${esc(f.text)}</p>
+            </div>`; }).join('')}
+          </section>`).join('')}
+        </div>
+      </div>`;
+    const grow = (t) => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; };
+    const refreshMeta = (n) => { const { sec, fs } = data[n]; const sec$ = $(`[data-wt-sec="${n}"]`, form); const ed = $$('.wt-field.edited', sec$).length; const hid = !$('[data-sec-show]', sec$).checked; $(`[data-wt-meta="${n}"]`, form).innerHTML = `${fs.length} texts${ed ? ` · <i>${ed} edited</i>` : ''}${hid ? ' · hidden' : ''}`; };
+    $$('.wt-tab', form).forEach((b) => b.addEventListener('click', () => {
+      $$('.wt-tab', form).forEach((x) => x.classList.toggle('on', x === b));
+      $$('.wt-sec', form).forEach((x) => { x.hidden = x.dataset.wtSec !== b.dataset.wt; });
+      $$(`[data-wt-sec="${b.dataset.wt}"] textarea`, form).forEach(grow);
+    }));
+    $$('.wt-sec', form).forEach((sec$) => {
+      const n = sec$.dataset.wtSec;
+      sec$.addEventListener('input', (e) => {
+        const t = e.target.closest('textarea'); if (!t) return;
+        grow(t);
+        const box = t.closest('.wt-field'), ed = t.value.trim() !== t.dataset.orig.trim();
+        box.classList.toggle('edited', ed); $('[data-reset]', box).hidden = !ed; $('.wt-orig', box).hidden = !ed;
+        refreshMeta(n); setDirty(true);
+      });
+      sec$.addEventListener('change', (e) => { if (e.target.matches('[data-sec-show]')) { refreshMeta(n); setDirty(true); } });
+      sec$.addEventListener('click', (e) => {
+        const r = e.target.closest('[data-reset]'); if (!r) return;
+        const box = r.closest('.wt-field'), t = $('textarea', box);
+        t.value = t.dataset.orig; t.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    });
+    requestAnimationFrame(() => $$('[data-wt-sec="0"] textarea', form).forEach(grow));
   }
 
   function openSiteEditor() {
     editing = 0; mode = 'site';
-    show('v-edit');
-    $('#ed-title').innerHTML = 'Profile <em class="serif">&amp; links</em>';
-    $('#ed-draft').textContent = 'Preview changes ↗';
-    $$('.atabs button').forEach((b) => { const on = b.dataset.tab === 'profile'; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
+    embedPanel('profile', 'Profile <em class="serif">&amp; links</em>');
     const cvName = site.cv ? site.cv.split('/').pop() : 'none';
     $('#edForm').innerHTML = `
       <fieldset><legend>Photos</legend>
@@ -352,6 +402,7 @@
   }
 
   function openExpEditor(i, isNew) {
+    unembed();
     editing = i; mode = 'exp';
     const x = experience[i];
     show('v-edit');

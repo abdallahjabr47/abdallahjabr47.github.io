@@ -1033,3 +1033,9 @@ html.intro-on .hero .portrait{transform:scale(.92)}
 html.intro-on .hero .avail{opacity:0}
 .hero .avail{transition:opacity 1s ease .6s}
 .hero .portrait{transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+
+/* compact stats */
+.stats{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{padding:18px 20px;border-radius:18px}
+.stat b{font-size:clamp(30px,2.6vw,38px)}
+.stat > span{margin-top:8px;font-size:14px}
