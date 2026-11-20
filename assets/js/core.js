@@ -154,6 +154,9 @@
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
     map.forEach((_, s) => navIO.observe(s));
+    // sections without a menu link (Testimonials, Contact) clear the highlight instead of leaving FAQ lit
+    const free = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) links.forEach((l) => l.classList.remove('active')); }), { rootMargin: '-45% 0px -50% 0px' });
+    $$('main > section[id]').filter((s) => !map.has(s) && s.id !== 'hero').forEach((s) => free.observe(s));
   }
 
   /* ---------- custom cursor ---------- */
@@ -334,6 +337,7 @@
     if (!s) return;
     const url = {
       email: s.email ? 'mailto:' + s.email : '',
+      emailcta: s.email ? 'mailto:' + s.email + '?subject=' + encodeURIComponent("Let's work together") : '',
       whatsapp: s.whatsapp ? 'https://wa.me/' + String(s.whatsapp).replace(/[^0-9]/g, '') : '',
       linkedin: s.linkedin || '', behance: s.behance || '', dribbble: s.dribbble || '', github: s.github || '', cv: s.cv || ''
     };

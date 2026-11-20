@@ -142,6 +142,30 @@
   rescan();
   new MutationObserver(() => { clearTimeout(rescan.t); rescan.t = setTimeout(rescan, 120); }).observe(document.body, { childList: true, subtree: true });
 
+  /* ---------- section links land on the section's heading, not its empty top padding ---------- */
+  let glide = null;
+  const anchorY = (sec) => {
+    const head = sec.querySelector('.eyebrow, h1, h2') || sec;
+    let y = 0; for (let el = head; el; el = el.offsetParent) y += el.offsetTop; // layout position, ignores reveal animations
+    return y - 112;
+  };
+  const goTo = (sec) => { const y = Math.max(0, anchorY(sec)); if (glide) glide(y); else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' }); };
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href*="#"]');
+    if (!a) return;
+    const url = new URL(a.getAttribute('href'), location.href);
+    if (url.pathname !== location.pathname || url.hash.length < 2) return;
+    const t = document.getElementById(url.hash.slice(1));
+    if (!t) return;
+    e.preventDefault();
+    document.body.classList.remove('menu-open');
+    goTo(t);
+  });
+  // arriving from another page with #section (e.g. a case study's nav)
+  if (location.hash.length > 1) {
+    addEventListener('load', () => { const t = document.getElementById(location.hash.slice(1)); if (t && scrollY > 0) setTimeout(() => window.scrollTo(0, Math.max(0, anchorY(t))), 60); });
+  }
+
   /* ---------- 6. smooth wheel scrolling (mouse wheels and trackpads; keyboard and touch untouched) ---------- */
   (function smooth() {
     if (!fine || reduce) return;
@@ -161,6 +185,7 @@
       window.scrollTo(0, current);
       if (running) requestAnimationFrame(loop);
     };
+    glide = (y) => { target = Math.max(0, Math.min(max(), y)); if (!running) { current = scrollY; running = true; requestAnimationFrame(loop); } };
     addEventListener('wheel', (e) => {
       if (e.ctrlKey || e.defaultPrevented || Math.abs(e.deltaX) > Math.abs(e.deltaY) || scrollable(e.target) || document.body.classList.contains('menu-open')) return;
       e.preventDefault();
@@ -170,15 +195,5 @@
       if (!running) { running = true; requestAnimationFrame(loop); }
     }, { passive: false });
     addEventListener('scroll', () => { if (!running) { target = current = scrollY; } }, { passive: true });
-    // in-page anchor links glide too
-    document.addEventListener('click', (e) => {
-      const a = e.target.closest('a[href^="#"]');
-      if (!a || a.getAttribute('href').length < 2) return;
-      const t = document.getElementById(a.getAttribute('href').slice(1));
-      if (!t) return;
-      e.preventDefault();
-      target = Math.max(0, Math.min(max(), t.getBoundingClientRect().top + scrollY - 90));
-      if (!running) { current = scrollY; running = true; requestAnimationFrame(loop); }
-    });
   })();
 })();
