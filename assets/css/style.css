@@ -871,3 +871,5 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 [data-theme="dark"] .ic.full [fill="#00546B" i]{fill:#5BA8CC}
 [data-theme="dark"] .ic.full [fill="#5382A1" i]{fill:#8FB8DD}
 [data-theme="dark"] .ic.full [fill="#000000" i],[data-theme="dark"] .ic.full [fill="#000" i]{fill:#fff}
+
+[hidden]{display:none!important}
