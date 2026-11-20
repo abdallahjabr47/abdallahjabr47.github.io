@@ -1168,3 +1168,11 @@ html.intro-on .hero .avail{opacity:0}
   .footer .container > :last-child{text-align:right}
 }
 .cta{padding-bottom:clamp(40px,5vw,64px)}
+/* one active-tab style everywhere: light blue tint (slightly brighter) */
+:root{--tab-on:rgba(120,175,255,.30);--tab-on-ink:#EEF4FF}
+[data-theme="light"]{--tab-on:#D6E6FF;--tab-on-ink:#0F55BD}
+.nav-links a.active,[data-theme="light"] .nav-links a.active{background:var(--tab-on);color:var(--tab-on-ink)}
+.filters .thumb,.tabs .thumb,.lens .thumb,.seg .thumb{background:var(--tab-on)}
+.filters button.on,.tabs button.on,.lens button.on,.seg button.on{color:var(--tab-on-ink)}
+.mini-seg button.on{background:var(--tab-on);color:var(--tab-on-ink)}
+.nav-links a:focus-visible{outline-offset:-2px;outline-color:rgb(120 175 255 / .7)}
