@@ -1635,11 +1635,6 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 [data-theme="light"] .who .pm{background:#E3EEFF;color:#1259C2}
 [data-theme="light"] .who .po{background:#DDF3E9;color:#1F7A55}
 [data-theme="light"] .who .ds{background:#FDEBDD;color:#B4561A}
-.flow{--lc:92 155 245}
-.flow[data-lens="po"]{--lc:95 184 148}.flow[data-lens="ds"]{--lc:240 152 82}
-.flow.filtering li.hit{border-color:rgb(var(--lc) / .55);background:rgb(var(--lc) / .07)}
-.lens button[data-lens="pm"].on{color:#7FB0FF}.lens button[data-lens="po"].on{color:#6FD1A6}.lens button[data-lens="ds"].on{color:#F4A867}
-[data-theme="light"] .lens button[data-lens="pm"].on{color:#1259C2}[data-theme="light"] .lens button[data-lens="po"].on{color:#1F7A55}[data-theme="light"] .lens button[data-lens="ds"].on{color:#B4561A}
 /* interaction: tap ring follows the ball */
 .iv-motion .tap{position:absolute;left:10%;bottom:22%;width:24px;height:24px;border-radius:50%;border:2px solid var(--ac2);opacity:0;animation:ivTap 2.4s ease-out infinite}
 @keyframes ivTap{0%{opacity:.9;transform:scale(.6)}30%{opacity:0;transform:scale(2.2)}100%{opacity:0}}
