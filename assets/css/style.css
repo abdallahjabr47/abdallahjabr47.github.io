@@ -914,14 +914,15 @@ h1,h2,h3,.h-xl,.h-lg,.h-md,.ix-t,.stat b{letter-spacing:-.035em}
 .big-mq .item.ghost b{font-style:italic;font-weight:500;color:rgb(var(--fg) / .03);-webkit-text-stroke:1.2px rgb(var(--fg) / .45)}
 .big-mq .item:hover b{color:rgb(var(--fg) / .06);-webkit-text-stroke:1.2px rgb(var(--fg) / .7)}
 .big-mq .item.ghost:hover b{color:var(--ink);-webkit-text-stroke-color:transparent}
-/* glass letters: every letter near the mouse turns into frosted glass, strongest at the centre and fading out with distance */
-h1[data-split] .c,h2[data-split] .c{--base:var(--ink);--gf:rgb(var(--fg) / .025);--gs:rgb(var(--fg) / .6);--g:0;
-  color:color-mix(in srgb,var(--base) calc((1 - var(--g)) * 100%),var(--gf));
-  -webkit-text-stroke:1.1px color-mix(in srgb,var(--gs) calc(var(--g) * 100%),transparent);
-  transition:transform 1s var(--ease),color .5s ease,-webkit-text-stroke-color .5s ease}
-h1[data-split] .serif .c,h2[data-split] .serif .c{--base:var(--coral-ink);--gf:rgba(92,155,245,.1);--gs:rgba(92,155,245,.9)}
-[data-theme="light"] h1[data-split] .serif .c,[data-theme="light"] h2[data-split] .serif .c{--gf:rgba(23,105,224,.08);--gs:rgba(23,105,224,.85)}
-h1[data-split] .c.gr,h2[data-split] .c.gr{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .14 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");-webkit-background-clip:text;background-clip:text;animation:glassgrain .6s steps(3) infinite}
+/* glass letters: the letter under the mouse turns to clear glass (sheen + thin border); its neighbours only half */
+h1[data-split] .c,h2[data-split] .c{--base:var(--ink);--sheen:linear-gradient(180deg,rgba(255,255,255,.34),rgba(255,255,255,.06) 55%,rgba(255,255,255,.14));--gs:rgba(255,255,255,.7);--g:0;
+  background-image:var(--sheen);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:color-mix(in srgb,var(--base) calc((1 - var(--g) * var(--g)) * 100%),transparent);
+  -webkit-text-stroke:1px color-mix(in srgb,var(--gs) calc(var(--g) * 100%),transparent);
+  transition:transform 1s var(--ease),-webkit-text-fill-color .8s cubic-bezier(.3,.6,.2,1),-webkit-text-stroke-color .8s cubic-bezier(.3,.6,.2,1)}
+h1[data-split] .serif .c,h2[data-split] .serif .c{--base:var(--coral-ink);--sheen:linear-gradient(180deg,rgba(150,195,255,.45),rgba(92,155,245,.08) 55%,rgba(92,155,245,.2));--gs:rgba(120,175,255,.95)}
+[data-theme="light"] h1[data-split] .c,[data-theme="light"] h2[data-split] .c{--sheen:linear-gradient(180deg,rgba(255,255,255,.9),rgba(14,16,24,.04) 60%,rgba(14,16,24,.08));--gs:rgba(14,16,24,.55)}
+[data-theme="light"] h1[data-split] .serif .c,[data-theme="light"] h2[data-split] .serif .c{--sheen:linear-gradient(180deg,rgba(255,255,255,.9),rgba(23,105,224,.08) 60%,rgba(23,105,224,.16));--gs:rgba(23,105,224,.85)}
 @keyframes glassgrain{0%{background-position:0 0}33%{background-position:-23px 17px}66%{background-position:31px -12px}100%{background-position:0 0}}
 
 /* hero title: three lines on desktop */

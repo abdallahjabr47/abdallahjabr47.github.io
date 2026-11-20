@@ -190,7 +190,7 @@
   /* ---------- glass letters near the mouse ---------- */
   (function () {
     if (!fine || reduce) return;
-    const R = 80;
+    const R = 60;
     let active = null, chars = [], raf = 0, px = 0, py = 0;
     const clear = () => { chars.forEach((c) => { c.style.removeProperty('--g'); c.classList.remove('gr'); }); chars = []; active = null; };
     const paint = () => {
@@ -198,11 +198,11 @@
       if (!active) return;
       chars.forEach((c) => {
         const r = c.getBoundingClientRect();
-        const dx = Math.max(r.left - px, 0, px - r.right), dy = Math.max(r.top - py, 0, py - r.bottom);
-        const d = Math.hypot(dx, dy);
-        const g = d >= R ? 0 : Math.min(1, (1 - d / R) * 2.6);
-        if (g > 0.01) c.style.setProperty('--g', g.toFixed(2)); else c.style.removeProperty('--g');
-        c.classList.toggle('gr', g > 0.95);
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const nx = Math.abs(px - cx) / Math.max(r.width, 18), ny = Math.abs(py - cy) / (r.height * 0.75);
+        const d = Math.max(nx, ny);
+        const g = d < 0.55 ? 1 : d < 1.15 ? 0.5 : 0;
+        if (g) c.style.setProperty('--g', g); else c.style.removeProperty('--g');
       });
     };
     addEventListener('pointermove', (e) => {
