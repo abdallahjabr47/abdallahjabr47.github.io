@@ -219,10 +219,10 @@
   }
 
   /* =============== design system =============== */
-  const tokens = [['Night', '#07080B'], ['Surface', '#12141B'], ['Primary', '#1769E0'], ['Sky', '#5C9BF5'], ['Violet', '#1769E0'], ['Success', '#3DDC97']];
+  const tokens = [['Primary', '#1769E0', '--blue'], ['Sky', '#5C9BF5', '--sky'], ['Mint', '#5FB894', '--mint'], ['Sand', '#D8A960', '--sand'], ['Lilac', '#A497DB', '--lilac'], ['Night', '#07080B', '--bg'], ['Surface', '#12141B', '--panel']];
   const sw = $('#swatches');
   if (sw) {
-    sw.innerHTML = tokens.map(([n, h]) => `<button class="sw" type="button" data-hex="${h}" aria-label="Copy ${n} ${h}"><i style="background:${h}"></i><b>${n}</b><small>${h}</small></button>`).join('');
+    sw.innerHTML = tokens.map(([n, h, v]) => `<button class="sw" type="button" data-hex="${h}" aria-label="Copy ${n} ${h}"><i style="background:${h}"></i><span class="sw-n"><b>${n}</b><code>${v}</code></span><small>${h}</small></button>`).join('');
     $$('.sw', sw).forEach((b) => b.addEventListener('click', async () => {
       const hex = b.dataset.hex;
       try { await navigator.clipboard.writeText(hex); toast('Copied ' + hex); }
