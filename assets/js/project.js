@@ -30,8 +30,8 @@
     const resp = p.responsibilities || {};
     if (has(resp.product) || has(resp.design) || has(p.role)) {
       const cards = [];
-      if (has(resp.product)) cards.push(`<div class="role glass" data-glow data-reveal><span class="ico" style="background:rgba(77,163,255,.14);color:var(--sky)">◎</span><h3>Product · PM / PO</h3><ul>${resp.product.filter(Boolean).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`);
-      if (has(resp.design)) cards.push(`<div class="role glass" data-glow data-reveal style="--d:120ms"><span class="ico" style="background:rgba(88,64,255,.18);color:#8B7CFF">✦</span><h3>Design · UI/UX</h3><ul>${resp.design.filter(Boolean).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`);
+      if (has(resp.product)) cards.push(`<div class="role glass" data-glow data-reveal><span class="ico" style="background:rgba(23,105,224,.14);color:var(--sky)">◎</span><h3>Product · PM / PO</h3><ul>${resp.product.filter(Boolean).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`);
+      if (has(resp.design)) cards.push(`<div class="role glass" data-glow data-reveal style="--d:120ms"><span class="ico" style="background:rgba(23,105,224,.18);color:#5C9BF5">✦</span><h3>Design · UI/UX</h3><ul>${resp.design.filter(Boolean).map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>`);
       add('role', 'My role', `
         <span class="k" data-reveal>02 · MY ROLE</span>
         <h2 class="h-md" data-split>What I <em class="serif">owned</em></h2>
