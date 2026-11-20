@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121004050">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121005605">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -512,7 +512,7 @@ fieldset>.wt-head.part-sw{padding-top:0;margin-bottom:16px}
 /* text + photo on one page: 70 / 30 */
 #edForm.combo-side{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,3fr);gap:20px;align-items:start}
 #edForm.combo-side>.combo-text{grid-column:1;grid-row:1 / span 20;min-width:0}
-#edForm.combo-side>fieldset{grid-column:2;margin:0;position:sticky;top:96px}
+#edForm.combo-side>fieldset{grid-column:2;margin:0}
 #edForm.combo-side>fieldset .ph-grid{grid-template-columns:1fr}
 @media (max-width:1000px){#edForm.combo-side{grid-template-columns:1fr}#edForm.combo-side>.combo-text,#edForm.combo-side>fieldset{grid-column:1;grid-row:auto;position:static}}
 
@@ -529,6 +529,41 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .wt-head h3{font-size:22px}
 #subTabs[hidden]{display:none!important}
 #pageTabs:has(+#subTabs[hidden]){margin-bottom:24px}
+
+/* learning & recognition: one tidy row per item, opens to edit */
+.rep-item.rec-row{display:block;padding:0;overflow:hidden;background:rgb(var(--fg) / .02)}
+.rr-h{display:flex;align-items:center;gap:12px;padding:10px 12px;cursor:pointer;user-select:none}
+.rr-h:hover{background:rgb(var(--fg) / .04)}
+.rr-h:focus-visible{outline:2px solid var(--sky);outline-offset:-2px}
+.rr-mini{width:44px;height:32px;flex:none;border-radius:7px;border:1px solid var(--line2);background:rgb(var(--fg) / .05) center/cover no-repeat}
+.rr-k{flex:none;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;color:var(--kc);background:color-mix(in srgb,var(--kc) 16%,transparent)}
+.rr-k.k-certificate,.rr-k.k-education{--kc:#E2B866}.rr-k.k-award{--kc:#A497DB}.rr-k.k-leadership{--kc:#5FB894}
+.rr-ht{flex:1;min-width:0;display:flex;flex-direction:column}
+.rr-ht b{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rr-ht small{font-size:12.5px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rr-del{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:10px;border:1px solid transparent;color:var(--dim);transition:color .2s,background .2s,border-color .2s}
+.rr-del svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rr-del:hover{color:#F07167;background:rgb(240 113 103 / .1);border-color:rgb(240 113 103 / .35)}
+.rr-chev{width:18px;height:18px;flex:none;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+.rec-row.open .rr-chev{transform:rotate(180deg)}
+.rr-b{display:none;flex-direction:column;gap:12px;padding:14px 14px 16px;border-top:1px solid var(--line)}
+.rec-row.open .rr-b{display:flex}
+.rec-row.open{border-color:var(--line2)}
+.rep[data-rep="recognition"]{gap:8px}
+/* nothing sticks while scrolling: the whole page scrolls */
+@media (min-width:861px){.wt-nav,.ed-layout.two .ed-side{position:static!important;max-height:none!important;overflow:visible!important}}
+@media (max-width:640px){.rr-mini{display:none}.rr-h{gap:8px}.rr-ht b,.rr-ht small{white-space:normal}}
+/* no side list on text pages */
+.wt,.wt.one,.wt.flat{grid-template-columns:minmax(0,1fr)!important}.wt-nav{display:none!important}
+.cgrid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))!important}
+.pts{display:flex;flex-direction:column;gap:6px;padding:10px 0 4px}
+.pts .wt-field.c{padding-left:16px}
+.pts .wt-field.c::before{content:"";position:absolute;left:2px;top:19px;width:6px;height:6px;border-radius:50%;background:var(--sky)}
+.pts .wt-field.c textarea{min-height:40px;padding-top:9px;padding-bottom:9px}
+.wt-group.card .wt-field.c textarea{padding-right:46px}
+.pts.words .wt-field.c{padding-left:0}.pts.words .wt-field.c::before{content:none}
+.pts.words .wt-run-b{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+.pts .wt-field.c,.wt-group.card .pts .wt-field.c{padding-top:0;padding-bottom:0}
 </style>
 </head>
 <body>
@@ -632,10 +667,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
   </div>
 </div>
 
-<script src="assets/js/config.js?v=20261121004050"></script>
-<script src="assets/js/icons.js?v=20261121004050"></script>
-<script src="assets/js/content.js?v=20261121004050"></script>
-<script src="assets/js/core.js?v=20261121004050"></script>
-<script src="assets/js/admin.js?v=20261121004050"></script>
+<script src="assets/js/config.js?v=20261121005605"></script>
+<script src="assets/js/icons.js?v=20261121005605"></script>
+<script src="assets/js/content.js?v=20261121005605"></script>
+<script src="assets/js/core.js?v=20261121005605"></script>
+<script src="assets/js/admin.js?v=20261121005605"></script>
 </body>
 </html>

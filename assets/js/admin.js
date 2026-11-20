@@ -22,18 +22,19 @@
       { id: 'avail', label: 'Availability line', kind: 'site', groups: ['availability'] },
       { id: 'tools', label: 'Tools strip', kind: 'content', keys: ['tools'] }] },
     { id: 'work', label: 'Work', subs: [
-      { id: 'projects', label: 'Projects', kind: 'projects' , part: 'work', partName: 'Selected work' },
       { id: 'work-text', label: 'Selected work · text', kind: 'content', keys: ['work'] },
+      { id: 'projects', label: 'Projects', kind: 'projects' , part: 'work', partName: 'Selected work' },
       { id: 'screens', label: 'Screens that ship', kind: 'site', groups: ['showcase'], keys: ['screens'] },
       { id: 'process', label: 'From sketch to shipped', kind: 'content', keys: ['process'] }] },
     { id: 'about', label: 'About', subs: [
       { id: 'about-text', label: 'About text, numbers & photo', kind: 'site', groups: ['photo2'], keys: ['about'], side: true }] },
     { id: 'experience', label: 'Experience', subs: [
+      { id: 'exp-text', label: 'Section text', kind: 'content', keys: ['experience'] },
       { id: 'roles', label: 'Work experience', kind: 'experience' , part: 'experience', partName: 'Experience' },
-      { id: 'learning', label: 'Learning & recognition', kind: 'site', groups: ['recognition'] , part: 'learning', partName: 'Learning & recognition tab' },
-      { id: 'exp-text', label: 'Section text', kind: 'content', keys: ['experience'] }] },
+      { id: 'learning', label: 'Learning & recognition', kind: 'site', groups: ['recognition'] , part: 'learning', partName: 'Learning & recognition tab' }] },
     { id: 'product', label: 'Product', subs: [
-      { id: 'product-text', label: 'Product management', kind: 'content', keys: ['product'] },
+      { id: 'product-text', label: 'Product management', kind: 'content', keys: ['product'], fnot: '.cycle' },
+      { id: 'flow', label: 'How a feature travels', kind: 'content', keys: ['product'], fsel: '.cycle', part: 'flow' },
       { id: 'principles', label: 'Principles', kind: 'content', keys: ['principles'] }] },
     { id: 'skills', label: 'Skills', subs: [
       { id: 'skills-text', label: 'Skills', kind: 'content', keys: ['skills'] },
@@ -41,8 +42,8 @@
     { id: 'beyond', label: 'Beyond', subs: [
       { id: 'beyond', label: 'Beyond the screen', kind: 'site', groups: ['beyond'], keys: ['beyond'] }] },
     { id: 'contact', label: 'Contact & more', subs: [
-      { id: 'links', label: 'Links & CV', kind: 'site', groups: ['links', 'cv'] , part: 'contact', partName: 'Contact' },
       { id: 'contact-text', label: 'Contact text', kind: 'content', keys: ['contact'] },
+      { id: 'links', label: 'Links & CV', kind: 'site', groups: ['links', 'cv'] , part: 'contact', partName: 'Contact' },
       { id: 'faq', label: 'FAQ', kind: 'content', keys: ['faq'] },
       { id: 'testi', label: 'Testimonials', kind: 'site', groups: ['testimonials'], keys: ['testimonials'] }] }];
   let page = PAGES[1], sub = PAGES[1].subs[0];
@@ -320,7 +321,10 @@
     if (kind === 'testimonials') return `<div class="rep-item" data-row><label class="f">Quote<textarea data-r="quote" placeholder="What they said about working with you">${esc(a.quote || '')}</textarea></label><div style="display:flex;flex-direction:column;gap:12px"><label class="f">Name<input data-r="name" value="${esc(a.name || '')}" placeholder="Full name"></label><label class="f">Role &amp; company<input data-r="role" value="${esc(a.role || '')}" placeholder="CTO, Homyt"></label></div><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     if (kind === 'recognition') {
       const K = [['certificate', 'Certificate'], ['education', 'Degree / education'], ['award', 'Hackathon, award or fellowship'], ['leadership', 'Leadership & community']];
-      return `<div class="rep-item rec-row" data-row><div class="g2"><label class="f">Type<select data-r="kind">${K.map(([v, l]) => `<option value="${v}"${(a.kind || 'certificate') === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Year<input data-r="year" value="${esc(a.year || '')}" placeholder="2024 or 2022 — 2024"></label></div><label class="f">Title<input data-r="title" value="${esc(a.title || '')}" placeholder="Google UX Design Professional Certificate"></label><div class="g2"><label class="f">Organisation · place<input data-r="org" value="${esc(a.org || '')}" placeholder="Google · Online"></label><label class="f">Link (optional)<input data-r="link" value="${esc(a.link || '')}" placeholder="https://… certificate link"></label></div><div class="f">Certificate image (optional)<div class="rec-img"><input type="hidden" data-r="image" value="${esc(a.image || '')}"><span class="rec-th"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}>${a.image ? '' : 'No image'}</span><span class="rec-acts"><label class="btn btn-ghost btn-sm">${a.image ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${a.image ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}</span></div><small class="hint" style="margin:0">Shown as a small preview on the site; visitors can click to see it full size.</small></div><label class="f">Short note (optional)<input data-r="note" value="${esc(a.note || '')}" placeholder="Selected from 300+ applicants"></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
+      const KL = { certificate: 'Certificate', education: 'Degree', award: 'Award', leadership: 'Leadership' };
+      const kk = a.kind || 'certificate', open = !a.title;
+      const head = `<div class="rr-h" data-rec-toggle role="button" tabindex="0" aria-expanded="${open}"><span class="rr-mini"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}></span><span class="rr-k k-${kk}">${KL[kk]}</span><span class="rr-ht"><b>${esc(a.title || 'New item')}</b><small>${esc([a.org, a.year].filter(Boolean).join(' · '))}</small></span><button class="rr-del" type="button" data-del-row aria-label="Delete this item" title="Delete"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></svg></button><svg class="rr-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>`;
+      return `<div class="rep-item rec-row${open ? ' open' : ''}" data-row>${head}<div class="rr-b"><div class="g2"><label class="f">Type<select data-r="kind">${K.map(([v, l]) => `<option value="${v}"${(a.kind || 'certificate') === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Year<input data-r="year" value="${esc(a.year || '')}" placeholder="2024 or 2022 — 2024"></label></div><label class="f">Title<input data-r="title" value="${esc(a.title || '')}" placeholder="Google UX Design Professional Certificate"></label><div class="g2"><label class="f">Organisation · place<input data-r="org" value="${esc(a.org || '')}" placeholder="Google · Online"></label><label class="f">Link (optional)<input data-r="link" value="${esc(a.link || '')}" placeholder="https://… certificate link"></label></div><div class="f">Certificate image (optional)<div class="rec-img"><input type="hidden" data-r="image" value="${esc(a.image || '')}"><span class="rec-th"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}>${a.image ? '' : 'No image'}</span><span class="rec-acts"><label class="btn btn-ghost btn-sm">${a.image ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${a.image ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}</span></div><small class="hint" style="margin:0">Shown as a small preview on the site; visitors can click to see it full size.</small></div><label class="f">Short note (optional)<input data-r="note" value="${esc(a.note || '')}" placeholder="Selected from 300+ applicants"></label></div></div>`;
     }
     if (kind === 'results') return `<div class="rep-item" data-row><label class="f">Value<input data-r="value" value="${esc(a.value || '')}" placeholder="+35%"></label><label class="f">What it measures<input data-r="label" value="${esc(a.label || '')}" placeholder="Weekly active users"></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     return '';
@@ -443,7 +447,8 @@
     try { doc = new DOMParser().parseFromString(await (await fetch('index.html?v=' + Date.now(), { cache: 'no-store' })).text(), 'text/html'); }
     catch (e) { host.innerHTML = '<p class="hint">Could not load the page text. Refresh and try again.</p>'; return; }
     const secs = window.SiteContent.sections(doc).filter((x) => !sub.keys || sub.keys.includes(x.key));
-    const data = secs.map((sec) => ({ sec, fs: window.SiteContent.fields(sec) }));
+    const pick = (f) => (!sub.fsel || f.el.closest(sub.fsel)) && (!sub.fnot || !f.el.closest(sub.fnot));
+    const data = secs.map((sec) => ({ sec, fs: window.SiteContent.fields(sec).filter(pick) }));
     const valOf = (f) => (Object.prototype.hasOwnProperty.call(content.text, f.key) ? content.text[f.key] : f.text);
     const offs = content.off || [];
     const EYE_I = '<svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c1-1.5 5-6 10-6s9 4.5 10 6c-1 1.5-5 6-10 6S3 13.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="no" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
@@ -456,8 +461,8 @@
         <div class="wt-body">${data.map(({ sec, fs }, n) => `
           <section class="wt-sec${content.hidden.includes(sec.key) ? ' sec-off' : ''}" data-wt-sec="${n}"${n ? ' hidden' : ''}>
             <header class="wt-head">
-              <div><small>Section ${String(n + 1).padStart(2, '0')}</small><h3>${esc(sec.name)}</h3></div>
-              <label class="wt-switch"><input type="checkbox" data-sec-show="${esc(sec.key)}" ${content.hidden.includes(sec.key) ? '' : 'checked'}><span></span>Show on website</label>
+              <div><small>Section</small><h3>${esc(sub.fsel ? sub.label : sec.name)}</h3></div>
+              ${sub.fsel && sub.part ? `<label class="wt-switch"><input type="checkbox" data-part-show="${esc(sub.part)}" ${content.hidden.includes(sub.part) ? '' : 'checked'}><span></span>Show on website</label>` : `<label class="wt-switch"><input type="checkbox" data-sec-show="${esc(sec.key)}" ${content.hidden.includes(sec.key) ? '' : 'checked'}><span></span>Show on website</label>`}
             </header>
             ${(() => {
               const isShort = (f) => !/\n/.test(f.text) && f.text.length <= 48 && !/Paragraph|Main heading|FAQ answer/.test(f.kind);
@@ -476,7 +481,7 @@
               const logo = (el) => { const ic = el && (window.ICONS || {})[el.dataset.icon]; if (!ic) return `<span class="tc-fb">${esc((el && el.dataset.fb) || '•')}</span>`; if (ic.full) return `<svg viewBox="${ic.fvb}" aria-hidden="true">${ic.full}</svg>`; return `<svg viewBox="${ic.vb}" fill="currentColor" style="color:${ic.c === 'ink' ? 'var(--ink)' : ic.c}" aria-hidden="true">${ic.p}</svg>`; };
               const mini = (f, ph) => { const v = valOf(f); const ed = v !== f.text; return `<div class="wt-field tf${ed ? ' edited' : ''}"><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1" placeholder="${ph}">${esc(v)}</textarea><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'} title="Back to original">↺</button><p class="wt-orig" hidden></p></div>`; };
               const tcard = (run) => { const tool = run[0].el.closest('.tool'); const gk = 'g:' + run[0].key, goff = offs.includes(gk); return `<div class="wt-group tcard${goff ? ' off' : ''}"><div class="wt-gh"><span class="tc-ic">${logo(tool && tool.querySelector('[data-icon]'))}</span><div class="tc-f">${run.map((f, i) => mini(f, i ? 'Short line' : 'Name')).join('')}</div><button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}" title="Show / hide this tool">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button></div></div>`; };
-              let html = '', k = 0, grid = '';
+              let html = '', k = 0, grid = '', lastFam = '';
               const openGrid = (cls) => { if (grid !== cls) { if (grid) html += '</div>'; if (cls) html += `<div class="${cls}">`; grid = cls; } };
               while (k < fs.length) {
                 const g = fs[k].group;
@@ -487,9 +492,19 @@
                 const isList = g.startsWith('list-');
                 if (!isList) {
                   /* cards side by side, always open */
+                  const fam = String(run[0].groupLabel || '').replace(/\s*\d+.*$/, '');
+                  if (grid === 'cgrid' && fam !== lastFam) openGrid('');
+                  lastFam = fam;
                   openGrid('cgrid');
                   const gk = 'g:' + run[0].key, goff = offs.includes(gk);
-                  html += `<div class="wt-group card${goff ? ' off' : ''}"><div class="wt-gh"><b>${esc(run[0].groupLabel)}</b><button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}" title="Show or hide this card on the website">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button></div><div class="wt-gb">${run.map((f, i) => field(f.kind === 'Text' ? Object.assign({}, f, { kind: f.text.length > 55 || (i === run.length - 1 && i > 0 && f.text.length > 25) ? 'Description' : i === 0 && run.length >= 3 ? 'Label' : 'Title' }) : f)).join('')}</div></div>`;
+                  html += `<div class="wt-group card${goff ? ' off' : ''}"><div class="wt-gh"><b>${esc(run[0].groupLabel)}</b><button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}" title="Show or hide this card on the website">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button></div><div class="wt-gb">${(() => {
+                    const isPt = (f) => { const li = f.el.closest('li'); return li && run.filter((g) => li.contains(g.el)).length === 1; };
+                    const words = run.length >= 4 && run.every((f) => f.text.length <= 30 && f.el.tagName === run[0].el.tagName);
+                    if (words) return `<div class="pts words"><div class="wt-run-h">Words<small>${run.length}</small></div><div class="wt-run-b">${run.map(cfield).join('')}</div></div>`;
+                    const main = run.filter((f) => !isPt(f)), pts = run.filter(isPt);
+                    const lab = (f, i) => f.el.closest('.role-tag, .eyebrow, .n') ? 'Label' : /^H[1-6]$/.test(f.el.tagName) ? 'Heading' : f.el.tagName === 'P' || f.text.length > 55 || (i === main.length - 1 && i > 0 && f.text.length > 25) ? 'Description' : i === 0 && main.length >= 3 ? 'Label' : 'Title';
+                    return main.map((f, i) => field(f.kind === 'Text' || f.kind === 'Title' || f.kind === 'Heading' ? Object.assign({}, f, { kind: lab(f, i) }) : f)).join('') + (pts.length ? `<div class="pts"><div class="wt-run-h">Points<small>${pts.length}</small></div>${pts.map(cfield).join('')}</div>` : '');
+                  })()}</div></div>`;
                   continue;
                 }
                 openGrid('');
@@ -504,7 +519,7 @@
       </div>`;
     const grow = (t) => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; };
     /* sections that are switched off: dim them and say so */
-    const markSec = (sec$) => { const off = !$('[data-sec-show]', sec$).checked; sec$.classList.toggle('sec-off', off); const note = $('.off-note', sec$); if (off && !note) $('.wt-head', sec$).insertAdjacentHTML('afterend', OFF_NOTE); if (!off && note) note.remove(); };
+    const markSec = (sec$) => { const off = !$('[data-sec-show],[data-part-show]', sec$).checked; sec$.classList.toggle('sec-off', off); const note = $('.off-note', sec$); if (off && !note) $('.wt-head', sec$).insertAdjacentHTML('afterend', OFF_NOTE); if (!off && note) note.remove(); };
     $$('.wt-sec', form).forEach(markSec);
     /* long sections: fold the cards, with a jump list on the side */
     const peek = (g) => { const t = $('textarea', g); const p = $('.wt-peek', g); if (!p) return; const v = t ? t.value.replace(/[*\n]+/g, ' ').trim() : ''; const lab = ($('.wt-gh b', g).textContent || '').toLowerCase(); p.textContent = v && !lab.includes(v.toLowerCase()) ? v : ''; };
@@ -529,7 +544,7 @@
     if (data.length < 2 && !$('.wt-jumps', form)) $('.wt', form).classList.add('flat');
     form.addEventListener('click', onClick); form.addEventListener('keydown', onKey); form.addEventListener('input', onIn);
     wtUnbind = () => { form.removeEventListener('click', onClick); form.removeEventListener('keydown', onKey); form.removeEventListener('input', onIn); wtUnbind = null; };
-    const refreshMeta = (n) => { const { sec, fs } = data[n]; const sec$ = $(`[data-wt-sec="${n}"]`, form); const ed = $$('.wt-field.edited', sec$).length; const hid = !$('[data-sec-show]', sec$).checked; $(`[data-wt-meta="${n}"]`, form).innerHTML = `${fs.length} texts${ed ? ` · <i>${ed} edited</i>` : ''}${hid ? ' · hidden' : ''}`; };
+    const refreshMeta = (n) => { const { sec, fs } = data[n]; const sec$ = $(`[data-wt-sec="${n}"]`, form); const ed = $$('.wt-field.edited', sec$).length; const hid = !$('[data-sec-show],[data-part-show]', sec$).checked; $(`[data-wt-meta="${n}"]`, form).innerHTML = `${fs.length} texts${ed ? ` · <i>${ed} edited</i>` : ''}${hid ? ' · hidden' : ''}`; };
     $$('.wt-tab', form).forEach((b) => b.addEventListener('click', () => {
       $$('.wt-tab', form).forEach((x) => x.classList.toggle('on', x === b));
       $$('.wt-sec', form).forEach((x) => { x.hidden = x.dataset.wtSec !== b.dataset.wt; });
@@ -545,7 +560,7 @@
         box.classList.toggle('edited', ed); $('[data-reset]', box).hidden = !ed; $('.wt-orig', box).hidden = !ed;
         refreshMeta(n); setDirty(true);
       });
-      sec$.addEventListener('change', (e) => { if (e.target.matches('[data-sec-show]')) { refreshMeta(n); markSec(sec$); setDirty(true); } });
+      sec$.addEventListener('change', (e) => { if (e.target.matches('[data-sec-show],[data-part-show]')) { refreshMeta(n); markSec(sec$); setDirty(true); } });
       sec$.addEventListener('click', (e) => {
         const eye = e.target.closest('[data-off]');
         if (eye) {
@@ -743,13 +758,21 @@
       if (s && (!s.dataset.touched)) s.value = slugify(e.target.value);
     }
     if (e.target.dataset.k === 'slug') e.target.dataset.touched = '1';
+    const rr = e.target.closest && e.target.closest('.rec-row');
+    if (rr) { const v = (k) => (($(`[data-r="${k}"]`, rr) || {}).value || '').trim(); $('.rr-ht b', rr).textContent = v('title') || 'New item'; $('.rr-ht small', rr).textContent = [v('org'), v('year')].filter(Boolean).join(' · '); const kk = v('kind') || 'certificate', kp = $('.rr-k', rr); kp.className = 'rr-k k-' + kk; kp.textContent = { certificate: 'Certificate', education: 'Degree', award: 'Award', leadership: 'Leadership' }[kk]; }
     setDirty(true);
   });
   form.addEventListener('click', (e) => {
     const add = e.target.closest('[data-add-row]');
     if (add) { const kind = add.dataset.addRow; $(`[data-rep="${kind}"]`, form).insertAdjacentHTML('beforeend', repRow(kind)); setDirty(true); return; }
     const del = e.target.closest('[data-del-row]');
-    if (del) { del.closest('[data-row]').remove(); setDirty(true); return; }
+    if (del) {
+      const row = del.closest('[data-row]');
+      if (row.classList.contains('rec-row')) { const t = ($('[data-r="title"]', row) || {}).value || 'this item'; ask({ title: `Delete “${t}”?`, text: 'It disappears from the website when you publish.', ok: 'Delete', tone: 'danger' }).then((y) => { if (y) { row.remove(); setDirty(true); } }); return; }
+      row.remove(); setDirty(true); return;
+    }
+    const tg = e.target.closest('[data-rec-toggle]');
+    if (tg) { const row = tg.closest('.rec-row'); const o = !row.classList.contains('open'); row.classList.toggle('open', o); tg.setAttribute('aria-expanded', String(o)); return; }
     const im = e.target.closest('[data-im]');
     if (im) {
       const item = im.closest('.im'), act = im.dataset.im;
@@ -764,7 +787,7 @@
   new MutationObserver(() => requestAnimationFrame(() => $$('textarea', form).forEach(grow))).observe(form, { childList: true });
   const drawRecImg = (wrap, path) => {
     $('[data-r="image"]', wrap).value = path || '';
-    const th = $('.rec-th', wrap); th.style.backgroundImage = path ? `url('${imgURL(path)}')` : ''; th.textContent = path ? '' : 'No image';
+    const th = $('.rec-th', wrap); th.style.backgroundImage = path ? `url('${imgURL(path)}')` : ''; th.textContent = path ? '' : 'No image'; const mini = wrap.closest('.rec-row') && $('.rr-mini', wrap.closest('.rec-row')); if (mini) mini.style.backgroundImage = path ? `url('${imgURL(path)}')` : '';
     $('.rec-acts', wrap).innerHTML = `<label class="btn btn-ghost btn-sm">${path ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${path ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}`;
   };
   form.addEventListener('click', (e) => { const b = e.target.closest('[data-rec-rm]'); if (!b) return; drawRecImg(b.closest('.rec-img'), ''); setDirty(true); });
