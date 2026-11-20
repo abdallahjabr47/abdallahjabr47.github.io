@@ -20,8 +20,9 @@
     document.body.appendChild(ov);
     document.documentElement.classList.add('intro-on');
     requestAnimationFrame(() => ov.classList.add('go'));
-    setTimeout(() => { ov.classList.add('out'); document.documentElement.classList.remove('intro-on'); }, 2100);
-    setTimeout(() => ov.remove(), 3000);
+    setTimeout(() => { ov.classList.add('out'); }, 1650);
+    setTimeout(() => { document.documentElement.classList.remove('intro-on'); }, 1900);
+    setTimeout(() => ov.remove(), 2600);
     ov.addEventListener('click', () => { ov.classList.add('out'); document.documentElement.classList.remove('intro-on'); setTimeout(() => ov.remove(), 700); });
   })();
 
