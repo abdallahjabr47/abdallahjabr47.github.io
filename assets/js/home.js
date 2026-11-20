@@ -14,21 +14,41 @@
   const imgOr = (src, alt, fallback) => src ? `<img src="${esc(src)}" alt="${esc(alt)}" loading="lazy">` : fallback;
 
   /* =============== project cards =============== */
+  /* which devices a project has (admin: Devices), with a sensible default from its type */
+  function devicesOf(p) {
+    const d = p.devices || {};
+    if (d.mobile || d.tablet || d.desktop) return { mobile: !!d.mobile, tablet: !!d.tablet, desktop: !!d.desktop };
+    const t = p.type || 'mobile';
+    return { mobile: t !== 'web' || !!(p.screens && p.screens.length), tablet: !!(p.tabletScreens && p.tabletScreens.length), desktop: t !== 'mobile' };
+  }
+  window.SiteDevices = devicesOf;
+  const DEV_IC = {
+    mobile: '<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M11 18.5h2"/></svg>',
+    tablet: '<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.6"/><path d="M11 18h2"/></svg>',
+    desktop: '<svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="11.5" rx="1.8"/><path d="M2 19.5h20"/></svg>' };
   function cardHTML(p, i) {
     const type = p.type || 'mobile';
     const tint = (p.cover && p.cover.tint) || '#2B3A8F';
     const href = 'project.html#' + encodeURIComponent(p.slug);
-    const phoneShots = (p.screens && p.screens.length) ? p.screens.map((s) => imgOr(s, p.title + ' screen', '')) : [0, 1, 2, 3].map((k) => mockPhone(k, p.title));
-    const webShots = (p.webScreens && p.webScreens.length) ? p.webScreens.map((s) => imgOr(s, p.title + ' website', '')) : [0, 1, 2].map(mockWeb);
-    const count = type === 'web' ? webShots.length : phoneShots.length;
-    const laptop = type !== 'mobile' ? `<div class="laptop-f"><div class="lid"><div class="scr"><div class="reel" data-reel>${webShots.map((s) => `<div>${s}</div>`).join('')}</div></div></div><div class="base"></div></div>` : '';
-    const phone = type !== 'web' ? `<div class="phone-f"><div class="scr"><span class="island"></span><div class="reel" data-reel>${phoneShots.map((s) => `<div>${s}</div>`).join('')}</div></div></div>` : '';
+    const dv = devicesOf(p);
+    const pref = p.cardDevice && p.cardDevice !== 'auto' && dv[p.cardDevice] ? p.cardDevice : (type === 'mobile' ? (dv.mobile ? 'mobile' : dv.tablet ? 'tablet' : 'desktop') : (dv.desktop ? 'desktop' : dv.tablet ? 'tablet' : 'mobile'));
+    const list = (arr, alt, mock, n) => (arr && arr.length) ? arr.map((s) => imgOr(s, p.title + ' ' + alt, '')) : Array.from({ length: n }, (_, k) => mock(k));
+    const shots = pref === 'mobile' ? list(p.screens, 'screen', (k) => mockPhone(k, p.title), 4)
+      : pref === 'tablet' ? list(p.tabletScreens, 'tablet screen', mockWeb, 3)
+      : list(p.webScreens, 'website', mockWeb, 3);
+    const count = shots.length;
+    const reel = `<div class="reel" data-reel>${shots.map((s) => `<div>${s}</div>`).join('')}</div>`;
+    const device = pref === 'desktop' ? `<div class="laptop-f"><div class="lid"><div class="scr">${reel}</div></div><div class="base"></div></div>`
+      : pref === 'tablet' ? `<div class="tablet-f"><div class="scr">${reel}</div></div>`
+      : `<div class="phone-f"><div class="scr"><span class="island"></span>${reel}</div></div>`;
+    const laptop = '', phone = device;
+    const devChips = ['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span class="dv${k === pref ? ' on' : ''}" title="${({ mobile: 'Phone', tablet: 'Tablet', desktop: 'Desktop' })[k]}">${DEV_IC[k]}</span>`).join('');
     const catShort = (p.category || '').split('·')[0].trim();
     const icon = p.icon ? `<img src="${esc(p.icon)}" alt="">` : esc((p.title || '?').charAt(0));
     return `
-    <article class="pcard type-${type}" data-type="${type}" style="--tint:${esc(tint)}" data-reveal>
+    <article class="pcard type-${type} show-${pref}" data-type="${type}" style="--tint:${esc(tint)}" data-reveal>
       <div class="stage-panel" data-cursor="Explore case ↗" data-href="${href}" data-n="${count}">
-        <div class="sp-badges"><span class="l"><span class="tag">${esc(p.platform || (type === 'web' ? 'Website' : 'Mobile App'))}</span></span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
+        <div class="sp-badges"><span class="l"><span class="tag">${esc(p.platform || (type === 'web' ? 'Website' : 'Mobile App'))}</span>${devChips ? `<span class="tag devs" aria-label="Designed for">${devChips}</span>` : ''}</span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
         <div class="devices2">${laptop}${phone}</div>
         <button class="sp-arrow a-prev" type="button" aria-label="Previous screen of ${esc(p.title)}" disabled>←</button>
         <button class="sp-arrow a-next" type="button" aria-label="Next screen of ${esc(p.title)}"${count < 2 ? ' disabled' : ''}>→</button>

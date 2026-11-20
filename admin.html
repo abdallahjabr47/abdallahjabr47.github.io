@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261120172228">
+<link rel="stylesheet" href="assets/css/style.css?v=20261120172444">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -93,6 +93,14 @@ body::after{opacity:.04}
 .addimg{width:118px;height:200px;border-radius:14px;border:1.5px dashed var(--line2);display:grid;place-items:center;color:var(--muted);font-size:13px;font-weight:600;text-align:center;cursor:pointer;transition:border-color .2s,color .2s}
 .addimg:hover{border-color:var(--sky);color:var(--ink)}
 .addimg.wide{width:220px;height:138px}.addimg.sq{width:96px;height:96px}
+.im.tab,.im.tab .th{width:132px}.im.tab .th{height:176px}.addimg.tab{width:132px;height:176px}
+.dev-pick{display:flex;flex-wrap:wrap;gap:10px}
+.dev-opt{position:relative;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;border:1px solid var(--line2);cursor:pointer;font-weight:600;font-size:14.5px;color:var(--muted);transition:border-color .25s,background .25s,color .25s}
+.dev-opt input{position:absolute;opacity:0;pointer-events:none}
+.dev-opt svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dev-opt:has(input:checked){border-color:var(--sky);background:rgba(23,105,224,.12);color:var(--ink)}
+.dev-opt:has(input:focus-visible){outline:2px solid var(--sky);outline-offset:2px}
+.dev-up{display:flex;flex-direction:column;gap:10px}
 .addimg input{display:none}
 /* discard */
 #discard{color:#F0566F;border-color:rgba(240,86,111,.45);background:rgba(240,86,111,.08)}
@@ -321,10 +329,10 @@ body::after{opacity:.04}
   </div>
 </div>
 
-<script src="assets/js/config.js?v=20261120172228"></script>
-<script src="assets/js/icons.js?v=20261120172228"></script>
-<script src="assets/js/content.js?v=20261120172228"></script>
-<script src="assets/js/core.js?v=20261120172228"></script>
-<script src="assets/js/admin.js?v=20261120172228"></script>
+<script src="assets/js/config.js?v=20261120172444"></script>
+<script src="assets/js/icons.js?v=20261120172444"></script>
+<script src="assets/js/content.js?v=20261120172444"></script>
+<script src="assets/js/core.js?v=20261120172444"></script>
+<script src="assets/js/admin.js?v=20261120172444"></script>
 </body>
 </html>

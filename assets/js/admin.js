@@ -184,7 +184,7 @@
       experience.unshift({ id: 'role-' + Date.now().toString(36), visible: true, role: '', company: '', location: '', dates: '', type: 'Full-time', summary: '', highlights: [] });
       return openExpEditor(0, true);
     }
-    projects.push({ slug: '', title: '', headline: '', headlineAccent: '', tagline: '', category: '', platform: 'Mobile App', type: 'mobile', year: String(new Date().getFullYear()), live: false, liveUrl: '', status: '', published: true, summary: '', cover: { image: '', ghost: '', tint: '#2B3A8F' }, company: '', role: '', team: '', timeline: '', platforms: '', tags: [], overview: '', problem: '', responsibilities: { product: [], design: [] }, process: [], challenges: [], gallery: { before: [], after: [] }, results: [], learnings: '', icon: '', screens: [], webScreens: [] });
+    projects.push({ slug: '', title: '', headline: '', headlineAccent: '', tagline: '', category: '', platform: 'Mobile App', type: 'mobile', year: String(new Date().getFullYear()), live: false, liveUrl: '', status: '', published: true, summary: '', cover: { image: '', ghost: '', tint: '#2B3A8F' }, company: '', role: '', team: '', timeline: '', platforms: '', tags: [], overview: '', problem: '', responsibilities: { product: [], design: [] }, process: [], challenges: [], gallery: { before: [], after: [] }, results: [], learnings: '', icon: '', screens: [], tabletScreens: [], webScreens: [], devices: { mobile: true, tablet: false, desktop: false }, cardDevice: 'auto' });
     openEditor(projects.length - 1, true);
   });
 
@@ -234,6 +234,7 @@
     $('#ed-draft').textContent = 'Preview changes ↗';
     const r = p.responsibilities || {};
     const g = p.gallery || {};
+    const devs = (p.devices && (p.devices.mobile || p.devices.tablet || p.devices.desktop)) ? p.devices : { mobile: (p.type || 'mobile') !== 'web' || !!(p.screens || []).length, tablet: !!(p.tabletScreens || []).length, desktop: (p.type || 'mobile') !== 'mobile' };
     $('#edForm').innerHTML = `
       <fieldset><legend>Basics</legend>
         <div class="g2">${F('Project name *', 'title', p.title)}${F('URL name (slug)', 'slug', p.slug, { hint: 'Auto-filled from the name. Used in the link: project.html#slug' })}</div>
@@ -243,11 +244,14 @@
         ${F('Short summary (card)', 'summary', p.summary, { area: true, rows: 3 })}
       </fieldset>
 
-      <fieldset><legend>Card images</legend>
-        <p class="hint">App icon, then the phone screenshots visitors swipe through on the card (portrait, e.g. 1170×2532). For websites add desktop screenshots.</p>
+      <fieldset><legend>Devices &amp; screens</legend>
+        <p class="hint">Tick every device this project was designed for, then upload its screens. Phone: portrait (e.g. 1170×2532) · Tablet: portrait (e.g. 1668×2224) · Desktop: wide (e.g. 1440×900).</p>
+        <div class="dev-pick">${[['mobile', 'Phone', '<rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M11 18.5h2"/>'], ['tablet', 'Tablet / iPad', '<rect x="4" y="3" width="16" height="18" rx="2.6"/><path d="M11 18h2"/>'], ['desktop', 'Laptop / desktop', '<rect x="3.5" y="4.5" width="17" height="11.5" rx="1.8"/><path d="M2 19.5h20"/>']].map(([k, l, ic]) => `<label class="dev-opt"><input type="checkbox" data-k="devices.${k}" data-dev="${k}" ${devs[k] ? 'checked' : ''}><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg><span>${l}</span></label>`).join('')}</div>
+        ${F('Card preview shows', 'cardDevice', p.cardDevice || 'auto', { select: [['auto', 'Automatic (best fit)'], ['mobile', 'Phone'], ['tablet', 'Tablet'], ['desktop', 'Laptop']], hint: 'Which device appears on the home page card. The case study shows all of them.' })}
         <div class="f">App icon</div>${imgList('icon', p.icon ? [p.icon] : [], 'sq', false, false)}
-        <div class="f">Phone screens</div>${imgList('screens', p.screens || [])}
-        <div class="f">Website screens</div>${imgList('webScreens', p.webScreens || [], 'wide')}
+        <div class="dev-up" data-dev-up="mobile"${devs.mobile ? '' : ' hidden'}><div class="f">Phone screens</div>${imgList('screens', p.screens || [])}</div>
+        <div class="dev-up" data-dev-up="tablet"${devs.tablet ? '' : ' hidden'}><div class="f">Tablet screens</div>${imgList('tabletScreens', p.tabletScreens || [], 'tab')}</div>
+        <div class="dev-up" data-dev-up="desktop"${devs.desktop ? '' : ' hidden'}><div class="f">Desktop screens</div>${imgList('webScreens', p.webScreens || [], 'wide')}</div>
       </fieldset>
 
       <fieldset><legend>Case study header</legend>
@@ -518,6 +522,7 @@
 
   /* editor events */
   const form = $('#edForm');
+  form.addEventListener('change', (e) => { const d = e.target.dataset && e.target.dataset.dev; if (!d) return; const up = form.querySelector(`[data-dev-up="${d}"]`); if (up) up.hidden = !e.target.checked; });
   form.addEventListener('input', (e) => {
     if (mode === 'project' && e.target.dataset.k === 'title') {
       const s = $('[data-k="slug"]', form);

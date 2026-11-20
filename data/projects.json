@@ -145,7 +145,14 @@
     "icon": "",
     "screens": [],
     "webScreens": [],
-    "featured": true
+    "featured": true,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
   },
   {
     "slug": "momyt-meet",
@@ -214,7 +221,14 @@
     "icon": "",
     "screens": [],
     "webScreens": [],
-    "featured": true
+    "featured": true,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
   },
   {
     "slug": "foras",
@@ -269,7 +283,14 @@
     "icon": "",
     "screens": [],
     "webScreens": [],
-    "featured": true
+    "featured": true,
+    "devices": {
+      "mobile": true,
+      "tablet": true,
+      "desktop": true
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
   },
   {
     "slug": "ruckaroo",
@@ -335,7 +356,14 @@
     "icon": "",
     "screens": [],
     "webScreens": [],
-    "featured": true
+    "featured": true,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
   },
   {
     "slug": "mazadak",
@@ -383,7 +411,14 @@
     "learnings": "",
     "icon": "",
     "screens": [],
-    "webScreens": []
+    "webScreens": [],
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
   },
   {
     "slug": "afyti",
@@ -431,7 +466,14 @@
     "learnings": "",
     "icon": "",
     "screens": [],
-    "webScreens": []
+    "webScreens": [],
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
   },
   {
     "slug": "sip-cafe",
@@ -479,6 +521,13 @@
     "icon": "",
     "screens": [],
     "webScreens": [],
-    "featured": true
+    "featured": true,
+    "devices": {
+      "mobile": true,
+      "tablet": true,
+      "desktop": true
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
   }
 ]
