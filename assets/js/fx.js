@@ -6,24 +6,43 @@
   const fine = matchMedia('(pointer: fine)').matches;
   const isPreview = /[?&]preview\b/.test(location.search);
 
-  /* ---------- 1. intro: عبدالله writes itself, then the page slides in (once per visit) ---------- */
+  /* ---------- 1. intro: عبدالله writes itself in light, then flies into the logo while the curtain opens (once per visit) ---------- */
   (function intro() {
     const src = $('#sig path');
     if (!src || reduce || isPreview) return;
     let seen = false;
     try { seen = sessionStorage.getItem('intro-seen') === '1'; sessionStorage.setItem('intro-seen', '1'); } catch (e) {}
     if (seen) return;
+    const d = src.getAttribute('d');
     const ov = document.createElement('div');
     ov.className = 'intro';
     ov.setAttribute('aria-hidden', 'true');
-    ov.innerHTML = `<svg viewBox="0 0 430.5 201" class="intro-sig"><path d="${src.getAttribute('d')}" pathLength="1" fill-rule="evenodd"/></svg><span class="intro-line"></span>`;
+    ov.innerHTML = `<span class="ip t"></span><span class="ip b"></span><span class="iglow"></span>
+      <svg viewBox="0 0 430.5 201" class="intro-sig"><defs><linearGradient id="igr" x1="0" x2="1"><stop offset="0" stop-color="#9CC4FF"/><stop offset=".5" stop-color="#5C9BF5"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
+        <path class="stroke" d="${d}" pathLength="1" fill-rule="evenodd"/><path class="fill" d="${d}" fill-rule="evenodd"/></svg>
+      <span class="intro-name">${'ABDALLAH JABR'.split('').map((c, i) => `<i style="--i:${i}">${c === ' ' ? '&nbsp;' : c}</i>`).join('')}</span>`;
     document.body.appendChild(ov);
-    document.documentElement.classList.add('intro-on');
-    requestAnimationFrame(() => ov.classList.add('go'));
-    setTimeout(() => { ov.classList.add('out'); }, 1650);
-    setTimeout(() => { document.documentElement.classList.remove('intro-on'); }, 1900);
-    setTimeout(() => ov.remove(), 2600);
-    ov.addEventListener('click', () => { ov.classList.add('out'); document.documentElement.classList.remove('intro-on'); setTimeout(() => ov.remove(), 700); });
+    const html = document.documentElement;
+    html.classList.add('intro-on');
+    requestAnimationFrame(() => requestAnimationFrame(() => ov.classList.add('go')));
+    const finish = () => {
+      if (ov.classList.contains('out')) return;
+      const sig = $('.intro-sig', ov), logo = $('.brand .logo');
+      if (sig && logo) {
+        const a = sig.getBoundingClientRect(), b = logo.getBoundingClientRect();
+        // the logo's calligraphy sits inside a wider viewBox; aim at its calligraphy part
+        const vb = (logo.getAttribute('viewBox') || '0 0 430.5 201').split(/\s+/).map(Number);
+        const k = b.height / vb[3];
+        const tw = 430.5 * k, tx = b.left + (0 - vb[0]) * k, ty = b.top + (0 - vb[1]) * k;
+        const s = tw / a.width;
+        sig.style.transform = `translate(${tx - a.left}px, ${ty - a.top}px) scale(${s})`;
+      }
+      ov.classList.add('out');
+      setTimeout(() => html.classList.remove('intro-on'), 250);
+      setTimeout(() => ov.remove(), 1300);
+    };
+    setTimeout(finish, 1900);
+    ov.addEventListener('click', finish);
   })();
 
   /* ---------- 2. scrambled labels: eyebrows decode letter by letter when they appear ---------- */
@@ -49,6 +68,7 @@
     };
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { io.unobserve(e.target); setTimeout(() => run(e.target), 120); } }), { threshold: 0.6 });
     $$('.eyebrow').forEach((el) => {
+      if (el.closest('.hero')) return;
       if (el.children.length || !el.textContent.trim()) return;
       el.dataset.text = el.textContent.trim();
       el.setAttribute('aria-label', el.dataset.text);
@@ -152,7 +172,6 @@
       e.preventDefault();
       target = Math.max(0, Math.min(max(), t.getBoundingClientRect().top + scrollY - 90));
       if (!running) { current = scrollY; running = true; requestAnimationFrame(loop); }
-      history.replaceState(null, '', a.getAttribute('href'));
     });
   })();
 })();
