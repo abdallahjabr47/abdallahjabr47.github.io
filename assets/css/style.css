@@ -377,9 +377,10 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .words .hl{color:var(--sky)}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
 .stat{padding:26px;border-radius:22px}
-.stat b{display:flex;align-items:flex-start;font-size:clamp(38px,3.8vw,52px);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
-.stat b sup{font-size:.45em;color:var(--sky);margin-left:2px}
-.stat span{display:block;margin-top:10px;font-size:15px;color:var(--muted)}
+.stat b{display:flex;align-items:baseline;font-size:clamp(40px,3.8vw,54px);font-weight:700;line-height:1;letter-spacing:-.045em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.stat b span{display:inline;margin:0;font-size:inherit;color:inherit}
+.stat b sup{font-size:1em;vertical-align:baseline;top:0;position:static;color:var(--sky);margin-left:1px;font-weight:600}
+.stat > span{display:block;margin-top:14px;font-size:15px;line-height:1.45;color:var(--muted)}
 
 /* ---------- process (how I work) ---------- */
 .p-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
@@ -878,3 +879,4 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .tile.has-img{aspect-ratio:auto;padding:0;background:#0d0f14}
 .tile.has-img img{display:block;margin:0;width:100%;height:auto;object-fit:initial}
 @media (max-width:900px){.tilt{grid-template-columns:repeat(3,minmax(0,1fr))}.tilt .tcol:nth-child(4){display:none}}
+[data-theme="light"] .stat b sup{color:var(--blue)}
