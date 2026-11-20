@@ -1590,3 +1590,4 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 /* shorter scroll on phones */
 @media (max-width:1000px){.proc{height:330vh}}
 #beyond .sec-head .side{max-width:760px}
+.cs-sum{max-width:760px;margin-top:14px;font-size:clamp(16px,1.3vw,18px);line-height:1.6;color:var(--muted)}

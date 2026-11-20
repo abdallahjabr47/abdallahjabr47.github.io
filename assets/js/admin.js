@@ -155,7 +155,7 @@
       return `<div class="prow glass">
         <span class="ic" style="background:linear-gradient(140deg,${esc(tint)},#0E1119)">${icon}</span>
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small>${esc(p.category || '')}${p.year ? ' · ' + esc(p.year) : ''}</small></span>
-        <span class="badge-d ${p.published !== false ? 'on' : ''}">${p.published !== false ? 'Published' : 'Hidden'}</span>${p.featured ? '<span class="badge-d feat">★ Featured</span>' : ''}
+        <span class="bdgs"><span class="badge-d ${p.published !== false ? 'on' : ''}">${p.published !== false ? 'Published' : 'Hidden'}</span>${p.featured ? '<span class="badge-d feat">★ Featured</span>' : ''}</span>
         <span class="acts">
           <button class="ib" type="button" data-a="up" data-i="${i}" aria-label="Move ${esc(p.title)} up" ${i === 0 ? 'disabled' : ''}>↑</button>
           <button class="ib" type="button" data-a="down" data-i="${i}" aria-label="Move ${esc(p.title)} down" ${i === projects.length - 1 ? 'disabled' : ''}>↓</button>
@@ -241,7 +241,7 @@
         <div class="g2">${F('Card one-liner', 'tagline', p.tagline, { hint: 'Shown under the name on the card and on the case study.' })}${F('Category', 'category', p.category, { ph: 'Entertainment · Series platform' })}</div>
         <div class="g3">${F('Type', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Website + mobile app']] })}${F('Platform label', 'platform', p.platform, { ph: 'Mobile App' })}${F('Year', 'year', p.year)}</div>
         <div class="g3">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES, hint: 'Shown on the card and case study.' })}${F('Live link (optional)', 'liveUrl', p.liveUrl, { ph: 'https://…', hint: 'Adds a “Visit live” button.' })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}${C('Featured on the home page (top 5)', 'featured', p.featured === true)}</div></div>
-        ${F('Short summary (card)', 'summary', p.summary, { area: true, rows: 3 })}
+        ${F('Short summary', 'summary', p.summary, { area: true, rows: 3, hint: 'Two or three sentences shown on the case study page, under the one-liner.' })}
       </fieldset>
 
       <fieldset><legend>Devices &amp; screens</legend>

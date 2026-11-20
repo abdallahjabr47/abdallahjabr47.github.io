@@ -86,6 +86,7 @@
         <span class="eyebrow" data-reveal>Case study ${String(idx + 1).padStart(2, '0')} · ${esc(p.category || '')}</span>
         <h1 class="h-xl" data-split>${esc(p.headline || p.title)} ${has(p.headlineAccent) ? `<em class="serif">${esc(p.headlineAccent)}</em>` : ''}</h1>
         ${has(p.tagline) ? `<p class="tagline" data-reveal style="--d:250ms">${esc(p.tagline)}</p>` : ''}
+        ${has(p.summary) ? `<p class="cs-sum" data-reveal style="--d:300ms">${esc(p.summary)}</p>` : ''}
         <div class="cs-meta" data-reveal style="--d:350ms">
           ${(p.tags || []).map((t) => `<span class="pill">${esc(t)}</span>`).join('')}
           ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
