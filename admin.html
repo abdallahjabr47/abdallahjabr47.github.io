@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121002911">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121003710">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -508,6 +508,23 @@ fieldset>.wt-head.part-sw{padding-top:0;margin-bottom:16px}
 .wt-group.card .wt-orig{font-size:12px}
 .wt-group.card .wt-run-b{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
 @media (max-width:860px){.wt-flow{grid-template-columns:1fr}.cgrid{grid-template-columns:1fr}.wt-run-b{grid-template-columns:1fr 1fr}}
+
+/* text + photo on one page: 70 / 30 */
+#edForm.combo-side{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,3fr);gap:20px;align-items:start}
+#edForm.combo-side>.combo-text{grid-column:1;grid-row:1 / span 20;min-width:0}
+#edForm.combo-side>fieldset{grid-column:2;margin:0;position:sticky;top:96px}
+#edForm.combo-side>fieldset .ph-grid{grid-template-columns:1fr}
+@media (max-width:1000px){#edForm.combo-side{grid-template-columns:1fr}#edForm.combo-side>.combo-text,#edForm.combo-side>fieldset{grid-column:1;grid-row:auto;position:static}}
+
+/* one section header style everywhere: small grey "Section", big white title, line under it */
+.ed fieldset,.wt-sec{border:1px solid var(--line);border-radius:20px;background:var(--card);padding:6px 22px 22px}
+.ed fieldset{gap:14px}
+.ed fieldset>legend{float:left;width:100%;display:block;padding:16px 0 14px;margin:0 0 4px;border-bottom:1px solid var(--line);font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.25;text-transform:none;color:var(--ink)}
+.ed fieldset>legend::before{content:"Section";display:block;margin-bottom:2px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);opacity:1}
+.ed-layout.two .ed>fieldset>legend::before{content:"Section " counter(eds,decimal-leading-zero);opacity:1}
+.ed fieldset:has(>.part-sw)>legend{display:none}
+fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
+.wt-head h3{font-size:22px}
 </style>
 </head>
 <body>
@@ -611,10 +628,10 @@ fieldset>.wt-head.part-sw{padding-top:0;margin-bottom:16px}
   </div>
 </div>
 
-<script src="assets/js/config.js?v=20261121002911"></script>
-<script src="assets/js/icons.js?v=20261121002911"></script>
-<script src="assets/js/content.js?v=20261121002911"></script>
-<script src="assets/js/core.js?v=20261121002911"></script>
-<script src="assets/js/admin.js?v=20261121002911"></script>
+<script src="assets/js/config.js?v=20261121003710"></script>
+<script src="assets/js/icons.js?v=20261121003710"></script>
+<script src="assets/js/content.js?v=20261121003710"></script>
+<script src="assets/js/core.js?v=20261121003710"></script>
+<script src="assets/js/admin.js?v=20261121003710"></script>
 </body>
 </html>

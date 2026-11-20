@@ -18,8 +18,7 @@
   /* admin follows the website: one page tab per menu item, with sub-tabs for every section under it */
   const PAGES = [
     { id: 'top', label: 'Top', subs: [
-      { id: 'hero', label: 'Heading & intro', kind: 'content', keys: ['hero'] },
-      { id: 'photo', label: 'Main photo', kind: 'site', groups: ['photo'] },
+      { id: 'hero', label: 'Heading, intro & photo', kind: 'site', groups: ['photo'], keys: ['hero'], side: true },
       { id: 'avail', label: 'Availability line', kind: 'site', groups: ['availability'] },
       { id: 'tools', label: 'Tools strip', kind: 'content', keys: ['tools'] }] },
     { id: 'work', label: 'Work', subs: [
@@ -28,8 +27,7 @@
       { id: 'screens', label: 'Screens that ship', kind: 'site', groups: ['showcase'], keys: ['screens'] },
       { id: 'process', label: 'From sketch to shipped', kind: 'content', keys: ['process'] }] },
     { id: 'about', label: 'About', subs: [
-      { id: 'about-text', label: 'About text & numbers', kind: 'content', keys: ['about'] },
-      { id: 'photo2', label: 'About photo', kind: 'site', groups: ['photo2'] }] },
+      { id: 'about-text', label: 'About text, numbers & photo', kind: 'site', groups: ['photo2'], keys: ['about'], side: true }] },
     { id: 'experience', label: 'Experience', subs: [
       { id: 'roles', label: 'Work experience', kind: 'experience' , part: 'experience', partName: 'Experience' },
       { id: 'learning', label: 'Learning & recognition', kind: 'site', groups: ['recognition'] , part: 'learning', partName: 'Learning & recognition tab' },
@@ -349,7 +347,7 @@
     unembed();
     editing = i; mode = 'project';
     const p = projects[i];
-    show('v-edit');
+    show('v-edit'); $('#backList').textContent = '← All projects';
     $('#ed-title').innerHTML = isNew ? 'New <em class="serif">project</em>' : `Edit <em class="serif">${esc(p.title || 'project')}</em>`;
     $('#ed-draft').textContent = 'Preview changes ↗';
     const r = p.responsibilities || {};
@@ -405,6 +403,7 @@
 
   /* Profile & links and Website text open right under the tabs, like the lists */
   function embedPanel(tabName, title) {
+    $('#edForm').classList.remove('combo-side');
     if (wtUnbind) wtUnbind();
     show('v-list');
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
@@ -414,6 +413,7 @@
     $('#edSide').hidden = true; $('#edLayout').classList.remove('two'); $('#edForm').oninput = null; $('#edForm').onchange = null;
   }
   function unembed() {
+    $('#edForm').classList.remove('combo-side');
     if (wtUnbind) wtUnbind();
     $('#edLayout').appendChild($('#edForm'));
     $('#plist').hidden = false; $('#listHint').hidden = false; $('#newProject').hidden = false; $('#tabPanel').hidden = true;
@@ -598,6 +598,7 @@
     $$('#edForm fieldset[data-g]').forEach((f) => { f.hidden = !!(sub.groups && !sub.groups.includes(f.dataset.g)); });
     placePartSwitch();
     /* sections whose text and images live on one admin page: the text editor goes first */
+    $('#edForm').classList.toggle('combo-side', !!(sub.keys && sub.side));
     if (sub.keys) { const host = document.createElement('div'); host.className = 'combo-text'; $('#edForm').prepend(host); openContentEditor(host); }
     const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } };
     const drawCv = () => {
@@ -646,7 +647,7 @@
     unembed();
     editing = i; mode = 'exp';
     const x = experience[i];
-    show('v-edit');
+    show('v-edit'); $('#backList').textContent = '← All roles';
     $('#ed-title').innerHTML = isNew ? 'New <em class="serif">role</em>' : `Edit <em class="serif">${esc(x.company || 'role')}</em>`;
     $('#edForm').innerHTML = `
       <fieldset><legend>Role</legend>
