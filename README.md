@@ -48,7 +48,7 @@ assets/cv.pdf       Your résumé (the "View My CV" button opens it; replace the
    - Under Repository access, choose **Only select repositories** and select your portfolio repo.
    - Under Permissions → Repository permissions, set **Contents** to **Read and write**.
    - Generate the token and copy it.
-3. Open `https://your-site/admin.html`, paste the token in "Editor key" and click Open editor.
+3. Open `https://your-site/admin.html`, paste the token in "Editor key" and click Open editor. To switch to a new key later, open `admin.html?lock`.
 
 The token is stored only in your browser. Never put it in the code. If you lose your laptop, delete the token on GitHub.
 

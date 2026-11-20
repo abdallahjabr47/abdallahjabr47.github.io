@@ -76,7 +76,7 @@
       await loadData();
     } catch (err) { msg.textContent = 'Could not sign in: ' + err.message; auth = null; }
   });
-  $('#logout').addEventListener('click', () => { if (dirty && !window.confirm('You have unpublished changes. Lock anyway?')) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
+  if ($('#logout')) $('#logout').addEventListener('click', () => { if (dirty && !window.confirm('You have unpublished changes. Lock anyway?')) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
 
   /* ---------------- load ---------------- */
   async function loadData() {
@@ -210,7 +210,6 @@
     const p = projects[i];
     show('v-edit');
     $('#ed-title').innerHTML = isNew ? 'New <em class="serif">project</em>' : `Edit <em class="serif">${esc(p.title || 'project')}</em>`;
-    $('#ed-preview').href = 'project.html#' + encodeURIComponent(p.slug || '');
     $('#ed-draft').textContent = 'Preview changes ↗';
     const r = p.responsibilities || {};
     const g = p.gallery || {};
@@ -262,7 +261,6 @@
     editing = 0; mode = 'site';
     show('v-edit');
     $('#ed-title').innerHTML = 'Profile <em class="serif">&amp; links</em>';
-    $('#ed-preview').href = 'index.html#contact';
     $('#ed-draft').textContent = 'Preview changes ↗';
     $$('.atabs button').forEach((b) => { const on = b.dataset.tab === 'profile'; b.classList.toggle('on', on); b.setAttribute('aria-selected', String(on)); });
     const cvName = site.cv ? site.cv.split('/').pop() : 'none';
@@ -310,7 +308,6 @@
     const x = experience[i];
     show('v-edit');
     $('#ed-title').innerHTML = isNew ? 'New <em class="serif">role</em>' : `Edit <em class="serif">${esc(x.company || 'role')}</em>`;
-    $('#ed-preview').href = 'index.html#experience';
     $('#edForm').innerHTML = `
       <fieldset><legend>Role</legend>
         <div class="g2">${F('Job title *', 'role', x.role)}${F('Company *', 'company', x.company)}</div>
@@ -530,6 +527,7 @@
 
   /* ---------------- start ---------------- */
   auth = loadAuth();
+  if (/[?&]lock\b/.test(location.search)) { clearAuth(); auth = null; history.replaceState(null, '', location.pathname); initLogin(); }
   if (auth && auth.token) loadData().catch((e) => { toast('Please sign in again'); clearAuth(); auth = null; initLogin(); });
   else initLogin();
 })();
