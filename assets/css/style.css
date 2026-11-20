@@ -1519,3 +1519,4 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .iv-health .bg{stroke:color-mix(in srgb,var(--ac) 28%,transparent)}
 .iv-health .fg{stroke-dasharray:38 62;animation:ivBeat3 2s linear infinite;filter:drop-shadow(0 0 6px var(--ac))}
 @keyframes ivBeat3{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+.words{font-size:clamp(18px,1.55vw,23px);line-height:1.55;font-weight:400;letter-spacing:-.01em}.words .hl{font-weight:500}
