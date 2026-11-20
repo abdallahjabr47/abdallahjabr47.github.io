@@ -40,7 +40,7 @@
       { id: 'skills-text', label: 'Skills', kind: 'content', keys: ['skills'] },
       { id: 'system', label: 'Design system', kind: 'content', keys: ['design-system'] }] },
     { id: 'beyond', label: 'Beyond', subs: [
-      { id: 'beyond', label: 'Beyond the screen', kind: 'site', groups: ['beyond'], keys: ['beyond'] }] },
+      { id: 'beyond', label: 'Beyond the screen', kind: 'content', keys: ['beyond'] }] },
     { id: 'contact', label: 'Contact & more', subs: [
       { id: 'contact-text', label: 'Contact text', kind: 'content', keys: ['contact'] },
       { id: 'links', label: 'Links & CV', kind: 'site', groups: ['links', 'cv'] , part: 'contact', partName: 'Contact' },
@@ -120,14 +120,31 @@
   const imgURL = (path) => previews.get(path) || path;
   const b64FromUtf8 = (str) => { const bytes = new TextEncoder().encode(str); let bin = ''; bytes.forEach((b) => { bin += String.fromCharCode(b); }); return btoa(bin); };
   const touched = new Set();   // "page/sub" ids with unpublished edits, shown as dots on the tabs
-  function setDirty(v, mark = true) {
-    dirty = v;
-    if (!v) touched.clear(); else if (mark && page && sub) touched.add(page.id + '/' + sub.id);
-    if ($('#pageTabs').children.length) drawTabs();
-    $('#savebar').classList.toggle('hidden', !v);
-    if (v) { const m = $('#saveMsg'); m.className = 'msg'; m.textContent = 'Unsaved changes — press Publish to put them live'; }
+  /* ---- saving: every change is checked against what's live; real changes save on their own a moment later ---- */
+  let saving = false, saveAgain = false, saveTimer = 0, checkTimer = 0, hideTimer = 0;
+  const tabsReady = () => $('#pageTabs').children.length && drawTabs();
+  function status(state, text) {
+    const bar = $('#savebar'), m = $('#saveMsg');
+    clearTimeout(hideTimer);
+    if (!state) { bar.classList.add('hidden'); return; }
+    bar.classList.remove('hidden'); bar.dataset.state = state;
+    m.textContent = text || { pending: 'Changes will save in a moment…', saving: 'Saving…', ok: 'Saved ✓ — live on your site in about a minute' }[state];
+    $('#saveRetry').hidden = state !== 'err';
+    if (state === 'ok') hideTimer = setTimeout(() => { if (!dirty && !saving) bar.classList.add('hidden'); }, 3500);
   }
-  addEventListener('beforeunload', (e) => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+  function recheck() {
+    collect();
+    dirty = changed();
+    clearTimeout(saveTimer);
+    if (!dirty) { touched.clear(); if (!saving) status(''); }
+    else { if (!saving) status('pending'); saveTimer = setTimeout(autoSave, 2200); }
+    tabsReady();
+  }
+  function setDirty(v, mark = true) {
+    if (v) { if (mark && page && sub) touched.add(page.id + '/' + sub.id); clearTimeout(checkTimer); checkTimer = setTimeout(recheck, 250); tabsReady(); return; }
+    dirty = false; touched.clear(); clearTimeout(saveTimer); clearTimeout(checkTimer); if (!saving) status(''); tabsReady();
+  }
+  addEventListener('beforeunload', (e) => { if (dirty || saving) { e.preventDefault(); e.returnValue = ''; } });
 
   async function gh(path, opts = {}) {
     const res = await fetch(API + path, {
@@ -338,24 +355,33 @@
     if (!isProject) { side.innerHTML = ''; return; }
     const fsets = $$('#edForm > fieldset');
     fsets.forEach((f, n) => { f.id = 'ed-s-' + n; });
-    side.innerHTML = `<div class="ed-prev glass"><div class="ep-cover"><span class="ep-cap">Live card</span><span class="ep-flags"></span><span class="ep-logo"></span></div><div class="ep-body"><b class="ep-t"></b><small class="ep-c"></small><small class="ep-l"></small><span class="ep-st"></span></div></div>
+    side.innerHTML = `<div class="ed-prev"><div class="ep-top"><span class="ep-cap">Live card</span><span class="ep-flags"></span></div><div class="ep-stage"><div class="ep-lbls"></div><div class="ep-dev"></div></div><div class="ep-head"><span class="ep-logo"></span><span class="ep-tx"><b class="ep-t"></b><small class="ep-l"></small></span></div><span class="ep-st"></span></div>
       <nav class="ed-nav" aria-label="Editor sections">${fsets.map((f, n) => `<a href="#ed-s-${n}" data-n="${n}"${n ? '' : ' class="on"'}><span>${String(n + 1).padStart(2, '0')}</span>${esc($('legend', f).textContent)}</a>`).join('')}</nav>`;
     const val = (k) => { const el = $(`#edForm [data-k="${k}"]`); return el ? (el.type === 'checkbox' ? el.checked : el.value.trim()) : ''; };
+    const first = (k) => { const im = $(`#edForm [data-imgs="${k}"] .im`); return im && im.dataset.path; };
     const draw = () => {
-      const tint = val('cover.tint') || '#2B3A8F', title = val('title') || 'Untitled project';
-      const im = $('#edForm [data-imgs="icon"] .im'), icon = im && im.dataset.path;
-      $('.ep-cover', side).style.setProperty('--tint', tint);
-      $('.ep-logo', side).innerHTML = icon ? `<img src="${esc(imgURL(icon))}" alt="">` : (val('title') ? esc(title.charAt(0)) : '+');
+      const tint = val('cover.tint') || '#2B3A8F', title = val('title') || 'Untitled project', type = val('type') || 'mobile';
+      const icon = first('icon');
+      const on = (d) => { const c = $(`#edForm [data-dev="${d}"]`); return c ? c.checked : false; };
+      const want = val('cardDevice');
+      const dev = want && want !== 'auto' && on(want) ? want : type === 'mobile' ? (on('mobile') ? 'mobile' : on('tablet') ? 'tablet' : 'desktop') : (on('desktop') ? 'desktop' : on('tablet') ? 'tablet' : 'mobile');
+      const shot = first({ mobile: 'screens', tablet: 'tabletScreens', desktop: 'webScreens' }[dev]);
+      $('.ep-stage', side).style.setProperty('--tint', tint);
+      $('.ep-dev', side).className = 'ep-dev d-' + dev;
+      $('.ep-dev', side).innerHTML = shot ? `<img src="${esc(imgURL(shot))}" alt="">` : '<span>No screen yet</span>';
+      const cat = (val('category') || '').split('·')[0].trim();
+      $('.ep-lbls', side).innerHTML = `<span class="lb lb-${type}">${({ mobile: 'Mobile app', web: 'Website', both: 'Web + app' })[type] || 'Mobile app'}</span>${cat ? `<span class="lb lb-cat">${esc(cat)}</span>` : ''}`;
+      $('.ep-logo', side).innerHTML = icon ? `<img src="${esc(imgURL(icon))}" alt="">` : esc(title.charAt(0));
+      $('.ep-logo', side).style.setProperty('--tint', tint);
       $('.ep-t', side).textContent = title;
-      $('.ep-c', side).textContent = val('category') || 'Add a category';
-      $('.ep-l', side).textContent = val('tagline');
+      $('.ep-l', side).textContent = val('tagline') || val('category');
       $('.ep-st', side).textContent = val('status');
       $('.ep-flags', side).innerHTML = `<span class="badge-d ${val('published') ? 'on' : ''}">${val('published') ? 'Published' : 'Hidden'}</span>${val('featured') ? '<span class="badge-d feat">★ Featured</span>' : ''}`;
     };
     draw();
     const form = $('#edForm');
     form.oninput = draw; form.onchange = draw;
-    new MutationObserver(draw).observe($('#edForm [data-imgs="icon"]') || form, { childList: true, subtree: true });
+    new MutationObserver(draw).observe(form, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-path'] });
     $$('.ed-nav a', side).forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); const f = $(a.getAttribute('href')); if (f) f.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
     const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) $$('.ed-nav a', side).forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id)); }), { rootMargin: '-30% 0px -60% 0px' });
     fsets.forEach((f) => io.observe(f));
@@ -864,10 +890,6 @@
   }
 
   $('#backList').addEventListener('click', () => { collect(); setDirty(changed(), false); renderList(); });
-  $('#discard').addEventListener('click', async () => {
-    if (!(await ask({ title: 'Discard all changes?', text: 'Everything you changed since the last publish goes back to how it is on the live website. This can’t be undone.', ok: 'Discard changes', tone: 'danger' }))) return;
-    projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent); pending.clear(); setDirty(false); renderList();
-  });
 
   /* ---------------- guide (the ⓘ button in the top bar) ---------------- */
   const helpDlg = $('#helpDlg');
@@ -944,63 +966,58 @@
     openPreview('project.html?preview=1#' + encodeURIComponent((p && p.slug) || ''));
   });
   $('#previewHome').addEventListener('click', () => openPreview('index.html?preview=1'));
-  $('#previewBtn').addEventListener('click', () => {
-    if (editing >= 0 && (mode === 'project' || mode === 'site' || mode === 'content')) return $('#ed-draft').click();
-    openPreview('index.html?preview=1' + (mode === 'exp' ? '#experience' : ''));
-  });
 
   /* ---------------- publish (one commit) ---------------- */
-  $('#publish').addEventListener('click', async () => {
+  async function autoSave() {
+    if (saving) { saveAgain = true; return; }
     collect();
-    const msg = $('#saveMsg'), btn = $('#publish');
+    if (!changed()) { dirty = false; status(''); return; }
     const badX = experience.find((x) => !x.role || !x.role.trim() || !x.company || !x.company.trim());
-    if (badX) { msg.className = 'msg err'; msg.textContent = 'Every role needs a job title and a company.'; return; }
+    if (badX) return status('err', 'Not saved yet: every role needs a job title and a company.');
     const bad = projects.find((p) => !p.title || !p.title.trim());
-    if (bad) { msg.className = 'msg err'; msg.textContent = 'Every project needs a name.'; return; }
+    if (bad) return status('err', 'Not saved yet: every project needs a name.');
     const slugs = projects.map((p) => p.slug);
-    const dup = slugs.find((s, i) => slugs.indexOf(s) !== i);
-    if (dup) { msg.className = 'msg err'; msg.textContent = `Two projects use the same URL name “${dup}”. Change one.`; return; }
-    btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Publishing…';
+    const dup = slugs.find((x, i) => slugs.indexOf(x) !== i);
+    if (dup) return status('err', `Not saved yet: two projects use the same URL name “${dup}”.`);
+    saving = true; status('saving');
+    const snap = { p: JSON.stringify(projects), x: JSON.stringify(experience), s: JSON.stringify(site), c: JSON.stringify(content) };
     try {
-      const json = JSON.stringify(projects, null, 2) + '\n';
-      const used = new Set(JSON.stringify([projects, site]).match(/"[^"]+\.(?:webp|jpg|jpeg|png|svg|gif|pdf)"/g) || []);
       const files = [];
-      if (json.trim() !== JSON.stringify(JSON.parse(original), null, 2) ) files.push({ path: CFG.dataPath || 'data/projects.json', b64: b64FromUtf8(json) });
-      if (JSON.stringify(content) !== originalContent) files.push({ path: CONTENT_PATH, b64: b64FromUtf8(JSON.stringify(content, null, 2) + '\n') });
-      if (JSON.stringify(site) !== originalSite) files.push({ path: SITE_PATH, b64: b64FromUtf8(JSON.stringify(site, null, 2) + '\n') });
-      if (JSON.stringify(experience) !== originalExp) files.push({ path: EXP_PATH, b64: b64FromUtf8(JSON.stringify(experience, null, 2) + '\n') });
-      if (!files.length) { msg.className = 'msg ok'; msg.textContent = 'Nothing to publish — everything is already live.'; btn.disabled = false; return; }
-      pending.forEach((b64, path) => { if (used.has('"' + path + '"')) files.push({ path, b64 }); });
-
-      const ref = await (await gh(`${repoPath()}/git/ref/heads/${encodeURIComponent(auth.branch)}`)).json();
-      const baseCommit = ref.object.sha;
-      const commit = await (await gh(`${repoPath()}/git/commits/${baseCommit}`)).json();
-      const tree = [];
-      for (let i = 0; i < files.length; i++) {
-        msg.textContent = `Uploading ${i + 1} of ${files.length}…`;
-        const blob = await (await gh(`${repoPath()}/git/blobs`, { method: 'POST', body: JSON.stringify({ content: files[i].b64, encoding: 'base64' }) })).json();
-        tree.push({ path: files[i].path, mode: '100644', type: 'blob', sha: blob.sha });
+      if (!same(projects, original)) files.push({ path: CFG.dataPath || 'data/projects.json', b64: b64FromUtf8(JSON.stringify(projects, null, 2) + '\n') });
+      if (!same(content, originalContent)) files.push({ path: CONTENT_PATH, b64: b64FromUtf8(JSON.stringify(content, null, 2) + '\n') });
+      if (!same(site, originalSite)) files.push({ path: SITE_PATH, b64: b64FromUtf8(JSON.stringify(site, null, 2) + '\n') });
+      if (!same(experience, originalExp)) files.push({ path: EXP_PATH, b64: b64FromUtf8(JSON.stringify(experience, null, 2) + '\n') });
+      const used = new Set(JSON.stringify([projects, site, experience]).match(/"[^"]+\.(?:webp|jpg|jpeg|png|svg|gif|pdf)"/g) || []);
+      const sent = [];
+      pending.forEach((b64, path) => { if (used.has('"' + path + '"')) { files.push({ path, b64 }); sent.push(path); } });
+      if (files.length) {
+        const ref = await (await gh(`${repoPath()}/git/ref/heads/${encodeURIComponent(auth.branch)}`)).json();
+        const baseCommit = ref.object.sha;
+        const commit = await (await gh(`${repoPath()}/git/commits/${baseCommit}`)).json();
+        const tree = [];
+        for (let i = 0; i < files.length; i++) {
+          if (files.length > 2) status('saving', `Saving… ${i + 1} of ${files.length}`);
+          const blob = await (await gh(`${repoPath()}/git/blobs`, { method: 'POST', body: JSON.stringify({ content: files[i].b64, encoding: 'base64' }) })).json();
+          tree.push({ path: files[i].path, mode: '100644', type: 'blob', sha: blob.sha });
+        }
+        const newTree = await (await gh(`${repoPath()}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: commit.tree.sha, tree }) })).json();
+        const label = page && sub ? `Update ${page.label} · ${sub.label}` : 'Update portfolio content';
+        const newCommit = await (await gh(`${repoPath()}/git/commits`, { method: 'POST', body: JSON.stringify({ message: `${label} (via admin)`, tree: newTree.sha, parents: [baseCommit] }) })).json();
+        await gh(`${repoPath()}/git/refs/heads/${encodeURIComponent(auth.branch)}`, { method: 'PATCH', body: JSON.stringify({ sha: newCommit.sha }) });
       }
-      const newTree = await (await gh(`${repoPath()}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: commit.tree.sha, tree }) })).json();
-      const cur = editing >= 0 ? (mode === 'exp' ? experience[editing] : mode === 'site' ? { title: 'profile & links' } : mode === 'content' ? { title: 'website text' } : projects[editing]) : null;
-      const label = cur ? `Update ${cur.title || cur.company}` : 'Update portfolio content';
-      const newCommit = await (await gh(`${repoPath()}/git/commits`, { method: 'POST', body: JSON.stringify({ message: `${label} (via admin)`, tree: newTree.sha, parents: [baseCommit] }) })).json();
-      await gh(`${repoPath()}/git/refs/heads/${encodeURIComponent(auth.branch)}`, { method: 'PATCH', body: JSON.stringify({ sha: newCommit.sha }) });
-
-      original = JSON.stringify(projects);
-      originalExp = JSON.stringify(experience);
-      originalSite = JSON.stringify(site);
-      originalContent = JSON.stringify(content);
-      pending.clear();
-      dirty = false;
-      msg.className = 'msg ok'; msg.textContent = 'Published ✓ — your site updates in about a minute.';
-      toast('Published ✓');
-      setTimeout(() => { if (!dirty) $('#savebar').classList.add('hidden'); }, 4000);
-      if (editing < 0) renderList();
+      original = snap.p; originalExp = snap.x; originalSite = snap.s; originalContent = snap.c;
+      sent.forEach((path) => pending.delete(path));
+      saving = false;
+      dirty = changed();
+      if (dirty) { status('pending'); clearTimeout(saveTimer); saveTimer = setTimeout(autoSave, 1200); }
+      else { touched.clear(); tabsReady(); status('ok'); }
     } catch (err) {
-      msg.className = 'msg err'; msg.textContent = 'Publish failed: ' + err.message;
-    } finally { btn.disabled = false; }
-  });
+      saving = false;
+      status('err', 'Couldn’t save: ' + err.message);
+    }
+    if (saveAgain) { saveAgain = false; recheck(); }
+  }
+  $('#saveRetry').addEventListener('click', () => { clearTimeout(saveTimer); autoSave(); });
 
   /* ---------------- start ---------------- */
   auth = loadAuth();

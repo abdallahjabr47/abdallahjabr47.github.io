@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121010640">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121011340">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -452,6 +452,7 @@ fieldset>.wt-head.part-sw{padding-top:0;margin-bottom:16px}
 .hd-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:10px;border:1px solid var(--line2);font-size:13.5px;font-weight:600;color:var(--muted)}
 .hd-chip.off{color:#E8A33D;border-color:rgb(232 163 61 / .5);background:rgb(232 163 61 / .08)}
 .hd-chip.blue{color:var(--sky);background:rgba(23,105,224,.15);border-color:transparent}
+.hd-chip.ok{color:#3DDC97;border-color:rgb(61 220 151 / .4)}
 .hd-chip.primary{background:var(--blue);border-color:var(--blue);color:#fff}
 .hd-chip .tdot{margin-left:2px}
 .hd-sw{position:relative;width:42px;height:24px;border-radius:999px;background:rgb(var(--fg) / .15)}
@@ -572,6 +573,35 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .wt-run-b{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
 .wt-run-b .wt-field.c textarea{white-space:nowrap;overflow-x:auto;overflow-y:hidden;height:44px!important;min-height:44px;text-overflow:ellipsis;scrollbar-width:none}
 .wt-run-b .wt-field.c textarea::-webkit-scrollbar{display:none}
+/* save status: a small pill, no buttons — changes save on their own */
+.savebar{left:auto;right:24px;bottom:24px;padding:10px 16px 10px 14px;border:1px solid var(--line2);border-radius:999px;display:flex;align-items:center;gap:10px;background:rgb(var(--raise) / .96);box-shadow:0 14px 40px rgb(0 0 0 / .35);transition:opacity .25s,transform .25s}
+.savebar.hidden{display:flex!important;opacity:0;transform:translateY(10px);pointer-events:none}
+.savebar .msg{font-size:14px;color:var(--ink)}
+.sv-ic{width:10px;height:10px;border-radius:50%;flex:none;background:#E8A33D}
+.savebar[data-state="saving"] .sv-ic{width:14px;height:14px;background:none;border:2px solid var(--sky);border-right-color:transparent;animation:svspin .7s linear infinite}
+.savebar[data-state="ok"] .sv-ic{background:#3DDC97}
+.savebar[data-state="err"] .sv-ic{background:#F07167}
+.savebar[data-state="err"] .msg{color:#F07167}
+.sv-retry{font-size:13.5px;font-weight:700;color:var(--sky);padding:0 4px}
+@keyframes svspin{to{transform:rotate(360deg)}}
+@media (max-width:640px){.savebar{right:12px;left:12px;bottom:12px;border-radius:16px}}
+/* live card beside the project editor: same layout as the card on the website */
+.ed-prev{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:22px;border:1px solid var(--line);background:var(--card);overflow:visible}
+.ep-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ed-prev .ep-cap{position:static;color:var(--dim)}
+.ed-prev .ep-flags{position:static}
+.ep-stage{position:relative;height:230px;border-radius:18px;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;background:radial-gradient(110% 80% at 50% 115%,var(--tint,#2B3A8F),transparent 70%),#11141B;border:1px solid var(--line)}
+.ep-lbls{position:absolute;top:10px;left:10px;display:flex;gap:6px;z-index:2}
+.ep-dev{display:grid;place-items:center;overflow:hidden;background:#0B0D12;color:var(--dim);font-size:12px}
+.ep-dev img{width:100%;height:100%;object-fit:cover;object-position:top}
+.ep-dev.d-mobile{width:112px;height:196px;margin-bottom:-28px;border-radius:20px;border:4px solid #1B1E26}
+.ep-dev.d-tablet{width:200px;height:170px;margin-bottom:-24px;border-radius:14px;border:5px solid #1B1E26}
+.ep-dev.d-desktop{width:250px;height:156px;margin-bottom:22px;border-radius:8px;border:4px solid #1B1E26}
+.ep-head{display:flex;align-items:center;gap:12px}
+.ed-prev .ep-logo{width:44px;height:44px;flex:none;border-radius:12px;font-size:19px;box-shadow:none}
+.ep-tx{display:flex;flex-direction:column;min-width:0}
+.ep-tx b{font-size:16px}.ep-tx small{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ed-prev .ep-st{margin-top:0}
 </style>
 </head>
 <body>
@@ -649,10 +679,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
     <h3>Showing &amp; hiding</h3>
     <div class="hd-row"><div class="hd-k"><b>Eye button</b><p>Hides one text or one card but keeps it saved, so you can bring it back later.</p></div><div class="hd-ex"><span class="hd-chip">👁 Shown</span><span class="hd-arrow">→</span><span class="hd-chip off">Hidden</span></div></div>
     <div class="hd-row"><div class="hd-k"><b>Show on website</b><p>The switch at the top of a section hides the whole section. Your edits stay.</p></div><div class="hd-ex"><span class="hd-sw on"></span><span class="hd-arrow">→</span><span class="hd-sw"></span></div></div>
-    <div class="hd-row"><div class="hd-k"><b>Reset</b><p>An edited field shows <b>Reset</b> (or ↺) to go back to the original text.</p></div><div class="hd-ex"><span class="hd-chip blue">Edited</span><span class="hd-chip">Reset</span></div></div>
+    <div class="hd-row"><div class="hd-k"><b>Reset</b><p>An edited field shows <b>Reset</b> (or ↺) to go back to the text that's live now.</p></div><div class="hd-ex"><span class="hd-chip blue">Edited</span><span class="hd-chip">Reset</span></div></div>
     <h3>Saving</h3>
-    <div class="hd-row"><div class="hd-k"><b>Orange dot</b><p>A tab with a dot has changes that aren't live yet.</p></div><div class="hd-ex"><span class="hd-chip">Beyond <i class="tdot"></i></span></div></div>
-    <div class="hd-row"><div class="hd-k"><b>Preview vs Publish</b><p><b>Preview</b> opens the site with your changes only for you. <b>Publish</b> puts them live for everyone, in about a minute.</p></div><div class="hd-ex"><span class="hd-chip">Preview ↗</span><span class="hd-chip primary">Publish to site ↗</span></div></div>
+    <div class="hd-row"><div class="hd-k"><b>Saves on its own</b><p>Stop typing for a couple of seconds and your change saves by itself. It's live on the site about a minute later. If you change something and put it back, nothing is saved.</p></div><div class="hd-ex"><span class="hd-chip">● Saving…</span><span class="hd-arrow">→</span><span class="hd-chip ok">● Saved ✓</span></div></div>
+    <div class="hd-row"><div class="hd-k"><b>Preview</b><p><b>Preview site</b> in the top bar opens the website with your latest changes, only for you.</p></div><div class="hd-ex"><span class="hd-chip">Preview site ↗</span></div></div>
     <div class="hd-row"><div class="hd-k"><b>Search</b><p>Type any word in the search box to jump straight to the field that has it.</p></div><div class="hd-ex"><span class="hd-chip">🔍 figma</span></div></div>
   </div>
 </dialog>
@@ -664,21 +694,14 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
     <div class="ask-btns"><button type="button" class="btn btn-ghost" data-ask="no">Cancel</button><button type="button" class="btn btn-primary" data-ask="ok">OK</button></div>
   </div>
 </dialog>
-<div class="savebar hidden" id="savebar">
-  <div class="in">
-    <span class="msg" id="saveMsg">Unsaved changes</span>
-    <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <button class="btn btn-ghost btn-sm" type="button" id="discard">Discard</button>
-      <button class="btn btn-ghost btn-sm" type="button" id="previewBtn">Preview <span class="arr">↗</span></button>
-      <button class="btn btn-primary btn-sm" type="button" id="publish">Publish to site <span class="arr">↗</span></button>
-    </div>
-  </div>
+<div class="savebar hidden" id="savebar" role="status" aria-live="polite">
+  <span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button>
 </div>
 
-<script src="assets/js/config.js?v=20261121010640"></script>
-<script src="assets/js/icons.js?v=20261121010640"></script>
-<script src="assets/js/content.js?v=20261121010640"></script>
-<script src="assets/js/core.js?v=20261121010640"></script>
-<script src="assets/js/admin.js?v=20261121010640"></script>
+<script src="assets/js/config.js?v=20261121011340"></script>
+<script src="assets/js/icons.js?v=20261121011340"></script>
+<script src="assets/js/content.js?v=20261121011340"></script>
+<script src="assets/js/core.js?v=20261121011340"></script>
+<script src="assets/js/admin.js?v=20261121011340"></script>
 </body>
 </html>
