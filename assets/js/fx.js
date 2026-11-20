@@ -120,12 +120,17 @@
   /* ---------- 5. image wipe reveal ---------- */
   function wipe(root = document) {
     if (reduce) return;
-    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('wiped'); io.unobserve(e.target); } }), { threshold: 0.18 });
+    // observe the parent: a fully clipped element never reports as visible
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      $$('.wipe', e.target).forEach((w) => w.classList.add('wiped'));
+      io.unobserve(e.target);
+    }), { threshold: 0.12 });
     $$('.photo-card .photo, .shot', root).forEach((el) => {
       if (el.dataset.wipeDone) return;
       el.dataset.wipeDone = '1';
       el.classList.add('wipe');
-      io.observe(el);
+      io.observe(el.parentElement);
     });
   }
 

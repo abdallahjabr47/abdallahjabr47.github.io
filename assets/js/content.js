@@ -94,10 +94,14 @@
 
   /* home page: a refresh always starts at the top, never at #work or another section */
   if (root.document && document.getElementById('hero')) {
+    let reload = false;
+    try { const nav = performance.getEntriesByType('navigation')[0]; reload = nav ? nav.type === 'reload' : performance.navigation.type === 1; } catch (e) {}
     try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
-    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-    root.scrollTo(0, 0);
-    root.addEventListener('load', () => root.scrollTo(0, 0));
+    if (reload || !location.hash) {
+      if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+      root.scrollTo(0, 0);
+      root.addEventListener('load', () => root.scrollTo(0, 0));
+    }
   }
 
   /* on the site itself: apply overrides right away (preview draft first, then data/content.json) */
