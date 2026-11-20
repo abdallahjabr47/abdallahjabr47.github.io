@@ -26,7 +26,9 @@
     mobile: '<svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M11 18.5h2"/></svg>',
     tablet: '<svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2.6"/><path d="M11 18h2"/></svg>',
     desktop: '<svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="11.5" rx="1.8"/><path d="M2 19.5h20"/></svg>' };
+  const unbr = (v) => typeof v === 'string' ? v.replace(/\s*\[[^\]]*\]/g, '').trim() : v;
   function cardHTML(p, i) {
+    p = Object.assign({}, p, { tagline: unbr(p.tagline), category: unbr(p.category), summary: unbr(p.summary), year: unbr(p.year) });
     const type = p.type || 'mobile';
     const tint = (p.cover && p.cover.tint) || '#2B3A8F';
     const href = 'project.html#' + encodeURIComponent(p.slug);
