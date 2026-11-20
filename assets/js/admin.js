@@ -186,7 +186,7 @@
 
   function imgItem(path, cls, withLabel, label) {
     return `<div class="im ${cls}" data-path="${esc(path)}">
-      <span class="th" style="${path ? `background-image:url('${esc(imgURL(path))}')` : ''}">${path ? '' : 'Empty'}</span>
+      ${path ? `<span class="th" style="background-image:url('${esc(imgURL(path))}')"></span>` : `<label class="th empty" title="Upload an image for this slot"><span>+ Upload</span><input type="file" accept="image/*" data-slot hidden></label>`}
       ${withLabel ? `<input type="text" value="${esc(label || '')}" placeholder="Label" data-lbl>` : ''}
       <span class="ctl"><button type="button" data-im="left" aria-label="Move left">←</button><button type="button" data-im="right" aria-label="Move right">→</button><button type="button" data-im="del" aria-label="Remove image">✕</button></span>
     </div>`;
@@ -234,7 +234,8 @@
         <div class="g2">${F('Big title', 'headline', p.headline, { ph: 'From content' })}${F('Italic blue part', 'headlineAccent', p.headlineAccent, { ph: 'to series.' })}</div>
         <div class="g3">${F('Accent colour', 'cover.tint', (p.cover && p.cover.tint) || '#2B3A8F', { type: 'color' })}${F('Big background word', 'cover.ghost', p.cover && p.cover.ghost, { ph: 'REDZ' })}${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}</div>
         <div class="f">Cover image (optional — wide, replaces the device mock-up)</div>${imgList('cover.image', p.cover && p.cover.image ? [p.cover.image] : [], 'wide', false, false)}
-        <div class="g3">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}${F('Team', 'team', p.team)}${F('Timeline', 'timeline', p.timeline)}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
+        <div class="g2">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}</div>
+        <div class="g3">${F('Team', 'team', p.team)}${F('Timeline', 'timeline', p.timeline)}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
       </fieldset>
 
       <fieldset><legend>Story</legend>
@@ -385,6 +386,9 @@
       setDirty(true);
     }
   });
+  const grow = (t) => { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight + 2, 640) + 'px'; };
+  form.addEventListener('input', (e) => { if (e.target.tagName === 'TEXTAREA') grow(e.target); });
+  new MutationObserver(() => requestAnimationFrame(() => $$('textarea', form).forEach(grow))).observe(form, { childList: true });
   form.addEventListener('change', async (e) => {
     const input = e.target;
     if (input.type !== 'file' || !input.files.length) return;
@@ -393,6 +397,21 @@
     const cls = box.dataset.cls, lab = box.dataset.lab === '1', multi = box.dataset.multi === '1';
     const titleEl = $('[data-k="slug"]', form);
     const folder = mode === 'site' ? (box.dataset.imgs === 'showcase' ? 'showcase' : 'profile') : slugify((titleEl && titleEl.value) || ($('[data-k="title"]', form) || {}).value || 'project');
+    const slot = input.hasAttribute('data-slot') ? input.closest('.im') : null;
+    if (slot) {
+      const file = input.files[0];
+      try {
+        const { b64, url, ext } = await processImage(file, cls === 'sq' ? 512 : cls === 'wide' ? 2400 : 1400);
+        const name = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40) || 'image';
+        const path = `${CFG.imagesPath || 'assets/uploads'}/${folder}/${Date.now().toString(36)}-${name}.${ext}`;
+        pending.set(path, b64); previews.set(path, url);
+        const lblEl = $('[data-lbl]', slot);
+        slot.insertAdjacentHTML('afterend', imgItem(path, cls, lab, lblEl ? lblEl.value : ''));
+        slot.remove();
+        setDirty(true);
+      } catch (err) { toast('Could not read ' + file.name); }
+      return;
+    }
     if (!multi) $$('.im', box).forEach((x) => x.remove());
     for (const file of Array.from(input.files)) {
       try {
