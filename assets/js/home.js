@@ -434,9 +434,10 @@
       const current = /present|now/i.test(x.dates || '');
       const hl = (x.highlights || []).length;
       const more = hl || x.summary;
-      const meta = [x.company, x.location, x.type].filter(Boolean).map(esc).join('<i aria-hidden="true">·</i>');
+      const tk = /intern/i.test(x.type || '') ? 'intern' : /part/i.test(x.type || '') ? 'part' : /contract|freelance/i.test(x.type || '') ? 'contract' : x.type ? 'full' : '';
+      const meta = [x.company, x.location].filter(Boolean).map(esc).join('<i aria-hidden="true">·</i>') + (x.type ? `<span class="xp-type t-${tk}">${esc(x.type)}</span>` : '');
       return `
-      <div class="xp-row${more ? ' has-hl' : ''}" data-reveal>
+      <div class="xp-row${more ? ' has-hl' : ''}${tk ? ' k-' + tk : ''}" data-reveal>
         <div class="xp-head">
           <div class="xp-main"><h3>${esc(x.role)}</h3><p class="xp-meta">${meta}</p></div>
           <span class="xp-date${current ? ' now' : ''}">${esc(x.dates)}</span>

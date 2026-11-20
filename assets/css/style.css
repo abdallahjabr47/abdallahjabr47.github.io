@@ -1609,3 +1609,11 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .cv-meta a{align-self:flex-start;margin-top:8px;font-weight:600;font-size:14.5px;color:var(--sky)}
 .cv-meta [hidden]{display:none}
 .cv-x{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;background:rgb(0 0 0 / .55);color:#fff;font-size:15px;display:grid;place-items:center}
+/* experience: colour per job type */
+.xp-row{--tc:#5C9BF5}
+.xp-row.k-full{--tc:#5C9BF5}.xp-row.k-part{--tc:#5FB894}.xp-row.k-intern{--tc:#E2B866}.xp-row.k-contract{--tc:#A497DB}
+.xp-type{display:inline-flex;align-items:center;gap:6px;margin-left:12px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:600;color:var(--tc);background:color-mix(in srgb,var(--tc) 13%,transparent);vertical-align:1px}
+.xp-type::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--tc)}
+[data-theme="light"] .xp-row.k-full{--tc:#1769E0}[data-theme="light"] .xp-row.k-part{--tc:#1F8A5E}[data-theme="light"] .xp-row.k-intern{--tc:#A9741C}[data-theme="light"] .xp-row.k-contract{--tc:#6A58C4}
+.xp-row::before{content:"";position:absolute;left:-1px;top:22%;bottom:22%;width:3px;border-radius:3px;background:var(--tc);opacity:0;transition:opacity .35s}
+.xp-row:hover::before,.xp-row.open::before{opacity:1}
