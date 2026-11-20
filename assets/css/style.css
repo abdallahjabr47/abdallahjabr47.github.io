@@ -12,7 +12,7 @@
   --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.16);
   --ink:#EDEEF0; --ink2:#C9CDD6; --muted:#9AA1AE; --dim:#7C8391;
   --panel:#14161C; --panel2:#0A0C12; --ph1:#1A1F2E; --ph2:#0E1119; --icbg:#FFFFFF; --field:#0E1017;
-  --pill-bg:rgba(23,105,224,.18); --pill-ink:#B9D3FA; --ok:#3DDC97; --glow:.15; --grain:.07;
+  --pill-bg:rgba(23,105,224,.18); --pill-ink:#B9D3FA; --ok:#3DDC97; --glow:.15; --grain:0;
   --blue:#1769E0; --on-accent:#FFFFFF; --sky:#5C9BF5; --violet:#1769E0; --coral:#1769E0; --coral-ink:#5C9BF5; --green:#3DDC97; --pink:#FF4D8D; --red:#FF6B8B;
   --max:1240px; --pad:clamp(20px,4vw,32px);
   --ease:cubic-bezier(.2,.7,.2,1); --ease2:cubic-bezier(.65,0,.35,1);
@@ -24,7 +24,7 @@
   --line:rgba(14,16,24,.09); --line2:rgba(14,16,24,.16);
   --ink:#0B0C10; --ink2:#2A2F3A; --muted:#565D6B; --dim:#6B7280;
   --panel:#E7EAF0; --panel2:#E1E5EC; --ph1:#E3E6EC; --ph2:#D2D8E1; --icbg:#FFFFFF; --field:#FFFFFF;
-  --pill-bg:rgba(23,105,224,.1); --pill-ink:#1769E0; --ok:#0E9F62; --glow:.07; --grain:.045;
+  --pill-bg:rgba(23,105,224,.1); --pill-ink:#1769E0; --ok:#0E9F62; --glow:.07; --grain:0;
   --sky:#1769E0; --coral-ink:#1769E0;
   color-scheme:light;
 }
@@ -914,8 +914,13 @@ h1,h2,h3,.h-xl,.h-lg,.h-md,.ix-t,.stat b{letter-spacing:-.035em}
 .big-mq .item.ghost b{font-style:italic;font-weight:500;color:rgb(var(--fg) / .03);-webkit-text-stroke:1.2px rgb(var(--fg) / .45)}
 .big-mq .item:hover b{color:rgb(var(--fg) / .06);-webkit-text-stroke:1.2px rgb(var(--fg) / .7)}
 .big-mq .item.ghost:hover b{color:var(--ink);-webkit-text-stroke-color:transparent}
+/* hover a letter in a big title: it turns into frosted glass (grainy fill + light border), then fades back */
 @media (pointer:fine){
-  h1[data-split] .c,h2[data-split] .c{transition:transform 1s var(--ease),color .45s var(--ease),-webkit-text-stroke-color .45s var(--ease);-webkit-text-stroke:1.2px transparent}
-  h1[data-split]:hover .c,h2[data-split]:hover .c{color:rgb(var(--fg) / .05);-webkit-text-stroke-color:rgb(var(--fg) / .75)}
-  h1[data-split]:hover .serif .c,h2[data-split]:hover .serif .c{color:rgba(92,155,245,.08);-webkit-text-stroke-color:var(--coral-ink)}
+  h1[data-split] .c,h2[data-split] .c{-webkit-text-stroke:1px transparent;background-repeat:repeat;
+    transition:transform 1s var(--ease),color .9s ease,-webkit-text-stroke-color .9s ease}
+  h1[data-split].in .c:hover,h2[data-split].in .c:hover{color:rgb(var(--fg) / .07);-webkit-text-stroke-color:rgb(var(--fg) / .32);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");-webkit-background-clip:text;background-clip:text;animation:glassgrain .6s steps(3) infinite;
+    transition:transform 1s var(--ease),color .15s ease,-webkit-text-stroke-color .15s ease}
+  [data-theme="light"] h1[data-split].in .c:hover,[data-theme="light"] h2[data-split].in .c:hover{color:rgb(var(--fg) / .05);-webkit-text-stroke-color:rgb(var(--fg) / .3);filter:invert(0)}
 }
+@keyframes glassgrain{0%{background-position:0 0}33%{background-position:-23px 17px}66%{background-position:31px -12px}100%{background-position:0 0}}
