@@ -202,7 +202,7 @@
         const d = Math.hypot(dx, dy);
         const g = d >= R ? 0 : Math.pow(1 - d / R, 1.3);
         if (g > 0.01) c.style.setProperty('--g', g.toFixed(2)); else c.style.removeProperty('--g');
-        c.classList.toggle('gr', g > 0.55);
+        c.classList.toggle('gr', g > 0.7);
       });
     };
     addEventListener('pointermove', (e) => {
@@ -219,7 +219,7 @@
 
   /* ---------- floating dots: slow drifting particles that lean away from the mouse ---------- */
   (function () {
-    const cv = $('canvas.dots');
+    const cv = $('canvas.bg-dots');
     if (!cv || reduce) return;
     const ctx = cv.getContext('2d');
     let W = 0, H = 0, dpr = 1, pts = [], mx = -9999, my = -9999;
