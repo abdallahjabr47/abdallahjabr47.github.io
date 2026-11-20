@@ -50,6 +50,7 @@
   function drawTabs() {
     $('#pageTabs').innerHTML = PAGES.map((p) => `<button type="button" role="tab" data-page="${p.id}" class="${p === page ? 'on' : ''}" aria-selected="${p === page}">${esc(p.label)}${p.subs.some((x) => touched.has(p.id + '/' + x.id)) ? '<i class="tdot" title="Unpublished changes"></i>' : ''}</button>`).join('');
     $('#partBar').hidden = true;
+    $('#subTabs').hidden = page.subs.length <= 1;
     $('#subTabs').innerHTML = page.subs.map((x) => `<button type="button" data-sub="${x.id}" class="${x === sub ? 'on' : ''}" aria-pressed="${x === sub}">${esc(x.label)}${touched.has(page.id + '/' + x.id) ? '<i class="tdot" title="Unpublished changes"></i>' : ''}</button>`).join('');
   }
   const partHead = () => { const on = !(content.hidden || []).includes(sub.part); return `<header class="wt-head part-sw"><div><small>Section</small><h3>${esc(sub.partName)}</h3></div><label class="wt-switch"><input type="checkbox" data-part-show="${esc(sub.part)}" ${on ? 'checked' : ''}><span></span>Show on website</label></header>`; };
