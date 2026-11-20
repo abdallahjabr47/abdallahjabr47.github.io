@@ -168,37 +168,28 @@
     });
   }
 
-  /* =============== process: phone builds itself, notes around it =============== */
+  /* =============== process: scroll through the 4 stages, then move on =============== */
   const proc = $('.proc');
   const phone = proc && $('.phone', proc);
   if (proc && phone) {
     const notes = $$('.pnote', proc);
-    const DUR = 3200;
-    let cur = 0, timer = null, inView = false, held = false;
-    const set = (s) => {
-      cur = s;
-      phone.dataset.stage = String(s);
-      notes.forEach((n, j) => {
-        n.classList.toggle('active', j === s);
-        n.classList.toggle('done', j < s);
-        n.setAttribute('aria-pressed', String(j === s));
-        const bar = $('.pn-bar i', n);
-        bar.style.transition = 'none'; bar.style.transform = 'scaleX(0)';
-      });
-      if (inView && !held && !reduce) {
-        const bar = $('.pn-bar i', notes[s]);
-        void bar.offsetWidth;
-        bar.style.transition = `transform ${DUR}ms linear`; bar.style.transform = 'scaleX(1)';
+    let cur = -1;
+    const progress = () => { const r = proc.getBoundingClientRect(); const total = r.height - innerHeight; return total > 0 ? clamp(-r.top / total) : 0; };
+    onScroll(() => {
+      const p = progress() * notes.length;
+      const s = Math.min(notes.length - 1, Math.floor(p));
+      notes.forEach((n, j) => { $('.pn-bar i', n).style.transform = `scaleX(${clamp(p - j)})`; });
+      if (s !== cur) {
+        cur = s;
+        phone.dataset.stage = String(s);
+        notes.forEach((n, j) => { n.classList.toggle('active', j === s); n.classList.toggle('done', j < s); n.setAttribute('aria-current', j === s ? 'step' : 'false'); });
       }
-    };
-    const run = () => { clearTimeout(timer); if (!inView || held || reduce) return; timer = setTimeout(() => { set((cur + 1) % notes.length); run(); }, DUR); };
-    notes.forEach((n) => {
-      n.addEventListener('click', () => { held = false; set(+n.dataset.step); run(); });
-      n.addEventListener('mouseenter', () => { held = true; clearTimeout(timer); set(+n.dataset.step); });
-      n.addEventListener('mouseleave', () => { held = false; set(cur); run(); });
     });
-    new IntersectionObserver((es) => es.forEach((e) => { inView = e.isIntersecting; if (inView) { set(cur); run(); } else clearTimeout(timer); }), { threshold: .35 }).observe(proc);
-    set(0);
+    notes.forEach((n) => n.addEventListener('click', () => {
+      const j = +n.dataset.step;
+      const top = proc.getBoundingClientRect().top + scrollY;
+      scrollTo({ top: top + (proc.offsetHeight - innerHeight) * ((j + 0.5) / notes.length), behavior: reduce ? 'auto' : 'smooth' });
+    }));
   }
 
   /* =============== about: words light up while scrolling =============== */
