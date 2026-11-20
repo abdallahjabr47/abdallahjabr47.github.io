@@ -17,10 +17,8 @@
     const ov = document.createElement('div');
     ov.className = 'intro';
     ov.setAttribute('aria-hidden', 'true');
-    ov.innerHTML = `<span class="ip t"></span><span class="ip b"></span><span class="iglow"></span>
-      <svg viewBox="0 0 430.5 201" class="intro-sig"><defs><linearGradient id="igr" x1="0" x2="1"><stop offset="0" stop-color="#9CC4FF"/><stop offset=".5" stop-color="#5C9BF5"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
-        <path class="stroke" d="${d}" pathLength="1" fill-rule="evenodd"/><path class="fill" d="${d}" fill-rule="evenodd"/></svg>
-      <span class="intro-name">${'ABDALLAH JABR'.split('').map((c, i) => `<i style="--i:${i}">${c === ' ' ? '&nbsp;' : c}</i>`).join('')}</span>`;
+    ov.innerHTML = `<span class="ip t"></span><span class="ip b"></span>
+      <svg viewBox="0 0 430.5 201" class="intro-sig"><path class="fill" d="${d}" fill-rule="evenodd"/></svg>`;
     document.body.appendChild(ov);
     const html = document.documentElement;
     html.classList.add('intro-on');
@@ -38,10 +36,10 @@
         sig.style.transform = `translate(${tx - a.left}px, ${ty - a.top}px) scale(${s})`;
       }
       ov.classList.add('out');
-      setTimeout(() => html.classList.remove('intro-on'), 250);
+      setTimeout(() => html.classList.remove('intro-on'), 150);
       setTimeout(() => ov.remove(), 1300);
     };
-    setTimeout(finish, 1900);
+    setTimeout(finish, 1150);
     ov.addEventListener('click', finish);
   })();
 

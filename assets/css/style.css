@@ -879,7 +879,7 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 /* dark-mode legibility for logos whose official colours are very dark */
 [data-theme="dark"] .ic.full [fill="#00546B" i]{fill:#5BA8CC}
 [data-theme="dark"] .ic.full [fill="#5382A1" i]{fill:#8FB8DD}
-[data-theme="dark"] .ic.full [fill="#000000" i],[data-theme="dark"] .ic.full [fill="#000" i]{fill:#fff}
+[data-theme="dark"] .ic.full:not([data-icon="notion"]) [fill="#000000" i],[data-theme="dark"] .ic.full:not([data-icon="notion"]) [fill="#000" i]{fill:#fff}
 
 [hidden]{display:none!important}
 
@@ -961,28 +961,18 @@ h1[data-split] .serif .c,h2[data-split] .serif .c{--base:var(--coral-ink);--shee
 
 /* ===== polish pack ===== */
 html.js-smooth{scroll-behavior:auto}
-/* intro */
-.intro{position:fixed;inset:0;z-index:300;display:grid;place-items:center;cursor:pointer;pointer-events:auto}
-.intro .ip{position:absolute;left:0;right:0;height:50.5%;background:var(--bg);transition:transform 1s cubic-bezier(.76,0,.24,1)}
+/* intro: the name is written right-to-left like ink, then jumps into the logo and the page opens */
+.intro{position:fixed;inset:0;z-index:300;display:grid;place-items:center;cursor:pointer}
+.intro .ip{position:absolute;left:0;right:0;height:50.5%;background:var(--bg);transition:transform .8s cubic-bezier(.76,0,.24,1)}
 .intro .ip.t{top:0}.intro .ip.b{bottom:0}
-.intro .iglow{position:absolute;left:50%;top:50%;width:70vmin;height:70vmin;margin:-35vmin 0 0 -35vmin;border-radius:50%;background:radial-gradient(circle,rgba(23,105,224,.35),rgba(23,105,224,0) 62%);transform:scale(.4);opacity:0;transition:transform 1.8s cubic-bezier(.2,.8,.2,1),opacity 1s ease}
-.intro.go .iglow{transform:scale(1);opacity:1;animation:iglow 2.4s ease-in-out infinite alternate}
-@keyframes iglow{to{transform:scale(1.12);opacity:.75}}
-.intro-sig{position:relative;width:min(46vw,300px);overflow:visible;transform-origin:0 0;transition:transform .95s cubic-bezier(.76,0,.24,1)}
-.intro-sig .stroke{fill:none;stroke:url(#igr);stroke-width:1.4;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 6px rgba(92,155,245,.9))}
-.intro-sig .fill{fill:var(--ink);opacity:0;clip-path:inset(0 0 0 100%)}
-.intro.go .intro-sig .stroke{animation:sigdraw 1.25s cubic-bezier(.6,.05,.3,1) forwards,sigfade .5s ease 1.25s forwards}
-.intro.go .intro-sig .fill{animation:sigfill .7s cubic-bezier(.6,.05,.3,1) .85s forwards}
-.intro-name{position:absolute;left:50%;top:calc(50% + min(16vw,104px));transform:translateX(-50%);display:flex;font-size:12px;font-weight:600;letter-spacing:.42em;color:var(--muted);white-space:nowrap}
-.intro-name i{font-style:normal;opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .5s ease,transform .5s ease,filter .5s ease;transition-delay:calc(1s + var(--i) * 35ms)}
-.intro.go .intro-name i{opacity:1;transform:none;filter:none}
+.intro-sig{position:relative;width:min(46vw,300px);overflow:visible;transform-origin:0 0;transition:transform .8s cubic-bezier(.76,0,.24,1);
+  -webkit-mask-image:linear-gradient(270deg,#000 45%,transparent 55%);mask-image:linear-gradient(270deg,#000 45%,transparent 55%);
+  -webkit-mask-size:240% 100%;mask-size:240% 100%;-webkit-mask-position:0 0;mask-position:0 0;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.intro-sig .fill{fill:var(--ink)}
+.intro.go .intro-sig{animation:inkwrite .95s cubic-bezier(.55,.1,.35,1) forwards}
+@keyframes inkwrite{to{-webkit-mask-position:100% 0;mask-position:100% 0}}
 .intro.out{pointer-events:none}
 .intro.out .ip.t{transform:translateY(-100%)}.intro.out .ip.b{transform:translateY(100%)}
-.intro.out .iglow,.intro.out .intro-name{opacity:0;transition:opacity .4s ease}
-.intro.out .intro-name i{transition-delay:0s}
-@keyframes sigdraw{to{stroke-dashoffset:0}}
-@keyframes sigfade{to{opacity:0}}
-@keyframes sigfill{to{opacity:1;clip-path:inset(0 0 0 0)}}
 html.intro-on{overflow:hidden}
 html.intro-on .brand .logo{opacity:0}
 .brand .logo{transition:opacity .3s ease .75s,transform .5s cubic-bezier(.2,.8,.2,1)}
