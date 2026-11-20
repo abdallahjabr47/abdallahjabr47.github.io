@@ -48,7 +48,7 @@
     return `
     <article class="pcard type-${type} show-${pref}" data-type="${type}" style="--tint:${esc(tint)}" data-reveal>
       <div class="stage-panel" data-cursor="Explore case ↗" data-href="${href}" data-n="${count}">
-        <div class="sp-badges"><span class="l"><span class="tag">${esc(p.platform || (type === 'web' ? 'Website' : 'Mobile App'))}</span>${devChips ? `<span class="tag devs" aria-label="Designed for">${devChips}</span>` : ''}</span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
+        <div class="sp-badges"><span class="l">${catShort ? `<span class="tag">${esc(catShort)}</span>` : `<span class="tag">${esc(p.platform || (type === 'web' ? 'Website' : 'Mobile App'))}</span>`}${devChips ? `<span class="tag devs" aria-label="${esc(p.platform || (type === 'web' ? 'Website' : 'Mobile App'))}" title="${esc(p.platform || (type === 'web' ? 'Website' : 'Mobile App'))}">${devChips}</span>` : ''}</span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
         <div class="devices2">${laptop}${phone}</div>
         <button class="sp-arrow a-prev" type="button" aria-label="Previous screen of ${esc(p.title)}" disabled>←</button>
         <button class="sp-arrow a-next" type="button" aria-label="Next screen of ${esc(p.title)}"${count < 2 ? ' disabled' : ''}>→</button>
