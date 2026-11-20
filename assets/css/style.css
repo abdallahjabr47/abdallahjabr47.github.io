@@ -1619,3 +1619,12 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .xp-row:hover::before,.xp-row.open::before{opacity:1}
 .sec{padding-block:clamp(64px,8vw,110px)}.cta3{padding-top:clamp(70px,8vw,110px)}
 .nav-links a.active{font-weight:600}.nav-links a{transition:color .3s,background .3s,font-weight .2s}
+/* football: ball curls into a goal */
+.iv-foot .goal{position:absolute;right:8%;top:22%;width:30%;height:46%;border:2px solid rgb(var(--fg) / .55);border-left:0;border-radius:0 4px 4px 0;background:repeating-linear-gradient(90deg,rgb(var(--fg) / .12) 0 1px,transparent 1px 7px),repeating-linear-gradient(0deg,rgb(var(--fg) / .12) 0 1px,transparent 1px 7px)}
+.iv-foot .ball{bottom:16%;left:8%;animation:ivGoal 2.8s cubic-bezier(.3,.1,.3,1) infinite}
+@keyframes ivGoal{0%,12%{transform:translate(0,0) rotate(0);opacity:1}62%{transform:translate(150px,-34px) rotate(540deg);opacity:1}80%{transform:translate(160px,-30px) rotate(560deg);opacity:1}92%,100%{transform:translate(160px,-30px);opacity:0}}
+/* gym & health: small barbell over the pulse */
+.iv-health{grid-template-rows:auto auto;gap:12px}
+.iv-health .bar{position:relative;width:56%;height:4px;justify-self:center;border-radius:4px;background:rgb(var(--fg) / .5);animation:ivLift 2s ease-in-out infinite}
+.iv-health .bar i{position:absolute;top:50%;width:9px;height:24px;margin-top:-12px;border-radius:3px;background:var(--ac2)}
+.iv-health .bar i:first-child{left:-3px}.iv-health .bar i:last-child{right:-3px}
