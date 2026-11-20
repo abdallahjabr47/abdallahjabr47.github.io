@@ -49,8 +49,9 @@ body::after{opacity:.04}
 .ib:hover{background:rgb(var(--fg) / .07)}
 .ib svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .ib.edit,.ib.hide,.ib.show,.ib.danger{display:inline-flex;align-items:center;gap:7px}
-.ib.edit{background:var(--blue);border-color:var(--blue);color:#fff}
-.ib.edit:hover{background:#1259C2}
+.ib.edit{color:#5C9BF5;border-color:rgba(23,105,224,.5);background:rgba(23,105,224,.1)}
+.ib.edit:hover{background:rgba(23,105,224,.2)}
+[data-theme="light"] .ib.edit{color:#1769E0}
 .ib.hide{color:#E8A33D;border-color:rgba(232,163,61,.45);background:rgba(232,163,61,.08)}
 .ib.hide:hover{background:rgba(232,163,61,.18)}
 .ib.show{color:#2FBF7F;border-color:rgba(47,191,127,.45);background:rgba(47,191,127,.08)}
