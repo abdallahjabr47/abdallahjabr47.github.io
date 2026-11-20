@@ -36,7 +36,7 @@
 }
 *{box-sizing:border-box;min-width:0}
 html{overflow-x:hidden;scroll-behavior:smooth;scroll-padding-top:90px;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 'Inter',system-ui,-apple-system,sans-serif;font-optical-sizing:auto;font-feature-settings:'cv11','ss03';overflow-x:clip;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 html,body{transition:background-color .4s}
@@ -49,7 +49,7 @@ ul,ol{margin:0;padding:0}
 ::selection{background:var(--blue);color:var(--on-accent)}
 .container{max-width:var(--max);margin-inline:auto;padding-inline:var(--pad)}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.serif{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:400;color:var(--coral-ink);letter-spacing:-.02em;font-variation-settings:'SOFT' 100,'opsz' 144}
+.serif{font-family:'Inter',sans-serif;font-style:italic;font-weight:500;color:var(--coral-ink);letter-spacing:-.03em;font-variation-settings:normal}
 .muted{color:var(--muted)}
 
 /* ---------- ambient: glows + grain ---------- */
@@ -154,7 +154,7 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .portrait .backing{position:absolute;inset:0;border-radius:36px;background:linear-gradient(150deg,var(--blue),#1769E0 55%,var(--coral));transform:rotate(5deg) translate(14px,8px);opacity:.9}
 .badge-ring{position:absolute;top:-26px;right:-22px;width:92px;height:92px;z-index:3;border-radius:50%;background:var(--coral);display:grid;place-items:center;box-shadow:0 6px 18px rgba(23,105,224,.2)}
 .badge-ring svg{position:absolute;inset:0;width:100%;height:100%;animation:spin 18s linear infinite}
-.badge-ring text{font:700 12.5px 'Plus Jakarta Sans',sans-serif;letter-spacing:.2em;fill:#fff;text-transform:uppercase}
+.badge-ring text{font:700 12.5px 'Inter',sans-serif;letter-spacing:.2em;fill:#fff;text-transform:uppercase}
 .badge-ring b{font-size:20px;color:#fff}
 @keyframes spin{to{transform:rotate(360deg)}}
 .arch{position:absolute;inset:0;border-radius:36px;transform:rotate(-3deg);box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden;background:linear-gradient(180deg,var(--ph1),var(--ph2)) center/cover no-repeat;border:1px solid var(--line);display:grid;place-items:center}
@@ -889,3 +889,4 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 [data-theme="light"] .stat b sup{color:var(--blue)}
 .faq-q .pm::before,.faq-q .pm::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:2px;border-radius:2px;background:currentColor;transform:translate(-50%,-50%)}
 .faq-q .pm::after{transform:translate(-50%,-50%) rotate(90deg)}
+h1,h2,h3,.h-xl,.h-lg,.h-md,.ix-t,.stat b{letter-spacing:-.035em}
