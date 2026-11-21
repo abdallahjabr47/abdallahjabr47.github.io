@@ -540,8 +540,8 @@
     "title": "xchange",
     "headline": "xchange",
     "headlineAccent": "",
-    "tagline": "A currency converter with live rates, favourites and rate alerts.",
-    "category": "Finance · Currency converter",
+    "tagline": "A mobile currency exchange app for travelers.",
+    "category": "Fintech · Currency exchange",
     "platform": "Mobile app",
     "type": "mobile",
     "year": "2024",
@@ -549,7 +549,7 @@
     "liveUrl": "",
     "status": "",
     "published": true,
-    "summary": "A personal project: a mobile currency converter that makes checking and comparing rates quick, with favourite currencies, rate charts and alerts.",
+    "summary": "A mobile app that gives global travelers quick, reliable access to live exchange rates, so they can convert between currencies, manage travel budgets and make informed decisions abroad.",
     "cover": {
       "image": "assets/uploads/xchange/cover.webp",
       "ghost": "xchange",
@@ -558,27 +558,66 @@
     "company": "Personal project",
     "role": "UI/UX Designer",
     "team": "Solo",
-    "timeline": "[Start — End]",
+    "timeline": "4 weeks",
     "platforms": "iOS · Android",
     "tags": [
       "UX/UI",
       "Mobile",
-      "Fintech"
+      "Fintech",
+      "Figma"
     ],
-    "overview": "xchange is a mobile app for converting currencies in a few taps. You pick a base amount once and see it in all your favourite currencies, follow how a rate moved over time, and get an alert when it changes.",
-    "problem": "Most converter apps make you convert one pair at a time and hide the trend behind extra screens. People who travel or send money abroad want to see several currencies at once and know if now is a good time to exchange.",
+    "overview": "xchange was created to help international travelers and remote workers track and convert currencies in real time. The app focuses on speed, accuracy and usability, with a simple, clean interface. I designed it while taking the Google UX Design Professional Certificate, following user-centred design principles.",
+    "problem": "Travelers need reliable, up-to-date exchange rates fast, want to convert between several currencies on the go and keep their travel budget in check, but existing apps are slow, cluttered or hard to navigate.",
     "responsibilities": {
       "product": [],
       "design": [
-        "User flows and information architecture",
-        "Wireframes and high-fidelity UI",
-        "Onboarding, sign up and log in",
-        "Converter, charts and rate alerts",
-        "Settings, security and edge states (empty, error, loading)"
+        "Research into travelers’ needs and pain points",
+        "User flows and wireframes",
+        "Style guide: colours, type and components",
+        "High-fidelity UI and interactive prototype",
+        "Testing and iteration"
       ]
     },
-    "process": [],
-    "challenges": [],
+    "process": [
+      {
+        "title": "Empathize",
+        "desc": "Learned users’ needs and pain points."
+      },
+      {
+        "title": "Define",
+        "desc": "Framed the problems and goals clearly."
+      },
+      {
+        "title": "Ideate",
+        "desc": "Explored and sketched creative solutions."
+      },
+      {
+        "title": "Prototype",
+        "desc": "Designed and built interactive mockups."
+      },
+      {
+        "title": "Test",
+        "desc": "Gathered feedback and refined the design."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "Finding reliable, up-to-date exchange rates quickly.",
+        "solution": "Live rates for multiple currencies, with the last update time always visible."
+      },
+      {
+        "challenge": "Converting between multiple currencies on the go.",
+        "solution": "One amount converted into all favourite currencies at once, plus a quick converter between any two."
+      },
+      {
+        "challenge": "Managing travel budgets efficiently.",
+        "solution": "Budget tracking features to help users manage their travel finances, with charts that show how a rate moved over time."
+      },
+      {
+        "challenge": "Existing apps are slow, cluttered or hard to navigate.",
+        "solution": "A clean, minimal dark interface with one bright accent that guides users to the key actions."
+      }
+    ],
     "gallery": {
       "before": [],
       "after": []
