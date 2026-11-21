@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121034727">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121035016">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -616,6 +616,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 #subTabs button.on::after{transform:scaleX(1)}
 #subTabs button .tdot{margin-left:6px}
 @media (max-width:860px){#subTabs{justify-content:flex-start;gap:22px}}
+/* for now hiding works per section only: no eye buttons on single texts or cards */
+#edForm .wt-eye{display:none!important}
+#edForm .wt-field.c textarea,.wt-group.card .wt-field.c textarea,.wt-run-b .wt-field.c textarea{padding-right:34px}
+.tcard .wt-field.tf textarea{padding-right:24px}
 </style>
 </head>
 <body>
@@ -691,7 +695,6 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
     <div class="hd-row"><div class="hd-k"><b>New line</b><p>Press <kbd>Enter</kbd> inside a field to break the line on the website.</p></div><div class="hd-ex t"><span class="hd-in">Building Products <kbd class="hd-key">Enter ↵</kbd> People Actually</span><span class="hd-arrow">→</span><span class="hd-out">Building Products<br>People Actually</span></div></div>
     <div class="hd-row"><div class="hd-k"><b>Remove a text</b><p>Leave the field empty and it disappears from the website.</p></div><div class="hd-ex t"><span class="hd-in hd-empty">empty field</span><span class="hd-arrow">→</span><span class="hd-out hd-muted">not shown</span></div></div>
     <h3>Showing &amp; hiding</h3>
-    <div class="hd-row"><div class="hd-k"><b>Eye button</b><p>Hides one text or one card but keeps it saved, so you can bring it back later.</p></div><div class="hd-ex"><span class="hd-chip">👁 Shown</span><span class="hd-arrow">→</span><span class="hd-chip off">Hidden</span></div></div>
     <div class="hd-row"><div class="hd-k"><b>Show on website</b><p>The switch at the top of a section hides the whole section. Your edits stay.</p></div><div class="hd-ex"><span class="hd-sw on"></span><span class="hd-arrow">→</span><span class="hd-sw"></span></div></div>
     <div class="hd-row"><div class="hd-k"><b>Reset</b><p>An edited field shows <b>Reset</b> (or ↺) to go back to the text that's live now.</p></div><div class="hd-ex"><span class="hd-chip blue">Edited</span><span class="hd-chip">Reset</span></div></div>
     <h3>Saving</h3>
@@ -712,10 +715,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
   <span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button>
 </div>
 
-<script src="assets/js/config.js?v=20261121034727"></script>
-<script src="assets/js/icons.js?v=20261121034727"></script>
-<script src="assets/js/content.js?v=20261121034727"></script>
-<script src="assets/js/core.js?v=20261121034727"></script>
-<script src="assets/js/admin.js?v=20261121034727"></script>
+<script src="assets/js/config.js?v=20261121035016"></script>
+<script src="assets/js/icons.js?v=20261121035016"></script>
+<script src="assets/js/content.js?v=20261121035016"></script>
+<script src="assets/js/core.js?v=20261121035016"></script>
+<script src="assets/js/admin.js?v=20261121035016"></script>
 </body>
 </html>
