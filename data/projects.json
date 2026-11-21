@@ -529,5 +529,115 @@
     },
     "tabletScreens": [],
     "cardDevice": "auto"
+  },
+  {
+    "slug": "xchange",
+    "title": "xchange",
+    "headline": "xchange",
+    "headlineAccent": "",
+    "tagline": "[One line about the app.]",
+    "category": "Finance · Currency exchange",
+    "platform": "Mobile app",
+    "type": "mobile",
+    "year": "[Year]",
+    "live": false,
+    "liveUrl": "",
+    "status": "",
+    "published": true,
+    "summary": "[One line on the goal and the result.]",
+    "cover": {
+      "image": "assets/uploads/xchange/cover.webp",
+      "ghost": "xchange",
+      "tint": "#7A4A2C"
+    },
+    "company": "[Client]",
+    "role": "UI/UX Designer",
+    "team": "[Team]",
+    "timeline": "[Start — End]",
+    "platforms": "iOS · Android",
+    "tags": [
+      "UX/UI",
+      "Mobile"
+    ],
+    "overview": "[Overview]",
+    "problem": "",
+    "responsibilities": {
+      "product": [],
+      "design": []
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": [],
+    "featured": false,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
+  },
+  {
+    "slug": "worldclockr",
+    "title": "WorldClockr",
+    "headline": "WorldClockr",
+    "headlineAccent": "",
+    "tagline": "[One line about the app.]",
+    "category": "Utility · World clock",
+    "platform": "Mobile app",
+    "type": "mobile",
+    "year": "[Year]",
+    "live": false,
+    "liveUrl": "",
+    "status": "",
+    "published": true,
+    "summary": "[One line on the goal and the result.]",
+    "cover": {
+      "image": "assets/uploads/worldclockr/cover.webp",
+      "ghost": "Clock",
+      "tint": "#3A1420"
+    },
+    "company": "[Client]",
+    "role": "UI/UX Designer",
+    "team": "[Team]",
+    "timeline": "[Start — End]",
+    "platforms": "iOS · Android",
+    "tags": [
+      "UX/UI",
+      "Mobile"
+    ],
+    "overview": "[Overview]",
+    "problem": "",
+    "responsibilities": {
+      "product": [],
+      "design": []
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": [],
+    "featured": false,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
   }
 ]
