@@ -28,13 +28,13 @@
     web: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>'
   };
   const LINK_NAME = { appstore: ['Download on the', 'App Store'], googleplay: ['Get it on', 'Google Play'], web: ['Visit', 'Website'] };
-  const linkType = (l) => /apps\.apple\.com|itunes\.apple/.test(l.url) ? 'appstore' : /play\.google\.com/.test(l.url) ? 'googleplay' : 'web';
+  const linkType = (l) => ['appstore', 'googleplay', 'web'].includes(l.type) ? l.type : /apps\.apple\.com|itunes\.apple/.test(l.url) ? 'appstore' : /play\.google\.com/.test(l.url) ? 'googleplay' : 'web';
   function linksHTML(p) {
     const list = (Array.isArray(p.links) ? p.links : []).filter((l) => l && has(l.url));
     if (!list.length && has(p.liveUrl)) list.push({ url: p.liveUrl, label: 'Visit live' });
     if (!list.length) return '';
     return `<div class="cs-links">${list.map((l) => { const t = linkType(l);
-      const name = has(l.label) ? l.label : ({ appstore: 'App Store', googleplay: 'Google Play', web: 'Visit website' })[t];
+      const name = ({ appstore: 'App Store', googleplay: 'Google Play', web: 'Website' })[t];
       return `<a class="btn btn-ghost btn-sm cs-link" href="${esc(l.url)}" target="_blank" rel="noopener">${LINK_IC[t]}${esc(name)} <span class="arr" aria-hidden="true">↗</span></a>`; }).join('')}</div>`;
   }
 
