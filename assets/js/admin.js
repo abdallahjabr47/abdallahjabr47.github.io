@@ -369,7 +369,10 @@
     const hint = opts.hint ? `<small>${opts.hint}</small>` : '';
     if (opts.area) return `<label class="f">${label}<textarea data-k="${key}" rows="${opts.rows || 4}">${v}</textarea>${hint}</label>`;
     if (opts.select) return `<label class="f">${label}<select data-k="${key}">${opts.select.map(([ov, ol]) => `<option value="${ov}" ${String(val) === ov ? 'selected' : ''}>${ol}</option>`).join('')}</select>${hint}</label>`;
-    return `<label class="f">${label}<input data-k="${key}" type="${opts.type || 'text'}" value="${v}" ${opts.ph ? `placeholder="${esc(opts.ph)}"` : ''}>${hint}</label>`;
+    const inp = `<input data-k="${key}" type="${opts.type || 'text'}" value="${v}" ${opts.ph ? `placeholder="${esc(opts.ph)}"` : ''}>`;
+    const ic = opts.icon && window.ICONS && window.ICONS[opts.icon];
+    if (ic) return `<label class="f">${label}<span class="f-ico"><svg viewBox="${ic.vb}" aria-hidden="true" style="color:${ic.c === 'ink' ? 'var(--ink)' : ic.c}">${ic.p}</svg>${inp}</span>${hint}</label>`;
+    return `<label class="f">${label}${inp}${hint}</label>`;
   };
   const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['Shipped', 'Shipped'], ['In progress', 'In progress']];
   const C = (label, key, val) => `<label class="chk"><input type="checkbox" data-k="${key}" ${val ? 'checked' : ''}> ${label}</label>`;
@@ -696,9 +699,9 @@
       </fieldset>
       <fieldset data-g="links"><legend>Links</legend>
         <p class="hint">Leave a link empty to hide its button on the site.</p>
-        <div class="g2">${F('Email', 'email', site.email, { type: 'email', ph: 'you@email.com' })}${F('WhatsApp number (with country code)', 'whatsapp', site.whatsapp, { ph: '970597323726' })}</div>
-        <div class="g2">${F('LinkedIn URL', 'linkedin', site.linkedin, { ph: 'https://www.linkedin.com/in/…' })}${F('Behance URL', 'behance', site.behance, { ph: 'https://www.behance.net/…' })}</div>
-        <div class="g2">${F('Dribbble URL', 'dribbble', site.dribbble, { ph: 'https://dribbble.com/…' })}${F('GitHub URL', 'github', site.github, { ph: 'https://github.com/…' })}</div>
+        <div class="g2">${F('Email', 'email', site.email, { icon: 'gmail', type: 'email', ph: 'you@email.com' })}${F('WhatsApp number (with country code)', 'whatsapp', site.whatsapp, { icon: 'whatsapp', ph: '9705XXXXXXXX' })}</div>
+        <div class="g2">${F('LinkedIn URL', 'linkedin', site.linkedin, { icon: 'linkedin', ph: 'https://www.linkedin.com/in/…' })}${F('Behance URL', 'behance', site.behance, { icon: 'behance', ph: 'https://www.behance.net/…' })}</div>
+        <div class="g2">${F('Dribbble URL', 'dribbble', site.dribbble, { icon: 'dribbble', ph: 'https://dribbble.com/…' })}${F('GitHub URL', 'github', site.github, { icon: 'github', ph: 'https://github.com/…' })}</div>
       </fieldset>
       <fieldset data-g="cv"><legend>CV</legend>
         <p class="hint">The “View My CV” button in the top bar opens this file. Removing it hides the button.</p>
