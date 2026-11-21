@@ -127,13 +127,15 @@
   function status(state, text) {
     const bar = $('#savebar'), m = $('#saveMsg');
     clearTimeout(hideTimer);
-    if (!state) { bar.classList.add('hidden'); return; }
+    if (!state) { bar.classList.add('hidden'); document.body.classList.remove('has-savebar'); return; }
     bar.classList.remove('hidden'); bar.dataset.state = state;
     m.textContent = text || { pending: 'You have unsaved changes', saving: 'Saving…', ok: 'Saved ✓ — live on your site in about a minute' }[state];
+    $('#saveDiscard').hidden = !['pending', 'hint', 'err'].includes(state);
+    document.body.classList.add('has-savebar');
     $('#saveRetry').hidden = !['pending', 'err', 'conflict'].includes(state);
     $('#saveRetry').textContent = state === 'conflict' ? 'Reload' : state === 'err' ? 'Try again' : 'Save';
     $('#saveRetry').classList.toggle('primary', state === 'pending');
-    if (state === 'ok') hideTimer = setTimeout(() => { if (!dirty && !saving) bar.classList.add('hidden'); }, 3500);
+    if (state === 'ok') hideTimer = setTimeout(() => { if (!dirty && !saving) { bar.classList.add('hidden'); document.body.classList.remove('has-savebar'); } }, 3500);
   }
   function recheck() {
     collect();
@@ -1100,6 +1102,21 @@
     if (saveAgain) { saveAgain = false; recheck(); }
   }
   addEventListener('keydown', (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') { e.preventDefault(); if (dirty && !saving) { collect(); autoSave(); } } });
+  /* discard: drop every unsaved change and go back to what's live */
+  $('#saveDiscard').addEventListener('click', async () => {
+    if (saving) return;
+    const ok = await ask({ title: 'Discard unsaved changes?', text: 'Everything you changed since the last save goes back to how it is on the site.', ok: 'Discard', tone: 'danger' });
+    if (!ok) return;
+    const wasMode = mode, wasIdx = editing;
+    projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent);
+    content.text = content.text || {}; content.hidden = content.hidden || [];
+    pending.clear();
+    setDirty(false);
+    if (wasMode === 'project' && wasIdx >= 0 && projects[wasIdx]) openEditor(wasIdx);
+    else if (wasMode === 'exp' && wasIdx >= 0 && experience[wasIdx]) openExpEditor(wasIdx);
+    else renderList();
+    setDirty(false);
+  });
   $('#saveRetry').addEventListener('click', () => { if ($('#savebar').dataset.state === 'conflict') { dirty = false; saving = false; location.reload(); return; } clearTimeout(saveTimer); autoSave(); });
 
   /* ---------------- start ---------------- */

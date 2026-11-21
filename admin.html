@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121114853">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121120130">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -575,7 +575,12 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .wt-run-b .wt-field.c textarea{white-space:nowrap;overflow-x:auto;overflow-y:hidden;height:44px!important;min-height:44px;text-overflow:ellipsis;scrollbar-width:none}
 .wt-run-b .wt-field.c textarea::-webkit-scrollbar{display:none}
 /* save status: a small pill, no buttons — changes save on their own */
-.savebar{left:auto;right:24px;bottom:24px;padding:10px 16px 10px 14px;border:1px solid var(--line2);border-radius:999px;display:flex;align-items:center;gap:10px;background:rgb(var(--raise) / .96);box-shadow:0 14px 40px rgb(0 0 0 / .35);transition:opacity .25s,transform .25s}
+.savebar{left:0;right:0;bottom:0;padding:14px var(--pad);border:0;border-top:1px solid var(--line2);border-radius:0;display:flex;justify-content:center;background:rgb(var(--raise) / .97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 -14px 40px rgb(0 0 0 / .3);transition:opacity .25s,transform .25s}
+.sv-in{width:100%;max-width:1400px;display:flex;align-items:center;gap:12px}
+.sv-acts{margin-left:auto;display:flex;align-items:center;gap:10px}
+.sv-discard{height:40px;padding:0 18px;border-radius:999px;border:1px solid var(--line2);color:var(--ink);font-size:14px;font-weight:700}
+.sv-discard:hover{background:rgb(var(--fg) / .06);border-color:rgb(var(--fg) / .3)}
+body.has-savebar{padding-bottom:76px}
 .savebar.hidden{display:flex!important;opacity:0;transform:translateY(10px);pointer-events:none}
 .savebar .msg{font-size:14px;color:var(--ink)}
 .sv-ic{width:10px;height:10px;border-radius:50%;flex:none;background:#E8A33D}
@@ -587,10 +592,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .f.flash,[data-row].flash{animation:wtFlash 1.6s ease-out;border-radius:14px}
 .savebar[data-state="err"] .msg{color:#F07167}
 .sv-retry{font-size:13.5px;font-weight:700;color:var(--sky);padding:0 4px}
-.sv-retry.primary{height:34px;padding:0 16px;margin:-4px -8px -4px 2px;border-radius:999px;background:var(--blue);color:#fff}
+.sv-retry.primary{height:40px;padding:0 22px;margin:0;border-radius:999px;background:var(--blue);color:#fff;font-size:14px}
 .sv-retry.primary:hover{filter:brightness(1.1)}
 @keyframes svspin{to{transform:rotate(360deg)}}
-@media (max-width:640px){.savebar{right:12px;left:12px;bottom:12px;border-radius:16px}}
+@media (max-width:640px){.savebar{padding:12px 14px}.sv-in{flex-wrap:wrap;gap:10px}.sv-acts{width:100%}.sv-acts button{flex:1}}
 /* live card beside the project editor: same layout as the card on the website */
 .ed-prev{display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:22px;border:1px solid var(--line);background:var(--card);overflow:visible}
 .ep-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -757,13 +762,13 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
   </div>
 </dialog>
 <div class="savebar hidden" id="savebar" role="status" aria-live="polite">
-  <span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button>
+  <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261121114853"></script>
-<script src="assets/js/icons.js?v=20261121114853"></script>
-<script src="assets/js/content.js?v=20261121114853"></script>
-<script src="assets/js/core.js?v=20261121114853"></script>
-<script src="assets/js/admin.js?v=20261121114853"></script>
+<script src="assets/js/config.js?v=20261121120130"></script>
+<script src="assets/js/icons.js?v=20261121120130"></script>
+<script src="assets/js/content.js?v=20261121120130"></script>
+<script src="assets/js/core.js?v=20261121120130"></script>
+<script src="assets/js/admin.js?v=20261121120130"></script>
 </body>
 </html>
