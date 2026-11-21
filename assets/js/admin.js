@@ -271,7 +271,7 @@
     show('v-list');
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
-    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'The ★ projects are the first 5 on the home page, in this order. Use the arrows to reorder, then press <b>Save</b>.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
+    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'The ★ projects are the first 5 on the home page, in this order. All projects, these included, are on the All work page. Use the arrows to reorder, then press <b>Save</b>.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
     placePartSwitch();
     const el = $('#plist');
     if (tab === 'experience') {
@@ -294,7 +294,7 @@
     el.innerHTML = projects.map((p, i) => {
       const fr = feats.indexOf(p);
       const upOff = fr > -1 ? fr === 0 : i === nf, downOff = fr > -1 ? fr === nf - 1 : i === projects.length - 1;
-      return `${i === nf && nf ? '<div class="feat-split"><span>Not on the home page</span></div>' : ''}<div class="prow glass${p.published === false ? ' is-hidden' : ''}${fr > -1 ? ' is-feat' : ''}">
+      return `${i === nf && nf ? '<div class="feat-split"><span>The rest — shown on the All work page</span></div>' : ''}<div class="prow glass${p.published === false ? ' is-hidden' : ''}${fr > -1 ? ' is-feat' : ''}">
         ${icn(p)}
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small>${esc(p.category || '')}${p.year ? ' · ' + esc(p.year) : ''}</small></span>
         <span class="bdgs">${p.published === false ? '<span class="badge-d">Hidden</span>' : ''}${fr > -1 ? `<span class="badge-d feat">★ Home #${fr + 1}</span>` : ''}</span>
