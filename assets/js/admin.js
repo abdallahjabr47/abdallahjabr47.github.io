@@ -458,10 +458,10 @@
     $('#edForm').innerHTML = `
       <fieldset><legend>Basics</legend>
         <div class="g2">${F('Project name *', 'title', p.title)}${F('URL name (slug)', 'slug', p.slug, { hint: 'Auto-filled from the name. Used in the link: project.html#slug' })}</div>
-        <div class="g2">${F('Card one-liner', 'tagline', p.tagline, { hint: 'Shown under the name on the card and on the case study.' })}${F('Category', 'category', p.category, { ph: 'Entertainment · Series platform' })}</div>
+        <div class="g2">${F('Card one-liner', 'tagline', p.tagline, { hint: 'Shown under the name on the project card. The case study uses it only if the summary is empty.' })}${F('Category', 'category', p.category, { ph: 'Entertainment · Series platform' })}</div>
         <div class="g2">${F('Type', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Website + mobile app']] })}${F('Platform label', 'platform', p.platform, { ph: 'Mobile App' })}</div>
         <div class="g3">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES, hint: 'Shown on the card and case study.' })}${F('Live link (optional)', 'liveUrl', p.liveUrl, { ph: 'https://…', hint: 'Adds a “Visit live” button.' })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}${C('Featured on the home page (top 5)', 'featured', p.featured === true)}</div></div>
-        ${F('Short summary', 'summary', p.summary, { area: true, rows: 3, hint: 'Two or three sentences shown on the case study page, under the one-liner.' })}
+        ${F('Short summary', 'summary', p.summary, { area: true, rows: 3, hint: 'The idea in two or three sentences. Shown under the project name at the top of the case study.' })}
       </fieldset>
 
       <fieldset><legend>Devices &amp; screens</legend>
@@ -475,9 +475,8 @@
       </fieldset>
 
       <fieldset><legend>Case study header</legend>
-        <div class="g2">${F('Big title', 'headline', p.headline, { ph: 'From content' })}${F('Italic blue part', 'headlineAccent', p.headlineAccent, { ph: 'to series.' })}</div>
         <div class="g2">${F('Accent colour', 'cover.tint', (p.cover && p.cover.tint) || '#2B3A8F', { type: 'color' })}${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}</div>
-        <div class="f">Cover image (optional — wide, replaces the device mock-up)</div>${imgList('cover.image', p.cover && p.cover.image ? [p.cover.image] : [], 'wide', false, false)}
+        <div class="f">Cover image (optional — wide, replaces the device mock-up and the faint project name behind it)</div>${imgList('cover.image', p.cover && p.cover.image ? [p.cover.image] : [], 'wide', false, false)}
         <div class="g2">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}</div>
         <div class="g3">${F('Team', 'team', p.team)}${F('Timeline', 'timeline', p.timeline, { ph: '6 months' })}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
       </fieldset>
