@@ -177,7 +177,7 @@
         </div>
         ${has(p.summary) || has(p.tagline) ? `<p class="cs-sum" data-reveal style="--d:250ms">${esc(has(p.summary) ? p.summary : p.tagline)}</p>` : ''}
         <div class="cs-meta" data-reveal style="--d:350ms">
-          <span class="pill dev-pill">${['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span title="${DEV[k][0]}">${devIc(k)}</span>`).join('')}${esc(p.platform || (type === 'web' ? 'Website' : type === 'both' ? 'Website + app' : 'Mobile app'))}</span>
+          <span class="pill dev-pill">${['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span title="${DEV[k][0]}">${devIc(k)}</span>`).join('')}${esc(p.platform || (type === 'web' ? 'Website' : type === 'both' ? 'Mobile + Website' : 'Mobile app'))}</span>
           ${(p.tags || []).map((t) => `<span class="pill">${esc(t)}</span>`).join('')}
         </div>
       </section>

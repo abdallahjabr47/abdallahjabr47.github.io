@@ -410,13 +410,15 @@
   const rep = (kind, list, addLabel) => `<div class="rep" data-rep="${kind}">${(list || []).map((a) => repRow(kind, a)).join('')}</div><button class="btn btn-ghost btn-sm" type="button" data-add-row="${kind}" style="align-self:flex-start">+ ${addLabel}</button>`;
 
   /* live card + section nav beside the project editor */
+  const KIND_LABEL = { mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' };
+  const CATS = ['Social', 'Entertainment', 'Fintech', 'Utility', 'Careers', 'Food & drink', 'Health', 'E-commerce', 'Education', 'Travel', 'Productivity', 'Local business'];
   function setupSide(isProject) {
     const side = $('#edSide'), lay = $('#edLayout');
     side.hidden = !isProject; lay.classList.toggle('two', !!isProject);
     if (!isProject) { side.innerHTML = ''; return; }
     const fsets = $$('#edForm > fieldset');
     fsets.forEach((f, n) => { f.id = 'ed-s-' + n; });
-    side.innerHTML = `<div class="ed-prev"><div class="ep-top"><span class="ep-cap">Live card</span><span class="ep-flags"></span></div><div class="ep-stage"><div class="ep-lbls"></div><div class="ep-dev"></div></div><div class="ep-head"><span class="ep-logo"></span><span class="ep-tx"><b class="ep-t"></b><small class="ep-l"></small></span></div><span class="ep-st"></span></div>
+    side.innerHTML = `<div class="ed-prev"><div class="ep-stage"><div class="ep-lbls"></div><div class="ep-dev"></div></div><div class="ep-head"><span class="ep-logo"></span><span class="ep-tx"><b class="ep-t"></b><small class="ep-l"></small></span></div><div class="ep-flags"><span class="ep-st"></span></div></div>
       <nav class="ed-nav" aria-label="Editor sections">${fsets.map((f, n) => `<a href="#ed-s-${n}" data-n="${n}"${n ? '' : ' class="on"'}><span>${String(n + 1).padStart(2, '0')}</span>${esc($('legend', f).textContent)}</a>`).join('')}</nav>`;
     const val = (k) => { const el = $(`#edForm [data-k="${k}"]`); return el ? (el.type === 'checkbox' ? el.checked : el.value.trim()) : ''; };
     const first = (k) => { const im = $(`#edForm [data-imgs="${k}"] .im`); return im && im.dataset.path; };
@@ -431,13 +433,14 @@
       $('.ep-dev', side).className = 'ep-dev d-' + dev;
       $('.ep-dev', side).innerHTML = shot ? `<img src="${esc(imgURL(shot))}" alt="">` : '<span>No screen yet</span>';
       const cat = (val('category') || '').split('·')[0].trim();
-      $('.ep-lbls', side).innerHTML = `<span class="lb lb-${type}">${({ mobile: 'Mobile app', web: 'Website', both: 'Web + app' })[type] || 'Mobile app'}</span>${cat ? `<span class="lb lb-cat">${esc(cat)}</span>` : ''}`;
+      $('.ep-lbls', side).innerHTML = `<span class="lb lb-${type}">${KIND_LABEL[type] || 'Mobile app'}</span>${cat ? `<span class="lb lb-cat">${esc(cat)}</span>` : ''}`;
       $('.ep-logo', side).innerHTML = icon ? `<img src="${esc(imgURL(icon))}" alt="">` : esc(title.charAt(0));
       $('.ep-logo', side).style.setProperty('--tint', tint);
       $('.ep-t', side).textContent = title;
       $('.ep-l', side).textContent = val('tagline') || val('category');
-      $('.ep-st', side).textContent = val('status');
-      $('.ep-flags', side).innerHTML = `<span class="badge-d ${val('published') ? 'on' : ''}">${val('published') ? 'Published' : 'Hidden'}</span>${val('featured') ? '<span class="badge-d feat">★ Featured</span>' : ''}`;
+      const stv = val('status');
+      $('.ep-flags', side).innerHTML = `${stv ? `<span class="ep-st">${esc(stv)}</span>` : ''}<span class="badge-d pub ${val('published') ? 'on' : ''}">${val('published') ? '✓ Published' : 'Hidden'}</span>${val('featured') ? '<span class="badge-d feat">★ Featured</span>' : ''}`;
+
     };
     draw();
     const form = $('#edForm');
@@ -461,8 +464,8 @@
     $('#edForm').innerHTML = `
       <fieldset><legend>Basics</legend>
         <div class="g2">${F('Project name *', 'title', p.title)}${F('URL name (slug)', 'slug', p.slug, { hint: 'Auto-filled from the name. Used in the link: project.html#slug' })}</div>
-        <div class="g2">${F('Card one-liner', 'tagline', p.tagline, { hint: 'Shown under the name on the project card. The case study uses it only if the summary is empty.' })}${F('Category', 'category', p.category, { ph: 'Entertainment · Series platform' })}</div>
-        <div class="g2">${F('Type', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Website + mobile app']] })}${F('Platform label', 'platform', p.platform, { ph: 'Mobile App' })}</div>
+        <div class="g2">${F('Card one-liner', 'tagline', p.tagline, { hint: 'Shown under the name on the project card. The case study uses it only if the summary is empty.' })}<label class="f">Kind<input data-k="category" list="catList" value="${esc(p.category || '')}" placeholder="Social · Series platform"><datalist id="catList">${CATS.map((c) => `<option value="${c}">`).join('')}</datalist><small>Pick one or type your own. The first word shows on the card.</small></label></div>
+        <div class="g2"><div class="f">What is it<div class="seg-pick" role="group" aria-label="What is it"><input type="hidden" data-k="type" value="${esc(p.type || 'mobile')}">${[['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Mobile + Website']].map(([v, l]) => `<button type="button" data-seg="${v}"${(p.type || 'mobile') === v ? ' class="on"' : ''}>${l}</button>`).join('')}</div></div>${F('Platform label', 'platform', p.platform, { ph: 'Mobile App' })}</div>
         <div class="g2">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES, hint: 'Shown on the card and case study.' })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}${C('Featured on the home page (top 5)', 'featured', p.featured === true)}</div></div>
         ${F('Short summary', 'summary', p.summary, { area: true, rows: 3, hint: 'The idea in two or three sentences. Shown under the project name at the top of the case study.' })}
       </fieldset>
@@ -857,6 +860,8 @@
     setDirty(true);
   });
   form.addEventListener('click', (e) => {
+    const sg = e.target.closest('[data-seg]');
+    if (sg) { const box = sg.parentElement, h = $('input[data-k]', box); h.value = sg.dataset.seg; $$('[data-seg]', box).forEach((b) => b.classList.toggle('on', b === sg)); h.dispatchEvent(new Event('input', { bubbles: true })); h.dispatchEvent(new Event('change', { bubbles: true })); setDirty(true); return; }
     const add = e.target.closest('[data-add-row]');
     if (add) { const kind = add.dataset.addRow; $(`[data-rep="${kind}"]`, form).insertAdjacentHTML('beforeend', repRow(kind)); setDirty(true); return; }
     const del = e.target.closest('[data-del-row]');
