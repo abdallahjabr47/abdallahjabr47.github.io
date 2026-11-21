@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121035735">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121042137">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -622,6 +622,33 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 #edForm .wt-eye{display:none!important}
 #edForm .wt-field.c textarea,.wt-group.card .wt-field.c textarea,.wt-run-b .wt-field.c textarea{padding-right:34px}
 .tcard .wt-field.tf textarea{padding-right:24px}
+/* project list: icon actions, home-page picks */
+.ib.ico{width:40px;min-width:40px;height:40px;padding:0;display:inline-grid;place-items:center;border-radius:11px}
+.ib.ico svg{width:17px;height:17px}
+.ib.ico:disabled{opacity:.3;cursor:default}
+.ib.ico.star svg{fill:none}
+.ib.ico.star.on{color:#F5C451;border-color:rgb(245 196 81 / .5);background:rgb(245 196 81 / .12)}
+.ib.ico.star.on svg{fill:currentColor}
+.acts{align-items:center}
+.acts-sep{width:1px;height:22px;margin:0 4px;background:var(--line2)}
+.prow.is-hidden .t,.prow.is-hidden .ic{opacity:.5}
+.feat-box{padding:18px 20px 20px;border-radius:22px;margin-bottom:22px}
+.fb-h,.all-h{display:flex;flex-direction:column;gap:2px;margin-bottom:14px}
+.fb-h b,.all-h b{font-size:17px}.fb-h small,.all-h small{font-size:13.5px;color:var(--dim)}
+.all-h{margin:6px 0 12px 4px}
+.fslots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.fslot{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 10px 12px;border-radius:16px;border:1px solid var(--line2);background:rgb(var(--fg) / .03);text-align:center;min-height:150px}
+.fslot .fn{position:absolute;top:8px;left:10px;font-size:12px;font-weight:800;color:#F5C451}
+.fslot .ic{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;font-weight:800;color:#fff;overflow:hidden}
+.fslot .ic img{width:100%;height:100%;object-fit:cover}
+.fslot b{font-size:14.5px;line-height:1.25}
+.fs-acts{display:flex;gap:4px;margin-top:auto}
+.fs-acts .ib.ico{width:32px;min-width:32px;height:32px;border-radius:9px}
+.fs-acts .ib.ico svg{width:15px;height:15px}
+.fslot.empty{border-style:dashed;justify-content:center;color:var(--dim)}
+.fslot.empty small{font-size:12.5px;line-height:1.4}
+.fslot.empty small svg{width:13px;height:13px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:2}
+@media (max-width:860px){.fslots{grid-template-columns:repeat(5,minmax(130px,1fr));overflow-x:auto;padding-bottom:4px}.prow{flex-wrap:wrap}.prow .acts{width:100%;justify-content:flex-end}}
 </style>
 </head>
 <body>
@@ -717,10 +744,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
   <span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button>
 </div>
 
-<script src="assets/js/config.js?v=20261121035735"></script>
-<script src="assets/js/icons.js?v=20261121035735"></script>
-<script src="assets/js/content.js?v=20261121035735"></script>
-<script src="assets/js/core.js?v=20261121035735"></script>
-<script src="assets/js/admin.js?v=20261121035735"></script>
+<script src="assets/js/config.js?v=20261121042137"></script>
+<script src="assets/js/icons.js?v=20261121042137"></script>
+<script src="assets/js/content.js?v=20261121042137"></script>
+<script src="assets/js/core.js?v=20261121042137"></script>
+<script src="assets/js/admin.js?v=20261121042137"></script>
 </body>
 </html>

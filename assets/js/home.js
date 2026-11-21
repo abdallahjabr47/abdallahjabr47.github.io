@@ -123,9 +123,9 @@
     const all = grid.hasAttribute('data-all');
     let shown = list, rest = [];
     if (!all && list.length > 6) {
-      const feat = list.filter((p) => p.featured);
+      const feat = list.map((p, i) => ({ p, i })).filter((x) => x.p.featured).sort((a, b) => (a.p.featuredRank || 99) - (b.p.featuredRank || 99) || a.i - b.i).map((x) => x.p);
       const pick = (feat.length ? feat.concat(list.filter((p) => !p.featured)) : list).slice(0, 5);
-      shown = list.filter((p) => pick.includes(p));
+      shown = pick;
       rest = list.filter((p) => !pick.includes(p));
     }
     grid.innerHTML = shown.map(cardHTML).join('') + (rest.length ? seeAllHTML(list, rest) : '');

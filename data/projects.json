@@ -535,35 +535,42 @@
     "title": "xchange",
     "headline": "xchange",
     "headlineAccent": "",
-    "tagline": "[One line about the app.]",
-    "category": "Finance · Currency exchange",
+    "tagline": "A currency converter with live rates, favourites and rate alerts.",
+    "category": "Finance · Currency converter",
     "platform": "Mobile app",
     "type": "mobile",
-    "year": "[Year]",
+    "year": "2024",
     "live": false,
     "liveUrl": "",
     "status": "",
     "published": true,
-    "summary": "[One line on the goal and the result.]",
+    "summary": "A personal project: a mobile currency converter that makes checking and comparing rates quick, with favourite currencies, rate charts and alerts.",
     "cover": {
       "image": "assets/uploads/xchange/cover.webp",
       "ghost": "xchange",
-      "tint": "#7A4A2C"
+      "tint": "#A0521F"
     },
-    "company": "[Client]",
+    "company": "Personal project",
     "role": "UI/UX Designer",
-    "team": "[Team]",
+    "team": "Solo",
     "timeline": "[Start — End]",
     "platforms": "iOS · Android",
     "tags": [
       "UX/UI",
-      "Mobile"
+      "Mobile",
+      "Fintech"
     ],
-    "overview": "[Overview]",
-    "problem": "",
+    "overview": "xchange is a mobile app for converting currencies in a few taps. You pick a base amount once and see it in all your favourite currencies, follow how a rate moved over time, and get an alert when it changes.",
+    "problem": "Most converter apps make you convert one pair at a time and hide the trend behind extra screens. People who travel or send money abroad want to see several currencies at once and know if now is a good time to exchange.",
     "responsibilities": {
       "product": [],
-      "design": []
+      "design": [
+        "User flows and information architecture",
+        "Wireframes and high-fidelity UI",
+        "Onboarding, sign up and log in",
+        "Converter, charts and rate alerts",
+        "Settings, security and edge states (empty, error, loading)"
+      ]
     },
     "process": [],
     "challenges": [],
@@ -574,7 +581,16 @@
     "results": [],
     "learnings": "",
     "icon": "",
-    "screens": [],
+    "screens": [
+      "assets/uploads/xchange/01-splash.webp",
+      "assets/uploads/xchange/02-onboarding.webp",
+      "assets/uploads/xchange/02b-login.webp",
+      "assets/uploads/xchange/03-home.webp",
+      "assets/uploads/xchange/04-convert.webp",
+      "assets/uploads/xchange/05-charts.webp",
+      "assets/uploads/xchange/06-alerts.webp",
+      "assets/uploads/xchange/07-profile.webp"
+    ],
     "webScreens": [],
     "featured": false,
     "devices": {

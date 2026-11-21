@@ -235,6 +235,23 @@
   }
 
   /* ---------------- list ---------------- */
+  const IC = {
+    up: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>',
+    down: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>',
+    hide: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
+    show: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c1-1.5 5-6 10-6s9 4.5 10 6c-1 1.5-5 6-10 6S3 13.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+    edit: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg>',
+    del: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>',
+    star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg>',
+    left: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
+    right: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
+    x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+  };
+  const iconBtn = (a, i, icon, label, cls = '', dis = false) => `<button class="ib ico ${cls}" type="button" data-a="${a}" data-i="${i}" aria-label="${esc(label)}" title="${esc(label)}"${dis ? ' disabled' : ''}>${icon}</button>`;
+  const FEAT_MAX = 5;
+  /* featured projects in their home-page order (featuredRank, then list order) */
+  const featList = () => projects.map((p, i) => ({ p, i })).filter((x) => x.p.featured).sort((a, b) => (a.p.featuredRank || 99) - (b.p.featuredRank || 99) || a.i - b.i).map((x) => x.p);
+  const rerank = (list) => list.forEach((p, n) => { p.featuredRank = n + 1; });
   function renderList() {
     editing = -1;
     tab = KIND_TAB[sub.kind];
@@ -246,7 +263,7 @@
     show('v-list');
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
-    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a project saved but off the website. Press <b>Save</b> when you’re done.' : 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a role saved but off the website. Press <b>Save</b> when you’re done.') + '</span>';
+    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Pick up to 5 for the home page with the star, and set their order above. Press <b>Save</b> when you’re done.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
     placePartSwitch();
     const el = $('#plist');
     if (tab === 'experience') {
@@ -255,28 +272,36 @@
         <span class="t"><b>${esc(x.role || 'Untitled role')}</b><small>${esc(x.company || '')}${x.dates ? ' · ' + esc(x.dates) : ''}</small></span>
         <span class="badge-d ${x.visible !== false ? 'on' : ''}">${x.visible !== false ? 'Visible' : 'Hidden'}</span>
         <span class="acts">
-          <button class="ib" type="button" data-a="up" data-i="${i}" aria-label="Move up" ${i === 0 ? 'disabled' : ''}>↑</button>
-          <button class="ib" type="button" data-a="down" data-i="${i}" aria-label="Move down" ${i === experience.length - 1 ? 'disabled' : ''}>↓</button>
-          <button class="ib ${x.visible !== false ? 'hide' : 'show'}" type="button" data-a="toggle" data-i="${i}">${x.visible !== false ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>Hide' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c1-1.5 5-6 10-6s9 4.5 10 6c-1 1.5-5 6-10 6S3 13.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Show'}</button>
-          <button class="ib edit" type="button" data-a="edit" data-i="${i}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg>Edit</button>
-          <button class="ib danger" type="button" data-a="del" data-i="${i}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>Delete</button>
+          ${iconBtn('up', i, IC.up, 'Move up', '', i === 0)}${iconBtn('down', i, IC.down, 'Move down', '', i === experience.length - 1)}
+          <span class="acts-sep"></span>
+          ${x.visible !== false ? iconBtn('toggle', i, IC.hide, 'Hide from the website', 'hide') : iconBtn('toggle', i, IC.show, 'Show on the website', 'show')}
+          ${iconBtn('edit', i, IC.edit, 'Edit', 'edit')}${iconBtn('del', i, IC.del, 'Delete', 'danger')}
         </span></div>`).join('');
       return;
     }
     if (!projects.length) { el.innerHTML = '<div class="card-a glass"><p class="muted">No projects yet. Press <b>+ New project</b> to add your first one.</p></div>'; return; }
-    el.innerHTML = projects.map((p, i) => {
-      const tint = (p.cover && p.cover.tint) || '#2B3A8F';
-      const icon = p.icon ? `<img src="${esc(imgURL(p.icon))}" alt="">` : esc((p.title || '?').charAt(0));
-      return `<div class="prow glass">
-        <span class="ic" style="background:linear-gradient(140deg,${esc(tint)},#0E1119)">${icon}</span>
+    const feats = featList();
+    const icn = (p) => { const tint = (p.cover && p.cover.tint) || '#2B3A8F'; return `<span class="ic" style="background:linear-gradient(140deg,${esc(tint)},#0E1119)">${p.icon ? `<img src="${esc(imgURL(p.icon))}" alt="">` : esc((p.title || '?').charAt(0))}</span>`; };
+    const slots = Array.from({ length: FEAT_MAX }, (_, n) => {
+      const p = feats[n];
+      if (!p) return `<div class="fslot empty"><span class="fn">${n + 1}</span><small>Empty — tap ${IC.star} on a project below</small></div>`;
+      const k = projects.indexOf(p);
+      return `<div class="fslot"><span class="fn">${n + 1}</span>${icn(p)}<b>${esc(p.title || 'Untitled')}</b><span class="fs-acts">${iconBtn('fleft', k, IC.left, 'Move earlier', '', n === 0)}${iconBtn('fright', k, IC.right, 'Move later', '', n === feats.length - 1)}${iconBtn('feat', k, IC.x, 'Remove from the home page')}</span></div>`;
+    }).join('');
+    el.innerHTML = `<div class="feat-box glass"><div class="fb-h"><b>On the home page</b><small>The ${FEAT_MAX} projects shown first, in this order. Everything else is under “See all”.</small></div><div class="fslots">${slots}</div></div>
+    <div class="all-h"><b>All projects</b><small>This is the order on the All work page.</small></div>` + projects.map((p, i) => {
+      const fr = feats.indexOf(p);
+      return `<div class="prow glass${p.published === false ? ' is-hidden' : ''}">
+        ${icn(p)}
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small>${esc(p.category || '')}${p.year ? ' · ' + esc(p.year) : ''}</small></span>
-        <span class="bdgs"><span class="badge-d ${p.published !== false ? 'on' : ''}">${p.published !== false ? 'Published' : 'Hidden'}</span>${p.featured ? '<span class="badge-d feat">★ Featured</span>' : ''}</span>
+        <span class="bdgs">${p.published === false ? '<span class="badge-d">Hidden</span>' : ''}${fr > -1 ? `<span class="badge-d feat">★ Home #${fr + 1}</span>` : ''}</span>
         <span class="acts">
-          <button class="ib" type="button" data-a="up" data-i="${i}" aria-label="Move ${esc(p.title)} up" ${i === 0 ? 'disabled' : ''}>↑</button>
-          <button class="ib" type="button" data-a="down" data-i="${i}" aria-label="Move ${esc(p.title)} down" ${i === projects.length - 1 ? 'disabled' : ''}>↓</button>
-          <button class="ib ${p.published !== false ? 'hide' : 'show'}" type="button" data-a="toggle" data-i="${i}">${p.published !== false ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>Hide' : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12c1-1.5 5-6 10-6s9 4.5 10 6c-1 1.5-5 6-10 6S3 13.5 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Show'}</button>
-          <button class="ib edit" type="button" data-a="edit" data-i="${i}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4zM14 6l4 4"/></svg>Edit</button>
-          <button class="ib danger" type="button" data-a="del" data-i="${i}" aria-label="Delete ${esc(p.title)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg>Delete</button>
+          ${iconBtn('feat', i, IC.star, fr > -1 ? 'Remove from the home page' : 'Show on the home page', 'star' + (fr > -1 ? ' on' : ''))}
+          <span class="acts-sep"></span>
+          ${iconBtn('up', i, IC.up, 'Move up', '', i === 0)}${iconBtn('down', i, IC.down, 'Move down', '', i === projects.length - 1)}
+          <span class="acts-sep"></span>
+          ${p.published !== false ? iconBtn('toggle', i, IC.hide, 'Hide from the website', 'hide') : iconBtn('toggle', i, IC.show, 'Show on the website', 'show')}
+          ${iconBtn('edit', i, IC.edit, 'Edit', 'edit')}${iconBtn('del', i, IC.del, 'Delete', 'danger')}
         </span></div>`;
     }).join('');
   }
@@ -290,6 +315,17 @@
     if (a === 'up' && i > 0) [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
     if (a === 'down' && i < arr.length - 1) [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]];
     if (a === 'toggle') arr[i][flag] = arr[i][flag] === false;
+    if (a === 'feat' || a === 'fleft' || a === 'fright') {
+      const list = featList(), p = projects[i], n = list.indexOf(p);
+      if (a === 'feat') {
+        if (n > -1) { list.splice(n, 1); p.featured = false; delete p.featuredRank; }
+        else if (list.length >= FEAT_MAX) { status('hint', `The home page shows ${FEAT_MAX}. Remove one first.`); return; }
+        else { p.featured = true; list.push(p); }
+      }
+      if (a === 'fleft' && n > 0) [list[n - 1], list[n]] = [list[n], list[n - 1]];
+      if (a === 'fright' && n > -1 && n < list.length - 1) [list[n + 1], list[n]] = [list[n], list[n + 1]];
+      rerank(list);
+    }
     if (a === 'del') { if (!(await ask({ title: `Delete “${arr[i].title || arr[i].role}”?`, text: 'It’s removed from the website after you press Save.', ok: 'Delete', tone: 'danger' }))) return; arr.splice(i, 1); }
     setDirty(changed());
     renderList();
