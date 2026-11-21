@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121035333">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121035735">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -586,6 +586,8 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .f.flash,[data-row].flash{animation:wtFlash 1.6s ease-out;border-radius:14px}
 .savebar[data-state="err"] .msg{color:#F07167}
 .sv-retry{font-size:13.5px;font-weight:700;color:var(--sky);padding:0 4px}
+.sv-retry.primary{height:34px;padding:0 16px;margin:-4px -8px -4px 2px;border-radius:999px;background:var(--blue);color:#fff}
+.sv-retry.primary:hover{filter:brightness(1.1)}
 @keyframes svspin{to{transform:rotate(360deg)}}
 @media (max-width:640px){.savebar{right:12px;left:12px;bottom:12px;border-radius:16px}}
 /* live card beside the project editor: same layout as the card on the website */
@@ -698,7 +700,7 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
     <div class="hd-row"><div class="hd-k"><b>Show on website</b><p>The switch at the top of a section hides the whole section. Your edits stay.</p></div><div class="hd-ex"><span class="hd-sw on"></span><span class="hd-arrow">→</span><span class="hd-sw"></span></div></div>
     <div class="hd-row"><div class="hd-k"><b>Reset</b><p>An edited field shows <b>Reset</b> (or ↺) to go back to the text that's live now.</p></div><div class="hd-ex"><span class="hd-chip blue">Edited</span><span class="hd-chip">Reset</span></div></div>
     <h3>Saving</h3>
-    <div class="hd-row"><div class="hd-k"><b>Saves on its own</b><p>Stop typing for a couple of seconds and your change saves by itself. It's live on the site about a minute later. If you change something and put it back, nothing is saved.</p></div><div class="hd-ex"><span class="hd-chip">● Saving…</span><span class="hd-arrow">→</span><span class="hd-chip ok">● Saved ✓</span></div></div>
+    <div class="hd-row"><div class="hd-k"><b>Save</b><p>When you change something, a <b>Save</b> button shows at the bottom right (or press <kbd>⌘ S</kbd>). Your changes are live on the site about a minute after saving. If you change something and put it back, the button goes away.</p></div><div class="hd-ex"><span class="hd-chip">● You have unsaved changes</span><span class="hd-chip primary">Save</span></div></div>
     <div class="hd-row"><div class="hd-k"><b>Preview</b><p><b>Preview site</b> in the top bar opens the website with your latest changes, only for you.</p></div><div class="hd-ex"><span class="hd-chip">Preview site ↗</span></div></div>
     <div class="hd-row"><div class="hd-k"><b>Search</b><p>Type any word in the search box to jump straight to the field that has it.</p></div><div class="hd-ex"><span class="hd-chip">🔍 figma</span></div></div>
   </div>
@@ -715,10 +717,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
   <span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button>
 </div>
 
-<script src="assets/js/config.js?v=20261121035333"></script>
-<script src="assets/js/icons.js?v=20261121035333"></script>
-<script src="assets/js/content.js?v=20261121035333"></script>
-<script src="assets/js/core.js?v=20261121035333"></script>
-<script src="assets/js/admin.js?v=20261121035333"></script>
+<script src="assets/js/config.js?v=20261121035735"></script>
+<script src="assets/js/icons.js?v=20261121035735"></script>
+<script src="assets/js/content.js?v=20261121035735"></script>
+<script src="assets/js/core.js?v=20261121035735"></script>
+<script src="assets/js/admin.js?v=20261121035735"></script>
 </body>
 </html>

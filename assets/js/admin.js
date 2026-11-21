@@ -129,9 +129,10 @@
     clearTimeout(hideTimer);
     if (!state) { bar.classList.add('hidden'); return; }
     bar.classList.remove('hidden'); bar.dataset.state = state;
-    m.textContent = text || { pending: 'Changes will save in a moment…', saving: 'Saving…', ok: 'Saved ✓ — live on your site in about a minute' }[state];
-    $('#saveRetry').hidden = state !== 'err' && state !== 'conflict';
-    $('#saveRetry').textContent = state === 'conflict' ? 'Reload' : 'Retry';
+    m.textContent = text || { pending: 'You have unsaved changes', saving: 'Saving…', ok: 'Saved ✓ — live on your site in about a minute' }[state];
+    $('#saveRetry').hidden = !['pending', 'err', 'conflict'].includes(state);
+    $('#saveRetry').textContent = state === 'conflict' ? 'Reload' : state === 'err' ? 'Try again' : 'Save';
+    $('#saveRetry').classList.toggle('primary', state === 'pending');
     if (state === 'ok') hideTimer = setTimeout(() => { if (!dirty && !saving) bar.classList.add('hidden'); }, 3500);
   }
   function recheck() {
@@ -139,7 +140,7 @@
     dirty = changed();
     clearTimeout(saveTimer);
     if (!dirty) { touched.clear(); if (!saving) status(''); }
-    else { if (!saving) status('pending'); saveTimer = setTimeout(autoSave, 2200); }
+    else if (!saving) status('pending');
     tabsReady();
   }
   function setDirty(v, mark = true) {
@@ -189,7 +190,7 @@
       await loadData();
     } catch (err) { msg.textContent = 'Could not sign in: ' + err.message; auth = null; }
   });
-  if ($('#logout')) $('#logout').addEventListener('click', async () => { if ((dirty || saving) && !(await ask({ title: 'Lock the editor?', text: 'Your last change hasn’t finished saving yet. Lock anyway and lose it?', ok: 'Lock anyway', tone: 'danger' }))) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
+  if ($('#logout')) $('#logout').addEventListener('click', async () => { if ((dirty || saving) && !(await ask({ title: 'Lock the editor?', text: 'You have changes that aren’t saved yet. Lock anyway and lose them?', ok: 'Lock anyway', tone: 'danger' }))) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
 
   /* ---------------- load ---------------- */
   async function loadData() {
@@ -245,7 +246,7 @@
     show('v-list');
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
-    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a project saved but off the website. Changes save on their own.' : 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a role saved but off the website. Changes save on their own.') + '</span>';
+    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a project saved but off the website. Press <b>Save</b> when you’re done.' : 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a role saved but off the website. Press <b>Save</b> when you’re done.') + '</span>';
     placePartSwitch();
     const el = $('#plist');
     if (tab === 'experience') {
@@ -289,7 +290,7 @@
     if (a === 'up' && i > 0) [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
     if (a === 'down' && i < arr.length - 1) [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]];
     if (a === 'toggle') arr[i][flag] = arr[i][flag] === false;
-    if (a === 'del') { if (!(await ask({ title: `Delete “${arr[i].title || arr[i].role}”?`, text: 'It’s removed from the website a minute after you confirm. This can’t be undone here.', ok: 'Delete', tone: 'danger' }))) return; arr.splice(i, 1); }
+    if (a === 'del') { if (!(await ask({ title: `Delete “${arr[i].title || arr[i].role}”?`, text: 'It’s removed from the website after you press Save.', ok: 'Delete', tone: 'danger' }))) return; arr.splice(i, 1); }
     setDirty(changed());
     renderList();
   });
@@ -669,7 +670,7 @@
       const when = site.cvUpdated ? `Updated ${fmtDate(site.cvUpdated)}` : 'Uploaded';
       box.innerHTML = `<div class="cv-card">
         <span class="cv-ic" aria-hidden="true">PDF</span>
-        <span class="cv-meta"><b>${esc(name)}</b><small>${when}${isNew ? ' · <i>new — saving…</i>' : ' · <i class="ok">Live on the site</i>'}</small></span>
+        <span class="cv-meta"><b>${esc(name)}</b><small>${when}${isNew ? ' · <i>new — press Save to put it live</i>' : ' · <i class="ok">Live on the site</i>'}</small></span>
         <span class="cv-act">
           <a class="ib" href="${esc(previews.get(site.cv) || site.cv)}" target="_blank" rel="noopener">View</a>
           <label class="ib edit" for="cvInput" style="cursor:pointer">Replace</label>
@@ -796,7 +797,7 @@
     const del = e.target.closest('[data-del-row]');
     if (del) {
       const row = del.closest('[data-row]');
-      if (row.classList.contains('rec-row')) { const t = ($('[data-r="title"]', row) || {}).value || 'this item'; ask({ title: `Delete “${t}”?`, text: 'It’s removed from the website a minute after you confirm.', ok: 'Delete', tone: 'danger' }).then((y) => { if (y) { row.remove(); setDirty(true); } }); return; }
+      if (row.classList.contains('rec-row')) { const t = ($('[data-r="title"]', row) || {}).value || 'this item'; ask({ title: `Delete “${t}”?`, text: 'It’s removed from the website after you press Save.', ok: 'Delete', tone: 'danger' }).then((y) => { if (y) { row.remove(); setDirty(true); } }); return; }
       row.remove(); setDirty(true); return;
     }
     const tg = e.target.closest('[data-rec-toggle]');
@@ -992,9 +993,9 @@
     collect();
     if (!changed()) { dirty = false; status(''); return; }
     const badX = experience.find((x) => !x.role || !x.role.trim() || !x.company || !x.company.trim());
-    if (badX) return status('hint', 'Add a job title and company to save this role.');
+    if (badX) return status('hint', 'Add a job title and company, then press Save.');
     const bad = projects.find((p) => !p.title || !p.title.trim());
-    if (bad) return status('hint', 'Add a project name to save it.');
+    if (bad) return status('hint', 'Add a project name, then press Save.');
     const slugs = projects.map((p) => p.slug);
     const dup = slugs.find((x, i) => slugs.indexOf(x) !== i);
     if (dup) return status('err', `Not saved yet: two projects use the same URL name “${dup}”.`);
@@ -1036,7 +1037,7 @@
       sent.forEach((path) => pending.delete(path));
       saving = false;
       dirty = changed();
-      if (dirty) { status('pending'); clearTimeout(saveTimer); saveTimer = setTimeout(autoSave, 1200); }
+      if (dirty) status('pending');
       else { touched.clear(); tabsReady(); status('ok'); }
     } catch (err) {
       saving = false;
@@ -1044,6 +1045,7 @@
     }
     if (saveAgain) { saveAgain = false; recheck(); }
   }
+  addEventListener('keydown', (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') { e.preventDefault(); if (dirty && !saving) { collect(); autoSave(); } } });
   $('#saveRetry').addEventListener('click', () => { if ($('#savebar').dataset.state === 'conflict') { dirty = false; saving = false; location.reload(); return; } clearTimeout(saveTimer); autoSave(); });
 
   /* ---------------- start ---------------- */
