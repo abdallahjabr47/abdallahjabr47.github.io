@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121042429">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121043022">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -656,6 +656,14 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .prow.is-feat{border-color:rgba(92,155,245,.28)}
 .feat-split{display:flex;align-items:center;gap:12px;margin:6px 4px;color:var(--dim);font-size:12.5px;font-weight:600}
 .feat-split::before,.feat-split::after{content:"";flex:1;height:1px;background:var(--line2)}
+/* home-page position picker in each row */
+.rank{position:relative;display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 10px 0 11px;border-radius:11px;border:1px solid var(--line2);color:var(--muted);cursor:pointer}
+.rank svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round;flex:none}
+.rank select{appearance:none;-webkit-appearance:none;border:0;background:none;color:inherit;font:600 14px 'Inter',sans-serif;padding:0 14px 0 0;cursor:pointer;outline:none;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 5px) 55%,100% 55%;background-size:5px 5px;background-repeat:no-repeat}
+.rank select option{color:#111}
+.rank.on{color:#5C9BF5;border-color:rgba(92,155,245,.55);background:rgba(23,105,224,.14)}
+.rank.on svg{fill:currentColor}
+.rank:focus-within{outline:2px solid var(--sky);outline-offset:1px}
 </style>
 </head>
 <body>
@@ -751,10 +759,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
   <span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button>
 </div>
 
-<script src="assets/js/config.js?v=20261121042429"></script>
-<script src="assets/js/icons.js?v=20261121042429"></script>
-<script src="assets/js/content.js?v=20261121042429"></script>
-<script src="assets/js/core.js?v=20261121042429"></script>
-<script src="assets/js/admin.js?v=20261121042429"></script>
+<script src="assets/js/config.js?v=20261121043022"></script>
+<script src="assets/js/icons.js?v=20261121043022"></script>
+<script src="assets/js/content.js?v=20261121043022"></script>
+<script src="assets/js/core.js?v=20261121043022"></script>
+<script src="assets/js/admin.js?v=20261121043022"></script>
 </body>
 </html>

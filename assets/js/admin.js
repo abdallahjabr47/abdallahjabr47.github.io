@@ -271,7 +271,7 @@
     show('v-list');
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
-    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'The ★ projects are the first 5 on the home page, in this order. All projects, these included, are on the All work page. Use the arrows to reorder, then press <b>Save</b>.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
+    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Pick a home-page position (#1–#5) for any project from its ★ menu. All projects, these included, are on the All work page. Then press <b>Save</b>.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
     placePartSwitch();
     const el = $('#plist');
     if (tab === 'experience') {
@@ -297,9 +297,9 @@
       return `${i === nf && nf ? '<div class="feat-split"><span>The rest — shown on the All work page</span></div>' : ''}<div class="prow glass${p.published === false ? ' is-hidden' : ''}${fr > -1 ? ' is-feat' : ''}">
         ${icn(p)}
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small>${esc(p.category || '')}${p.year ? ' · ' + esc(p.year) : ''}</small></span>
-        <span class="bdgs">${p.published === false ? '<span class="badge-d">Hidden</span>' : ''}${fr > -1 ? `<span class="badge-d feat">★ Home #${fr + 1}</span>` : ''}</span>
+        <span class="bdgs">${p.published === false ? '<span class="badge-d">Hidden</span>' : ''}</span>
         <span class="acts">
-          ${iconBtn('feat', i, IC.star, fr > -1 ? 'Remove from the home page' : 'Show on the home page', 'star' + (fr > -1 ? ' on' : ''))}
+          <label class="rank${fr > -1 ? ' on' : ''}" title="Position on the home page">${IC.star}<select data-rank="${i}" aria-label="Home page position for ${esc(p.title || 'project')}"><option value="0"${fr < 0 ? ' selected' : ''}>Off</option>${Array.from({ length: FEAT_MAX }, (_, n) => `<option value="${n + 1}"${fr === n ? ' selected' : ''}>#${n + 1}</option>`).join('')}</select></label>
           <span class="acts-sep"></span>
           ${iconBtn('up', i, IC.up, 'Move up', '', upOff)}${iconBtn('down', i, IC.down, 'Move down', '', downOff)}
           <span class="acts-sep"></span>
@@ -308,6 +308,17 @@
         </span></div>`;
     }).join('');
   }
+  /* pick a home-page position (1–5) right from the row; others shift, a 6th falls off */
+  $('#plist').addEventListener('change', (e) => {
+    const sel = e.target.closest('select[data-rank]'); if (!sel) return;
+    const p = projects[+sel.dataset.rank], want = +sel.value;
+    const list = featList().filter((x) => x !== p);
+    if (want) { list.splice(Math.min(want - 1, list.length), 0, p); }
+    list.forEach((x, n) => { x.featured = n < FEAT_MAX; if (n >= FEAT_MAX) delete x.featuredRank; });
+    if (!want) { p.featured = false; delete p.featuredRank; }
+    rerank(list.slice(0, FEAT_MAX));
+    normalize(); setDirty(changed()); renderList();
+  });
   $('#plist').addEventListener('click', async (e) => {
     const b = e.target.closest('button[data-a]'); if (!b) return;
     if (b.dataset.a === 'new') { $('#newProject').click(); return; }
