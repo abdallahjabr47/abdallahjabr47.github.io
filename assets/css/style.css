@@ -1745,3 +1745,4 @@ html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height
 /* project name written faintly behind the cover devices */
 .cs-cover .ghost{top:clamp(40px,12%,90px);bottom:auto;padding:0 4%;font-size:clamp(60px,13vw,210px);letter-spacing:-.04em;line-height:.9;background:linear-gradient(180deg,rgb(var(--fg) / .2),rgb(var(--fg) / .02) 90%);-webkit-background-clip:text;background-clip:text;color:transparent;overflow:hidden;text-overflow:clip;z-index:0;pointer-events:none;user-select:none}
 .cs-cover .devices{z-index:1}
+.cs-back{margin-bottom:-6px;align-self:flex-start}

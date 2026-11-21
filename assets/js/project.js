@@ -99,8 +99,12 @@
 
     const snap = [['My role', p.role], ['Company', p.company], ['Category', p.category], ['Team', p.team], ['Timeline', p.timeline], ['Platform', p.platforms]].filter(([, v]) => has(v));
 
+    let ref = ''; try { ref = document.referrer && new URL(document.referrer).origin === location.origin ? new URL(document.referrer).pathname : ''; } catch (e) {}
+    const fromHome = /(^|\/)(index\.html)?$/.test(ref) && ref !== '';
+    const backHref = fromHome ? 'index.html#work' : 'work.html', backLabel = fromHome ? 'Back to home' : 'All work';
     main.innerHTML = `
       <section class="container cs-hero">
+        <a class="back-link cs-back" href="${backHref}" data-reveal><span aria-hidden="true">←</span> ${backLabel}</a>
         <div class="cs-id" data-reveal>
           ${has(p.icon) ? `<span class="cs-icon"><img src="${esc(p.icon)}" alt="${esc(p.title)} logo"></span>` : `<span class="cs-icon letter" style="--tint:${esc(tint)}">${esc((p.title || '?').charAt(0))}</span>`}
           <span class="cs-idt"><h1 class="cs-idt-h">${esc(p.title)}</h1><small>Case study ${String(idx + 1).padStart(2, '0')}${has(p.category) ? ' · ' + esc(p.category) : ''}</small></span>
