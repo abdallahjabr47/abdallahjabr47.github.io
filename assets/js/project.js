@@ -91,7 +91,7 @@
     const dv = (p.devices && (p.devices.mobile || p.devices.tablet || p.devices.desktop)) ? p.devices : { mobile: type !== 'web', tablet: false, desktop: type !== 'mobile' };
     const coverInner = p.cover && p.cover.image
       ? `<img src="${esc(p.cover.image)}" alt="${esc(p.title)} cover">`
-      : `<span class="ghost" aria-hidden="true">${esc(p.title)}</span><div class="devices" style="gap:28px">
+      : `${window.Scenes ? window.Scenes.html(p) : ''}<span class="ghost" aria-hidden="true">${esc(p.title)}</span><div class="devices" style="gap:28px">
            ${dv.desktop ? `<div class="dev-desk">${p.webScreens && p.webScreens[0] ? `<img src="${esc(p.webScreens[0])}" alt="" style="width:100%;height:100%;object-fit:cover">` : 'Desktop'}</div>` : ''}
            ${dv.tablet ? `<div class="dev-tab">${p.tabletScreens && p.tabletScreens[0] ? `<img src="${esc(p.tabletScreens[0])}" alt="" style="width:100%;height:100%;object-fit:cover">` : 'Tablet'}</div>` : ''}
            ${dv.mobile ? (dv.desktop || dv.tablet ? [1] : [0, 1, 2]).map((k) => `<div class="dev-phone" style="${k !== 1 ? 'transform:translateY(-26px);opacity:.75' : 'border-color:var(--sky)'};overflow:hidden">${shots[k] || (k === 1 && shots[0]) ? `<img src="${esc(shots[k] || shots[0])}" alt="" style="width:100%;height:100%;object-fit:cover">` : mockScreen(tint)}</div>`).join('') : ''}
