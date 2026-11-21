@@ -225,6 +225,7 @@
       else throw err;
     }
     content.text = content.text || {}; content.hidden = content.hidden || [];
+    normalize();
     original = JSON.stringify(projects);
     originalExp = JSON.stringify(experience);
     originalSite = JSON.stringify(site);
@@ -252,6 +253,13 @@
   /* featured projects in their home-page order (featuredRank, then list order) */
   const featList = () => projects.map((p, i) => ({ p, i })).filter((x) => x.p.featured).sort((a, b) => (a.p.featuredRank || 99) - (b.p.featuredRank || 99) || a.i - b.i).map((x) => x.p);
   const rerank = (list) => list.forEach((p, n) => { p.featuredRank = n + 1; });
+  /* featured projects always sit first, in their home-page order; the rest keep their order after them */
+  function normalize() {
+    const f = featList(); rerank(f);
+    const rest = projects.filter((p) => !p.featured);
+    rest.forEach((p) => { delete p.featuredRank; });
+    projects.splice(0, projects.length, ...f, ...rest);
+  }
   function renderList() {
     editing = -1;
     tab = KIND_TAB[sub.kind];
@@ -263,7 +271,7 @@
     show('v-list');
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
-    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Pick up to 5 for the home page with the star, and set their order above. Press <b>Save</b> when you’re done.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
+    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'The ★ projects are the first 5 on the home page, in this order. Use the arrows to reorder, then press <b>Save</b>.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
     placePartSwitch();
     const el = $('#plist');
     if (tab === 'experience') {
@@ -282,23 +290,18 @@
     if (!projects.length) { el.innerHTML = '<div class="card-a glass"><p class="muted">No projects yet. Press <b>+ New project</b> to add your first one.</p></div>'; return; }
     const feats = featList();
     const icn = (p) => { const tint = (p.cover && p.cover.tint) || '#2B3A8F'; return `<span class="ic" style="background:linear-gradient(140deg,${esc(tint)},#0E1119)">${p.icon ? `<img src="${esc(imgURL(p.icon))}" alt="">` : esc((p.title || '?').charAt(0))}</span>`; };
-    const slots = Array.from({ length: FEAT_MAX }, (_, n) => {
-      const p = feats[n];
-      if (!p) return `<div class="fslot empty"><span class="fn">${n + 1}</span><small>Empty — tap ${IC.star} on a project below</small></div>`;
-      const k = projects.indexOf(p);
-      return `<div class="fslot"><span class="fn">${n + 1}</span>${icn(p)}<b>${esc(p.title || 'Untitled')}</b><span class="fs-acts">${iconBtn('fleft', k, IC.left, 'Move earlier', '', n === 0)}${iconBtn('fright', k, IC.right, 'Move later', '', n === feats.length - 1)}${iconBtn('feat', k, IC.x, 'Remove from the home page')}</span></div>`;
-    }).join('');
-    el.innerHTML = `<div class="feat-box glass"><div class="fb-h"><b>On the home page</b><small>The ${FEAT_MAX} projects shown first, in this order. Everything else is under “See all”.</small></div><div class="fslots">${slots}</div></div>
-    <div class="all-h"><b>All projects</b><small>This is the order on the All work page.</small></div>` + projects.map((p, i) => {
+    const nf = feats.length;
+    el.innerHTML = projects.map((p, i) => {
       const fr = feats.indexOf(p);
-      return `<div class="prow glass${p.published === false ? ' is-hidden' : ''}">
+      const upOff = fr > -1 ? fr === 0 : i === nf, downOff = fr > -1 ? fr === nf - 1 : i === projects.length - 1;
+      return `${i === nf && nf ? '<div class="feat-split"><span>Not on the home page</span></div>' : ''}<div class="prow glass${p.published === false ? ' is-hidden' : ''}${fr > -1 ? ' is-feat' : ''}">
         ${icn(p)}
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small>${esc(p.category || '')}${p.year ? ' · ' + esc(p.year) : ''}</small></span>
         <span class="bdgs">${p.published === false ? '<span class="badge-d">Hidden</span>' : ''}${fr > -1 ? `<span class="badge-d feat">★ Home #${fr + 1}</span>` : ''}</span>
         <span class="acts">
           ${iconBtn('feat', i, IC.star, fr > -1 ? 'Remove from the home page' : 'Show on the home page', 'star' + (fr > -1 ? ' on' : ''))}
           <span class="acts-sep"></span>
-          ${iconBtn('up', i, IC.up, 'Move up', '', i === 0)}${iconBtn('down', i, IC.down, 'Move down', '', i === projects.length - 1)}
+          ${iconBtn('up', i, IC.up, 'Move up', '', upOff)}${iconBtn('down', i, IC.down, 'Move down', '', downOff)}
           <span class="acts-sep"></span>
           ${p.published !== false ? iconBtn('toggle', i, IC.hide, 'Hide from the website', 'hide') : iconBtn('toggle', i, IC.show, 'Show on the website', 'show')}
           ${iconBtn('edit', i, IC.edit, 'Edit', 'edit')}${iconBtn('del', i, IC.del, 'Delete', 'danger')}
@@ -312,6 +315,7 @@
     const arr = tab === 'projects' ? projects : experience;
     const flag = tab === 'projects' ? 'published' : 'visible';
     if (a === 'edit') return tab === 'projects' ? openEditor(i) : openExpEditor(i);
+    if (tab === 'projects' && (a === 'up' || a === 'down') && arr[i].featured) { const list = featList(), n = list.indexOf(arr[i]), m = a === 'up' ? n - 1 : n + 1; if (m >= 0 && m < list.length) { [list[n], list[m]] = [list[m], list[n]]; rerank(list); } normalize(); setDirty(changed()); renderList(); return; }
     if (a === 'up' && i > 0) [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
     if (a === 'down' && i < arr.length - 1) [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]];
     if (a === 'toggle') arr[i][flag] = arr[i][flag] === false;
@@ -326,6 +330,7 @@
       if (a === 'fright' && n > -1 && n < list.length - 1) [list[n + 1], list[n]] = [list[n], list[n + 1]];
       rerank(list);
     }
+    if (tab === 'projects') normalize();
     if (a === 'del') { if (!(await ask({ title: `Delete “${arr[i].title || arr[i].role}”?`, text: 'It’s removed from the website after you press Save.', ok: 'Delete', tone: 'danger' }))) return; arr.splice(i, 1); }
     setDirty(changed());
     renderList();

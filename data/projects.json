@@ -152,7 +152,8 @@
       "desktop": false
     },
     "tabletScreens": [],
-    "cardDevice": "auto"
+    "cardDevice": "auto",
+    "featuredRank": 1
   },
   {
     "slug": "momyt-meet",
@@ -228,7 +229,8 @@
       "desktop": false
     },
     "tabletScreens": [],
-    "cardDevice": "auto"
+    "cardDevice": "auto",
+    "featuredRank": 2
   },
   {
     "slug": "foras",
@@ -290,7 +292,8 @@
       "desktop": true
     },
     "tabletScreens": [],
-    "cardDevice": "auto"
+    "cardDevice": "auto",
+    "featuredRank": 3
   },
   {
     "slug": "ruckaroo",
@@ -363,7 +366,64 @@
       "desktop": false
     },
     "tabletScreens": [],
-    "cardDevice": "auto"
+    "cardDevice": "auto",
+    "featuredRank": 4
+  },
+  {
+    "slug": "sip-cafe",
+    "title": "SIP Café",
+    "headline": "SIP",
+    "headlineAccent": "Café.",
+    "tagline": "[One line about the website.]",
+    "category": "Food & drink · Café website",
+    "platform": "Website",
+    "type": "web",
+    "year": "[Year]",
+    "live": true,
+    "liveUrl": "",
+    "status": "Live",
+    "published": true,
+    "summary": "A website for a specialty café: [one line on the goal of the site and the result].",
+    "cover": {
+      "image": "",
+      "ghost": "SIP",
+      "tint": "#2E1F18"
+    },
+    "company": "[Client]",
+    "role": "UI/UX Designer",
+    "team": "[Team]",
+    "timeline": "[Start — End]",
+    "platforms": "Web",
+    "tags": [
+      "UX/UI",
+      "Web"
+    ],
+    "overview": "[Overview]",
+    "problem": "",
+    "responsibilities": {
+      "product": [],
+      "design": []
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": [],
+    "featured": true,
+    "devices": {
+      "mobile": true,
+      "tablet": true,
+      "desktop": true
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto",
+    "featuredRank": 5
   },
   {
     "slug": "mazadak",
@@ -471,61 +531,6 @@
       "mobile": true,
       "tablet": false,
       "desktop": false
-    },
-    "tabletScreens": [],
-    "cardDevice": "auto"
-  },
-  {
-    "slug": "sip-cafe",
-    "title": "SIP Café",
-    "headline": "SIP",
-    "headlineAccent": "Café.",
-    "tagline": "[One line about the website.]",
-    "category": "Food & drink · Café website",
-    "platform": "Website",
-    "type": "web",
-    "year": "[Year]",
-    "live": true,
-    "liveUrl": "",
-    "status": "Live",
-    "published": true,
-    "summary": "A website for a specialty café: [one line on the goal of the site and the result].",
-    "cover": {
-      "image": "",
-      "ghost": "SIP",
-      "tint": "#2E1F18"
-    },
-    "company": "[Client]",
-    "role": "UI/UX Designer",
-    "team": "[Team]",
-    "timeline": "[Start — End]",
-    "platforms": "Web",
-    "tags": [
-      "UX/UI",
-      "Web"
-    ],
-    "overview": "[Overview]",
-    "problem": "",
-    "responsibilities": {
-      "product": [],
-      "design": []
-    },
-    "process": [],
-    "challenges": [],
-    "gallery": {
-      "before": [],
-      "after": []
-    },
-    "results": [],
-    "learnings": "",
-    "icon": "",
-    "screens": [],
-    "webScreens": [],
-    "featured": true,
-    "devices": {
-      "mobile": true,
-      "tablet": true,
-      "desktop": true
     },
     "tabletScreens": [],
     "cardDevice": "auto"

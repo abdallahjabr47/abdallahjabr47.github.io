@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121042137">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121042323">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -627,7 +627,7 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .ib.ico svg{width:17px;height:17px}
 .ib.ico:disabled{opacity:.3;cursor:default}
 .ib.ico.star svg{fill:none}
-.ib.ico.star.on{color:#F5C451;border-color:rgb(245 196 81 / .5);background:rgb(245 196 81 / .12)}
+.ib.ico.star.on{color:#5C9BF5;border-color:rgba(92,155,245,.55);background:rgba(23,105,224,.14)}
 .ib.ico.star.on svg{fill:currentColor}
 .acts{align-items:center}
 .acts-sep{width:1px;height:22px;margin:0 4px;background:var(--line2)}
@@ -649,6 +649,13 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .fslot.empty small{font-size:12.5px;line-height:1.4}
 .fslot.empty small svg{width:13px;height:13px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:2}
 @media (max-width:860px){.fslots{grid-template-columns:repeat(5,minmax(130px,1fr));overflow-x:auto;padding-bottom:4px}.prow{flex-wrap:wrap}.prow .acts{width:100%;justify-content:flex-end}}
+/* hide = neutral grey; featured rows marked in blue; a line after the home-page picks */
+.ib.ico.hide{color:var(--muted);border-color:var(--line2);background:none}
+.ib.ico.hide:hover{color:var(--ink);background:rgb(var(--fg) / .07)}
+.ib.ico.show{color:var(--ink);border-color:var(--line2);background:rgb(var(--fg) / .06)}
+.prow.is-feat{border-color:rgba(92,155,245,.28)}
+.feat-split{display:flex;align-items:center;gap:12px;margin:6px 4px;color:var(--dim);font-size:12.5px;font-weight:600}
+.feat-split::before,.feat-split::after{content:"";flex:1;height:1px;background:var(--line2)}
 </style>
 </head>
 <body>
@@ -744,10 +751,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
   <span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button>
 </div>
 
-<script src="assets/js/config.js?v=20261121042137"></script>
-<script src="assets/js/icons.js?v=20261121042137"></script>
-<script src="assets/js/content.js?v=20261121042137"></script>
-<script src="assets/js/core.js?v=20261121042137"></script>
-<script src="assets/js/admin.js?v=20261121042137"></script>
+<script src="assets/js/config.js?v=20261121042323"></script>
+<script src="assets/js/icons.js?v=20261121042323"></script>
+<script src="assets/js/content.js?v=20261121042323"></script>
+<script src="assets/js/core.js?v=20261121042323"></script>
+<script src="assets/js/admin.js?v=20261121042323"></script>
 </body>
 </html>
