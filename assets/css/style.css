@@ -1594,7 +1594,7 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 /* shorter scroll on phones */
 @media (max-width:1000px){.proc{height:330vh}}
 #beyond .sec-head .side{max-width:760px}
-.cs-sum{max-width:760px;margin-top:22px;font-size:clamp(18px,1.6vw,22px);line-height:1.6;color:var(--ink2)}
+.cs-sum{max-width:1040px;margin-top:22px;font-size:clamp(18px,1.6vw,22px);line-height:1.6;color:rgb(var(--fg) / .86)}
 /* certificates with images */
 .rec-list li>.rec-cert{display:grid;grid-template-columns:64px minmax(0,1fr) auto 18px;gap:14px;align-items:center;width:100%;text-align:left;padding:12px 6px;color:inherit;font:inherit}
 .rec-cert:hover{background:rgb(var(--fg) / .04)}
