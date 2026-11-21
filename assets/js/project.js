@@ -97,7 +97,7 @@
            ${dv.mobile ? (dv.desktop || dv.tablet ? [1] : [0, 1, 2]).map((k) => `<div class="dev-phone" style="${k !== 1 ? 'transform:translateY(-26px);opacity:.75' : 'border-color:var(--sky)'};overflow:hidden">${shots[k] || (k === 1 && shots[0]) ? `<img src="${esc(shots[k] || shots[0])}" alt="" style="width:100%;height:100%;object-fit:cover">` : mockScreen(tint)}</div>`).join('') : ''}
          </div>`;
 
-    const snap = [['My role', p.role], ['Company', p.company], ['Category', p.category], ['Year', p.year], ['Team', p.team], ['Timeline', p.timeline], ['Platform', p.platforms]].filter(([, v]) => has(v));
+    const snap = [['My role', p.role], ['Company', p.company], ['Category', p.category], ['Team', p.team], ['Timeline', p.timeline], ['Platform', p.platforms]].filter(([, v]) => has(v));
 
     main.innerHTML = `
       <section class="container cs-hero">

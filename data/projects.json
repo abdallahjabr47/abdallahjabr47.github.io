@@ -8,7 +8,7 @@
     "category": "Entertainment · Content",
     "platform": "Mobile App",
     "type": "mobile",
-    "year": "2024 — Now",
+    "year": "",
     "live": true,
     "liveUrl": "",
     "status": "Live",
@@ -164,7 +164,7 @@
     "category": "Social · Meetups",
     "platform": "Mobile App",
     "type": "mobile",
-    "year": "2024 — Now",
+    "year": "",
     "live": true,
     "liveUrl": "",
     "status": "Live",
@@ -241,7 +241,7 @@
     "category": "Careers · Opportunities platform",
     "platform": "Website",
     "type": "web",
-    "year": "2023 — 2024",
+    "year": "",
     "live": true,
     "liveUrl": "",
     "status": "Live",
@@ -255,7 +255,7 @@
     "company": "Foras Palestine",
     "role": "UI/UX Designer",
     "team": "[Team]",
-    "timeline": "Sep 2023 — Mar 2024",
+    "timeline": "6 months",
     "platforms": "Web",
     "tags": [
       "Redesign",
@@ -304,7 +304,7 @@
     "category": "Onboarding UX · Cincy Labs (US)",
     "platform": "Mobile App",
     "type": "mobile",
-    "year": "[Year]",
+    "year": "",
     "live": false,
     "liveUrl": "",
     "status": "Shipped",
@@ -378,7 +378,7 @@
     "category": "Food & drink · Café website",
     "platform": "Website",
     "type": "web",
-    "year": "[Year]",
+    "year": "",
     "live": true,
     "liveUrl": "",
     "status": "Live",
@@ -434,7 +434,7 @@
     "category": "Marketplace · Auctions",
     "platform": "Mobile App",
     "type": "mobile",
-    "year": "[Year]",
+    "year": "",
     "live": false,
     "liveUrl": "",
     "status": "",
@@ -489,7 +489,7 @@
     "category": "Healthcare · Doctors app",
     "platform": "Mobile App",
     "type": "mobile",
-    "year": "[Year]",
+    "year": "",
     "live": false,
     "liveUrl": "",
     "status": "",
@@ -544,14 +544,14 @@
     "category": "Fintech · Currency exchange",
     "platform": "Mobile app",
     "type": "mobile",
-    "year": "2024",
+    "year": "",
     "live": false,
     "liveUrl": "",
     "status": "",
     "published": true,
     "summary": "A mobile app that gives global travelers quick, reliable access to live exchange rates, so they can convert between currencies, manage travel budgets and make informed decisions abroad.",
     "cover": {
-      "image": "assets/uploads/xchange/cover.webp",
+      "image": "",
       "ghost": "xchange",
       "tint": "#A0521F"
     },
@@ -650,27 +650,137 @@
     "title": "WorldClockr",
     "headline": "WorldClockr",
     "headlineAccent": "",
-    "tagline": "[One line about the app.]",
-    "category": "Utility · World clock",
+    "tagline": "A clean world clock and time-zone converter.",
+    "category": "Utility · Time zones",
     "platform": "Mobile app",
     "type": "mobile",
-    "year": "[Year]",
+    "year": "",
     "live": false,
     "liveUrl": "",
     "status": "",
     "published": true,
-    "summary": "[One line on the goal and the result.]",
+    "summary": "A mobile app that keeps people in sync with time around the world: local time detected automatically, favourite cities at a glance, and a quick converter between any two cities.",
     "cover": {
-      "image": "assets/uploads/worldclockr/cover.webp",
+      "image": "",
       "ghost": "Clock",
-      "tint": "#3A1420"
+      "tint": "#8A2238"
     },
-    "company": "[Client]",
+    "company": "Personal concept project",
     "role": "UI/UX Designer",
-    "team": "[Team]",
-    "timeline": "[Start — End]",
+    "team": "Solo",
+    "timeline": "2 weeks",
     "platforms": "iOS · Android",
     "tags": [
+      "UX/UI",
+      "Mobile",
+      "Utility",
+      "Figma"
+    ],
+    "overview": "WorldClockr is a modern, intuitive mobile app that helps people stay connected with time across the world. It detects the user’s current location, shows the local time, and lets them add favourite cities for quick access. Users can convert time between two cities and manage their list by reordering or deleting any city.",
+    "problem": "Many people work or communicate across time zones, but most time apps are cluttered, hard to navigate or offer little customisation. Users end up searching “current time in X” or doing mental maths when scheduling meetings or travel.",
+    "responsibilities": {
+      "product": [],
+      "design": [
+        "Research into how people track time zones day to day",
+        "Review of gaps in existing time apps",
+        "User types, needs and pain points",
+        "Wireframes and high-fidelity UI",
+        "Testing and iteration"
+      ]
+    },
+    "process": [
+      {
+        "title": "Empathise",
+        "desc": "Understood user needs, problems and behaviours."
+      },
+      {
+        "title": "Define",
+        "desc": "Identified the core challenges and opportunities."
+      },
+      {
+        "title": "Ideate",
+        "desc": "Brainstormed and explored creative solutions."
+      },
+      {
+        "title": "Design",
+        "desc": "Created wireframes and high-fidelity interfaces."
+      },
+      {
+        "title": "Test",
+        "desc": "Validated ideas and improved them from feedback."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "Checking the time in another city means searching the web every time.",
+        "solution": "Local time detected automatically, with favourite cities listed on the home screen and their offset from you (+7h, −2h) and the day (Yesterday, Today, Tomorrow)."
+      },
+      {
+        "challenge": "Scheduling across time zones takes mental maths.",
+        "solution": "A two-city converter that shows the time difference in big type, with a swap button to flip the direction."
+      },
+      {
+        "challenge": "Existing apps are cluttered and hard to navigate.",
+        "solution": "One list, two actions in the header (edit and add), and a dark interface with a single pink accent so the time always stands out."
+      },
+      {
+        "challenge": "Users want their own list, not a fixed one.",
+        "solution": "An edit mode to remove or drag cities into any order, and an add-city sheet with suggested cities and search."
+      }
+    ],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [
+      "assets/uploads/worldclockr/01-home.webp",
+      "assets/uploads/worldclockr/02-converter.webp",
+      "assets/uploads/worldclockr/03-convert-result.webp",
+      "assets/uploads/worldclockr/04-swap.webp",
+      "assets/uploads/worldclockr/05-edit.webp",
+      "assets/uploads/worldclockr/06-add-city.webp",
+      "assets/uploads/worldclockr/07-search.webp"
+    ],
+    "webScreens": [],
+    "featured": false,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
+  },
+  {
+    "slug": "minicity",
+    "title": "MiniCity",
+    "headline": "MiniCity",
+    "headlineAccent": "",
+    "tagline": "[One line about the app.]",
+    "category": "Local business · Directory",
+    "platform": "Mobile App",
+    "type": "mobile",
+    "year": "",
+    "live": false,
+    "liveUrl": "",
+    "status": "",
+    "published": true,
+    "summary": "A directory that puts every merchant’s information in one place, with map, explore, search and QR codes.",
+    "cover": {
+      "image": "",
+      "ghost": "MiniCity",
+      "tint": "#1F4E5A"
+    },
+    "company": "[Client]",
+    "role": "[Your role]",
+    "team": "[Team]",
+    "timeline": "[Duration]",
+    "platforms": "[Platforms]",
+    "tags": [
+      "Product",
       "UX/UI",
       "Mobile"
     ],
@@ -691,13 +801,13 @@
     "icon": "",
     "screens": [],
     "webScreens": [],
-    "featured": false,
     "devices": {
       "mobile": true,
       "tablet": false,
       "desktop": false
     },
     "tabletScreens": [],
-    "cardDevice": "auto"
+    "cardDevice": "auto",
+    "featured": false
   }
 ]

@@ -296,7 +296,7 @@
       const upOff = fr > -1 ? fr === 0 : i === nf, downOff = fr > -1 ? fr === nf - 1 : i === projects.length - 1;
       return `${i === nf && nf ? '<div class="feat-split"><span>The rest — shown on the All work page</span></div>' : ''}<div class="prow glass${p.published === false ? ' is-hidden' : ''}${fr > -1 ? ' is-feat' : ''}">
         ${icn(p)}
-        <span class="t"><b>${esc(p.title || 'Untitled')}</b><small>${esc(p.category || '')}${p.year ? ' · ' + esc(p.year) : ''}</small></span>
+        <span class="t"><b>${esc(p.title || 'Untitled')}</b><small>${esc(p.category || '')}</small></span>
         <span class="bdgs">${p.published === false ? '<span class="badge-d">Hidden</span>' : ''}</span>
         <span class="acts">
           <label class="rank${fr > -1 ? ' on' : ''}" title="Position on the home page">${IC.star}<select data-rank="${i}" aria-label="Home page position for ${esc(p.title || 'project')}"><option value="0"${fr < 0 ? ' selected' : ''}>Off</option>${Array.from({ length: FEAT_MAX }, (_, n) => `<option value="${n + 1}"${fr === n ? ' selected' : ''}>#${n + 1}</option>`).join('')}</select></label>
@@ -456,7 +456,7 @@
       <fieldset><legend>Basics</legend>
         <div class="g2">${F('Project name *', 'title', p.title)}${F('URL name (slug)', 'slug', p.slug, { hint: 'Auto-filled from the name. Used in the link: project.html#slug' })}</div>
         <div class="g2">${F('Card one-liner', 'tagline', p.tagline, { hint: 'Shown under the name on the card and on the case study.' })}${F('Category', 'category', p.category, { ph: 'Entertainment · Series platform' })}</div>
-        <div class="g3">${F('Type', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Website + mobile app']] })}${F('Platform label', 'platform', p.platform, { ph: 'Mobile App' })}${F('Year', 'year', p.year)}</div>
+        <div class="g2">${F('Type', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Website + mobile app']] })}${F('Platform label', 'platform', p.platform, { ph: 'Mobile App' })}</div>
         <div class="g3">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES, hint: 'Shown on the card and case study.' })}${F('Live link (optional)', 'liveUrl', p.liveUrl, { ph: 'https://…', hint: 'Adds a “Visit live” button.' })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}${C('Featured on the home page (top 5)', 'featured', p.featured === true)}</div></div>
         ${F('Short summary', 'summary', p.summary, { area: true, rows: 3, hint: 'Two or three sentences shown on the case study page, under the one-liner.' })}
       </fieldset>
@@ -476,7 +476,7 @@
         <div class="g2">${F('Accent colour', 'cover.tint', (p.cover && p.cover.tint) || '#2B3A8F', { type: 'color' })}${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}</div>
         <div class="f">Cover image (optional — wide, replaces the device mock-up)</div>${imgList('cover.image', p.cover && p.cover.image ? [p.cover.image] : [], 'wide', false, false)}
         <div class="g2">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}</div>
-        <div class="g3">${F('Team', 'team', p.team)}${F('Timeline', 'timeline', p.timeline)}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
+        <div class="g3">${F('Team', 'team', p.team)}${F('Timeline', 'timeline', p.timeline, { ph: '6 months' })}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
       </fieldset>
 
       <fieldset><legend>Story</legend>
