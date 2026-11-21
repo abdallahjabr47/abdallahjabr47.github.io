@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121122937">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121124140">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -76,6 +76,7 @@ body::after{opacity:.04}
 .rep{display:flex;flex-direction:column;gap:12px}
 .rep-item{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) auto;gap:10px;align-items:start;padding:12px;border-radius:16px;border:1px solid var(--line)}
 .rep-item.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}
+.rep-item.link-row{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) auto;align-items:end}
 .rep-item .f{gap:4px}
 .rep-item .f textarea{min-height:64px}
 .rep-item.rec-row{grid-template-columns:minmax(0,1fr) auto;grid-auto-flow:row}.rec-row>.ib{grid-column:2;grid-row:1}.rec-row>:not(.ib){grid-column:1}
@@ -765,11 +766,11 @@ body.has-savebar{padding-bottom:76px}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261121122937"></script>
-<script src="assets/js/icons.js?v=20261121122937"></script>
-<script src="assets/js/scenes.js?v=20261121122937"></script>
-<script src="assets/js/content.js?v=20261121122937"></script>
-<script src="assets/js/core.js?v=20261121122937"></script>
-<script src="assets/js/admin.js?v=20261121122937"></script>
+<script src="assets/js/config.js?v=20261121124140"></script>
+<script src="assets/js/icons.js?v=20261121124140"></script>
+<script src="assets/js/scenes.js?v=20261121124140"></script>
+<script src="assets/js/content.js?v=20261121124140"></script>
+<script src="assets/js/core.js?v=20261121124140"></script>
+<script src="assets/js/admin.js?v=20261121124140"></script>
 </body>
 </html>

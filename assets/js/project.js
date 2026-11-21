@@ -21,6 +21,60 @@
     desktop: ['Desktop', '<rect x="3.5" y="4.5" width="17" height="11.5" rx="1.8"/><path d="M2 19.5h20"/>'] };
   const devIc = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true">${DEV[k][1]}</svg>`;
 
+  /* links to the live product: App Store, Google Play, website … */
+  const LINK_IC = {
+    appstore: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.8-1.6 0-3.1 1-4 2.4-1.7 3-.4 7.4 1.2 9.8.8 1.2 1.8 2.5 3 2.4 1.2 0 1.7-.8 3.2-.8s1.9.8 3.2.8c1.3 0 2.2-1.2 3-2.4.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.6-1-2.6-3.9zM14 5.5c.7-.8 1.1-1.9 1-3-1 0-2.1.7-2.8 1.5-.6.7-1.2 1.8-1 2.9 1.1.1 2.1-.6 2.8-1.4z"/></svg>',
+    googleplay: '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#34A853" d="M3.6 2.3 13.3 12l-9.7 9.7c-.4-.2-.6-.6-.6-1.1V3.4c0-.5.2-.9.6-1.1z"/><path fill="#FBBC04" d="m16.6 15.3-3.3-3.3 3.3-3.3 3.8 2.2c1 .6 1 1.6 0 2.2z"/><path fill="#EA4335" d="M16.6 15.3 13.3 12l-9.7 9.7c.3.2.8.2 1.3-.1z"/><path fill="#4285F4" d="M16.6 8.7 4.9 2.4c-.5-.3-1-.3-1.3-.1L13.3 12z"/></svg>',
+    web: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>'
+  };
+  const LINK_NAME = { appstore: ['Download on the', 'App Store'], googleplay: ['Get it on', 'Google Play'], web: ['Visit', 'Website'] };
+  const linkType = (l) => /apps\.apple\.com|itunes\.apple/.test(l.url) ? 'appstore' : /play\.google\.com/.test(l.url) ? 'googleplay' : 'web';
+  function linksHTML(p) {
+    const list = (Array.isArray(p.links) ? p.links : []).filter((l) => l && has(l.url));
+    if (!list.length && has(p.liveUrl)) list.push({ url: p.liveUrl, label: 'Visit live' });
+    if (!list.length) return '';
+    return `<div class="cs-links">${list.map((l) => { const t = linkType(l);
+      const name = has(l.label) ? l.label : ({ appstore: 'App Store', googleplay: 'Google Play', web: 'Visit website' })[t];
+      return `<a class="btn btn-ghost btn-sm cs-link" href="${esc(l.url)}" target="_blank" rel="noopener">${LINK_IC[t]}${esc(name)} <span class="arr" aria-hidden="true">↗</span></a>`; }).join('')}</div>`;
+  }
+
+  /* app demo: plays the flow like a recording — taps, loading, screen changes */
+  function wireDemo(p) {
+    const box = $('[data-demo]'); if (!box) return;
+    const steps = p.demo, ss = $$('.demo-s', box), li = $$('.demo-steps li', box), tap = $('.demo-tap', box), load = $('.demo-load', box);
+    let k = -1, timer = 0, alive = true, inView = false, seq = 0;
+    const wait = (ms) => new Promise((r) => { timer = setTimeout(r, ms); });
+    const show = (n, dir) => {
+      ss.forEach((el, j) => { el.classList.toggle('on', j === n); el.classList.toggle('prev', j === k && j !== n && dir !== 'fade'); });
+      li.forEach((el, j) => el.classList.toggle('on', j === n));
+      k = n;
+    };
+    const tapAt = async (x, y, my) => {
+      tap.style.left = (x * 100) + '%'; tap.style.top = (y * 100) + '%';
+      tap.classList.add('show'); await wait(650); if (my !== seq) return;
+      tap.classList.add('press'); await wait(380); tap.classList.remove('press');
+    };
+    async function run(from) {
+      const my = ++seq; clearTimeout(timer);
+      for (let n = from; alive && my === seq; n = (n + 1) % steps.length) {
+        while (!inView && my === seq) await wait(400);
+        if (my !== seq) return;
+        const st = steps[n];
+        show(n, n === 0 ? 'fade' : 'slide');
+        if (st.loading) { load.classList.add('on'); await wait(st.loading); load.classList.remove('on'); }
+        await wait(st.hold || 1100); if (my !== seq) return;
+        for (const t of (st.taps || (st.tap ? [st.tap] : []))) { await tapAt(t[0], t[1], my); if (my !== seq) return; await wait(250); }
+        tap.classList.remove('show');
+        await wait(150);
+      }
+    }
+    $$('[data-go]', box).forEach((b) => b.addEventListener('click', () => run(parseInt(b.dataset.go, 10))));
+    if ('IntersectionObserver' in window) new IntersectionObserver((es) => { inView = es[0].isIntersecting; }, { threshold: .35 }).observe(box);
+    else inView = true;
+    if (reduce) { show(0, 'fade'); li.forEach((el) => el.querySelector('button').addEventListener('click', () => show(parseInt(el.dataset.k, 10), 'fade'))); return; }
+    run(0);
+  }
+
   function render(p, idx) {
     p = clean(p);
     ['process', 'challenges', 'results'].forEach((k) => { if (Array.isArray(p[k])) p[k] = p[k].filter((x) => x && Object.values(x).some((v) => has(v))); });
@@ -50,6 +104,15 @@
         ${cards.length ? `<div class="roles">${cards.join('')}</div>` : ''}`);
     }
     if (has(p.process)) {
+      if (Array.isArray(p.demo) && p.demo.length && has(p.screens)) {
+      add('demo', 'In action', `
+        <span class="k" data-reveal>%N% · IN ACTION</span>
+        <h2 class="h-md" data-split>See it <em class="serif">work</em></h2>
+        <div class="demo" data-demo data-reveal>
+          <div class="demo-phone"><div class="demo-scr">${p.demo.map((st, k) => `<div class="demo-s" data-k="${k}"><img src="${esc(p.screens[st.s] || '')}" alt="${esc(st.label || '')}" loading="lazy"></div>`).join('')}<span class="demo-load" aria-hidden="true"><i></i></span><span class="demo-tap" aria-hidden="true"></span></div></div>
+          <ol class="demo-steps">${p.demo.map((st, k) => `<li data-k="${k}"><button type="button" data-go="${k}"><span>${String(k + 1).padStart(2, '0')}</span><b>${esc(st.label || 'Step ' + (k + 1))}</b>${has(st.note) ? `<small>${esc(st.note)}</small>` : ''}</button></li>`).join('')}</ol>
+        </div>`);
+    }
       add('process', 'Process', `
         <span class="k" data-reveal>%N% · PROCESS</span>
         <h2 class="h-md" data-split>How it <em class="serif">came together</em></h2>
@@ -104,17 +167,18 @@
     const backHref = fromHome ? 'index.html#work' : 'work.html', backLabel = fromHome ? 'Back to home' : 'All work';
     main.innerHTML = `
       <section class="container cs-hero">
-        <a class="back-link cs-back" href="${backHref}" data-reveal><span aria-hidden="true">←</span> ${backLabel}</a>
+        <a class="btn btn-ghost btn-sm cs-back" href="${backHref}" data-reveal><span aria-hidden="true">←</span> ${backLabel}</a>
+        <div class="cs-idrow">
         <div class="cs-id" data-reveal>
           ${has(p.icon) ? `<span class="cs-icon"><img src="${esc(p.icon)}" alt="${esc(p.title)} logo"></span>` : `<span class="cs-icon letter" style="--tint:${esc(tint)}">${esc((p.title || '?').charAt(0))}</span>`}
           <span class="cs-idt"><h1 class="cs-idt-h">${esc(p.title)}</h1><small>Case study ${String(idx + 1).padStart(2, '0')}${has(p.category) ? ' · ' + esc(p.category) : ''}</small></span>
+        </div>
+          <div class="cs-side" data-reveal>${p.status ? `<span class="status-pill big ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}${linksHTML(p)}</div>
         </div>
         ${has(p.summary) || has(p.tagline) ? `<p class="cs-sum" data-reveal style="--d:250ms">${esc(has(p.summary) ? p.summary : p.tagline)}</p>` : ''}
         <div class="cs-meta" data-reveal style="--d:350ms">
           <span class="pill dev-pill">${['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span title="${DEV[k][0]}">${devIc(k)}</span>`).join('')}${esc(p.platform || (type === 'web' ? 'Website' : type === 'both' ? 'Website + app' : 'Mobile app'))}</span>
           ${(p.tags || []).map((t) => `<span class="pill">${esc(t)}</span>`).join('')}
-          ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
-          ${has(p.liveUrl) ? `<a class="btn btn-primary btn-sm" href="${esc(p.liveUrl)}" target="_blank" rel="noopener">Visit live <span class="arr">↗</span></a>` : ''}
         </div>
       </section>
       <section class="container">
@@ -129,6 +193,7 @@
       </div>
 `;
 
+    wireDemo(p);
     /* gallery */
     const galEl = $('#gallery');
     let galList = after.length ? after : before;

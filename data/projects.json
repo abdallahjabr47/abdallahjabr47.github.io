@@ -533,7 +533,84 @@
       "desktop": false
     },
     "tabletScreens": [],
-    "cardDevice": "auto"
+    "cardDevice": "auto",
+    "demo": [
+      {
+        "s": 0,
+        "label": "Open the app",
+        "note": "Splash while it loads",
+        "loading": 1300,
+        "hold": 500
+      },
+      {
+        "s": 1,
+        "label": "Onboarding",
+        "note": "One screen, then Next",
+        "tap": [
+          0.5,
+          0.9
+        ]
+      },
+      {
+        "s": 2,
+        "label": "Log in",
+        "note": "Email or Google, Facebook, Apple",
+        "tap": [
+          0.5,
+          0.458
+        ]
+      },
+      {
+        "s": 3,
+        "label": "Home",
+        "note": "Live rate between two currencies",
+        "loading": 900,
+        "hold": 900,
+        "tap": [
+          0.3,
+          0.925
+        ]
+      },
+      {
+        "s": 4,
+        "label": "Convert",
+        "note": "One amount into all favourites",
+        "tap": [
+          0.5,
+          0.925
+        ]
+      },
+      {
+        "s": 5,
+        "label": "Charts",
+        "note": "How a rate moved over time",
+        "taps": [
+          [
+            0.63,
+            0.27
+          ],
+          [
+            0.7,
+            0.925
+          ]
+        ]
+      },
+      {
+        "s": 6,
+        "label": "Alerts",
+        "note": "Rate changes, today and yesterday",
+        "tap": [
+          0.9,
+          0.925
+        ]
+      },
+      {
+        "s": 7,
+        "label": "Profile",
+        "note": "Account, security, language",
+        "hold": 1800
+      }
+    ]
   },
   {
     "slug": "worldclockr",

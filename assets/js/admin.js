@@ -403,6 +403,7 @@
       const head = `<div class="rr-h" data-rec-toggle role="button" tabindex="0" aria-expanded="${open}"><span class="rr-mini"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}></span><span class="rr-k k-${kk}">${KL[kk]}</span><span class="rr-ht"><b>${esc(a.title || 'New item')}</b><small>${esc([a.org, a.year].filter(Boolean).join(' · '))}</small></span><button class="rr-del" type="button" data-del-row aria-label="Delete this item" title="Delete"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></svg></button><svg class="rr-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>`;
       return `<div class="rep-item rec-row${open ? ' open' : ''}" data-row>${head}<div class="rr-b"><div class="g2"><label class="f">Type<select data-r="kind">${K.map(([v, l]) => `<option value="${v}"${(a.kind || 'certificate') === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Year<input data-r="year" value="${esc(a.year || '')}" placeholder="2024 or 2022 — 2024"></label></div><label class="f">Title<input data-r="title" value="${esc(a.title || '')}" placeholder="Google UX Design Professional Certificate"></label><div class="g2"><label class="f">Organisation · place<input data-r="org" value="${esc(a.org || '')}" placeholder="Google · Online"></label><label class="f">Link (optional)<input data-r="link" value="${esc(a.link || '')}" placeholder="https://… certificate link"></label></div><div class="f">Certificate image (optional)<div class="rec-img"><input type="hidden" data-r="image" value="${esc(a.image || '')}"><span class="rec-th"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}>${a.image ? '' : 'No image'}</span><span class="rec-acts"><label class="btn btn-ghost btn-sm">${a.image ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${a.image ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}</span></div><small class="hint" style="margin:0">Shown as a small preview on the site; visitors can click to see it full size.</small></div><label class="f">Short note (optional)<input data-r="note" value="${esc(a.note || '')}" placeholder="Selected from 300+ applicants"></label></div></div>`;
     }
+    if (kind === 'links') return `<div class="rep-item link-row" data-row><label class="f">Name shown on the button<input data-r="label" value="${esc(a.label || '')}" placeholder="App Store · Google Play · Website"></label><label class="f">Link<input data-r="url" value="${esc(a.url || '')}" placeholder="https://…"></label><button class="ib danger" type="button" data-del-row>Remove</button></div>`;
     if (kind === 'results') return `<div class="rep-item" data-row><label class="f">Value<input data-r="value" value="${esc(a.value || '')}" placeholder="+35%"></label><label class="f">What it measures<input data-r="label" value="${esc(a.label || '')}" placeholder="Weekly active users"></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     return '';
   }
@@ -462,8 +463,13 @@
         <div class="g2">${F('Project name *', 'title', p.title)}${F('URL name (slug)', 'slug', p.slug, { hint: 'Auto-filled from the name. Used in the link: project.html#slug' })}</div>
         <div class="g2">${F('Card one-liner', 'tagline', p.tagline, { hint: 'Shown under the name on the project card. The case study uses it only if the summary is empty.' })}${F('Category', 'category', p.category, { ph: 'Entertainment · Series platform' })}</div>
         <div class="g2">${F('Type', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Website + mobile app']] })}${F('Platform label', 'platform', p.platform, { ph: 'Mobile App' })}</div>
-        <div class="g3">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES, hint: 'Shown on the card and case study.' })}${F('Live link (optional)', 'liveUrl', p.liveUrl, { ph: 'https://…', hint: 'Adds a “Visit live” button.' })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}${C('Featured on the home page (top 5)', 'featured', p.featured === true)}</div></div>
+        <div class="g2">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES, hint: 'Shown on the card and case study.' })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}${C('Featured on the home page (top 5)', 'featured', p.featured === true)}</div></div>
         ${F('Short summary', 'summary', p.summary, { area: true, rows: 3, hint: 'The idea in two or three sentences. Shown under the project name at the top of the case study.' })}
+      </fieldset>
+
+      <fieldset><legend>Live links</legend>
+        <p class="hint">If the app or website is live, add where people can open it. Give each link a short name — that’s what visitors see, not the link itself.</p>
+        ${rep('links', (p.links && p.links.length) ? p.links : (p.liveUrl ? [{ label: '', url: p.liveUrl }] : []), 'Add a link')}
       </fieldset>
 
       <fieldset><legend>Devices &amp; screens</legend>
@@ -828,6 +834,7 @@
     p.slug = slugify(p.slug);
     $$('[data-rep]', form).forEach((box) => {
       p[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); return o; }).filter((o) => Object.values(o).some(Boolean));
+      if (box.dataset.rep === 'links') { p.links = p.links.filter((l) => l.url); delete p.liveUrl; }
     });
     $$('[data-imgs]', form).forEach((box) => {
       const key = box.dataset.imgs, lab = box.dataset.lab === '1', multi = box.dataset.multi === '1';
