@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121011340">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121034217">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -580,7 +580,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .sv-ic{width:10px;height:10px;border-radius:50%;flex:none;background:#E8A33D}
 .savebar[data-state="saving"] .sv-ic{width:14px;height:14px;background:none;border:2px solid var(--sky);border-right-color:transparent;animation:svspin .7s linear infinite}
 .savebar[data-state="ok"] .sv-ic{background:#3DDC97}
-.savebar[data-state="err"] .sv-ic{background:#F07167}
+.savebar[data-state="err"] .sv-ic,.savebar[data-state="conflict"] .sv-ic{background:#F07167}
+.savebar[data-state="conflict"] .msg{color:#F07167}
+.savebar[data-state="hint"] .sv-ic{background:#E8A33D}
+.f.flash,[data-row].flash{animation:wtFlash 1.6s ease-out;border-radius:14px}
 .savebar[data-state="err"] .msg{color:#F07167}
 .sv-retry{font-size:13.5px;font-weight:700;color:var(--sky);padding:0 4px}
 @keyframes svspin{to{transform:rotate(360deg)}}
@@ -698,10 +701,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
   <span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button>
 </div>
 
-<script src="assets/js/config.js?v=20261121011340"></script>
-<script src="assets/js/icons.js?v=20261121011340"></script>
-<script src="assets/js/content.js?v=20261121011340"></script>
-<script src="assets/js/core.js?v=20261121011340"></script>
-<script src="assets/js/admin.js?v=20261121011340"></script>
+<script src="assets/js/config.js?v=20261121034217"></script>
+<script src="assets/js/icons.js?v=20261121034217"></script>
+<script src="assets/js/content.js?v=20261121034217"></script>
+<script src="assets/js/core.js?v=20261121034217"></script>
+<script src="assets/js/admin.js?v=20261121034217"></script>
 </body>
 </html>

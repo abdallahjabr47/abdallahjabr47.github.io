@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121011340">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121034217">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 </head>
 <body>
@@ -295,7 +295,7 @@
         <li data-who="po ds"><span class="n">07</span><b>Release</b><small>Accept the work and ship it.</small><span class="who"><span class="po">PO</span><span class="ds">DESIGN</span></span></li>
         <li data-who="pm ds"><span class="n">08</span><b>Measure &amp; iterate</b><small>Analytics, A/B tests, next version.</small><span class="who"><span class="pm">PM</span><span class="ds">DESIGN</span></span></li>
       </ol>
-      <p class="bridge"><span class="ic2" aria-hidden="true">✦</span><span><b>Plus the design lead.</b> Because I design the product too, intent never gets lost between the backlog and the screen.</span></p>
+      <p class="bridge"><span class="ic2" aria-hidden="true">✦</span><span><span class="hl">Plus the design lead.</span> Because I design the product too, intent never gets lost between the backlog and the screen.</span></p>
     </div>
   </div>
   <div class="big-mq" aria-hidden="true">
@@ -432,21 +432,21 @@
       <p class="side" data-reveal>Tokens, type and components, documented the way I hand designs to developers.</p>
     </div>
     <div class="sys">
-      <div class="sys-panel glass" data-reveal>
+      <div class="sys-panel glass" data-reveal data-c-group="Colour tokens">
         <h3>Colour tokens <em>tap to copy</em></h3>
         <div class="swatches" id="swatches"></div>
       </div>
-      <div class="sys-panel glass" data-reveal style="--d:120ms">
+      <div class="sys-panel glass" data-reveal style="--d:120ms" data-c-group="Type">
         <h3>Type <em>Inter · Inter Display</em></h3>
         <div class="ts-hero"><span class="ts-aa">Aa</span><span class="ts-meta"><b>Inter</b><small>Variable · 100–900 · Latin &amp; Arabic-friendly pairing</small><span class="ts-glyphs">ABC abc 123 &amp;?!</span></span></div>
-        <div class="ts-row"><span style="font-size:30px;font-weight:700;letter-spacing:-.04em;line-height:1">Display</span><small>74 / Bold / −4.5%</small></div>
-        <div class="ts-row"><span style="font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1">Heading</span><small>60 / Bold / −3.5%</small></div>
-        <div class="ts-row"><span class="serif" style="font-size:22px;line-height:1">Accent italic</span><small>Medium Italic</small></div>
-        <div class="ts-row"><span style="font-size:15px">Body text</span><small>17 / Regular / 1.6</small></div>
-        <div class="ts-row"><span style="font-size:11.5px;font-weight:700;letter-spacing:.2em">LABEL</span><small>12 / Bold / +20%</small></div>
-        <div class="space"><div class="space-h"><b>Spacing</b><small>8pt grid · px</small></div><div class="space-row"><span><i style="--s:4px"></i><small>4</small></span><span><i style="--s:8px"></i><small>8</small></span><span><i style="--s:16px"></i><small>16</small></span><span><i style="--s:24px"></i><small>24</small></span><span><i style="--s:32px"></i><small>32</small></span><span><i style="--s:48px"></i><small>48</small></span></div></div>
+        <div class="ts-row" data-c-group="Type style"><span style="font-size:30px;font-weight:700;letter-spacing:-.04em;line-height:1">Display</span><small>74 / Bold / −4.5%</small></div>
+        <div class="ts-row" data-c-group="Type style"><span style="font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1">Heading</span><small>60 / Bold / −3.5%</small></div>
+        <div class="ts-row" data-c-group="Type style"><span class="serif" style="font-size:22px;line-height:1">Accent italic</span><small>Medium Italic</small></div>
+        <div class="ts-row" data-c-group="Type style"><span style="font-size:15px">Body text</span><small>17 / Regular / 1.6</small></div>
+        <div class="ts-row" data-c-group="Type style"><span style="font-size:11.5px;font-weight:700;letter-spacing:.2em">LABEL</span><small>12 / Bold / +20%</small></div>
+        <div class="space" data-c-group="Spacing"><div class="space-h"><b>Spacing</b><small>8pt grid · px</small></div><div class="space-row"><span><i style="--s:4px"></i><small>4</small></span><span><i style="--s:8px"></i><small>8</small></span><span><i style="--s:16px"></i><small>16</small></span><span><i style="--s:24px"></i><small>24</small></span><span><i style="--s:32px"></i><small>32</small></span><span><i style="--s:48px"></i><small>48</small></span></div></div>
       </div>
-      <div class="sys-panel glass" data-reveal style="--d:240ms">
+      <div class="sys-panel glass" data-reveal style="--d:240ms" data-c-group="Components">
         <h3>Components
           <span class="seg" style="--n:2;--c-field:rgba(255,255,255,.06);--c-line:transparent;--c-muted:#A3A9B6" role="group" aria-label="Component theme" id="themeSeg"><span class="thumb"></span><button type="button" class="on" data-v="dark">Dark</button><button type="button" data-v="light">Light</button></span>
         </h3>
@@ -555,11 +555,11 @@
   </div>
 </footer>
 
-<script src="assets/js/content.js?v=20261121011340"></script>
-<script src="assets/js/config.js?v=20261121011340"></script>
-<script src="assets/js/icons.js?v=20261121011340"></script>
-<script src="assets/js/core.js?v=20261121011340"></script>
-<script src="assets/js/fx.js?v=20261121011340" defer></script>
-<script src="assets/js/home.js?v=20261121011340"></script>
+<script src="assets/js/content.js?v=20261121034217"></script>
+<script src="assets/js/config.js?v=20261121034217"></script>
+<script src="assets/js/icons.js?v=20261121034217"></script>
+<script src="assets/js/core.js?v=20261121034217"></script>
+<script src="assets/js/fx.js?v=20261121034217" defer></script>
+<script src="assets/js/home.js?v=20261121034217"></script>
 </body>
 </html>

@@ -129,7 +129,8 @@
     if (!state) { bar.classList.add('hidden'); return; }
     bar.classList.remove('hidden'); bar.dataset.state = state;
     m.textContent = text || { pending: 'Changes will save in a moment…', saving: 'Saving…', ok: 'Saved ✓ — live on your site in about a minute' }[state];
-    $('#saveRetry').hidden = state !== 'err';
+    $('#saveRetry').hidden = state !== 'err' && state !== 'conflict';
+    $('#saveRetry').textContent = state === 'conflict' ? 'Reload' : 'Retry';
     if (state === 'ok') hideTimer = setTimeout(() => { if (!dirty && !saving) bar.classList.add('hidden'); }, 3500);
   }
   function recheck() {
@@ -187,7 +188,7 @@
       await loadData();
     } catch (err) { msg.textContent = 'Could not sign in: ' + err.message; auth = null; }
   });
-  if ($('#logout')) $('#logout').addEventListener('click', async () => { if (dirty && !(await ask({ title: 'Lock the editor?', text: 'You have changes that aren’t published yet. They’ll be lost if you lock now.', ok: 'Lock anyway', tone: 'danger' }))) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
+  if ($('#logout')) $('#logout').addEventListener('click', async () => { if ((dirty || saving) && !(await ask({ title: 'Lock the editor?', text: 'Your last change hasn’t finished saving yet. Lock anyway and lose it?', ok: 'Lock anyway', tone: 'danger' }))) return; clearAuth(); auth = null; setDirty(false); initLogin(); });
 
   /* ---------------- load ---------------- */
   async function loadData() {
@@ -243,7 +244,7 @@
     show('v-list');
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
-    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a project saved but off the website. Changes go live about a minute after you press <b>Publish</b>.' : 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a role saved but off the website.') + '</span>';
+    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a project saved but off the website. Changes save on their own.' : 'Use <b>↑ ↓</b> to set the order. <b>Hide</b> keeps a role saved but off the website. Changes save on their own.') + '</span>';
     placePartSwitch();
     const el = $('#plist');
     if (tab === 'experience') {
@@ -287,7 +288,7 @@
     if (a === 'up' && i > 0) [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
     if (a === 'down' && i < arr.length - 1) [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]];
     if (a === 'toggle') arr[i][flag] = arr[i][flag] === false;
-    if (a === 'del') { if (!(await ask({ title: `Delete “${arr[i].title || arr[i].role}”?`, text: 'It disappears from the website when you publish. Until then you can still press Discard.', ok: 'Delete', tone: 'danger' }))) return; arr.splice(i, 1); }
+    if (a === 'del') { if (!(await ask({ title: `Delete “${arr[i].title || arr[i].role}”?`, text: 'It’s removed from the website a minute after you confirm. This can’t be undone here.', ok: 'Delete', tone: 'danger' }))) return; arr.splice(i, 1); }
     setDirty(changed());
     renderList();
   });
@@ -518,7 +519,7 @@
                 const isList = g.startsWith('list-');
                 if (!isList) {
                   /* cards side by side, always open */
-                  const fam = String(run[0].groupLabel || '').replace(/\s*\d+.*$/, '');
+                  const fam = run[0].el.closest('[data-c-group]') ? 'named' : String(run[0].groupLabel || '').replace(/\s*\d+.*$/, '');
                   if (grid === 'cgrid' && fam !== lastFam) openGrid('');
                   lastFam = fam;
                   openGrid('cgrid');
@@ -529,7 +530,7 @@
                     if (words) return `<div class="pts words"><div class="wt-run-h">Words<small>${run.length}</small></div><div class="wt-run-b">${run.map(cfield).join('')}</div></div>`;
                     const main = run.filter((f) => !isPt(f)), pts = run.filter(isPt);
                     const lab = (f, i) => f.el.closest('.role-tag, .eyebrow, .n') ? 'Label' : /^H[1-6]$/.test(f.el.tagName) ? 'Heading' : f.el.tagName === 'P' || f.text.length > 55 || (i === main.length - 1 && i > 0 && f.text.length > 25) ? 'Description' : i === 0 && main.length >= 3 ? 'Label' : 'Title';
-                    return main.map((f, i) => field(f.kind === 'Text' || f.kind === 'Title' || f.kind === 'Heading' ? Object.assign({}, f, { kind: lab(f, i) }) : f)).join('') + (pts.length ? `<div class="pts"><div class="wt-run-h">Points<small>${pts.length}</small></div>${pts.map(cfield).join('')}</div>` : '');
+                    return main.map((f, i) => field(f.kind === 'Text' || f.kind === 'Title' || f.kind === 'Heading' ? Object.assign({}, f, { kind: lab(f, i) }) : f.kind === 'Small text' ? Object.assign({}, f, { kind: 'Detail' }) : f)).join('') + (pts.length ? `<div class="pts"><div class="wt-run-h">Points<small>${pts.length}</small></div>${pts.map(cfield).join('')}</div>` : '');
                   })()}</div></div>`;
                   continue;
                 }
@@ -667,14 +668,14 @@
       const when = site.cvUpdated ? `Updated ${fmtDate(site.cvUpdated)}` : 'Uploaded';
       box.innerHTML = `<div class="cv-card">
         <span class="cv-ic" aria-hidden="true">PDF</span>
-        <span class="cv-meta"><b>${esc(name)}</b><small>${when}${isNew ? ' · <i>new — publish to put it live</i>' : ' · <i class="ok">Live on the site</i>'}</small></span>
+        <span class="cv-meta"><b>${esc(name)}</b><small>${when}${isNew ? ' · <i>new — saving…</i>' : ' · <i class="ok">Live on the site</i>'}</small></span>
         <span class="cv-act">
           <a class="ib" href="${esc(previews.get(site.cv) || site.cv)}" target="_blank" rel="noopener">View</a>
           <label class="ib edit" for="cvInput" style="cursor:pointer">Replace</label>
           <button class="ib danger" type="button" id="cvRemove">Remove</button>
         </span></div>`;
       $('#cvRemove').addEventListener('click', async () => {
-        if (!(await ask({ title: 'Remove the CV?', text: 'The “View My CV” button will be hidden on the website after you publish.', ok: 'Remove', tone: 'danger' }))) return;
+        if (!(await ask({ title: 'Remove the CV?', text: 'The “View My CV” button will disappear from the website.', ok: 'Remove', tone: 'danger' }))) return;
         if (pending.has(site.cv)) pending.delete(site.cv);
         site.cv = ''; site.cvName = ''; site.cvUpdated = '';
         drawCv(); setDirty(true);
@@ -794,7 +795,7 @@
     const del = e.target.closest('[data-del-row]');
     if (del) {
       const row = del.closest('[data-row]');
-      if (row.classList.contains('rec-row')) { const t = ($('[data-r="title"]', row) || {}).value || 'this item'; ask({ title: `Delete “${t}”?`, text: 'It disappears from the website when you publish.', ok: 'Delete', tone: 'danger' }).then((y) => { if (y) { row.remove(); setDirty(true); } }); return; }
+      if (row.classList.contains('rec-row')) { const t = ($('[data-r="title"]', row) || {}).value || 'this item'; ask({ title: `Delete “${t}”?`, text: 'It’s removed from the website a minute after you confirm.', ok: 'Delete', tone: 'danger' }).then((y) => { if (y) { row.remove(); setDirty(true); } }); return; }
       row.remove(); setDirty(true); return;
     }
     const tg = e.target.closest('[data-rec-toggle]');
@@ -911,6 +912,14 @@
       }));
       if (x.kind === 'projects') projects.forEach((pr, i) => out.push({ p, x, text: [pr.title, pr.tagline, pr.category].filter(Boolean).join(' · '), kind: 'Project', go: { project: i } }));
       if (x.kind === 'experience') experience.forEach((r, i) => out.push({ p, x, text: [r.role, r.company].filter(Boolean).join(' · '), kind: 'Role', go: { role: i } }));
+      if (x.kind === 'site') {
+        const G = x.groups || [];
+        if (G.includes('availability') && site.availability) out.push({ p, x, text: site.availability, kind: 'Availability', go: { sel: '[data-k="availability"]' } });
+        if (G.includes('links')) ['email', 'whatsapp', 'linkedin', 'behance', 'dribbble', 'github'].forEach((k) => { if (site[k]) out.push({ p, x, text: site[k], kind: 'Link', go: { sel: `[data-k="${k}"]` } }); });
+        if (G.includes('cv') && site.cvName) out.push({ p, x, text: site.cvName, kind: 'CV', go: { sel: '#cvBox' } });
+        if (G.includes('recognition')) (site.recognition || []).forEach((r, i) => out.push({ p, x, text: [r.title, r.org, r.year, r.note].filter(Boolean).join(' · '), kind: 'Learning', go: { rec: i } }));
+        if (G.includes('testimonials')) (site.testimonials || []).forEach((t, i) => out.push({ p, x, text: [t.quote, t.name, t.role].filter(Boolean).join(' · '), kind: 'Testimonial', go: { sel: `[data-rep="testimonials"] [data-row]:nth-child(${i + 1})` } }));
+      }
     }));
     return out;
   }
@@ -936,6 +945,15 @@
       goTo(h.p, h.x);
       if (h.go.project != null) return openEditor(h.go.project);
       if (h.go.role != null) return openExpEditor(h.go.role);
+      if (h.go.sel || h.go.rec != null) {
+        const el = h.go.sel ? $('#edForm ' + h.go.sel) : $$('#edForm .rec-row')[h.go.rec];
+        if (!el) return;
+        if (el.classList.contains('rec-row') && !el.classList.contains('open')) $('[data-rec-toggle]', el).click();
+        const box = el.closest('.f, [data-row]') || el;
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' }); box.classList.remove('flash'); void box.offsetWidth; box.classList.add('flash');
+        const inp = el.matches('input, textarea') ? el : ($('[data-r="title"]', el) || $('[data-r="quote"]', el) || $('input, textarea', el)); if (inp) setTimeout(() => inp.focus({ preventScroll: true }), 350);
+        return;
+      }
       let tries = 0;
       const find = () => {
         const t = $(`#edForm textarea[data-ckey="${CSS.escape(h.go.ckey)}"]`);
@@ -973,9 +991,9 @@
     collect();
     if (!changed()) { dirty = false; status(''); return; }
     const badX = experience.find((x) => !x.role || !x.role.trim() || !x.company || !x.company.trim());
-    if (badX) return status('err', 'Not saved yet: every role needs a job title and a company.');
+    if (badX) return status('hint', 'Add a job title and company to save this role.');
     const bad = projects.find((p) => !p.title || !p.title.trim());
-    if (bad) return status('err', 'Not saved yet: every project needs a name.');
+    if (bad) return status('hint', 'Add a project name to save it.');
     const slugs = projects.map((p) => p.slug);
     const dup = slugs.find((x, i) => slugs.indexOf(x) !== i);
     if (dup) return status('err', `Not saved yet: two projects use the same URL name “${dup}”.`);
@@ -993,6 +1011,14 @@
       if (files.length) {
         const ref = await (await gh(`${repoPath()}/git/ref/heads/${encodeURIComponent(auth.branch)}`)).json();
         const baseCommit = ref.object.sha;
+        /* someone saved from another tab or device since this page loaded? then don't overwrite their work */
+        const base = { [CFG.dataPath || 'data/projects.json']: original, [CONTENT_PATH]: originalContent, [SITE_PATH]: originalSite, [EXP_PATH]: originalExp };
+        for (const f of files) {
+          if (!(f.path in base)) continue;
+          let live;
+          try { live = JSON.parse(await (await gh(`${repoPath()}/contents/${f.path}?ref=${baseCommit}`, { headers: { Accept: 'application/vnd.github.raw+json' } })).text()); } catch (e) { continue; }
+          if (!same(live, base[f.path])) { saving = false; status('conflict', 'Changed from another tab or device. Reload to get the latest — this change wasn’t saved.'); return; }
+        }
         const commit = await (await gh(`${repoPath()}/git/commits/${baseCommit}`)).json();
         const tree = [];
         for (let i = 0; i < files.length; i++) {
@@ -1017,7 +1043,7 @@
     }
     if (saveAgain) { saveAgain = false; recheck(); }
   }
-  $('#saveRetry').addEventListener('click', () => { clearTimeout(saveTimer); autoSave(); });
+  $('#saveRetry').addEventListener('click', () => { if ($('#savebar').dataset.state === 'conflict') { dirty = false; saving = false; location.reload(); return; } clearTimeout(saveTimer); autoSave(); });
 
   /* ---------------- start ---------------- */
   auth = loadAuth();

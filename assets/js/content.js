@@ -7,7 +7,7 @@
     n.tagName === 'EM' || n.tagName === 'BR' || n.tagName === 'SUP' ||
     (n.tagName === 'SPAN' && /\b(hl|arr|pm)\b/.test(n.className)) || (n.tagName === 'SPAN' && n.hasAttribute('data-count'))));
   const KEEP = (n) => n.nodeType === 1 && n.tagName === 'SPAN' && /\b(arr|pm)\b/.test(n.className);
-  const SKIP = '.swipe-hint, .who, .po-card .big, .int-front, .pr-demo, .ph, [data-site-text], .cpill, .clock, #projects, #xp, #indexList, #hoverPreview, #testi, .tilt, .sparks, .orbits, .badge-ring, svg, script, style, .sp-arrow, .phone, .cursor-ring, [data-c-skip]';
+  const SKIP = '.swipe-hint, .ts-aa, .ts-glyphs, .space-row, .tk-wrap, .cmp-hint, .seg, .btns, .badges, .tg-row, .who, .po-card .big, .int-front, .pr-demo, .ph, [data-site-text], .cpill, .clock, #projects, #xp, #indexList, #hoverPreview, #testi, .tilt, .sparks, .orbits, .badge-ring, svg, script, style, .sp-arrow, .phone, .cursor-ring, [data-c-skip]';
   const ITEM = '.faq-item, .stat, .sk-card, .tool, .item, .edu, .pr, .pm-card, .role-card, .cpill, li';
   const slug = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 36) || 'x';
 
@@ -34,7 +34,7 @@
       let key = s.id || (eb ? slug(eb.textContent) : '') || slug(s.getAttribute('aria-label') || '') || 'section-' + i;
       if (used[key]) key += '-' + (++used[key]); else used[key] = 1;
       const h = s.querySelector('h1, h2');
-      const NAMES = { hero: 'Top of the page (hero)', tools: 'Tools strip', work: 'Selected work (titles)', screens: 'Screens wall', process: 'Process animation', about: 'About', beyond: 'Beyond the screen', product: 'Product management', experience: 'Experience (titles)', skills: 'Skills', testimonials: 'Testimonials (titles)', faq: 'FAQ', contact: 'Contact' };
+      const NAMES = { hero: 'Top of the page', tools: 'Tools strip', work: 'Selected work', screens: 'Screens that ship', process: 'From sketch to shipped', about: 'About', beyond: 'Beyond the screen', product: 'Product management', experience: 'Experience', skills: 'Skills', testimonials: 'Testimonials', faq: 'FAQ', contact: 'Contact' };
       const name = NAMES[s.id] || (eb && eb.textContent.trim()) || (h && h.textContent.trim()) || s.getAttribute('aria-label') || key;
       return { el: s, key, name };
     });
@@ -57,7 +57,7 @@
     });
     /* group fields that belong together (one FAQ, one card, one stat…) so the admin can box them */
     const first = (el) => (typeof el.className === 'string' && el.className.trim() ? el.className.trim().split(/\s+/)[0] : el.tagName === 'LI' ? 'li' : '');
-    const NICE = { pnote: 'Step', int: 'Card', 'faq-item': 'Question', stat: 'Number', tool: 'Tool', item: 'Word', 'pr-card': 'Principle', 'edu-card': 'Education', 'sk-card': 'Skill group', 'sys-panel': 'Panel', 'ts-row': 'Type row', step: 'Step', 'pm-card': 'Role card', 'role-card': 'Role card', cpill: 'Link', btn: 'Button', 'po-card': 'Role card', 'cl-btn': 'Button', 'ba-pane': 'Before / after side', ss: 'Item', 'skill-cloud': 'Skill tags', 'sk-list': 'Skills', marquee: 'Moving words row', 'ba-label': 'Before / after labels' };
+    const NICE = { pnote: 'Step', int: 'Card', 'faq-item': 'Question', stat: 'Number', tool: 'Tool', item: 'Word', 'pr-card': 'Principle', 'edu-card': 'Education', 'sk-card': 'Skill group', 'sys-panel': 'Panel', 'ts-row': 'Type style', step: 'Step', 'pm-card': 'Role card', 'role-card': 'Role card', cpill: 'Link', btn: 'Button', 'po-card': 'Role card', 'cl-btn': 'Button', 'ba-pane': 'Before / after side', ss: 'Item', 'skill-cloud': 'Skill tags', 'sk-list': 'Skills', marquee: 'Moving words row', 'ba-label': 'Before / after labels' };
     const nice = (cls, el) => (cls === 'li' && el ? (el.closest('.steps, ol') ? 'Step' : el.closest('.skill-cloud') ? 'Skill tag' : 'Point') : NICE[cls]) || (cls ? cls.replace(/[-_]+/g, ' ').replace(/^./, (m) => m.toUpperCase()) : 'Item');
     picked.forEach((f) => {
       const cands = [];
@@ -67,6 +67,9 @@
         const sib = Array.from(a.parentElement.children).filter((x) => first(x) === cls);
         if (sib.length >= 2) cands.push({ a, cls, idx: sib.indexOf(a) + 1 });
       }
+      /* the page can name a group itself with data-c-group="Name" (closest one wins) */
+      const forced = f.el.closest('[data-c-group]');
+      if (forced && sec.el.contains(forced)) { f.groupEl = forced; f.groupCls = 'c-group'; return; }
       const hit = cands.find((c) => picked.filter((g) => c.a.contains(g.el)).length >= 2);
       if (hit) { f.groupEl = hit.a; f.groupCls = hit.cls; }
       else if (cands.length) { f.listEl = cands[0].a.parentElement; f.groupCls = cands[0].cls; f.groupEl = cands[0].a; }
@@ -77,6 +80,7 @@
         f.group = 'list-' + picked.findIndex((g) => g.listEl === f.listEl);
         f.groupLabel = NICE[first(f.listEl)] || nice(f.groupCls, f.groupEl) + 's';
       } else if (f.groupEl) {
+        if (!seenG.has(f.groupEl)) { const named = f.groupEl.getAttribute && f.groupEl.getAttribute('data-c-group'); if (named) { const same = Array.from(sec.el.querySelectorAll('[data-c-group]')).filter((x) => x.getAttribute('data-c-group') === named); seenG.set(f.groupEl, same.length > 1 ? named + ' ' + (same.indexOf(f.groupEl) + 1) + ' · ' + f.text.replace(/[*\n]/g, ' ').trim().slice(0, 26) : named); } }
         if (!seenG.has(f.groupEl)) { const base = nice(f.groupCls, f.groupEl); counts[base] = (counts[base] || 0) + 1; const t1 = f.text.replace(/[*\n]/g, ' ').trim(); seenG.set(f.groupEl, base + ' ' + counts[base] + (t1.length <= 26 && !/^\d/.test(t1) ? ' · ' + t1 : '')); }
         f.group = 'g-' + picked.findIndex((g) => g.groupEl === f.groupEl && !g.listEl);
         f.groupLabel = seenG.get(f.groupEl);
