@@ -359,7 +359,7 @@
       experience.unshift({ id: 'role-' + Date.now().toString(36), visible: true, role: '', company: '', location: '', dates: '', type: 'Full-time', summary: '', highlights: [] });
       return openExpEditor(0, true);
     }
-    projects.push({ slug: '', title: '', headline: '', headlineAccent: '', tagline: '', category: '', platform: 'Mobile App', type: 'mobile', year: String(new Date().getFullYear()), live: false, liveUrl: '', status: '', published: true, summary: '', cover: { image: '', ghost: '', tint: '#2B3A8F' }, company: '', role: '', team: '', timeline: '', platforms: '', tags: [], overview: '', problem: '', responsibilities: { product: [], design: [] }, process: [], challenges: [], gallery: { before: [], after: [] }, results: [], learnings: '', icon: '', screens: [], tabletScreens: [], webScreens: [], devices: { mobile: true, tablet: false, desktop: false }, cardDevice: 'auto' });
+    projects.push({ slug: '', title: '', headline: '', headlineAccent: '', tagline: '', category: '', platform: 'Mobile App', type: 'mobile', year: '', live: false, liveUrl: '', status: '', published: true, summary: '', cover: { image: '', ghost: '', tint: '#2B3A8F' }, company: '', role: '', team: '', timeline: '', platforms: '', tags: [], overview: '', problem: '', responsibilities: { product: [], design: [] }, process: [], challenges: [], gallery: { before: [], after: [] }, results: [], learnings: '', icon: '', screens: [], tabletScreens: [], webScreens: [], devices: { mobile: true, tablet: false, desktop: false }, cardDevice: 'auto' });
     openEditor(projects.length - 1, true);
   });
 
@@ -371,7 +371,7 @@
     if (opts.select) return `<label class="f">${label}<select data-k="${key}">${opts.select.map(([ov, ol]) => `<option value="${ov}" ${String(val) === ov ? 'selected' : ''}>${ol}</option>`).join('')}</select>${hint}</label>`;
     const inp = `<input data-k="${key}" type="${opts.type || 'text'}" value="${v}" ${opts.ph ? `placeholder="${esc(opts.ph)}"` : ''}>`;
     const ic = opts.icon && window.ICONS && window.ICONS[opts.icon];
-    if (ic) return `<label class="f">${label}<span class="f-ico"><svg viewBox="${ic.vb}" aria-hidden="true" style="color:${ic.c === 'ink' ? 'var(--ink)' : ic.c}">${ic.p}</svg>${inp}</span>${hint}</label>`;
+    if (ic) return `<label class="f">${label}<span class="f-ico">${ic.full ? `<svg viewBox="${ic.fvb}" aria-hidden="true">${ic.full}</svg>` : `<svg viewBox="${ic.vb}" aria-hidden="true" style="color:${ic.c === 'ink' ? 'var(--ink)' : ic.c}">${ic.p}</svg>`}${inp}</span>${hint}</label>`;
     return `<label class="f">${label}${inp}${hint}</label>`;
   };
   const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['Shipped', 'Shipped'], ['In progress', 'In progress']];

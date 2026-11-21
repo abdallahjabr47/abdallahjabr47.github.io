@@ -588,11 +588,11 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .cs-content{flex:1;display:flex;flex-direction:column;gap:clamp(90px,10vw,140px)}
 .cs-sec{display:flex;flex-direction:column;gap:30px}
 .cs-sec .k{font-size:12.5px;font-weight:800;letter-spacing:.2em;color:var(--sky)}
-.cs-lead{font-size:clamp(22px,2.3vw,30px);line-height:1.4;font-weight:600;letter-spacing:-.012em}
+.cs-lead{font-size:clamp(18px,1.55vw,21px);line-height:1.7;font-weight:400;letter-spacing:0;color:var(--ink2);max-width:68ch}
 .cs-text{font-size:18px;line-height:1.75;color:var(--muted);max-width:760px}
 .quote{padding:34px;border-radius:24px;border-left:3px solid var(--sky)}
-.quote small{display:block;font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--dim);margin-bottom:12px}
-.quote p{font-size:clamp(22px,2.2vw,30px);line-height:1.35;font-weight:600}
+.quote small{display:block;font-size:12px;font-weight:800;letter-spacing:.2em;color:var(--sky);margin-bottom:12px}
+.quote p{font-size:clamp(17px,1.45vw,20px);line-height:1.65;font-weight:500;max-width:68ch}
 .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 .role{padding:32px;border-radius:24px;display:flex;flex-direction:column;gap:16px}
 .role .ico{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;font-size:22px}
@@ -601,6 +601,9 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 .timeline{position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px}
 .tl{position:relative;padding:28px 24px;border-radius:22px;display:flex;flex-direction:column;gap:12px}
 .tl .n{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:rgba(23,105,224,.12);color:var(--sky);font-weight:800}
+.tl:nth-child(5n+1) .n{--nc:#5C9BF5}.tl:nth-child(5n+2) .n{--nc:#A78BFA}.tl:nth-child(5n+3) .n{--nc:#3DDC97}.tl:nth-child(5n+4) .n{--nc:#F5A35C}.tl:nth-child(5n+5) .n{--nc:#FF6B8B}
+[data-theme="light"] .tl:nth-child(5n+1) .n{--nc:#1769E0}[data-theme="light"] .tl:nth-child(5n+2) .n{--nc:#7C4DE0}[data-theme="light"] .tl:nth-child(5n+3) .n{--nc:#0E9F62}[data-theme="light"] .tl:nth-child(5n+4) .n{--nc:#D2700F}[data-theme="light"] .tl:nth-child(5n+5) .n{--nc:#E0335A}
+.tl .n{background:color-mix(in srgb,var(--nc) 15%,transparent);color:var(--nc)}
 .tl h3{font-size:21px}
 .tl p{color:var(--muted);font-size:15px}
 .chal{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));border-radius:24px;overflow:hidden}
