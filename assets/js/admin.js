@@ -46,8 +46,9 @@
       { id: 'links', label: 'Links & CV', kind: 'site', groups: ['links', 'cv'] , part: 'contact', partName: 'Contact' },
       { id: 'faq', label: 'FAQ', kind: 'content', keys: ['faq'] },
       { id: 'testi', label: 'Testimonials', kind: 'site', groups: ['testimonials'], keys: ['testimonials'] }] }];
-  let page = PAGES[1], sub = PAGES[1].subs[0];
+  let page = PAGES[0], sub = PAGES[0].subs[0];
   const KIND_TAB = { projects: 'projects', experience: 'experience', site: 'profile', content: 'content' };
+  tab = KIND_TAB[sub.kind];
   function drawTabs() {
     $('#pageTabs').innerHTML = PAGES.map((p) => `<button type="button" role="tab" data-page="${p.id}" class="${p === page ? 'on' : ''}" aria-selected="${p === page}">${esc(p.label)}${p.subs.some((x) => touched.has(p.id + '/' + x.id)) ? '<i class="tdot" title="Unpublished changes"></i>' : ''}</button>`).join('');
     $('#partBar').hidden = true;

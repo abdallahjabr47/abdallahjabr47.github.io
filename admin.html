@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261121034217">
+<link rel="stylesheet" href="assets/css/style.css?v=20261121034727">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -605,6 +605,17 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
 .ep-tx{display:flex;flex-direction:column;min-width:0}
 .ep-tx b{font-size:16px}.ep-tx small{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ed-prev .ep-st{margin-top:0}
+/* tabs centered; sub-tabs as underlined text tabs under them */
+#pageTabs{display:flex;width:fit-content;max-width:100%;margin-inline:auto}
+#subTabs{display:flex;justify-content:center;flex-wrap:nowrap;gap:28px;width:100%;max-width:100%;margin:6px 0 26px;padding:0 4px;border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;overflow-x:auto;scrollbar-width:none}
+#subTabs::-webkit-scrollbar{display:none}
+#subTabs button{position:relative;flex:none;min-height:46px;padding:10px 2px 12px;border:0;border-radius:0;background:none;font-size:14.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+#subTabs button:hover{background:none;color:var(--ink)}
+#subTabs button::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:2px;background:var(--sky);transform:scaleX(0);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+#subTabs button.on{background:none;color:var(--ink)}
+#subTabs button.on::after{transform:scaleX(1)}
+#subTabs button .tdot{margin-left:6px}
+@media (max-width:860px){#subTabs{justify-content:flex-start;gap:22px}}
 </style>
 </head>
 <body>
@@ -701,10 +712,10 @@ fieldset>.wt-head.part-sw{padding-top:16px;margin-bottom:4px}
   <span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button>
 </div>
 
-<script src="assets/js/config.js?v=20261121034217"></script>
-<script src="assets/js/icons.js?v=20261121034217"></script>
-<script src="assets/js/content.js?v=20261121034217"></script>
-<script src="assets/js/core.js?v=20261121034217"></script>
-<script src="assets/js/admin.js?v=20261121034217"></script>
+<script src="assets/js/config.js?v=20261121034727"></script>
+<script src="assets/js/icons.js?v=20261121034727"></script>
+<script src="assets/js/content.js?v=20261121034727"></script>
+<script src="assets/js/core.js?v=20261121034727"></script>
+<script src="assets/js/admin.js?v=20261121034727"></script>
 </body>
 </html>
