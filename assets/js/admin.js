@@ -74,7 +74,7 @@
     if (target) target.classList.toggle('is-part-off', off);
     if (off) sw.insertAdjacentHTML(sw.tagName === 'HEADER' ? 'afterend' : 'beforeend', OFF_NOTE.replace('off-note', 'off-note pn'));
   }
-  function goTo(p, x) { collect(); setDirty(changed(), false); page = p; sub = x || p.subs[0]; tab = KIND_TAB[sub.kind]; renderList(); }
+  function goTo(p, x) { collect(); setDirty(changed(), false); page = p; sub = x || p.subs[0]; tab = KIND_TAB[sub.kind]; renderList(); listScroll = 0; const t = $('#pageTabs'); if (t && t.getBoundingClientRect().top < 0) scrollTo({ top: 0, behavior: 'instant' }); }
   let mode = 'project';     // which editor is open
   const EXP_PATH = 'data/experience.json';
   const SITE_PATH = 'data/site.json';
@@ -140,6 +140,7 @@
     $('#saveRetry').classList.toggle('primary', state === 'pending');
     if (state === 'ok') hideTimer = setTimeout(() => { if (!dirty && !saving) { bar.classList.add('hidden'); document.body.classList.remove('has-savebar'); } }, 1600);
   }
+  window.__dbg = () => { const d = (x, y) => { const A = JSON.stringify(canon(x)), B = JSON.stringify(canon(JSON.parse(y))); if (A === B) return null; let i = 0; while (A[i] === B[i]) i++; return [A.slice(Math.max(0, i - 80), i + 60), B.slice(Math.max(0, i - 80), i + 60)]; }; return { p: d(projects, original), x: d(experience, originalExp), s: d(site, originalSite), c: d(content, originalContent), pending: pending.size }; };
   function recheck() {
     collect();
     dirty = changed();
@@ -499,7 +500,8 @@
   function demoRow(st = {}, p = projects[editing] || {}) {
     const img = st.img || (p.screens || [])[st.s] || '';
     const taps = st.taps || (st.tap ? [st.tap] : []);
-    return `<div class="demo-row" data-demo-row data-img="${esc(img)}" data-taps='${esc(JSON.stringify(taps))}'>
+    const extra = {}; if (st.hold) extra.hold = st.hold;
+    return `<div class="demo-row" data-demo-row data-img="${esc(img)}" data-taps='${esc(JSON.stringify(taps))}' data-extra='${esc(JSON.stringify(extra))}'>
       <div class="dr-shot" data-dr-shot title="Click where the tap happens">${img ? `<img src="${esc(imgURL(img))}" alt="">` : '<em>Pick a screen</em>'}${taps.map((t, n) => `<i class="dr-dot" data-dr-dot="${n}" style="left:${t[0] * 100}%;top:${t[1] * 100}%">${n + 1}</i>`).join('')}</div>
       <div class="dr-f">
         <label class="f">Screen<select data-dr="img"></select></label>
@@ -553,6 +555,16 @@
   }
   const projDev = (p) => { const t = p.type || 'mobile', has = (k) => (p[k] || []).length; const want = p.cardDevice; if (want && want !== 'auto') return want; return t === 'web' ? 'desktop' : has('screens') || t === 'mobile' ? 'mobile' : 'desktop'; };
   const projShot = (p, dev) => (({ mobile: p.screens, tablet: p.tabletScreens, desktop: p.webScreens })[dev] || [])[0] || '';
+  /* timeline from two dates → "2 weeks", "6 months", "1 year 3 months" */
+  function tlSpan(s, e) {
+    const a = new Date(s), b = e ? new Date(e) : new Date(); if (isNaN(a) || isNaN(b) || b < a) return '';
+    const days = Math.round((b - a) / 864e5) + 1;
+    if (days < 60) { const w = Math.max(1, Math.round(days / 7)); return `${w} week${w > 1 ? 's' : ''}` + (e ? '' : ' so far'); }
+    let m = (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) + (b.getDate() >= a.getDate() ? 0 : -1); m = Math.max(1, m + (b.getDate() - a.getDate() >= 15 ? 1 : 0));
+    const y = Math.floor(m / 12), r = m % 12;
+    const out = [y ? `${y} year${y > 1 ? 's' : ''}` : '', r ? `${r} month${r > 1 ? 's' : ''}` : ''].filter(Boolean).join(' ');
+    return out + (e ? '' : ' so far');
+  }
   /* app & website kinds: the App Store / Google Play categories plus the usual kinds of websites */
   const KINDS = {
     'Apps': ['Auto & vehicles', 'Beauty', 'Books', 'Business', 'Communication', 'Dating', 'Developer tools', 'Education', 'Entertainment', 'Events', 'Finance', 'Fintech', 'Food & drink', 'Games', 'Graphics & design', 'Health & fitness', 'Healthcare', 'House & home', 'Kids', 'Lifestyle', 'Maps & navigation', 'Medical', 'Music & audio', 'News & magazines', 'Parenting', 'Personalization', 'Photo & video', 'Productivity', 'Real estate', 'Reference', 'Shopping', 'Social', 'Sports', 'Travel', 'Utility', 'Video & streaming', 'Weather'],
@@ -562,8 +574,7 @@
     const [main, ...rest] = String(cat).split('·').map((s) => s.trim());
     const all = [].concat(...Object.values(KINDS));
     const custom = main && !all.includes(main) ? `<optgroup label="Yours"><option value="${esc(main)}" selected>${esc(main)}</option></optgroup>` : '';
-    return `<label class="f">Kind<select data-kind="main"><option value=""${main ? '' : ' selected'}>Choose…</option>${custom}${Object.entries(KINDS).map(([g, list]) => `<optgroup label="${g}">${list.map((k) => `<option${k === main ? ' selected' : ''}>${esc(k)}</option>`).join('')}</optgroup>`).join('')}</select><small>Shows on the project card.</small></label>
-      <label class="f">Detail (optional)<input data-kind="sub" value="${esc(rest.join(' · '))}" placeholder="Series platform"><small>Shows on the case study only.</small></label>
+    return `<label class="f">Kind<select data-kind="main"><option value=""${main ? '' : ' selected'}>Choose…</option>${custom}${Object.entries(KINDS).map(([g, list]) => `<optgroup label="${g}">${list.map((k) => `<option${k === main ? ' selected' : ''}>${esc(k)}</option>`).join('')}</optgroup>`).join('')}</select></label>
       <input type="hidden" data-k="category" value="${esc(cat)}">`;
   }
   const CATS = [].concat(...Object.values(KINDS));
@@ -621,8 +632,11 @@
     fsets.forEach((f) => io.observe(f));
   }
 
+  let listScroll = 0;
+  const toTop = () => requestAnimationFrame(() => scrollTo({ top: 0, behavior: 'instant' }));
   function openEditor(i, isNew) {
-    unembed();
+    if (editing < 0) listScroll = scrollY;
+    unembed(); toTop();
     editing = i; mode = 'project';
     const p = projects[i];
     show('v-edit'); $('#backList').textContent = '← All projects';
@@ -633,9 +647,9 @@
     const devs = (p.devices && (p.devices.mobile || p.devices.tablet || p.devices.desktop)) ? p.devices : { mobile: (p.type || 'mobile') !== 'web' || !!(p.screens || []).length, tablet: !!(p.tabletScreens || []).length, desktop: (p.type || 'mobile') !== 'mobile' };
     $('#edForm').innerHTML = `
       <fieldset><legend>Basics</legend>
-        <div class="g2">${F('Project name *', 'title', p.title)}${F('URL name (slug)', 'slug', p.slug, { hint: 'Auto-filled from the name. Used in the link: project.html#slug' })}</div>
+        ${F('Project name *', 'title', p.title)}<input type="hidden" data-k="slug" value="${esc(p.slug || '')}"${p.slug ? ' data-touched="1"' : ''}>
         <div class="g3 kind-row">${F('What is it', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Mobile + Website']] })}${kindPick(p.category || '')}</div>
-        <div class="g2"><div>${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES })}<div class="pub-row">${C('Show on the website', 'published', p.published !== false)}</div></div><div></div></div>
+        <div>${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES })}<div class="pub-row">${C('Show on the website', 'published', p.published !== false)}</div></div>
         <div class="where-pair">
           <div class="where"><span class="where-tag">On the project card</span>${F('One-liner', 'tagline', p.tagline, { ph: 'A series-based content app', hint: 'A few words under the name on the home page and All work.' })}</div>
           <div class="where"><span class="where-tag">At the top of the case study</span>${F('Summary', 'summary', p.summary, { area: true, rows: 3, hint: 'The idea in two or three sentences, under the project name.' })}</div>
@@ -644,8 +658,7 @@
 
       <fieldset><legend>Card &amp; cover</legend>
         <div class="g2">${F('Accent colour', 'cover.tint', (p.cover && p.cover.tint) || '#2B3A8F', { type: 'color', hint: 'The card colour and the glow on the case study.' })}${F('Card style', 'cardStyle', p.cardStyle || 'auto', { select: [['auto', 'Automatic'], ['a', 'Phone in the middle'], ['b', 'Phone tilted'], ['c', 'Phone in 3D']] })}</div>
-        <div class="g2">${F('Card shows', 'cardDevice', p.cardDevice || 'auto', { select: [['auto', 'Automatic (best fit)'], ['mobile', 'Phone'], ['tablet', 'Tablet'], ['desktop', 'Laptop']] })}${F('Case study background', 'scene', p.scene || 'auto', { select: (window.Scenes ? window.Scenes.list : [['auto', 'Automatic']]), hint: 'Moves behind the devices at the top of the case study.' })}</div>
-        <div class="f">Cover image (optional — wide, replaces the devices on the case study)</div>${imgList('cover.image', p.cover && p.cover.image ? [p.cover.image] : [], 'wide', false, false)}
+        <input type="hidden" data-k="cardDevice" value="${esc(p.cardDevice || 'auto')}">${F('Case study background', 'scene', p.scene || 'auto', { select: (window.Scenes ? window.Scenes.list : [['auto', 'Automatic']]), hint: 'Moves behind the devices at the top of the case study.' })}
       </fieldset>
 
       <fieldset><legend>Live links</legend>
@@ -671,7 +684,9 @@
       <fieldset><legend>Case study header</legend>
         ${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}
         <div class="g2">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}</div>
-        <div class="g3">${F('Team', 'team', p.team)}${F('Timeline', 'timeline', p.timeline, { ph: '6 months' })}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
+        <div class="g2">${F('Team', 'team', p.team)}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
+        <div class="tl-row"><div class="f">Timeline</div><div class="g2">${F('Start', 'timelineStart', p.timelineStart, { type: 'date' })}${F('End', 'timelineEnd', p.timelineEnd, { type: 'date', hint: 'Leave empty if it’s still going.' })}</div>
+          <p class="hint tl-out" data-tl-out></p></div>
       </fieldset>
 
       <fieldset><legend>Story</legend>
@@ -793,7 +808,7 @@
           </section>`).join('')}
         </div>
       </div>`;
-    const grow = (t) => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; };
+    const grow = (t) => { if (t.dataset.fx || !t.isConnected || !t.offsetWidth) return; t.dataset.fx = '1'; t.style.height = ''; const one = t.clientHeight; if (t.scrollHeight > one + 4) t.classList.add(t.value.length > 220 || /Paragraph|FAQ answer/.test((t.closest('.wt-field') && t.closest('.wt-field').textContent) || '') ? 'ta-long' : 'ta-mid'); };
     /* sections that are switched off: dim them and say so */
     const markSec = (sec$) => { const off = !$('[data-sec-show],[data-part-show]', sec$).checked; sec$.classList.toggle('sec-off', off); const note = $('.off-note', sec$); if (off && !note) $('.wt-head', sec$).insertAdjacentHTML('afterend', OFF_NOTE); if (!off && note) note.remove(); };
     $$('.wt-sec', form).forEach(markSec);
@@ -949,7 +964,8 @@
   }
 
   function openExpEditor(i, isNew) {
-    unembed();
+    if (editing < 0) listScroll = scrollY;
+    unembed(); toTop();
     editing = i; mode = 'exp';
     const x = experience[i];
     show('v-edit'); $('#backList').textContent = '← All roles';
@@ -1017,18 +1033,22 @@
     p.slug = slugify(p.slug);
     $$('[data-rep]', form).forEach((box) => {
       p[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); return o; }).filter((o) => Object.values(o).some(Boolean));
-      if (box.dataset.rep === 'links') { p.links = p.links.filter((l) => l.url); delete p.liveUrl; }
+      if (box.dataset.rep === 'links') { p.links = p.links.filter((l) => l.url); if (p.links.length) delete p.liveUrl; else { delete p.links; if (p.liveUrl) p.liveUrl = ''; } }
     });
     $$('[data-imgs]', form).forEach((box) => {
       const key = box.dataset.imgs, lab = box.dataset.lab === '1', multi = box.dataset.multi === '1';
       const items = $$('.im', box).map((im) => lab ? { label: ($('[data-lbl]', im) || {}).value || '', image: im.dataset.path } : im.dataset.path).filter((x) => lab ? (x.image || x.label) : x);
       setPath(p, key, multi ? items : (items[0] || ''));
     });
+    ['cardStyle', 'scene'].forEach((k) => { if (!p[k] || p[k] === 'auto') delete p[k]; });
+    if (p.cover && p.cover.tint) p.cover.tint = p.cover.tint.toUpperCase();
+    ['timelineStart', 'timelineEnd'].forEach((k) => { if (!p[k]) delete p[k]; });
+    if (p.timelineStart) p.timeline = tlSpan(p.timelineStart, p.timelineEnd);
     const dRows = $$('[data-demo-row]', form);
     if ($('[data-demo-ed]', form)) {
       const shots = p.screens || [];
       p.demo = dRows.map((row) => { const g = (k) => ($(`[data-dr="${k}"]`, row) || {}).value || ''; const img = row.dataset.img, taps = JSON.parse(row.dataset.taps || '[]');
-        const o = { img, s: Math.max(0, shots.indexOf(img)), label: g('label').trim() }; if (g('note').trim()) o.note = g('note').trim(); if (+g('loading')) o.loading = +g('loading'); if (taps.length) o.taps = taps; return o; }).filter((o) => o.img);
+        const o = { img, s: Math.max(0, shots.indexOf(img)), label: g('label').trim() }; if (g('note').trim()) o.note = g('note').trim(); if (+g('loading')) o.loading = +g('loading'); if (taps.length) o.taps = taps; return Object.assign(o, JSON.parse(row.dataset.extra || '{}')); }).filter((o) => o.img);
       if (!p.demo.length) delete p.demo;
     }
   }
@@ -1036,11 +1056,14 @@
   /* editor events */
   const form = $('#edForm');
   form.addEventListener('change', (e) => { if (e.target.dataset && e.target.dataset.dr === 'img') { const row = e.target.closest('[data-demo-row]'); row.dataset.img = e.target.value; demoDraw(row); setDirty(true); } });
-  const riGrow = (t) => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; };
+  const riGrow = () => {};
   form.addEventListener('input', (e) => { if (e.target.matches && e.target.matches('.ri textarea')) riGrow(e.target); });
   new MutationObserver(() => requestAnimationFrame(() => $$('.ri textarea', form).forEach((t) => { if (!t.dataset.g) { t.dataset.g = '1'; riGrow(t); } }))).observe(form, { childList: true, subtree: true });
+  const tlShow = () => { const o = $('[data-tl-out]', form); if (!o) return; const s = ($('[data-k="timelineStart"]', form) || {}).value, e = ($('[data-k="timelineEnd"]', form) || {}).value; const p = projects[editing] || {}; o.textContent = s ? `Shows on the site as: ${tlSpan(s, e) || '—'}` : (p.timeline && !/^\[/.test(p.timeline) ? `Shows on the site as: ${p.timeline} (pick the dates to update it)` : 'Pick the start date — the site shows how long it took.'); };
+  form.addEventListener('input', (e) => { if (e.target.dataset && /^timeline/.test(e.target.dataset.k || '')) tlShow(); });
+  new MutationObserver(() => { if ($('[data-tl-out]', form) && !$('[data-tl-out]', form).textContent) tlShow(); }).observe(form, { childList: true });
   /* Kind: dropdown + optional detail → one category value */
-  const kindSync = (e) => { if (!e.target.dataset || !e.target.dataset.kind) return; const m = $('[data-kind="main"]', form).value, s = $('[data-kind="sub"]', form).value.trim(); const h = $('[data-k="category"]', form); h.value = [m, s].filter(Boolean).join(' · '); setDirty(true); if (form.oninput) form.oninput(); };
+  const kindSync = (e) => { if (!e.target.dataset || !e.target.dataset.kind) return; const m = $('[data-kind="main"]', form).value, s = ''; const h = $('[data-k="category"]', form); h.value = [m, s].filter(Boolean).join(' · '); setDirty(true); if (form.oninput) form.oninput(); };
   form.addEventListener('change', kindSync); form.addEventListener('input', kindSync);
   /* drag screens into order (arrows still work on touch) */
   let dragIm = null;
@@ -1111,7 +1134,7 @@
       setDirty(true);
     }
   });
-  const grow = (t) => { t.style.height = 'auto'; t.style.height = Math.min(t.scrollHeight + 2, 640) + 'px'; };
+  const grow = () => {};
   form.addEventListener('input', (e) => { if (e.target.tagName === 'TEXTAREA') grow(e.target); });
   new MutationObserver(() => requestAnimationFrame(() => $$('textarea', form).forEach(grow))).observe(form, { childList: true });
   const drawRecImg = (wrap, path) => {
@@ -1192,7 +1215,7 @@
     });
   }
 
-  $('#backList').addEventListener('click', () => { collect(); setDirty(changed(), false); renderList(); });
+  $('#backList').addEventListener('click', () => { collect(); setDirty(changed(), false); renderList(); requestAnimationFrame(() => scrollTo({ top: listScroll, behavior: 'instant' })); });
 
   /* ---------------- guide (the ⓘ button in the top bar) ---------------- */
   const helpDlg = $('#helpDlg');
