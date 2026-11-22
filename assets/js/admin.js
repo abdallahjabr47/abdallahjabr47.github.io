@@ -200,6 +200,7 @@
 
   /* ---------------- load ---------------- */
   async function loadData() {
+    getIdxDoc().catch(() => {});
     const path = CFG.dataPath || 'data/projects.json';
     try {
       const res = await gh(`${repoPath()}/contents/${path}?ref=${encodeURIComponent(auth.branch)}`, { headers: { Accept: 'application/vnd.github.raw+json' } });
@@ -653,7 +654,7 @@
   }
 
   let listScroll = 0;
-  const toTop = () => requestAnimationFrame(() => scrollTo({ top: 0, behavior: 'instant' }));
+  const toTop = () => scrollTo({ top: 0, behavior: 'instant' });
   function openEditor(i, isNew) {
     if (editing < 0) listScroll = scrollY;
     unembed(); toTop();
@@ -749,13 +750,16 @@
   }
 
   let wtUnbind = null;
+  /* the page structure is read once and kept: switching tabs never waits for the network again */
+  let idxDocP = null;
+  const getIdxDoc = () => idxDocP || (idxDocP = fetch('index.html?v=' + Date.now(), { cache: 'no-store' }).then((r) => r.text()).then((t) => new DOMParser().parseFromString(t, 'text/html')).catch((e) => { idxDocP = null; throw e; }));
   async function openContentEditor(host) {
     if (!host) { editing = 0; mode = 'content'; embedPanel('content', 'Website <em class="serif">text</em>'); }
     const form = $('#edForm');
     host = host || form;
-    host.innerHTML = '<p class="hint">Loading the page text…</p>';
+    if (!idxDocP) host.innerHTML = '<p class="hint">Loading the page text…</p>';
     let doc;
-    try { doc = new DOMParser().parseFromString(await (await fetch('index.html?v=' + Date.now(), { cache: 'no-store' })).text(), 'text/html'); }
+    try { doc = await getIdxDoc(); }
     catch (e) { host.innerHTML = '<p class="hint">Could not load the page text. Refresh and try again.</p>'; return; }
     const secs = window.SiteContent.sections(doc).filter((x) => !sub.keys || sub.keys.includes(x.key));
     const pick = (f) => (!sub.fsel || f.el.closest(sub.fsel)) && (!sub.fnot || !f.el.closest(sub.fnot));
@@ -886,7 +890,7 @@
         t.value = t.dataset.orig; t.dispatchEvent(new Event('input', { bubbles: true }));
       });
     });
-    requestAnimationFrame(() => $$('[data-wt-sec="0"] textarea', form).forEach(grow));
+    $$('[data-wt-sec="0"] textarea', form).forEach(grow);
   }
 
   function openSiteEditor() {
@@ -1077,7 +1081,7 @@
   form.addEventListener('change', (e) => { if (e.target.dataset && e.target.dataset.dr === 'img') { const row = e.target.closest('[data-demo-row]'); row.dataset.img = e.target.value; demoDraw(row); setDirty(true); } });
   const riGrow = () => {};
   form.addEventListener('input', (e) => { if (e.target.matches && e.target.matches('.ri textarea')) riGrow(e.target); });
-  new MutationObserver(() => requestAnimationFrame(() => $$('.ri textarea', form).forEach((t) => { if (!t.dataset.g) { t.dataset.g = '1'; riGrow(t); } }))).observe(form, { childList: true, subtree: true });
+  new MutationObserver(() => $$('.ri textarea', form).forEach((t) => { if (!t.dataset.g) { t.dataset.g = '1'; riGrow(t); } })).observe(form, { childList: true, subtree: true });
   /* item switched off ("Show on the website" unticked): everything else in the editor fades, edits still work */
   const markOff = () => {
     $$('.off-dim', form).forEach((x) => x.classList.remove('off-dim')); $$('.off-note', form).forEach((x) => x.remove());
@@ -1199,7 +1203,7 @@
   });
   const grow = () => {};
   form.addEventListener('input', (e) => { if (e.target.tagName === 'TEXTAREA') grow(e.target); });
-  new MutationObserver(() => requestAnimationFrame(() => $$('textarea', form).forEach(grow))).observe(form, { childList: true });
+  new MutationObserver(() => $$('textarea', form).forEach(grow)).observe(form, { childList: true });
   const drawRecImg = (wrap, path) => {
     wrap.innerHTML = recImgHTML(path);
     const mini = wrap.closest('.rec-row') && $('.rr-mini', wrap.closest('.rec-row')); if (mini) mini.style.backgroundImage = path ? `url('${imgURL(path)}')` : '';
@@ -1277,7 +1281,7 @@
     });
   }
 
-  $('#backList').addEventListener('click', () => { collect(); setDirty(changed(), false); renderList(); requestAnimationFrame(() => scrollTo({ top: listScroll, behavior: 'instant' })); });
+  $('#backList').addEventListener('click', () => { collect(); setDirty(changed(), false); renderList(); scrollTo({ top: listScroll, behavior: 'instant' }); });
 
   /* ---------------- guide (the ⓘ button in the top bar) ---------------- */
   const helpDlg = $('#helpDlg');
@@ -1289,7 +1293,7 @@
   /* ---------------- search every text in the admin ---------------- */
   let searchDoc = null;
   async function searchIndex() {
-    if (!searchDoc) searchDoc = new DOMParser().parseFromString(await (await fetch('index.html?v=' + Date.now(), { cache: 'no-store' })).text(), 'text/html');
+    if (!searchDoc) searchDoc = await getIdxDoc();
     const out = [];
     const secs = window.SiteContent.sections(searchDoc);
     PAGES.forEach((p) => p.subs.forEach((x) => {
