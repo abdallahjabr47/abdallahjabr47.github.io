@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122125212">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122125651">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -799,6 +799,34 @@ body.has-savebar{padding-bottom:76px}
 .ep-st.st-dev{color:#E8A33D;background:rgb(232 163 61 / .12)}.ep-st.st-done{color:var(--sky);background:rgb(92 155 245 / .12)}.ep-st.st-pers{color:#B79CFF;background:rgb(183 156 255 / .13)}.ep-st.st-muted{color:var(--muted);background:rgb(var(--fg) / .06)}
 [data-theme="light"] .ep-st.st-pers{color:#6A48D7}
 .kind-row{align-items:start}
+
+/* repeatable items (process steps, challenges, results, links, testimonials) */
+.rep{counter-reset:ri}
+.rep-item.ri{display:block;padding:0;border-radius:16px;border:1px solid var(--line);background:rgb(var(--fg) / .02);counter-increment:ri;overflow:hidden}
+.ri-h{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 16px;border-bottom:1px solid var(--line)}
+.ri-n{min-width:30px;height:24px;padding:0 6px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--sky);background:rgb(92 155 245 / .12)}
+.ri-n::before{content:counter(ri, decimal-leading-zero)}
+.ri-l{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.ri-acts{margin-left:auto;display:flex;gap:4px}
+.ri-b{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--muted);transition:background .2s,color .2s}
+.ri-b svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ri-b:hover{background:rgb(var(--fg) / .07);color:var(--ink)}
+.ri-b.del:hover{background:rgb(240 82 82 / .12);color:#F26B6B}
+.ri:first-child [data-mv-row="-1"],.ri:last-child [data-mv-row="1"]{opacity:.3;pointer-events:none}
+.ri-body{display:flex;flex-direction:column;gap:10px;padding:14px 16px 16px}
+.ri-body textarea{resize:none;min-height:0!important;overflow:hidden;line-height:1.55}
+.ri-body .ri-title{font-weight:600}
+.ri-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.ri-2.ri-res{grid-template-columns:minmax(0,.6fr) minmax(0,1.4fr)}
+.ri-2.ri-link{grid-template-columns:minmax(0,.7fr) minmax(0,1.6fr)}
+.ri-2 .f{gap:6px}
+@media (max-width:640px){.ri-2,.ri-2.ri-res,.ri-2.ri-link{grid-template-columns:minmax(0,1fr)}}
+
+/* a row of short texts (buttons, tabs, words): fill the whole width */
+.wt-run-b[style*="--n"]{grid-template-columns:repeat(var(--n),minmax(0,1fr))!important}
+@media (max-width:640px){.wt-run-b[style*="--n"]{grid-template-columns:repeat(min(var(--n),2),minmax(0,1fr))!important}}
+.wt-group.list .wt-gb[style*="--n"]{grid-template-columns:repeat(var(--n),minmax(0,1fr))}
+@media (max-width:640px){.wt-group.list .wt-gb[style*="--n"]{grid-template-columns:repeat(min(var(--n),2),minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -894,11 +922,11 @@ body.has-savebar{padding-bottom:76px}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122125212"></script>
-<script src="assets/js/icons.js?v=20261122125212"></script>
-<script src="assets/js/scenes.js?v=20261122125212"></script>
-<script src="assets/js/content.js?v=20261122125212"></script>
-<script src="assets/js/core.js?v=20261122125212"></script>
-<script src="assets/js/admin.js?v=20261122125212"></script>
+<script src="assets/js/config.js?v=20261122125651"></script>
+<script src="assets/js/icons.js?v=20261122125651"></script>
+<script src="assets/js/scenes.js?v=20261122125651"></script>
+<script src="assets/js/content.js?v=20261122125651"></script>
+<script src="assets/js/core.js?v=20261122125651"></script>
+<script src="assets/js/admin.js?v=20261122125651"></script>
 </body>
 </html>

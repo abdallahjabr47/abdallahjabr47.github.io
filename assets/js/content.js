@@ -78,7 +78,7 @@
     picked.forEach((f) => {
       if (f.listEl) {
         f.group = 'list-' + picked.findIndex((g) => g.listEl === f.listEl);
-        f.groupLabel = NICE[first(f.listEl)] || nice(f.groupCls, f.groupEl) + 's';
+        f.groupLabel = NICE[first(f.listEl)] || (() => { const n = nice(f.groupCls, f.groupEl); return /s$/i.test(n) ? n : n + 's'; })();
       } else if (f.groupEl) {
         if (!seenG.has(f.groupEl)) { const named = f.groupEl.getAttribute && f.groupEl.getAttribute('data-c-group'); if (named) { const same = Array.from(sec.el.querySelectorAll('[data-c-group]')).filter((x) => x.getAttribute('data-c-group') === named); seenG.set(f.groupEl, same.length > 1 ? named + ' ' + (same.indexOf(f.groupEl) + 1) + ' · ' + f.text.replace(/[*\n]/g, ' ').trim().slice(0, 26) : named); } }
         if (!seenG.has(f.groupEl)) { const base = nice(f.groupCls, f.groupEl); counts[base] = (counts[base] || 0) + 1; const t1 = f.text.replace(/[*\n]/g, ' ').trim(); seenG.set(f.groupEl, base + ' ' + counts[base] + (t1.length <= 26 && !/^\d/.test(t1) ? ' · ' + t1 : '')); }
