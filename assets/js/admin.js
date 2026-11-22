@@ -473,7 +473,7 @@
       experience.unshift({ id: 'role-' + Date.now().toString(36), visible: true, role: '', company: '', location: '', dates: '', type: 'Full-time', summary: '', highlights: [] });
       return openExpEditor(0, true);
     }
-    projects.push({ slug: '', title: '', headline: '', headlineAccent: '', tagline: '', category: '', platform: 'Mobile App', type: 'mobile', year: '', live: false, liveUrl: '', status: '', published: true, summary: '', cover: { image: '', ghost: '', tint: '#2B3A8F' }, company: '', role: '', team: '', timeline: '', platforms: '', tags: [], overview: '', problem: '', responsibilities: { product: [], design: [] }, process: [], challenges: [], gallery: { before: [], after: [] }, results: [], learnings: '', icon: '', screens: [], tabletScreens: [], webScreens: [], devices: { mobile: true, tablet: false, desktop: false }, cardDevice: 'auto' });
+    projects.push({ slug: '', title: '', headline: '', headlineAccent: '', tagline: '', category: '', platform: 'Mobile App', type: 'mobile', year: '', live: false, liveUrl: '', status: '', published: true, summary: '', cover: { image: '', ghost: '', tint: '#2B3A8F' }, company: '', role: '', team: '', timeline: '', platforms: '', overview: '', problem: '', responsibilities: { product: [], design: [] }, process: [], challenges: [], gallery: { before: [], after: [] }, results: [], learnings: '', icon: '', screens: [], tabletScreens: [], webScreens: [], devices: { mobile: true, tablet: false, desktop: false }, cardDevice: 'auto' });
     openEditor(projects.length - 1, true);
   });
 
@@ -712,7 +712,6 @@
       </fieldset>
 
       <fieldset><legend>Case study header</legend>
-        ${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}
         <div class="g2">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}</div>
         <div class="g2">${F('Team', 'team', p.team)}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
         <div class="tl-row"><div class="f">Timeline</div><div class="g2">${monthPick('Start', 'timelineStart', p.timelineStart)}${monthPick('End', 'timelineEnd', p.timelineEnd, 'Still going')}</div>
@@ -1060,7 +1059,6 @@
     $$('[data-k]', form).forEach((el) => {
       const k = el.dataset.k;
       let v = el.type === 'checkbox' ? el.checked : el.value;
-      if (k === 'tags') v = v.split(',').map((s) => s.trim()).filter(Boolean);
       if (k.startsWith('responsibilities.')) v = v.split('\n').map((s) => s.trim()).filter(Boolean);
       setPath(p, k, v);
     });

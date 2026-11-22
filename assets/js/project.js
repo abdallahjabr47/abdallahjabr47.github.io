@@ -5,13 +5,6 @@
   let projects = [];
 
   /* empty, or still a placeholder like "[Platforms]" → treated as not filled in */
-  /* tags under the summary: skip the ones that only repeat the device chip (Mobile, Web…) or the category */
-  const csTags = (p, type) => {
-    const dup = new Set(['mobile', 'mobile app', 'app', 'apps', 'web', 'website', 'websites', 'ios', 'android']);
-    const cat = String(p.category || '').toLowerCase().split('·').map((x) => x.trim());
-    const seen = new Set();
-    return (p.tags || []).filter((t) => { const k = String(t || '').trim().toLowerCase(); if (!k || dup.has(k) || cat.includes(k) || seen.has(k)) return false; seen.add(k); return true; });
-  };
   const has = (v) => Array.isArray(v) ? v.filter(Boolean).length > 0 : !!(v && String(v).trim() && !/^\[.*\]$/.test(String(v).trim()));
   const getSlug = () => {
     const h = decodeURIComponent(location.hash.replace(/^#/, ''));
@@ -186,7 +179,6 @@
         ${has(p.summary) || has(p.tagline) ? `<p class="cs-sum" data-reveal style="--d:250ms">${esc(has(p.summary) ? p.summary : p.tagline)}</p>` : ''}
         <div class="cs-meta" data-reveal style="--d:350ms">
           <span class="pill dev-pill">${['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span title="${DEV[k][0]}">${devIc(k)}</span>`).join('')}${esc(p.platform || (type === 'web' ? 'Website' : type === 'both' ? 'Mobile + Website' : 'Mobile app'))}</span>
-          ${csTags(p, type).map((t) => `<span class="pill">${esc(t)}</span>`).join('')}
         </div>
       </section>
       <section class="container">

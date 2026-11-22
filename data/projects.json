@@ -24,11 +24,6 @@
     "team": "[e.g. 4 developers, 2 designers, 1 QA]",
     "timeline": "[Start — End]",
     "platforms": "[iOS · Android]",
-    "tags": [
-      "Product strategy",
-      "UX/UI",
-      "Mobile"
-    ],
     "overview": "Redz started as a content app and grew into a series-based platform. As the single product decision-maker, I took its core features from concept to release: Series (solo and collaborative videos), Anonymous, an in-app Wallet, and the Redz Verification and Premium subscriptions. [Add 1–2 sentences on who Redz is for and why the move to series mattered.]",
     "problem": "How might we turn one-off content views into a habit people return to, episode after episode?",
     "responsibilities": {
@@ -180,11 +175,6 @@
     "team": "[Team]",
     "timeline": "[Start — End]",
     "platforms": "[iOS · Android]",
-    "tags": [
-      "Product",
-      "UX/UI",
-      "Mobile"
-    ],
     "overview": "Momyt Meet helps people organise meetups and find new friends. I defined and launched the end-to-end meetup flow — create, invite, join and coordinate activities — and the Find feature, which connects users with people nearby or in a location they choose. [Add who it's for and what the business needed.]",
     "problem": "[e.g. How might we make meeting new people feel easy and safe?]",
     "responsibilities": {
@@ -257,11 +247,6 @@
     "team": "[Team]",
     "timeline": "6 months",
     "platforms": "Web",
-    "tags": [
-      "Redesign",
-      "Information architecture",
-      "Design system"
-    ],
     "overview": "I led the full redesign, revamp and rebuild of the existing Foras.ps platform, from requirements to sign-off — presenting decisions to stakeholders and iterating on feedback and usability testing.",
     "problem": "[e.g. How might we make the whole platform easier to navigate and faster to extend?]",
     "responsibilities": {
@@ -319,11 +304,6 @@
     "team": "[Team]",
     "timeline": "[Start — End]",
     "platforms": "[iOS · Android]",
-    "tags": [
-      "UX/UI",
-      "Mobile",
-      "Onboarding"
-    ],
     "overview": "Cincy Labs, a US app studio, brought me in to design the onboarding, login and sign-up experience for the Ruckaroo app. [Add what Ruckaroo does and what the studio needed.]",
     "problem": "[e.g. How might we get new users signed up without losing them on the way?]",
     "responsibilities": {
@@ -393,10 +373,6 @@
     "team": "[Team]",
     "timeline": "[Start — End]",
     "platforms": "Web",
-    "tags": [
-      "UX/UI",
-      "Web"
-    ],
     "overview": "[Overview]",
     "problem": "",
     "responsibilities": {
@@ -449,12 +425,6 @@
     "team": "Solo",
     "timeline": "4 weeks",
     "platforms": "iOS · Android",
-    "tags": [
-      "UX/UI",
-      "Mobile",
-      "Fintech",
-      "Figma"
-    ],
     "overview": "xchange was created to help international travelers and remote workers track and convert currencies in real time. The app focuses on speed, accuracy and usability, with a simple, clean interface. I designed it while taking the Google UX Design Professional Certificate, following user-centred design principles.",
     "problem": "Travelers need reliable, up-to-date exchange rates fast, want to convert between several currencies on the go and keep their travel budget in check, but existing apps are slow, cluttered or hard to navigate.",
     "responsibilities": {
@@ -654,12 +624,6 @@
     "team": "Solo",
     "timeline": "2 weeks",
     "platforms": "iOS · Android",
-    "tags": [
-      "UX/UI",
-      "Mobile",
-      "Utility",
-      "Figma"
-    ],
     "overview": "WorldClockr is a modern, intuitive mobile app that helps people stay connected with time across the world. It detects the user’s current location, shows the local time, and lets them add favourite cities for quick access. Users can convert time between two cities and manage their list by reordering or deleting any city.",
     "problem": "Many people work or communicate across time zones, but most time apps are cluttered, hard to navigate or offer little customisation. Users end up searching “current time in X” or doing mental maths when scheduling meetings or travel.",
     "responsibilities": {
@@ -763,11 +727,6 @@
     "team": "[Team]",
     "timeline": "[Start — End]",
     "platforms": "[Platforms]",
-    "tags": [
-      "UX/UI",
-      "Mobile",
-      "Design system"
-    ],
     "overview": "[Overview]",
     "problem": "",
     "responsibilities": {
@@ -818,11 +777,6 @@
     "team": "[Team]",
     "timeline": "[Start — End]",
     "platforms": "[Platforms]",
-    "tags": [
-      "Product",
-      "UX/UI",
-      "Mobile"
-    ],
     "overview": "[Overview]",
     "problem": "",
     "responsibilities": {
@@ -873,11 +827,6 @@
     "team": "[Team]",
     "timeline": "[Duration]",
     "platforms": "[Platforms]",
-    "tags": [
-      "Product",
-      "UX/UI",
-      "Mobile"
-    ],
     "overview": "[Overview]",
     "problem": "",
     "responsibilities": {
