@@ -985,8 +985,7 @@
     $('#edForm').innerHTML = `
       <fieldset><legend>Role</legend>
         <div class="g2">${F('Job title *', 'role', x.role)}${F('Company *', 'company', x.company)}</div>
-        <div class="g2">${F('Location', 'location', x.location, { ph: 'Ramallah, Palestine' })}${F('Type', 'type', x.type || 'Full-time', { select: [...new Set(['Full-time', 'Part-time', 'Contract', 'Freelance', 'Internship', 'Volunteer', ...experience.map((r) => r.type).filter(Boolean)])].map((t) => [t, t]) })}</div><div class="tl-row"><div class="f">Dates</div>${rangePick('data-k', 'dates', x.dates, { present: true })}</div>
-        ${C('Show on the website', 'visible', x.visible !== false)}
+        <div class="g2">${F('Location', 'location', x.location, { ph: 'Ramallah, Palestine' })}${F('Type', 'type', x.type || 'Full-time', { select: [...new Set(['Full-time', 'Part-time', 'Contract', 'Freelance', 'Internship', 'Volunteer', ...experience.map((r) => r.type).filter(Boolean)])].map((t) => [t, t]) })}</div><div class="tl-row"><div class="f">Dates</div>${rangePick('data-k', 'dates', x.dates, { present: true })}<div class="pub-row">${C('Show on the website', 'visible', x.visible !== false)}</div></div>
         ${F('One-line summary', 'summary', x.summary, { area: true, rows: 2 })}
         ${F('Highlights (one per line — shown when visitors open the role)', 'highlights', (x.highlights || []).join('\n'), { area: true, rows: 7 })}
       </fieldset>`;
