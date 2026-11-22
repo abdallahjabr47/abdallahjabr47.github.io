@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122222252">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122223928">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -819,7 +819,7 @@ body.has-savebar{padding-bottom:76px}
 /* list thumbnail: the card in small — name on top, the screen under it */
 .mc.st-l .mc-g{top:9%;left:6%;right:6%;text-align:center;font-size:min(15px,calc(118cqw / var(--n,6)));letter-spacing:-.03em;line-height:1.05;text-overflow:ellipsis}
 .mc.st-l .mc-d.ph{height:62%;left:50%;bottom:-10%;transform:translateX(-50%);border-radius:7px;border-width:2px}
-.mc.st-l.is-web .mc-d{width:74%;height:auto;left:13%;bottom:-8%;border-radius:4px 4px 0 0;border-width:2px}
+.mc.st-l.is-web .mc-d:not(.mc-side){width:74%;height:auto;left:13%;bottom:-8%;border-radius:4px 4px 0 0;border-width:2px}
 .mc.st-l .mc-o.o1{width:30%;left:-8%;bottom:6%}.mc.st-l .mc-o.o2{width:14%;right:6%;top:auto;bottom:22%}
 .mc-d img{position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:cover;object-position:top}
 .pub-row{margin-top:-4px}
@@ -999,6 +999,44 @@ textarea.ta-long{height:150px!important}
 }
 .fs-pos{font-size:13px;color:var(--dim,var(--muted));font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){.ed-layout.two.tabbed #edForm > fieldset.on-tab{animation:none}}
+/* wide screens: the preview is one band across the top; under it the section list (left, stays in view) and the section (right) */
+@media (min-width:1001px){
+  .ed-layout.two.tabbed{grid-template-columns:260px minmax(0,1fr);row-gap:24px}
+  .ed-layout.two.tabbed .ed-side{display:contents}
+  .ed-layout.two.tabbed .ed-prev{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:20px;row-gap:16px;align-items:center;padding:14px 14px 18px}
+  .ed-layout.two.tabbed .ed-prev .ep-stage{grid-column:1/-1;width:100%;aspect-ratio:auto!important;height:clamp(220px,24vw,330px)!important;border-radius:18px}
+  /* banner: the card's own look, laid out for a wide frame (sizes follow the height so nothing stretches) */
+  .ed-layout.two.tabbed .ep-stage .mc .mc-g{top:12%!important;bottom:auto!important;left:0!important;right:0!important;text-align:center!important;font-size:min(calc(130cqw / var(--n,6)),26cqh)!important;line-height:.9!important;padding:0!important}
+  .ed-layout.two.tabbed .ep-stage .mc .mc-d.ph{height:82%;width:auto;left:50%!important;right:auto!important;top:auto!important;bottom:-24%!important;transform:translateX(-50%)!important;border-radius:5cqh;border-width:.9cqh}
+  .ed-layout.two.tabbed .ep-stage .mc .mc-d.lap{width:auto!important;height:62%;aspect-ratio:16/10;left:50%!important;right:auto!important;bottom:-6%!important;transform:translateX(-50%)!important;border-radius:1.6cqh 1.6cqh 0 0;border-width:.9cqh}
+  .ed-layout.two.tabbed .ep-stage .mc .mc-d.mc-side{height:46%;left:calc(50% + 40cqh)!important;right:auto!important;bottom:-8%!important;transform:none!important;border-radius:4cqh;border-width:.8cqh}
+  .ed-layout.two.tabbed .ep-stage .mc .mc-o.o1{width:auto!important;height:44%;left:3%!important;right:auto!important;bottom:-12%!important;top:auto!important}
+  .ed-layout.two.tabbed .ep-stage .mc .mc-o.o2{width:auto!important;height:16%;right:7%!important;left:auto!important;top:14%!important;bottom:auto!important}
+  .ed-layout.two.tabbed .ed-prev .ep-head{padding:0 6px}
+  .ed-layout.two.tabbed .ed-prev .ep-flags{justify-content:flex-end;padding-right:6px}
+  .ed-layout.two.tabbed .ed-prev .ep-logo{width:52px;height:52px;font-size:22px}
+  .ed-layout.two.tabbed .ed-prev .ep-t{font-size:22px}
+  .ed-layout.two.tabbed .ed-prev .ep-l{font-size:15px;white-space:normal}
+  .ed-layout.two.tabbed .ed-nav{grid-column:1;position:sticky;top:100px;align-self:start}
+  .ed-layout.two.tabbed #edForm{grid-column:2}
+}
+/* screen sketch inside device frames that have no screenshots yet */
+.mc-d em.mk{position:absolute;inset:0;background:linear-gradient(180deg,#16181f,#0e1015);container-type:size}
+.mk i{position:absolute;display:block;font-style:normal}
+.mk-ph .mk-top{right:9%;top:6%;width:12%;aspect-ratio:1;border-radius:50%;background:color-mix(in srgb,var(--tint) 75%,#fff 10%)}
+.mk-ph .mk-hero{left:8%;right:8%;top:15%;height:30%;border-radius:7cqw;background:linear-gradient(160deg,color-mix(in srgb,var(--tint) 85%,#fff 8%),color-mix(in srgb,var(--tint) 35%,#0e1015))}
+.mk-ph .mk-l1{left:8%;top:50%;width:34%;height:2.2%;border-radius:9px;background:rgb(255 255 255 / .16)}
+.mk-ph .mk-l2{left:8%;top:55%;width:54%;height:2.2%;border-radius:9px;background:rgb(255 255 255 / .1)}
+.mk-ph .mk-tiles{left:8%;right:8%;top:61%;height:16%;display:grid!important;grid-template-columns:repeat(3,1fr);gap:4%}
+.mk-ph .mk-tiles b,.mk-web .mk-tiles b{border-radius:5cqw;background:rgb(255 255 255 / .07)}
+.mk-ph .mk-btn{left:8%;right:8%;bottom:6%;height:7%;border-radius:5cqw;background:color-mix(in srgb,var(--tint) 85%,#fff 6%)}
+.mk-web .mk-nav{left:0;right:0;top:0;height:9%;display:flex!important;align-items:center;justify-content:flex-end;gap:3%;padding:0 5%;background:rgb(255 255 255 / .05)}
+.mk-web .mk-nav b{width:8%;height:24%;border-radius:9px;background:rgb(255 255 255 / .16)}
+.mk-web .mk-hero{left:5%;right:5%;top:15%;height:38%;border-radius:3cqw;background:linear-gradient(120deg,color-mix(in srgb,var(--tint) 85%,#fff 8%),color-mix(in srgb,var(--tint) 30%,#0e1015))}
+.mk-web .mk-l1{left:5%;top:58%;width:26%;height:3.5%;border-radius:9px;background:rgb(255 255 255 / .16)}
+.mk-web .mk-l2{left:5%;top:64%;width:40%;height:3.5%;border-radius:9px;background:rgb(255 255 255 / .1)}
+.mk-web .mk-tiles{left:5%;right:5%;top:72%;bottom:6%;display:grid!important;grid-template-columns:repeat(4,1fr);gap:3%}
+.mc.st-l .mc-d.ph.mc-side{left:auto;right:7%;transform:none;height:52%;bottom:-8%}
 </style>
 </head>
 <body>
@@ -1094,11 +1132,11 @@ textarea.ta-long{height:150px!important}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122222252"></script>
-<script src="assets/js/icons.js?v=20261122222252"></script>
-<script src="assets/js/scenes.js?v=20261122222252"></script>
-<script src="assets/js/content.js?v=20261122222252"></script>
-<script src="assets/js/core.js?v=20261122222252"></script>
-<script src="assets/js/admin.js?v=20261122222252"></script>
+<script src="assets/js/config.js?v=20261122223928"></script>
+<script src="assets/js/icons.js?v=20261122223928"></script>
+<script src="assets/js/scenes.js?v=20261122223928"></script>
+<script src="assets/js/content.js?v=20261122223928"></script>
+<script src="assets/js/core.js?v=20261122223928"></script>
+<script src="assets/js/admin.js?v=20261122223928"></script>
 </body>
 </html>

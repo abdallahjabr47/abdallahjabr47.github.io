@@ -151,7 +151,7 @@
         ${has(p.learnings) ? `<div class="quote glass" data-reveal><small>WHAT I LEARNED</small><p style="font-weight:500;color:var(--ink2)">${esc(p.learnings)}</p></div>` : ''}`);
     }
 
-    const shots = (p.screens && p.screens.length) ? p.screens : [];
+    const shots = (p.screens && p.screens.length) ? (p.coverShot && p.screens.includes(p.coverShot) ? [p.coverShot, ...p.screens.filter((x) => x !== p.coverShot)] : p.screens) : [];
     const dv = (p.devices && (p.devices.mobile || p.devices.tablet || p.devices.desktop)) ? p.devices : { mobile: type !== 'web', tablet: false, desktop: type !== 'mobile' };
     const coverInner = p.cover && p.cover.image
       ? `<img src="${esc(p.cover.image)}" alt="${esc(p.title)} cover">`

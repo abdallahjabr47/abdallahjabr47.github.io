@@ -326,7 +326,7 @@
       return `<div class="prow glass${shown ? '' : ' is-hidden'}${p.featured ? ' is-feat' : ''}" data-row-i="${i}">
         <button type="button" class="grip" data-grip="${i}" aria-label="Drag to reorder ${esc(p.title || 'project')}" title="Drag to reorder">${IC.grip}</button>
         <span class="pno" title="${p.featured ? 'On the home page' : shown ? 'On the All work page' : 'Hidden'}">${no || '–'}</span>
-        <span class="pthumb">${coverMini({ title: p.title, tint: p.cover && p.cover.tint, dev: projDev(p), shot: projShot(p, projDev(p)), phone: projDev(p) === 'desktop' && (p.devices || {}).mobile ? ((p.screens || [])[0] || '') : undefined, style: 'l' })}</span>
+        <span class="pthumb">${coverMini({ title: p.title, tint: p.cover && p.cover.tint, dev: projDev(p), shot: projShot(p, projDev(p)), phone: projDev(p) === 'desktop' && (p.devices || {}).mobile ? projShot(p, 'mobile') : undefined, style: 'l' })}</span>
         ${icn(p)}
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small><span class="lb lb-${p.type || 'mobile'}">${KIND_LABEL[p.type || 'mobile']}</span>${p.category ? ` <span class="pcat">${esc(p.category.split('·')[0].trim())}</span>` : ''}</small></span>
         <span class="bdgs">${shown ? '' : '<span class="badge-d">Hidden</span>'}</span>
@@ -565,14 +565,17 @@
   /* live card + section nav beside the project editor */
   const KIND_LABEL = { mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' };
   /* a small copy of the coloured project card on the website: name, one device, soft orbs */
+  /* a screen with no upload yet shows a simple app / website sketch in the project colour, never a black slab */
+  const MOCK_PH = '<em class="mk mk-ph"><i class="mk-top"></i><i class="mk-hero"></i><i class="mk-l1"></i><i class="mk-l2"></i><i class="mk-tiles"><b></b><b></b><b></b></i><i class="mk-btn"></i></em>';
+  const MOCK_WEB = '<em class="mk mk-web"><i class="mk-nav"><b></b><b></b><b></b></i><i class="mk-hero"></i><i class="mk-l1"></i><i class="mk-l2"></i><i class="mk-tiles"><b></b><b></b><b></b><b></b></i></em>';
   function coverMini(o) {
     const st = ['a', 'b', 'c', 'l'].includes(o.style) ? o.style : 'abc'[(o.idx || 0) % 3];
     const web = o.dev === 'desktop' || o.dev === 'tablet';
     const shot = o.shot ? `<img src="${esc(imgURL(o.shot))}" alt="">` : '';
-    return `<span class="mc st-${st === 'l' ? 'l' : web ? 'w' : st}${web ? ' is-web' : ''}" style="--tint:${esc(o.tint || '#2B3A8F')};--n:${Math.max(4, (o.title || '').length)}"><i class="mc-o o1"></i><i class="mc-o o2"></i><b class="mc-g">${esc(o.title || '')}</b><span class="mc-d ${web ? 'lap' : 'ph'}">${shot || '<em></em>'}</span>${web && o.phone !== undefined ? `<span class="mc-d ph mc-side">${o.phone ? `<img src="${esc(imgURL(o.phone))}" alt="">` : '<em></em>'}</span>` : ''}</span>`;
+    return `<span class="mc st-${st === 'l' ? 'l' : web ? 'w' : st}${web ? ' is-web' : ''}" style="--tint:${esc(o.tint || '#2B3A8F')};--n:${Math.max(4, (o.title || '').length)}"><i class="mc-o o1"></i><i class="mc-o o2"></i><b class="mc-g">${esc(o.title || '')}</b><span class="mc-d ${web ? 'lap' : 'ph'}">${shot || (web ? MOCK_WEB : MOCK_PH)}</span>${web && o.phone !== undefined ? `<span class="mc-d ph mc-side">${o.phone ? `<img src="${esc(imgURL(o.phone))}" alt="">` : MOCK_PH}</span>` : ''}</span>`;
   }
   const projDev = (p) => { const t = p.type || 'mobile', has = (k) => (p[k] || []).length; const want = p.cardDevice; if (want && want !== 'auto') return want; return t === 'web' ? 'desktop' : has('screens') || t === 'mobile' ? 'mobile' : 'desktop'; };
-  const projShot = (p, dev) => (({ mobile: p.screens, tablet: p.tabletScreens, desktop: p.webScreens })[dev] || [])[0] || '';
+  const projShot = (p, dev) => { const l = ({ mobile: p.screens, tablet: p.tabletScreens, desktop: p.webScreens })[dev] || []; return (p.coverShot && l.includes(p.coverShot) ? p.coverShot : l[0]) || ''; };
   /* timeline from two dates → "2 weeks", "6 months", "1 year 3 months" */
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const ym = (v) => { const m = /^(\d{4})-(\d{2})/.exec(v || ''); return m ? [+m[1], +m[2]] : null; };
@@ -626,11 +629,13 @@
       const on = (d) => { const c = $(`#edForm [data-dev="${d}"]`); return c ? c.checked : false; };
       const want = val('cardDevice');
       const dev = want && want !== 'auto' && on(want) ? want : type === 'mobile' ? (on('mobile') ? 'mobile' : on('tablet') ? 'tablet' : 'desktop') : (on('desktop') ? 'desktop' : on('tablet') ? 'tablet' : 'mobile');
-      const shot = first({ mobile: 'screens', tablet: 'tabletScreens', desktop: 'webScreens' }[dev]);
+      const lk = { mobile: 'screens', tablet: 'tabletScreens', desktop: 'webScreens' }[dev], cs = val('coverShot');
+      const inList = (k) => cs && $$(`#edForm [data-imgs="${k}"] .im`).some((im) => im.dataset.path === cs);
+      const shot = inList(lk) ? cs : first(lk);
       if (!$('.ep-stage', side)) return;
       $('.ep-stage', side).style.setProperty('--tint', tint);
       $('.ep-dev', side).className = 'ep-dev';
-      $('.ep-dev', side).innerHTML = coverMini({ title, tint, dev, shot, phone: dev === 'desktop' && on('mobile') ? (first('screens') || '') : undefined, style: val('cardStyle'), idx: editing });
+      $('.ep-dev', side).innerHTML = coverMini({ title, tint, dev, shot, phone: dev === 'desktop' && on('mobile') ? ((inList('screens') ? cs : first('screens')) || '') : undefined, style: val('cardStyle'), idx: editing });
       const cat = (val('category') || '').split('·')[0].trim();
       $('.ep-lbls', side).innerHTML = `<span class="lb lb-${type}">${KIND_LABEL[type] || 'Mobile app'}</span>${cat ? `<span class="lb lb-cat">${esc(cat)}</span>` : ''}`;
       $('.ep-logo', side).innerHTML = icon ? `<img src="${esc(imgURL(icon))}" alt="">` : esc(title.charAt(0));
@@ -705,7 +710,7 @@
 
       <fieldset><legend>Card &amp; cover</legend>
         <div class="g2">${F('Accent colour', 'cover.tint', (p.cover && p.cover.tint) || '#2B3A8F', { type: 'color', hint: 'The card colour and the glow on the case study.' })}${F('Card style', 'cardStyle', p.cardStyle || 'auto', { select: [['auto', 'Automatic'], ['a', 'Phone in the middle'], ['b', 'Phone tilted'], ['c', 'Phone in 3D']] })}</div>
-        <input type="hidden" data-k="cardDevice" value="${esc(p.cardDevice || 'auto')}">${F('Case study background', 'scene', p.scene || 'auto', { select: (window.Scenes ? window.Scenes.list : [['auto', 'Automatic']]), hint: 'Moves behind the devices at the top of the case study.' })}
+        <input type="hidden" data-k="cardDevice" value="${esc(p.cardDevice || 'auto')}"><div class="g2">${F('Case study background', 'scene', p.scene || 'auto', { select: (window.Scenes ? window.Scenes.list : [['auto', 'Automatic']]), hint: 'Moves behind the devices at the top of the case study.' })}${F('Screen shown first', 'coverShot', p.coverShot || '', { select: [['', 'The first one in the list']].concat([...(p.screens || []), ...(p.webScreens || []), ...(p.tabletScreens || [])].filter(Boolean).map((x) => [x, x.split('/').pop().replace(/\.[a-z0-9]+$/i, '').replace(/^\d+[a-z]?[-_ ]*/i, '').replace(/[-_]+/g, ' ') || x.split('/').pop()])), hint: 'On the card, this preview and the case study cover — e.g. the home screen instead of the splash.' })}</div>
       </fieldset>
 
       <fieldset><legend>Live links</legend>
@@ -1091,6 +1096,7 @@
       setPath(p, key, multi ? items : (items[0] || ''));
     });
     ['cardStyle', 'scene'].forEach((k) => { if (!p[k] || p[k] === 'auto') delete p[k]; });
+    if (!p.coverShot) delete p.coverShot;
     if (p.cover && p.cover.tint) p.cover.tint = p.cover.tint.toUpperCase();
     ['timelineStart', 'timelineEnd'].forEach((k) => { if (!p[k]) delete p[k]; });
     if (p.timelineStart) p.timeline = tlSpan(p.timelineStart, p.timelineEnd);

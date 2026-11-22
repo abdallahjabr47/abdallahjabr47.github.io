@@ -34,7 +34,8 @@
     const href = 'project.html#' + encodeURIComponent(p.slug);
     const dv = devicesOf(p);
     const pref = p.cardDevice && p.cardDevice !== 'auto' && dv[p.cardDevice] ? p.cardDevice : (type === 'mobile' ? (dv.mobile ? 'mobile' : dv.tablet ? 'tablet' : 'desktop') : (dv.desktop ? 'desktop' : dv.tablet ? 'tablet' : 'mobile'));
-    const list = (arr, alt, mock, n) => (arr && arr.length) ? arr.map((s) => imgOr(s, p.title + ' ' + alt, '')) : Array.from({ length: n }, (_, k) => mock(k));
+    const first = (arr) => (arr && p.coverShot && arr.includes(p.coverShot)) ? [p.coverShot, ...arr.filter((x) => x !== p.coverShot)] : arr;
+    const list = (arr, alt, mock, n) => (arr = first(arr), arr && arr.length) ? arr.map((s) => imgOr(s, p.title + ' ' + alt, '')) : Array.from({ length: n }, (_, k) => mock(k));
     const shots = pref === 'mobile' ? list(p.screens, 'screen', (k) => mockPhone(k, p.title), 4)
       : pref === 'tablet' ? list(p.tabletScreens, 'tablet screen', mockWeb, 3)
       : list(p.webScreens, 'website', mockWeb, 3);
@@ -44,7 +45,7 @@
       : pref === 'tablet' ? `<div class="tablet-f"><div class="scr">${reel}</div></div>`
       : `<div class="phone-f"><div class="scr"><span class="island"></span>${reel}</div></div>`;
     /* a website that also works on phones: a small phone in front of the laptop */
-    const sidePhone = pref === 'desktop' && dv.mobile ? `<div class="phone-f phone-side" aria-hidden="true"><div class="scr"><span class="island"></span>${(p.screens && p.screens[0]) ? imgOr(p.screens[0], '', '') : mockPhone(0, p.title)}</div></div>` : '';
+    const sidePhone = pref === 'desktop' && dv.mobile ? `<div class="phone-f phone-side" aria-hidden="true"><div class="scr"><span class="island"></span>${(p.screens && p.screens[0]) ? imgOr(first(p.screens)[0], '', '') : mockPhone(0, p.title)}</div></div>` : '';
     /* cover thumbnail: bold name + one device on the project's colour; style a/b/c varies per project */
     const st = ['a', 'b', 'c'].includes(p.cardStyle) ? p.cardStyle : 'abc'[i % 3];
     const laptop = '<span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>', phone = `<span class="ta-ghost" aria-hidden="true" style="--n:${Math.max(4, (p.title || '').length)}">${esc(p.title)}</span>` + device + sidePhone;
@@ -421,7 +422,8 @@
         const p = list[parseInt(row.dataset.i, 10)];
         const tint = (p.cover && p.cover.tint) || '#2B3A8F';
         const web = p.type === 'web';
-        const img = web ? (p.webScreens || [])[0] : (p.screens || [])[0];
+        const L = web ? (p.webScreens || []) : (p.screens || []);
+        const img = p.coverShot && L.includes(p.coverShot) ? p.coverShot : L[0];
         inner.className = 'hp-inner ' + (web ? 'is-web' : 'is-phone');
         inner.style.setProperty('--tint', tint);
         inner.innerHTML = img ? `<img src="${esc(img)}" alt="">` : (web ? mockWeb() : mockPhone(0, p.title));
