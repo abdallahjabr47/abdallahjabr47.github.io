@@ -487,7 +487,7 @@
     return `<div class="im ${cls}" data-path="${esc(path)}">
       ${path ? `<span class="th" style="background-image:url('${esc(imgURL(path))}')"></span>` : `<label class="th empty" title="Upload an image for this slot"><span>+ Upload</span><input type="file" accept="image/*" data-slot hidden></label>`}
       ${withLabel ? `<input type="text" value="${esc(label || '')}" placeholder="Label" data-lbl>` : ''}
-      <span class="ctl"><button type="button" data-im="left" aria-label="Move left">←</button><button type="button" data-im="right" aria-label="Move right">→</button><button type="button" data-im="del" aria-label="Remove image">✕</button></span>
+      <span class="ctl"><button type="button" data-im="left" aria-label="Move left" title="Move left"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button type="button" data-im="right" aria-label="Move right" title="Move right"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button type="button" class="del" data-im="del" aria-label="Remove image" title="Remove">${TRASH}</button></span>
     </div>`;
   }
   function imgList(key, items, cls = '', withLabel = false, multiple = true) {
@@ -508,7 +508,7 @@
         <label class="f">Step name<input data-dr="label" value="${esc(st.label || '')}" placeholder="Log in"></label>
         <label class="f">Note (optional)<input data-dr="note" value="${esc(st.note || '')}" placeholder="Email or Google, Facebook, Apple"></label>
         <label class="f">Loading first<select data-dr="loading">${[['0', 'No'], ['900', 'Short'], ['1400', 'Long']].map(([v, l]) => `<option value="${v}"${String(st.loading || 0) === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label>
-        <div class="dr-acts"><button type="button" class="ib" data-dr-mv="-1" aria-label="Move up">↑</button><button type="button" class="ib" data-dr-mv="1" aria-label="Move down">↓</button><button type="button" class="ib" data-dr-clear>Clear taps</button><button type="button" class="ib danger" data-dr-del>Remove</button></div>
+        <div class="dr-acts"><button type="button" class="dr-clear" data-dr-clear>Clear taps</button><span class="ri-acts"><button type="button" class="ri-b" data-dr-mv="-1" aria-label="Move up" title="Move up"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button><button type="button" class="ri-b" data-dr-mv="1" aria-label="Move down" title="Move down"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button><button type="button" class="ri-b del" data-dr-del aria-label="Remove step" title="Remove">${TRASH}</button></span></div>
       </div></div>`;
   }
   const demoShots = () => $$('#edForm [data-imgs="screens"] .im').map((im) => im.dataset.path).filter(Boolean);

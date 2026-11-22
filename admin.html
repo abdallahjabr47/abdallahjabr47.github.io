@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122132513">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122134106">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -97,7 +97,9 @@ body::after{opacity:.04}
 .im.wide,.im.wide .th{width:220px}.im.wide .th{height:138px}
 .im.sq,.im.sq .th{width:96px}.im.sq .th{height:96px}
 .im .ctl{display:flex;gap:4px}
-.im .ctl button{flex:1;height:32px;border-radius:9px;border:1px solid var(--line2);font-size:13px}
+.im .ctl button{flex:1;height:32px;border-radius:9px;border:1px solid var(--line2);font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--muted)}
+.im .ctl button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.im .ctl button.del:hover{color:#ff6b6b;border-color:rgba(255,107,107,.4)}
 .im .ctl button:hover{background:rgb(var(--fg) / .08)}
 .im input[type=text]{padding:7px 9px;border-radius:9px;border:1px solid var(--line2);background:var(--field);color:var(--ink);font-size:13px;width:100%}
 .addimg{width:118px;height:200px;border-radius:14px;border:1.5px dashed var(--line2);display:grid;place-items:center;color:var(--muted);font-size:13px;font-weight:600;text-align:center;cursor:pointer;transition:border-color .2s,color .2s}
@@ -105,7 +107,8 @@ body::after{opacity:.04}
 .addimg.wide{width:220px;height:138px}.addimg.sq{width:96px;height:96px}
 .im.tab,.im.tab .th{width:132px}.im.tab .th{height:176px}.addimg.tab{width:132px;height:176px}
 .rec-img{display:flex;align-items:center;gap:14px;margin-top:6px}.rec-th{width:120px;height:84px;flex:none;border-radius:12px;border:1px dashed var(--line2);background:rgb(var(--fg) / .03) center/cover no-repeat;display:grid;place-items:center;font-size:12.5px;color:var(--muted)}.rec-th[style*="background-image"]{border-style:solid}.rec-acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.dev-pick{display:flex;flex-wrap:wrap;gap:10px}
+.dev-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:560px){.dev-pick{grid-template-columns:1fr}}
 .dev-opt{position:relative;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;border:1px solid var(--line2);cursor:pointer;font-weight:600;font-size:14.5px;color:var(--muted);transition:border-color .25s,background .25s,color .25s}
 .dev-opt input{position:absolute;opacity:0;pointer-events:none}
 .dev-opt svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -221,7 +224,7 @@ body::after{opacity:.04}
 .addimg.pt{width:200px;height:250px}
 .imgs[data-multi="0"]{align-items:flex-end}
 .imgs[data-multi="0"] [data-im="left"],.imgs[data-multi="0"] [data-im="right"]{display:none}
-.imgs[data-multi="0"] .im ~ .addimg{width:auto;height:32px;padding:0 14px;border-radius:9px;border:1px solid var(--line2);font-size:0;align-self:start}
+.imgs[data-multi="0"] .im ~ .addimg{width:auto;height:32px;padding:0 14px;border-radius:9px;border:1px solid var(--line2);font-size:0;align-self:start;color:var(--muted);display:inline-flex;align-items:center}
 .imgs[data-multi="0"] .im ~ .addimg::after{content:"Replace";font-size:13px}
 .imgs[data-multi="0"] .im .ctl button{flex:0 0 auto;width:auto;padding:0 12px}
 .imgs[data-multi="0"] .im .ctl button[data-im="del"]::after{content:" Remove";font-size:13px}
@@ -858,6 +861,11 @@ input[type=date]{color-scheme:dark;min-height:48px}
 #edForm .ri textarea{height:96px!important}
 textarea.ta-mid{height:92px!important}
 textarea.ta-long{height:150px!important}
+
+.dr-acts{align-items:center;justify-content:space-between}
+.dr-clear{height:32px;padding:0 12px;border-radius:9px;font-size:13px;font-weight:600;color:var(--muted);border:1px solid var(--line2)}
+.dr-clear:hover{color:var(--ink);background:rgb(var(--fg) / .05)}
+.demo-row:first-child [data-dr-mv="-1"],.demo-row:last-child [data-dr-mv="1"]{opacity:.3;pointer-events:none}
 </style>
 </head>
 <body>
@@ -953,11 +961,11 @@ textarea.ta-long{height:150px!important}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122132513"></script>
-<script src="assets/js/icons.js?v=20261122132513"></script>
-<script src="assets/js/scenes.js?v=20261122132513"></script>
-<script src="assets/js/content.js?v=20261122132513"></script>
-<script src="assets/js/core.js?v=20261122132513"></script>
-<script src="assets/js/admin.js?v=20261122132513"></script>
+<script src="assets/js/config.js?v=20261122134106"></script>
+<script src="assets/js/icons.js?v=20261122134106"></script>
+<script src="assets/js/scenes.js?v=20261122134106"></script>
+<script src="assets/js/content.js?v=20261122134106"></script>
+<script src="assets/js/core.js?v=20261122134106"></script>
+<script src="assets/js/admin.js?v=20261122134106"></script>
 </body>
 </html>
