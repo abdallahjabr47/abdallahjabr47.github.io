@@ -394,9 +394,15 @@
     renderList();
   });
   function syncPartOff() {
-    if (!sub.part) return;
-    const sw = $(`[data-sec-show="${sub.part}"]`); if (!sw) return;
+    const key = sub.part || (sub.keys && sub.keys[0]); if (!key) return;
+    const sw = $(`[data-sec-show="${key}"]`); if (!sw) return;
     const off = !sw.checked;
+    /* one switch covers the whole tab: say what it hides */
+    const head = sw.closest('.wt-head');
+    if (head && !head.nextElementSibling?.classList.contains('part-note')) {
+      const extra = sub.kind === 'projects' ? ['the project cards'] : sub.kind === 'experience' ? ['the roles'] : $$('#edForm > fieldset[data-g]').filter((f) => !f.hidden).map((f) => $('legend', f).textContent.replace(/^[A-Z](?=[a-z])/, (m) => m.toLowerCase()));
+      if (extra.length) head.insertAdjacentHTML('afterend', `<p class="part-note">This switch shows or hides the whole section on the website — this text and ${extra.length > 1 ? extra.slice(0, -1).join(', ') + ' and ' + extra[extra.length - 1] : extra[0]} below.</p>`);
+    }
     $('#plist').classList.toggle('is-part-off', off && !$('#plist').hidden);
     $$('#edForm > fieldset[data-g]').forEach((f) => { if (!f.hidden) f.classList.toggle('is-part-off', off); });
     drawTabs();
@@ -648,7 +654,7 @@
 
   /* Profile & links and Website text open right under the tabs, like the lists */
   function embedPanel(tabName, title) {
-    $('#edForm').classList.remove('combo-side');
+    $('#edForm').classList.remove('combo-side', 'combo-on');
     if (wtUnbind) wtUnbind();
     show('v-list');
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
@@ -658,7 +664,7 @@
     $('#edSide').hidden = true; $('#edLayout').classList.remove('two'); $('#edForm').oninput = null; $('#edForm').onchange = null;
   }
   function unembed() {
-    $('#edForm').classList.remove('combo-side');
+    $('#edForm').classList.remove('combo-side', 'combo-on');
     if (wtUnbind) wtUnbind();
     $('#edLayout').appendChild($('#edForm'));
     $('#plist').hidden = false; $('#listHint').hidden = false; $('#newProject').hidden = false; $('#tabPanel').hidden = true;
@@ -853,6 +859,7 @@
     placePartSwitch();
     /* sections whose text and images live on one admin page: the text editor goes first */
     $('#edForm').classList.toggle('combo-side', !!(sub.keys && sub.side));
+    $('#edForm').classList.toggle('combo-on', !!sub.keys);
     if (sub.keys) { const host = document.createElement('div'); host.className = 'combo-text'; $('#edForm').prepend(host); openContentEditor(host).then(syncPartOff); }
     const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } };
     const drawCv = () => {
