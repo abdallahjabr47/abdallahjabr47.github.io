@@ -676,8 +676,8 @@
       n = Math.max(0, Math.min(fsets.length - 1, n));
       fsets.forEach((f, k) => f.classList.toggle('on-tab', k === n));
       $$('.ed-nav a', side).forEach((a, k) => { a.classList.toggle('on', k === n); a.setAttribute('aria-current', k === n ? 'step' : 'false'); });
-      /* the list and the section both stay where they are: only the section box goes back to its own top */
-      if (scroll) { const fm = $('#edForm'); if (fm.scrollHeight > fm.clientHeight + 2) fm.scrollTop = 0; else { const top = fm.getBoundingClientRect().top + scrollY - 100; if (scrollY > top) scrollTo({ top, behavior: 'instant' }); } }
+      /* one page scroll: if you're further down, the new section starts right under the top bar beside the list — never back to the page top */
+      if (scroll) { const top = $('#edForm').getBoundingClientRect().top + scrollY - 100; if (scrollY > top) scrollTo({ top, behavior: 'instant' }); }
     };
     lay.showTabOf = (el) => { const f = el && el.closest('#edForm > fieldset'); if (f && !f.classList.contains('on-tab')) showTab(fsets.indexOf(f), false); };
     $$('.ed-nav a', side).forEach((a, n) => a.addEventListener('click', (e) => { e.preventDefault(); showTab(n); }));
