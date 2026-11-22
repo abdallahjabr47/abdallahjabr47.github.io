@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122152223">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122153902">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -928,6 +928,23 @@ textarea.ta-long{height:150px!important}
 .ib.edit:hover{background:#1769E0!important;border-color:#1769E0!important;color:#fff!important}
 .ib.hide:hover{background:rgb(var(--fg) / .08)!important;border-color:rgb(var(--fg) / .3)!important;color:var(--ink)!important}
 .ib.show:hover{background:#1FA56A!important;border-color:#1FA56A!important;color:#fff!important}
+
+/* ===== spacing & type system — one scale for every page of the admin =====
+   label → field 8 · field → field 16 · section header → content 14 · inside cards 12 / padding 14-16
+   every text field: 16px text, 13px × 14px padding, 12px radius · every hint: 13px */
+.f,.rep-item .f,.ri-2 .f{gap:8px}
+.ed fieldset{gap:16px}
+.ed fieldset>.hint,.ed fieldset>.part-note,.ed fieldset>.off-note{margin:0}
+.ed fieldset>.wt-head{margin-bottom:0}
+.wt-head{margin-bottom:14px}
+.wt-sec>.part-note,.wt-sec>.off-note{margin:0 0 14px}
+.rr-b{gap:16px;padding:16px}
+.ri-body{gap:16px;padding:14px 16px 16px}
+.wt-field textarea,.wt-group.card .wt-field textarea{font:16px/1.5 'Inter',sans-serif;padding:13px 14px;border-radius:12px;min-height:50px}
+.hint,.f small,.f>small,.part-note,.off-note,.wt-field small.hint{font-size:13px;line-height:1.55}
+.ed .hint,.ed p.hint,#v-list .hint{font-size:13px;line-height:1.55}
+.wt-run-b .wt-field.c textarea{height:52px!important;min-height:52px;font-size:16px;padding:13px 34px 13px 14px}
+.im input[data-lbl]{height:32px;padding:0 10px;font-size:13px;border-radius:9px}
 </style>
 </head>
 <body>
@@ -1023,11 +1040,11 @@ textarea.ta-long{height:150px!important}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122152223"></script>
-<script src="assets/js/icons.js?v=20261122152223"></script>
-<script src="assets/js/scenes.js?v=20261122152223"></script>
-<script src="assets/js/content.js?v=20261122152223"></script>
-<script src="assets/js/core.js?v=20261122152223"></script>
-<script src="assets/js/admin.js?v=20261122152223"></script>
+<script src="assets/js/config.js?v=20261122153902"></script>
+<script src="assets/js/icons.js?v=20261122153902"></script>
+<script src="assets/js/scenes.js?v=20261122153902"></script>
+<script src="assets/js/content.js?v=20261122153902"></script>
+<script src="assets/js/core.js?v=20261122153902"></script>
+<script src="assets/js/admin.js?v=20261122153902"></script>
 </body>
 </html>
