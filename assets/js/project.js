@@ -109,7 +109,7 @@
         <span class="k" data-reveal>%N% · IN ACTION</span>
         <h2 class="h-md" data-split>See it <em class="serif">work</em></h2>
         <div class="demo" data-demo data-reveal>
-          <div class="demo-phone"><div class="demo-scr">${p.demo.map((st, k) => `<div class="demo-s" data-k="${k}"><img src="${esc(p.screens[st.s] || '')}" alt="${esc(st.label || '')}" loading="lazy"></div>`).join('')}<span class="demo-load" aria-hidden="true"><i></i></span><span class="demo-tap" aria-hidden="true"></span></div></div>
+          <div class="demo-phone"><div class="demo-scr">${p.demo.map((st, k) => `<div class="demo-s" data-k="${k}"><img src="${esc(st.img || p.screens[st.s] || '')}" alt="${esc(st.label || '')}" loading="lazy"></div>`).join('')}<span class="demo-load" aria-hidden="true"><i></i></span><span class="demo-tap" aria-hidden="true"></span></div></div>
           <ol class="demo-steps">${p.demo.map((st, k) => `<li data-k="${k}"><button type="button" data-go="${k}"><span>${String(k + 1).padStart(2, '0')}</span><b>${esc(st.label || 'Step ' + (k + 1))}</b>${has(st.note) ? `<small>${esc(st.note)}</small>` : ''}</button></li>`).join('')}</ol>
         </div>`);
     }

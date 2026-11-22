@@ -1905,3 +1905,5 @@ html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height
 .cs-link{gap:8px;color:var(--ink)}
 .cs-link svg{width:16px;height:16px;flex:none}
 .cs-link .arr{opacity:.6}
+@supports (overflow:clip){html,body{overflow-x:clip}}
+@media (hover:none){.pcard.art.st-b .ta-ghost{bottom:auto;top:11%}.pcard.art.st-b .phone-f{top:24%}}

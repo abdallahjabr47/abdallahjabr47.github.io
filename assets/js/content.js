@@ -115,7 +115,7 @@
     sections(doc).forEach((sec) => {
       if (hidden.includes(sec.key)) {
         sec.el.hidden = true;
-        if (sec.el.id) doc.querySelectorAll(`a[href="#${sec.el.id}"]`).forEach((a) => { if (a.closest('nav')) a.hidden = true; });
+        if (sec.el.id) doc.querySelectorAll(`a[href="#${sec.el.id}"]`).forEach((a) => { if (a.closest('nav')) a.hidden = true; else if (sec.el.id === 'work') a.setAttribute('href', 'work.html'); });
         return;
       }
       const fs = fields(sec);

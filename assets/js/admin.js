@@ -96,10 +96,12 @@
       let h = $(':scope > .fs-head', f);
       if (!h) { h = document.createElement('div'); h.className = 'fs-head'; lg.after(h); }
       const num = $('#edLayout').classList.contains('two') ? ' ' + String(n + 1).padStart(2, '0') : '';
-      h.innerHTML = `<small>Section${num}</small><h3>${esc(lg.textContent)}</h3>`;
+      h.innerHTML = `<small>Section${num}</small><h3>${esc(lg.textContent)}</h3><i class="fs-tog" aria-hidden="true"></i>`;
+      if (!f.dataset.colInit && $('#edLayout').classList.contains('two')) { f.dataset.colInit = '1'; if (n > 0 && matchMedia('(max-width:760px)').matches) f.classList.add('fs-shut'); }
     });
   };
   new MutationObserver(() => headFieldsets()).observe($('#edForm'), { childList: true });
+  $('#edForm').addEventListener('click', (e) => { const h = e.target.closest('.fs-head'); if (!h || !matchMedia('(max-width:760px)').matches || !$('#edLayout').classList.contains('two')) return; h.parentElement.classList.toggle('fs-shut'); });
   new MutationObserver(() => headFieldsets()).observe($('#edLayout'), { attributes: true, attributeFilter: ['class'] });
   /* our own confirm popup (instead of the browser's) — resolves true / false */
   function ask({ title, text = '', ok = 'OK', cancel = 'Cancel', tone = '' }) {
@@ -239,6 +241,7 @@
 
   /* ---------------- list ---------------- */
   const IC = {
+    grip: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>',
     up: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>',
     down: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>',
     hide: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
@@ -262,6 +265,11 @@
     rest.forEach((p) => { delete p.featuredRank; });
     projects.splice(0, projects.length, ...f, ...rest);
   }
+  /* the list order is the order everywhere: the first 5 shown projects are the home page, numbered 1–5; the rest follow 6, 7, 8 … */
+  function applyOrder() {
+    let n = 0;
+    projects.forEach((p) => { if (p.published !== false && n < FEAT_MAX) { p.featured = true; p.featuredRank = ++n; } else { if (p.featured !== undefined) p.featured = false; delete p.featuredRank; } });
+  }
   function renderList() {
     editing = -1;
     tab = KIND_TAB[sub.kind];
@@ -273,14 +281,14 @@
     show('v-list');
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
-    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Pick a home-page position (#1–#5) for any project from its ★ menu. All projects, these included, are on the All work page. Then press <b>Save</b>.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
+    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Drag projects by the handle to order them. The first 5 (in gold) are on the home page; every project is on the All work page. Then press <b>Save</b>.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
     placePartSwitch();
     const el = $('#plist');
     if (tab === 'experience') {
       if (!experience.length) { el.innerHTML = '<div class="card-a glass"><p class="muted">No roles yet. Press <b>+ Add role</b>.</p></div>'; return; }
       el.innerHTML = experience.map((x, i) => `<div class="prow glass">
         <span class="t"><b>${esc(x.role || 'Untitled role')}</b><small>${esc(x.company || '')}${x.dates ? ' · ' + esc(x.dates) : ''}</small></span>
-        <span class="badge-d ${x.visible !== false ? 'on' : ''}">${x.visible !== false ? 'Visible' : 'Hidden'}</span>
+        ${x.visible !== false ? '' : '<span class="badge-d">Hidden</span>'}
         <span class="acts">
           ${iconBtn('up', i, IC.up, 'Move up', '', i === 0)}${iconBtn('down', i, IC.down, 'Move down', '', i === experience.length - 1)}
           <span class="acts-sep"></span>
@@ -293,33 +301,63 @@
     const feats = featList();
     const icn = (p) => { const tint = (p.cover && p.cover.tint) || '#2B3A8F'; return `<span class="ic" style="background:linear-gradient(140deg,${esc(tint)},#0E1119)">${p.icon ? `<img src="${esc(imgURL(p.icon))}" alt="">` : esc((p.title || '?').charAt(0))}</span>`; };
     const nf = feats.length;
+    applyOrder();
+    let num = 0, lastFeat = -1;
+    projects.forEach((p, k) => { if (p.featured) lastFeat = k; });
     el.innerHTML = projects.map((p, i) => {
-      const fr = feats.indexOf(p);
-      const upOff = fr > -1 ? fr === 0 : i === nf, downOff = fr > -1 ? fr === nf - 1 : i === projects.length - 1;
-      return `${i === nf && nf ? '<div class="feat-split"><span>The rest — shown on the All work page</span></div>' : ''}<div class="prow glass${p.published === false ? ' is-hidden' : ''}${fr > -1 ? ' is-feat' : ''}">
+      const shown = p.published !== false, no = shown ? ++num : 0;
+      return `<div class="prow glass${shown ? '' : ' is-hidden'}${p.featured ? ' is-feat' : ''}" data-row-i="${i}">
+        <button type="button" class="grip" data-grip="${i}" aria-label="Drag to reorder ${esc(p.title || 'project')}" title="Drag to reorder">${IC.grip}</button>
+        <span class="pno" title="${p.featured ? 'On the home page' : shown ? 'On the All work page' : 'Hidden'}">${no || '–'}</span>
+        <span class="pthumb">${coverMini({ title: p.title, tint: p.cover && p.cover.tint, dev: projDev(p), shot: projShot(p, projDev(p)), style: p.cardStyle, idx: i })}</span>
         ${icn(p)}
-        <span class="t"><b>${esc(p.title || 'Untitled')}</b><small>${esc(p.category || '')}</small></span>
-        <span class="bdgs">${p.published === false ? '<span class="badge-d">Hidden</span>' : ''}</span>
+        <span class="t"><b>${esc(p.title || 'Untitled')}</b><small><span class="lb lb-${p.type || 'mobile'}">${KIND_LABEL[p.type || 'mobile']}</span>${p.category ? ` <span class="pcat">${esc(p.category.split('·')[0].trim())}</span>` : ''}</small></span>
+        <span class="bdgs">${shown ? '' : '<span class="badge-d">Hidden</span>'}</span>
         <span class="acts">
-          <label class="rank${fr > -1 ? ' on' : ''}" title="Position on the home page">${IC.star}<select data-rank="${i}" aria-label="Home page position for ${esc(p.title || 'project')}"><option value="0"${fr < 0 ? ' selected' : ''}>Off</option>${Array.from({ length: FEAT_MAX }, (_, n) => `<option value="${n + 1}"${fr === n ? ' selected' : ''}>#${n + 1}</option>`).join('')}</select></label>
-          <span class="acts-sep"></span>
-          ${iconBtn('up', i, IC.up, 'Move up', '', upOff)}${iconBtn('down', i, IC.down, 'Move down', '', downOff)}
-          <span class="acts-sep"></span>
-          ${p.published !== false ? iconBtn('toggle', i, IC.hide, 'Hide from the website', 'hide') : iconBtn('toggle', i, IC.show, 'Show on the website', 'show')}
+          ${shown ? iconBtn('toggle', i, IC.hide, 'Hide from the website', 'hide') : iconBtn('toggle', i, IC.show, 'Show on the website', 'show')}
           ${iconBtn('edit', i, IC.edit, 'Edit', 'edit')}${iconBtn('del', i, IC.del, 'Delete', 'danger')}
-        </span></div>`;
+        </span></div>${i === lastFeat && lastFeat < projects.length - 1 ? '<div class="feat-split"><span>The rest — shown on the All work page</span></div>' : ''}`;
     }).join('');
   }
-  /* pick a home-page position (1–5) right from the row; others shift, a 6th falls off */
-  $('#plist').addEventListener('change', (e) => {
-    const sel = e.target.closest('select[data-rank]'); if (!sel) return;
-    const p = projects[+sel.dataset.rank], want = +sel.value;
-    const list = featList().filter((x) => x !== p);
-    if (want) { list.splice(Math.min(want - 1, list.length), 0, p); }
-    list.forEach((x, n) => { x.featured = n < FEAT_MAX; if (n >= FEAT_MAX) delete x.featuredRank; });
-    if (!want) { p.featured = false; delete p.featuredRank; }
-    rerank(list.slice(0, FEAT_MAX));
-    normalize(); setDirty(changed()); renderList();
+  /* drag a row by its handle (mouse or touch); arrow keys on the handle move it too */
+  const plist = $('#plist');
+  const commitOrder = () => {
+    const order = $$('.prow[data-row-i]', plist).map((r) => projects[+r.dataset.rowI]);
+    if (order.length !== projects.length) return;
+    projects.splice(0, projects.length, ...order);
+    applyOrder(); setDirty(changed()); renderList();
+  };
+  let drag = null;
+  plist.addEventListener('pointerdown', (e) => {
+    const g = e.target.closest('[data-grip]'); if (!g || tab !== 'projects') return;
+    e.preventDefault();
+    const row = g.closest('.prow');
+    drag = { row, id: e.pointerId };
+    row.classList.add('dragging'); plist.classList.add('is-dragging');
+    g.setPointerCapture(e.pointerId);
+  });
+  plist.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const rows = $$('.prow[data-row-i]', plist).filter((r) => r !== drag.row);
+    const after = rows.find((r) => { const b = r.getBoundingClientRect(); return e.clientY < b.top + b.height / 2; });
+    if (after) { if (drag.row.nextElementSibling !== after) plist.insertBefore(drag.row, after); }
+    else plist.appendChild(drag.row);
+    $$('.feat-split', plist).forEach((x) => x.remove());
+    const r = drag.row.getBoundingClientRect();
+    if (e.clientY < 90) scrollBy(0, -12); else if (e.clientY > innerHeight - 110) scrollBy(0, 12);
+    void r;
+  });
+  const endDrag = (e) => { if (!drag || e.pointerId !== drag.id) return; drag.row.classList.remove('dragging'); plist.classList.remove('is-dragging'); drag = null; commitOrder(); };
+  plist.addEventListener('pointerup', endDrag);
+  plist.addEventListener('pointercancel', endDrag);
+  plist.addEventListener('keydown', (e) => {
+    const g = e.target.closest('[data-grip]'); if (!g || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
+    e.preventDefault();
+    const i = +g.dataset.grip, j = e.key === 'ArrowUp' ? i - 1 : i + 1;
+    if (j < 0 || j >= projects.length) return;
+    [projects[i], projects[j]] = [projects[j], projects[i]];
+    applyOrder(); setDirty(changed()); renderList();
+    const ng = $(`[data-grip="${j}"]`, plist); if (ng) ng.focus();
   });
   $('#plist').addEventListener('click', async (e) => {
     const b = e.target.closest('button[data-a]'); if (!b) return;
@@ -328,7 +366,6 @@
     const arr = tab === 'projects' ? projects : experience;
     const flag = tab === 'projects' ? 'published' : 'visible';
     if (a === 'edit') return tab === 'projects' ? openEditor(i) : openExpEditor(i);
-    if (tab === 'projects' && (a === 'up' || a === 'down') && arr[i].featured) { const list = featList(), n = list.indexOf(arr[i]), m = a === 'up' ? n - 1 : n + 1; if (m >= 0 && m < list.length) { [list[n], list[m]] = [list[m], list[n]]; rerank(list); } normalize(); setDirty(changed()); renderList(); return; }
     if (a === 'up' && i > 0) [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
     if (a === 'down' && i < arr.length - 1) [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]];
     if (a === 'toggle') arr[i][flag] = arr[i][flag] === false;
@@ -343,7 +380,6 @@
       if (a === 'fright' && n > -1 && n < list.length - 1) [list[n + 1], list[n]] = [list[n], list[n + 1]];
       rerank(list);
     }
-    if (tab === 'projects') normalize();
     if (a === 'del') { if (!(await ask({ title: `Delete “${arr[i].title || arr[i].role}”?`, text: 'It’s removed from the website after you press Save.', ok: 'Delete', tone: 'danger' }))) return; arr.splice(i, 1); }
     setDirty(changed());
     renderList();
@@ -392,6 +428,33 @@
       <label class="addimg ${cls}">+ Add image${multiple ? 's' : ''}<input type="file" accept="image/*" ${multiple ? 'multiple' : ''}></label>
     </div>`;
   }
+  /* app demo rows: screen + taps + loading */
+  function demoRow(st = {}, p = projects[editing] || {}) {
+    const img = st.img || (p.screens || [])[st.s] || '';
+    const taps = st.taps || (st.tap ? [st.tap] : []);
+    return `<div class="demo-row" data-demo-row data-img="${esc(img)}" data-taps='${esc(JSON.stringify(taps))}'>
+      <div class="dr-shot" data-dr-shot title="Click where the tap happens">${img ? `<img src="${esc(imgURL(img))}" alt="">` : '<em>Pick a screen</em>'}${taps.map((t, n) => `<i class="dr-dot" data-dr-dot="${n}" style="left:${t[0] * 100}%;top:${t[1] * 100}%">${n + 1}</i>`).join('')}</div>
+      <div class="dr-f">
+        <label class="f">Screen<select data-dr="img"></select></label>
+        <label class="f">Step name<input data-dr="label" value="${esc(st.label || '')}" placeholder="Log in"></label>
+        <label class="f">Note (optional)<input data-dr="note" value="${esc(st.note || '')}" placeholder="Email or Google, Facebook, Apple"></label>
+        <label class="f">Loading first<select data-dr="loading">${[['0', 'No'], ['900', 'Short'], ['1400', 'Long']].map(([v, l]) => `<option value="${v}"${String(st.loading || 0) === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label>
+        <div class="dr-acts"><button type="button" class="ib" data-dr-mv="-1" aria-label="Move up">↑</button><button type="button" class="ib" data-dr-mv="1" aria-label="Move down">↓</button><button type="button" class="ib" data-dr-clear>Clear taps</button><button type="button" class="ib danger" data-dr-del>Remove</button></div>
+      </div></div>`;
+  }
+  const demoShots = () => $$('#edForm [data-imgs="screens"] .im').map((im) => im.dataset.path).filter(Boolean);
+  function demoSync() {
+    const shots = demoShots();
+    $$('#edForm [data-demo-row]').forEach((row, n) => {
+      const sel = $('[data-dr="img"]', row), cur = row.dataset.img;
+      const html = (cur && !shots.includes(cur) ? [cur] : []).concat(shots).map((s) => `<option value="${esc(s)}"${s === cur ? ' selected' : ''}>Screen ${shots.indexOf(s) + 1 || '–'} · ${esc(s.split('/').pop().replace(/^[a-z0-9]+-/, '').slice(0, 26))}</option>`).join('') || '<option value="">Upload phone screens first</option>';
+      if (sel.dataset.h !== html) { sel.dataset.h = html; sel.innerHTML = html; }
+    });
+  }
+  function demoDraw(row) {
+    const img = row.dataset.img, taps = JSON.parse(row.dataset.taps || '[]');
+    $('[data-dr-shot]', row).innerHTML = (img ? `<img src="${esc(imgURL(img))}" alt="">` : '<em>Pick a screen</em>') + taps.map((t, n) => `<i class="dr-dot" data-dr-dot="${n}" style="left:${t[0] * 100}%;top:${t[1] * 100}%">${n + 1}</i>`).join('');
+  }
   function repRow(kind, a = {}) {
     if (kind === 'process') return `<div class="rep-item" data-row><label class="f">Step<input data-r="title" value="${esc(a.title || '')}"></label><label class="f">Description<textarea data-r="desc">${esc(a.desc || '')}</textarea></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
     if (kind === 'challenges') return `<div class="rep-item two" data-row><label class="f">Challenge<textarea data-r="challenge">${esc(a.challenge || '')}</textarea></label><label class="f">Solution<textarea data-r="solution">${esc(a.solution || '')}</textarea></label><button class="ib danger" type="button" data-del-row aria-label="Remove">✕</button></div>`;
@@ -411,6 +474,15 @@
 
   /* live card + section nav beside the project editor */
   const KIND_LABEL = { mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' };
+  /* a small copy of the coloured project card on the website: name, one device, soft orbs */
+  function coverMini(o) {
+    const st = ['a', 'b', 'c'].includes(o.style) ? o.style : 'abc'[(o.idx || 0) % 3];
+    const web = o.dev === 'desktop' || o.dev === 'tablet';
+    const shot = o.shot ? `<img src="${esc(imgURL(o.shot))}" alt="">` : '';
+    return `<span class="mc st-${web ? 'w' : st}" style="--tint:${esc(o.tint || '#2B3A8F')};--n:${Math.max(4, (o.title || '').length)}"><i class="mc-o o1"></i><i class="mc-o o2"></i><b class="mc-g">${esc(o.title || '')}</b><span class="mc-d ${web ? 'lap' : 'ph'}">${shot || '<em></em>'}</span></span>`;
+  }
+  const projDev = (p) => { const t = p.type || 'mobile', has = (k) => (p[k] || []).length; const want = p.cardDevice; if (want && want !== 'auto') return want; return t === 'web' ? 'desktop' : has('screens') || t === 'mobile' ? 'mobile' : 'desktop'; };
+  const projShot = (p, dev) => (({ mobile: p.screens, tablet: p.tabletScreens, desktop: p.webScreens })[dev] || [])[0] || '';
   const CATS = ['Social', 'Entertainment', 'Fintech', 'Utility', 'Careers', 'Food & drink', 'Health', 'E-commerce', 'Education', 'Travel', 'Productivity', 'Local business'];
   function setupSide(isProject) {
     const side = $('#edSide'), lay = $('#edLayout');
@@ -430,8 +502,8 @@
       const dev = want && want !== 'auto' && on(want) ? want : type === 'mobile' ? (on('mobile') ? 'mobile' : on('tablet') ? 'tablet' : 'desktop') : (on('desktop') ? 'desktop' : on('tablet') ? 'tablet' : 'mobile');
       const shot = first({ mobile: 'screens', tablet: 'tabletScreens', desktop: 'webScreens' }[dev]);
       $('.ep-stage', side).style.setProperty('--tint', tint);
-      $('.ep-dev', side).className = 'ep-dev d-' + dev;
-      $('.ep-dev', side).innerHTML = shot ? `<img src="${esc(imgURL(shot))}" alt="">` : '<span>No screen yet</span>';
+      $('.ep-dev', side).className = 'ep-dev';
+      $('.ep-dev', side).innerHTML = coverMini({ title, tint, dev, shot, style: val('cardStyle'), idx: editing });
       const cat = (val('category') || '').split('·')[0].trim();
       $('.ep-lbls', side).innerHTML = `<span class="lb lb-${type}">${KIND_LABEL[type] || 'Mobile app'}</span>${cat ? `<span class="lb lb-cat">${esc(cat)}</span>` : ''}`;
       $('.ep-logo', side).innerHTML = icon ? `<img src="${esc(imgURL(icon))}" alt="">` : esc(title.charAt(0));
@@ -439,13 +511,28 @@
       $('.ep-t', side).textContent = title;
       $('.ep-l', side).textContent = val('tagline') || val('category');
       const stv = val('status');
-      $('.ep-flags', side).innerHTML = `${stv ? `<span class="ep-st">${esc(stv)}</span>` : ''}<span class="badge-d pub ${val('published') ? 'on' : ''}">${val('published') ? '✓ Published' : 'Hidden'}</span>${val('featured') ? '<span class="badge-d feat">★ Featured</span>' : ''}`;
+      $('.ep-flags', side).innerHTML = `${stv ? `<span class="ep-st">${esc(stv)}</span>` : ''}<span class="badge-d pub ${val('published') ? 'on' : ''}">${val('published') ? '✓ Published' : 'Hidden'}</span>${(projects[editing] || {}).featured ? `<span class="badge-d feat">★ Home #${projects[editing].featuredRank}</span>` : ''}`;
 
     };
-    draw();
+    /* which sections still need something */
+    const blank = (k) => { const v = val(k); return !v || /^\[[^\]]*\]$/.test(v); };
+    const NEED = [
+      () => [['tagline', 'one-liner'], ['category', 'kind'], ['summary', 'summary']].filter(([k]) => blank(k)).map(([, l]) => l),
+      () => [],
+      () => val('status') === 'Live' && !$$('#edForm [data-rep="links"] [data-r="url"]').some((i) => i.value.trim()) ? ['a link — it’s marked Live'] : [],
+      () => (first('screens') || first('webScreens') || first('tabletScreens') ? [] : ['screens']).concat(first('icon') ? [] : ['app icon']),
+      () => [],
+      () => [['role', 'role'], ['timeline', 'timeline']].filter(([k]) => blank(k)).map(([, l]) => l),
+      () => [['overview', 'overview'], ['problem', 'problem']].filter(([k]) => blank(k)).map(([, l]) => l),
+      () => $$('#edForm [data-rep="process"] [data-row]').length ? [] : ['at least one step'],
+      () => $$('#edForm [data-rep="challenges"] [data-row]').length ? [] : ['at least one challenge']
+    ];
+    const marks = () => { $$('.ed-nav a', side).forEach((a, n) => { const miss = NEED[n] ? NEED[n]() : []; a.classList.toggle('todo', miss.length > 0); a.title = miss.length ? 'Missing: ' + miss.join(', ') : ''; }); };
+    const drawAll = () => { draw(); marks(); };
+    drawAll();
     const form = $('#edForm');
-    form.oninput = draw; form.onchange = draw;
-    new MutationObserver(draw).observe(form, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-path'] });
+    form.oninput = drawAll; form.onchange = drawAll;
+    new MutationObserver(drawAll).observe(form, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-path'] });
     $$('.ed-nav a', side).forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); const f = $(a.getAttribute('href')); if (f) f.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
     const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) $$('.ed-nav a', side).forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id)); }), { rootMargin: '-30% 0px -60% 0px' });
     fsets.forEach((f) => io.observe(f));
@@ -464,10 +551,18 @@
     $('#edForm').innerHTML = `
       <fieldset><legend>Basics</legend>
         <div class="g2">${F('Project name *', 'title', p.title)}${F('URL name (slug)', 'slug', p.slug, { hint: 'Auto-filled from the name. Used in the link: project.html#slug' })}</div>
-        <div class="g2">${F('Card one-liner', 'tagline', p.tagline, { hint: 'Shown under the name on the project card. The case study uses it only if the summary is empty.' })}<label class="f">Kind<input data-k="category" list="catList" value="${esc(p.category || '')}" placeholder="Social · Series platform"><datalist id="catList">${CATS.map((c) => `<option value="${c}">`).join('')}</datalist><small>Pick one or type your own. The first word shows on the card.</small></label></div>
-        <div class="g2">${F('What is it', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Mobile + Website']] })}${F('Platform label', 'platform', p.platform, { ph: 'Mobile App' })}</div>
-        <div class="g2">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES, hint: 'Shown on the card and case study.' })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}${C('Featured on the home page (top 5)', 'featured', p.featured === true)}</div></div>
-        ${F('Short summary', 'summary', p.summary, { area: true, rows: 3, hint: 'The idea in two or three sentences. Shown under the project name at the top of the case study.' })}
+        <div class="g2">${F('What is it', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Mobile + Website']] })}<label class="f">Kind<input data-k="category" list="catList" value="${esc(p.category || '')}" placeholder="Social · Series platform"><datalist id="catList">${CATS.map((c) => `<option value="${c}">`).join('')}</datalist><small>Pick one or type your own. The first word shows on the card.</small></label></div>
+        <div class="g2">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}</div></div>
+        <div class="where-pair">
+          <div class="where"><span class="where-tag">On the project card</span>${F('One-liner', 'tagline', p.tagline, { ph: 'A series-based content app', hint: 'A few words under the name on the home page and All work.' })}</div>
+          <div class="where"><span class="where-tag">At the top of the case study</span>${F('Summary', 'summary', p.summary, { area: true, rows: 3, hint: 'The idea in two or three sentences, under the project name.' })}</div>
+        </div>
+      </fieldset>
+
+      <fieldset><legend>Card &amp; cover</legend>
+        <div class="g2">${F('Accent colour', 'cover.tint', (p.cover && p.cover.tint) || '#2B3A8F', { type: 'color', hint: 'The card colour and the glow on the case study.' })}${F('Card style', 'cardStyle', p.cardStyle || 'auto', { select: [['auto', 'Automatic'], ['a', 'Phone in the middle'], ['b', 'Phone tilted'], ['c', 'Phone in 3D']] })}</div>
+        <div class="g2">${F('Card shows', 'cardDevice', p.cardDevice || 'auto', { select: [['auto', 'Automatic (best fit)'], ['mobile', 'Phone'], ['tablet', 'Tablet'], ['desktop', 'Laptop']] })}${F('Case study background', 'scene', p.scene || 'auto', { select: (window.Scenes ? window.Scenes.list : [['auto', 'Automatic']]), hint: 'Moves behind the devices at the top of the case study.' })}</div>
+        <div class="f">Cover image (optional — wide, replaces the devices on the case study)</div>${imgList('cover.image', p.cover && p.cover.image ? [p.cover.image] : [], 'wide', false, false)}
       </fieldset>
 
       <fieldset><legend>Live links</legend>
@@ -476,20 +571,22 @@
       </fieldset>
 
       <fieldset><legend>Devices &amp; screens</legend>
-        <p class="hint">Tick every device this project was designed for, then upload its screens. Phone: portrait (e.g. 1170×2532) · Tablet: portrait (e.g. 1668×2224) · Desktop: wide (e.g. 1440×900).</p>
+        <p class="hint">Tick every device this project was designed for, then upload its screens — you can pick many at once and drag them into order. Phone screens should be 375×812 (or 2× / 3× of it), otherwise they get cropped.</p>
         <div class="dev-pick">${[['mobile', 'Phone', '<rect x="7" y="2.5" width="10" height="19" rx="2.6"/><path d="M11 18.5h2"/>'], ['tablet', 'Tablet / iPad', '<rect x="4" y="3" width="16" height="18" rx="2.6"/><path d="M11 18h2"/>'], ['desktop', 'Laptop / desktop', '<rect x="3.5" y="4.5" width="17" height="11.5" rx="1.8"/><path d="M2 19.5h20"/>']].map(([k, l, ic]) => `<label class="dev-opt"><input type="checkbox" data-k="devices.${k}" data-dev="${k}" ${devs[k] ? 'checked' : ''}><svg viewBox="0 0 24 24" aria-hidden="true">${ic}</svg><span>${l}</span></label>`).join('')}</div>
-        ${F('Case study background animation', 'scene', p.scene || 'auto', { select: (window.Scenes ? window.Scenes.list : [['auto', 'Automatic']]), hint: 'The moving background behind the devices at the top of the case study page.' })}
-        ${F('Card cover style', 'cardStyle', p.cardStyle || 'auto', { select: [['auto', 'Automatic'], ['a', 'Phone in the middle'], ['b', 'Phone tilted'], ['c', 'Phone in 3D']], hint: 'How the project card looks on the home and All work pages.' })}
-        ${F('Card preview shows', 'cardDevice', p.cardDevice || 'auto', { select: [['auto', 'Automatic (best fit)'], ['mobile', 'Phone'], ['tablet', 'Tablet'], ['desktop', 'Laptop']], hint: 'Which device appears on the home page card. The case study shows all of them.' })}
         <div class="f">App icon</div>${imgList('icon', p.icon ? [p.icon] : [], 'sq', false, false)}
         <div class="dev-up" data-dev-up="mobile"${devs.mobile ? '' : ' hidden'}><div class="f">Phone screens</div>${imgList('screens', p.screens || [])}</div>
         <div class="dev-up" data-dev-up="tablet"${devs.tablet ? '' : ' hidden'}><div class="f">Tablet screens</div>${imgList('tabletScreens', p.tabletScreens || [], 'tab')}</div>
         <div class="dev-up" data-dev-up="desktop"${devs.desktop ? '' : ' hidden'}><div class="f">Desktop screens</div>${imgList('webScreens', p.webScreens || [], 'wide')}</div>
       </fieldset>
 
+      <fieldset data-demo-fs><legend>App demo</legend>
+        <p class="hint">Plays on the case study like a screen recording. Add a step per screen, then click on the screen where the tap happens (click a dot to remove it). Leave empty to skip the demo.</p>
+        <div class="demo-ed" data-demo-ed>${(p.demo || []).map((st) => demoRow(st, p)).join('')}</div>
+        <div class="demo-acts"><button type="button" class="btn btn-ghost btn-sm" data-demo-add>+ Add step</button><button type="button" class="btn btn-ghost btn-sm" data-demo-fill>One step per screen</button></div>
+      </fieldset>
+
       <fieldset><legend>Case study header</legend>
-        <div class="g2">${F('Accent colour', 'cover.tint', (p.cover && p.cover.tint) || '#2B3A8F', { type: 'color' })}${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}</div>
-        <div class="f">Cover image (optional — wide, replaces the device mock-up and the faint project name behind it)</div>${imgList('cover.image', p.cover && p.cover.image ? [p.cover.image] : [], 'wide', false, false)}
+        ${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}
         <div class="g2">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}</div>
         <div class="g3">${F('Team', 'team', p.team)}${F('Timeline', 'timeline', p.timeline, { ph: '6 months' })}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
       </fieldset>
@@ -687,14 +784,12 @@
         <div class="ph-grid"><div class="ph-card"><div class="ph-top"><span class="ph-badge">02</span><span><b>About photo</b><small>About section</small></span></div>${imgList('photo2', site.photo2 ? [site.photo2] : [], 'pt', false, false)}</div></div>
       </fieldset>
       <fieldset data-g="showcase"><legend>Screens gallery</legend>
-        <p class="hint">Screenshots for the big “Screens that ship” wall on the home page — app screens, web pages, anything you designed. Add as many as you like (10+ looks best), use ← → to order them. Phone and web screenshots can be mixed. If empty, screens from your projects are used.</p>
+        <p class="hint">Screenshots for the big “Screens that ship” wall on the home page — app screens, web pages, anything you designed. Add as many as you like (10+ looks best), drag them (or use ← →) to order them. Phone and web screenshots can be mixed. If empty, screens from your projects are used.</p>
         ${imgList('showcase', site.showcase || [], '', false, true)}
       </fieldset>
       <fieldset data-g="availability"><legend>Availability</legend>
-        <div class="av-row">
-          <p class="hint" style="margin:0">One short line under the buttons at the top of the page, with a green dot.</p>
-          <label class="wt-switch"><input type="checkbox" data-k="availabilityOn" ${site.availabilityOn === false ? '' : 'checked'}><span></span>Show on website</label>
-        </div>
+        <header class="wt-head av-head"><div><small>Section</small><h3>Availability</h3></div><label class="wt-switch"><input type="checkbox" data-k="availabilityOn" ${site.availabilityOn === false ? '' : 'checked'}><span></span>Show on website</label></header>
+        <p class="hint">One short line under the buttons at the top of the page, with a green dot.</p>
         ${F('Availability line', 'availability', site.availability, { ph: 'Open to Product Manager / Product Owner roles · Ramallah or remote' })}
       </fieldset>
       <fieldset data-g="beyond"><legend>Beyond the screen — card photos (optional)</legend>
@@ -844,10 +939,36 @@
       const items = $$('.im', box).map((im) => lab ? { label: ($('[data-lbl]', im) || {}).value || '', image: im.dataset.path } : im.dataset.path).filter((x) => lab ? (x.image || x.label) : x);
       setPath(p, key, multi ? items : (items[0] || ''));
     });
+    const dRows = $$('[data-demo-row]', form);
+    if ($('[data-demo-ed]', form)) {
+      const shots = p.screens || [];
+      p.demo = dRows.map((row) => { const g = (k) => ($(`[data-dr="${k}"]`, row) || {}).value || ''; const img = row.dataset.img, taps = JSON.parse(row.dataset.taps || '[]');
+        const o = { img, s: Math.max(0, shots.indexOf(img)), label: g('label').trim() }; if (g('note').trim()) o.note = g('note').trim(); if (+g('loading')) o.loading = +g('loading'); if (taps.length) o.taps = taps; return o; }).filter((o) => o.img);
+      if (!p.demo.length) delete p.demo;
+    }
   }
 
   /* editor events */
   const form = $('#edForm');
+  form.addEventListener('change', (e) => { if (e.target.dataset && e.target.dataset.dr === 'img') { const row = e.target.closest('[data-demo-row]'); row.dataset.img = e.target.value; demoDraw(row); setDirty(true); } });
+  /* drag screens into order (arrows still work on touch) */
+  let dragIm = null;
+  form.addEventListener('dragstart', (e) => { const im = e.target.closest && e.target.closest('.imgs .im'); if (!im) return; dragIm = im; im.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', ''); } catch (er) {} });
+  form.addEventListener('dragover', (e) => { if (!dragIm) return; const over = e.target.closest && e.target.closest('.im'); if (!over || over === dragIm || over.parentNode !== dragIm.parentNode) return; e.preventDefault(); const r = over.getBoundingClientRect(); const after = (e.clientX - r.left) > r.width / 2; over.parentNode.insertBefore(dragIm, after ? over.nextSibling : over); });
+  form.addEventListener('dragend', () => { if (dragIm) { dragIm.classList.remove('dragging'); dragIm = null; setDirty(true); demoSync(); } });
+  /* warn when a phone screen isn't 375×812 (it would be cropped) or an icon isn't square */
+  const sizeSeen = new Map();
+  function checkSizes() {
+    $$('#edForm [data-imgs="screens"] .im[data-path], #edForm [data-imgs="icon"] .im[data-path]').forEach((im) => {
+      const path = im.dataset.path; if (!path) return;
+      const isIcon = im.closest('[data-imgs="icon"]');
+      const apply = (w, h) => { const ok = isIcon ? Math.abs(w / h - 1) < 0.03 : Math.abs(w / h - 375 / 812) < 0.012; im.classList.toggle('size-warn', !ok); im.title = ok ? '' : (isIcon ? `Not square (${w}×${h}) — it will be cropped` : `Not 375×812 (${w}×${h}) — the phone frame will crop it`); };
+      if (sizeSeen.has(path)) { const [w, h] = sizeSeen.get(path); apply(w, h); return; }
+      const img = new Image(); img.onload = () => { sizeSeen.set(path, [img.naturalWidth, img.naturalHeight]); apply(img.naturalWidth, img.naturalHeight); }; img.src = imgURL(path);
+    });
+  }
+  let sizeT = 0;
+  new MutationObserver(() => { clearTimeout(sizeT); sizeT = setTimeout(() => { if (mode !== 'project') return; checkSizes(); demoSync(); $$('#edForm .imgs .im').forEach((im) => { im.draggable = true; }); }, 120); }).observe(form, { childList: true, subtree: true });
   form.addEventListener('change', (e) => { const d = e.target.dataset && e.target.dataset.dev; if (!d) return; const up = form.querySelector(`[data-dev-up="${d}"]`); if (up) up.hidden = !e.target.checked; });
   form.addEventListener('input', (e) => {
     if (mode === 'project' && e.target.dataset.k === 'title') {
@@ -862,6 +983,22 @@
   form.addEventListener('click', (e) => {
     const sg = e.target.closest('[data-seg]');
     if (sg) { const box = sg.parentElement, h = $('input[data-k]', box); h.value = sg.dataset.seg; $$('[data-seg]', box).forEach((b) => b.classList.toggle('on', b === sg)); h.dispatchEvent(new Event('input', { bubbles: true })); h.dispatchEvent(new Event('change', { bubbles: true })); setDirty(true); return; }
+    const dAdd = e.target.closest('[data-demo-add],[data-demo-fill]');
+    if (dAdd) { const ed = $('[data-demo-ed]', form), shots = demoShots();
+      if (dAdd.hasAttribute('data-demo-fill')) { const have = $$('[data-demo-row]', ed).map((r) => r.dataset.img); shots.filter((s) => !have.includes(s)).forEach((s, n) => ed.insertAdjacentHTML('beforeend', demoRow({ img: s, label: '' }))); }
+      else ed.insertAdjacentHTML('beforeend', demoRow({ img: shots[$$('[data-demo-row]', ed).length] || shots[0] || '' }));
+      demoSync(); setDirty(true); return; }
+    const dRow = e.target.closest('[data-demo-row]');
+    if (dRow) {
+      const dot = e.target.closest('[data-dr-dot]');
+      if (dot) { const t = JSON.parse(dRow.dataset.taps || '[]'); t.splice(+dot.dataset.drDot, 1); dRow.dataset.taps = JSON.stringify(t); demoDraw(dRow); setDirty(true); return; }
+      const shot = e.target.closest('[data-dr-shot]');
+      if (shot && dRow.dataset.img) { const r = shot.getBoundingClientRect(); const t = JSON.parse(dRow.dataset.taps || '[]'); t.push([+((e.clientX - r.left) / r.width).toFixed(3), +((e.clientY - r.top) / r.height).toFixed(3)]); dRow.dataset.taps = JSON.stringify(t); demoDraw(dRow); setDirty(true); return; }
+      if (e.target.closest('[data-dr-clear]')) { dRow.dataset.taps = '[]'; demoDraw(dRow); setDirty(true); return; }
+      if (e.target.closest('[data-dr-del]')) { dRow.remove(); setDirty(true); return; }
+      const mv = e.target.closest('[data-dr-mv]');
+      if (mv) { if (mv.dataset.drMv === '-1' && dRow.previousElementSibling) dRow.parentNode.insertBefore(dRow, dRow.previousElementSibling); else if (mv.dataset.drMv === '1' && dRow.nextElementSibling) dRow.parentNode.insertBefore(dRow.nextElementSibling, dRow); setDirty(true); return; }
+    }
     const add = e.target.closest('[data-add-row]');
     if (add) { const kind = add.dataset.addRow; $(`[data-rep="${kind}"]`, form).insertAdjacentHTML('beforeend', repRow(kind)); setDirty(true); return; }
     const del = e.target.closest('[data-del-row]');
