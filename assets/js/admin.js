@@ -22,15 +22,13 @@
       { id: 'avail', label: 'Availability line', kind: 'site', groups: ['availability'] },
       { id: 'tools', label: 'Tools strip', kind: 'content', keys: ['tools'] }] },
     { id: 'work', label: 'Work', subs: [
-      { id: 'work-text', label: 'Selected work · text', kind: 'content', keys: ['work'] },
-      { id: 'projects', label: 'Projects', kind: 'projects' , part: 'work', partName: 'Selected work' },
+      { id: 'projects', label: 'Selected work', kind: 'projects', keys: ['work'], part: 'work', partName: 'Selected work' },
       { id: 'screens', label: 'Screens that ship', kind: 'site', groups: ['showcase'], keys: ['screens'] },
       { id: 'process', label: 'From sketch to shipped', kind: 'content', keys: ['process'] }] },
     { id: 'about', label: 'About', subs: [
       { id: 'about-text', label: 'About text, numbers & photo', kind: 'site', groups: ['photo2'], keys: ['about'], side: true }] },
     { id: 'experience', label: 'Experience', subs: [
-      { id: 'exp-text', label: 'Section text', kind: 'content', keys: ['experience'] },
-      { id: 'roles', label: 'Work experience', kind: 'experience' , part: 'experience', partName: 'Experience' },
+      { id: 'roles', label: 'Experience', kind: 'experience', keys: ['experience'], part: 'experience', partName: 'Experience' },
       { id: 'learning', label: 'Learning & recognition', kind: 'site', groups: ['recognition'] , part: 'learning', partName: 'Learning & recognition tab' }] },
     { id: 'product', label: 'Product', subs: [
       { id: 'product-text', label: 'Product management', kind: 'content', keys: ['product'], fnot: '.cycle' },
@@ -42,23 +40,26 @@
     { id: 'beyond', label: 'Beyond', subs: [
       { id: 'beyond', label: 'Beyond the screen', kind: 'content', keys: ['beyond'] }] },
     { id: 'contact', label: 'Contact & more', subs: [
-      { id: 'contact-text', label: 'Contact text', kind: 'content', keys: ['contact'] },
-      { id: 'links', label: 'Links & CV', kind: 'site', groups: ['links', 'cv'] , part: 'contact', partName: 'Contact' },
+      { id: 'links', label: 'Contact', kind: 'site', groups: ['links', 'cv'], keys: ['contact'], part: 'contact', partName: 'Contact' },
       { id: 'faq', label: 'FAQ', kind: 'content', keys: ['faq'] },
       { id: 'testi', label: 'Testimonials', kind: 'site', groups: ['testimonials'], keys: ['testimonials'] }] }];
   let page = PAGES[0], sub = PAGES[0].subs[0];
   const KIND_TAB = { projects: 'projects', experience: 'experience', site: 'profile', content: 'content' };
   tab = KIND_TAB[sub.kind];
   function drawTabs() {
-    $('#pageTabs').innerHTML = PAGES.map((p) => `<button type="button" role="tab" data-page="${p.id}" class="${p === page ? 'on' : ''}" aria-selected="${p === page}">${esc(p.label)}${p.subs.some((x) => touched.has(p.id + '/' + x.id)) ? '<i class="tdot" title="Unpublished changes"></i>' : ''}</button>`).join('');
+    const subKey = (x) => x.part || (x.keys && x.keys[0]) || '';
+    const subOff = (x) => { const k = subKey(x); return !!k && (content.hidden || []).includes(k); };
+    const pageOff = (p) => p.subs.every((x) => subOff(x));
+    const OFF_I = '<svg class="t-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6-.4.7-1.4 2-2.9 3.3M6.6 6.6C4.6 8 3.3 9.8 2 12c1 1.5 5 6 10 6 1.6 0 3.1-.4 4.4-1.1"/></svg>';
+    $('#pageTabs').innerHTML = PAGES.map((p) => `<button type="button" role="tab" data-page="${p.id}" class="${p === page ? 'on' : ''}${pageOff(p) ? ' t-hid' : ''}" aria-selected="${p === page}" title="${pageOff(p) ? 'Every section here is hidden — this menu link is hidden on the website too' : ''}">${pageOff(p) ? OFF_I : ''}${esc(p.label)}${p.subs.some((x) => touched.has(p.id + '/' + x.id)) ? '<i class="tdot" title="Unpublished changes"></i>' : ''}</button>`).join('');
     $('#partBar').hidden = true;
     $('#subTabs').hidden = page.subs.length <= 1;
-    $('#subTabs').innerHTML = page.subs.map((x) => `<button type="button" data-sub="${x.id}" class="${x === sub ? 'on' : ''}" aria-pressed="${x === sub}">${esc(x.label)}${touched.has(page.id + '/' + x.id) ? '<i class="tdot" title="Unpublished changes"></i>' : ''}</button>`).join('');
+    $('#subTabs').innerHTML = page.subs.map((x) => `<button type="button" data-sub="${x.id}" class="${x === sub ? 'on' : ''}${subOff(x) ? ' t-hid' : ''}" aria-pressed="${x === sub}" title="${subOff(x) ? 'Hidden on the website' : ''}">${subOff(x) ? OFF_I : ''}${esc(x.label)}${touched.has(page.id + '/' + x.id) ? '<i class="tdot" title="Unpublished changes"></i>' : ''}</button>`).join('');
   }
   const partHead = () => { const on = !(content.hidden || []).includes(sub.part); return `<header class="wt-head part-sw"><div><small>Section</small><h3>${esc(sub.partName)}</h3></div><label class="wt-switch"><input type="checkbox" data-part-show="${esc(sub.part)}" ${on ? 'checked' : ''}><span></span>Show on website</label></header>`; };
   function placePartSwitch() {
     $$('.part-sw').forEach((x) => x.remove());
-    if (!sub.part) return;
+    if (!sub.part || (sub.keys && sub.keys.includes(sub.part))) return;
     if (sub.kind === 'site') { const fs = $$('#edForm fieldset[data-g]').find((f) => !f.hidden); const lg = fs && $('legend', fs); if (lg) lg.insertAdjacentHTML('afterend', partHead()); }
     else { $('#plist').insertAdjacentHTML('beforebegin', `<div class="part-sw part-list">${partHead()}</div>`); }
     markPartOff();
@@ -277,8 +278,16 @@
     $$('.part-sw').forEach((x) => x.remove());
     if (tab === 'profile') return openSiteEditor();
     if (tab === 'content') return openContentEditor();
-    unembed();
+    /* list pages whose section text lives on the same tab: the text (with the section switch) sits above the list */
+    const tp = $('#tabPanel'), comboList = !!sub.keys;
+    const keep = comboList && !tp.hidden && tp.dataset.sub === sub.id && $('#edForm', tp);
+    if (!keep) { if (!tp.hidden && $('#edForm [data-ckey]')) collect(); unembed(); tp.dataset.sub = ''; }
     show('v-list');
+    if (comboList && !keep) {
+      tp.dataset.sub = sub.id; $('#listHint').before(tp); tp.hidden = false; tp.appendChild($('#edForm'));
+      $('#edSide').hidden = true; $('#edLayout').classList.remove('two'); $('#edForm').oninput = null; $('#edForm').onchange = null;
+      $('#edForm').innerHTML = ''; openContentEditor($('#edForm')).then(syncPartOff);
+    }
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
     $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Drag projects by the handle to order them. The first 5 (in gold) are on the home page; every project is on the All work page. Then press <b>Save</b>.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
@@ -384,11 +393,20 @@
     setDirty(changed());
     renderList();
   });
+  function syncPartOff() {
+    if (!sub.part) return;
+    const sw = $(`[data-sec-show="${sub.part}"]`); if (!sw) return;
+    const off = !sw.checked;
+    $('#plist').classList.toggle('is-part-off', off && !$('#plist').hidden);
+    $$('#edForm > fieldset[data-g]').forEach((f) => { if (!f.hidden) f.classList.toggle('is-part-off', off); });
+    drawTabs();
+  }
+  document.addEventListener('change', (e) => { if (e.target.matches && e.target.matches('[data-sec-show]')) { const k = e.target.dataset.secShow; content.hidden = (content.hidden || []).filter((x) => x !== k).concat(e.target.checked ? [] : [k]); syncPartOff(); drawTabs(); } });
   document.addEventListener('change', (e) => {
     const c = e.target.closest && e.target.closest('[data-part-show]'); if (!c) return;
     const k = c.dataset.partShow;
     content.hidden = (content.hidden || []).filter((x) => x !== k).concat(c.checked ? [] : [k]);
-    setDirty(changed()); markPartOff();
+    setDirty(changed()); markPartOff(); drawTabs();
   });
   $('#pageTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-page]'); if (!b) return; const p = PAGES.find((x) => x.id === b.dataset.page); if (p === page && editing < 0 && tab !== 'profile' && tab !== 'content') return; goTo(p); });
   $('#subTabs').addEventListener('click', (e) => { const b = e.target.closest('[data-sub]'); if (!b) return; const x = page.subs.find((y) => y.id === b.dataset.sub); if (x === sub && (tab === 'profile' || tab === 'content')) return; goTo(page, x); });
@@ -619,7 +637,7 @@
     show('v-list');
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
     $('#plist').hidden = true; $('#listHint').hidden = true; $('#newProject').hidden = true;
-    $('#tabPanel').hidden = false;
+    $('#tabPanel').hidden = false; $('#tabPanel').dataset.sub = '';
     $('#tabPanel').appendChild($('#edForm'));
     $('#edSide').hidden = true; $('#edLayout').classList.remove('two'); $('#edForm').oninput = null; $('#edForm').onchange = null;
   }
@@ -819,7 +837,7 @@
     placePartSwitch();
     /* sections whose text and images live on one admin page: the text editor goes first */
     $('#edForm').classList.toggle('combo-side', !!(sub.keys && sub.side));
-    if (sub.keys) { const host = document.createElement('div'); host.className = 'combo-text'; $('#edForm').prepend(host); openContentEditor(host); }
+    if (sub.keys) { const host = document.createElement('div'); host.className = 'combo-text'; $('#edForm').prepend(host); openContentEditor(host).then(syncPartOff); }
     const fmtDate = (iso) => { try { return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (e) { return ''; } };
     const drawCv = () => {
       const box = $('#cvBox');
@@ -882,7 +900,7 @@
 
   /* collect form -> project */
   function collect() {
-    if (editing < 0) return;
+    if (editing < 0) { const tp = $('#tabPanel'); if (!tp.hidden && $('#edForm', tp) && $('#edForm [data-ckey]')) { const m = mode; mode = 'content'; editing = 0; collect(); editing = -1; mode = m; } return; }
     if (mode === 'site' && $('#edForm [data-ckey]')) { const m = mode; mode = 'content'; collect(); mode = m; }
     if (mode === 'content') {
       if (!$('#edForm [data-ckey]')) return;
@@ -1262,6 +1280,7 @@
     projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent);
     content.text = content.text || {}; content.hidden = content.hidden || [];
     pending.clear();
+    $('#tabPanel').hidden = true; $('#tabPanel').dataset.sub = '';
     setDirty(false);
     if (wasMode === 'project' && wasIdx >= 0 && projects[wasIdx]) openEditor(wasIdx);
     else if (wasMode === 'exp' && wasIdx >= 0 && experience[wasIdx]) openExpEditor(wasIdx);

@@ -108,6 +108,27 @@
     keep.forEach((k) => el.appendChild(k));
   }
 
+  /* menu links follow their group: a menu item covers its section and the ones after it, up to the next menu item.
+     If its own section is hidden it points at the first one still shown; if all are hidden the menu item goes too. */
+  function fixNav(doc) {
+    const main = doc.querySelector('main'); if (!main) return;
+    const navIds = new Set(Array.from(doc.querySelectorAll('nav a[href^="#"]')).map((a) => a.getAttribute('href').slice(1)));
+    const kids = Array.from(main.children);
+    navIds.forEach((id) => {
+      const start = doc.getElementById(id); if (!start || !start.hidden) return;
+      const i = kids.indexOf(start); if (i < 0) return;
+      const group = [start];
+      for (let j = i + 1; j < kids.length && !navIds.has(kids[j].id); j++) group.push(kids[j]);
+      const vis = group.find((el) => !el.hidden && el.textContent.trim());
+      if (vis && !vis.id) vis.id = id + '-more';
+      doc.querySelectorAll(`a[href="#${id}"]`).forEach((a) => {
+        if (a.closest('nav')) { if (vis) a.setAttribute('href', '#' + vis.id); else a.hidden = true; }
+        else if (id === 'work') a.setAttribute('href', 'work.html');
+        else if (vis) a.setAttribute('href', '#' + vis.id);
+      });
+    });
+  }
+
   function apply(doc, data) {
     if (!data) return;
     const hidden = data.hidden || [], text = data.text || {}, off = data.off || [];
@@ -115,7 +136,6 @@
     sections(doc).forEach((sec) => {
       if (hidden.includes(sec.key)) {
         sec.el.hidden = true;
-        if (sec.el.id) doc.querySelectorAll(`a[href="#${sec.el.id}"]`).forEach((a) => { if (a.closest('nav')) a.hidden = true; else if (sec.el.id === 'work') a.setAttribute('href', 'work.html'); });
         return;
       }
       const fs = fields(sec);
@@ -125,6 +145,7 @@
       fs.forEach((f) => { if (off.includes(f.key)) (f.el.closest(ITEM) || f.el).hidden = true; });
       firstOf.forEach((key, el) => { if (off.includes('g:' + key)) el.hidden = true; });
     });
+    fixNav(doc);
   }
 
   root.SiteContent = { sections, fields, apply, toText };
