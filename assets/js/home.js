@@ -142,7 +142,7 @@
     const on = $('button.on', group), th = $('.thumb', group);
     if (!on || !th) return;
     th.style.width = on.offsetWidth + 'px';
-    th.style.transform = `translateX(${on.offsetLeft}px)`;
+    th.style.transform = `translateX(${on.offsetLeft - th.offsetLeft}px)`;
   }
   if (fwrap) {
     $$('button', fwrap).forEach((b) => b.addEventListener('click', () => {
