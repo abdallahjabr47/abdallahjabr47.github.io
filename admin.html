@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122130415">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122131307">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -773,7 +773,9 @@ body.has-savebar{padding-bottom:76px}
 .prow .pno{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--muted);background:rgb(var(--fg) / .05);border:1px solid var(--line)}
 .prow.is-feat .pno{color:#F2B544;background:rgb(242 181 68 / .12);border-color:rgb(242 181 68 / .4)}
 [data-theme="light"] .prow.is-feat .pno{color:#A86A00;background:#FFF4DC;border-color:rgb(168 106 0 / .35)}
-.prow.dragging{opacity:.92;box-shadow:0 18px 40px rgb(0 0 0 / .45);position:relative;z-index:3;transform:scale(1.01)}
+.prow.shift{transition:transform .28s cubic-bezier(.2,.7,.2,1)}
+.prow.dragging{position:relative;z-index:5;box-shadow:0 24px 50px rgb(0 0 0 / .5);transition:box-shadow .2s;will-change:transform}
+#plist.is-dragging .feat-split{opacity:0;transition:opacity .2s}
 .prow.dragging .grip{cursor:grabbing}
 #plist .prow{-webkit-user-select:none;user-select:none}
 @media (max-width:640px){
@@ -929,11 +931,11 @@ body.has-savebar{padding-bottom:76px}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122130415"></script>
-<script src="assets/js/icons.js?v=20261122130415"></script>
-<script src="assets/js/scenes.js?v=20261122130415"></script>
-<script src="assets/js/content.js?v=20261122130415"></script>
-<script src="assets/js/core.js?v=20261122130415"></script>
-<script src="assets/js/admin.js?v=20261122130415"></script>
+<script src="assets/js/config.js?v=20261122131307"></script>
+<script src="assets/js/icons.js?v=20261122131307"></script>
+<script src="assets/js/scenes.js?v=20261122131307"></script>
+<script src="assets/js/content.js?v=20261122131307"></script>
+<script src="assets/js/core.js?v=20261122131307"></script>
+<script src="assets/js/admin.js?v=20261122131307"></script>
 </body>
 </html>

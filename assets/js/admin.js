@@ -337,27 +337,66 @@
     if (arr === projects) applyOrder();
     setDirty(changed()); renderList();
   };
+  /* smooth drag: the picked row follows the finger, the others glide out of its way; the order is applied on drop */
   let drag = null;
+  const rowsOf = () => $$('.prow[data-row-i]', plist);
+  function dragPlace() {
+    if (!drag) return;
+    const dy = drag.y - drag.y0 + (scrollY - drag.s0);
+    drag.row.style.transform = `translate3d(0,${dy}px,0) scale(1.015)`;
+    const mid = drag.top0 + dy + drag.h / 2;
+    let to = drag.from;
+    drag.tops.forEach((t, k) => { if (k < drag.from && mid < t.mid) to = Math.min(to, k); if (k > drag.from && mid > t.mid) to = Math.max(to, k); });
+    if (to !== drag.to) {
+      drag.to = to;
+      drag.rows.forEach((r, k) => {
+        if (r === drag.row) return;
+        let s = 0;
+        if (drag.from < to && k > drag.from && k <= to) s = -drag.step;
+        if (drag.from > to && k >= to && k < drag.from) s = drag.step;
+        r.style.transform = s ? `translate3d(0,${s}px,0)` : '';
+      });
+    }
+  }
+  function dragLoop() {
+    if (!drag) return;
+    const edge = 90, y = drag.y;
+    if (y < edge) scrollBy(0, -Math.ceil((edge - y) / 6)); else if (y > innerHeight - edge - 40) scrollBy(0, Math.ceil((y - (innerHeight - edge - 40)) / 6));
+    dragPlace();
+    drag.raf = requestAnimationFrame(dragLoop);
+  }
   plist.addEventListener('pointerdown', (e) => {
     const g = e.target.closest('[data-grip]'); if (!g || (tab !== 'projects' && tab !== 'experience')) return;
     e.preventDefault();
-    const row = g.closest('.prow');
-    drag = { row, id: e.pointerId };
+    const row = g.closest('.prow'), rows = rowsOf(), from = rows.indexOf(row);
+    const tops = rows.map((r) => { const b = r.getBoundingClientRect(); return { top: b.top + scrollY, mid: b.top + b.height / 2 }; });
+    const b = row.getBoundingClientRect();
+    const next = rows[from + 1] || rows[from - 1];
+    const step = next ? Math.abs(next.getBoundingClientRect().top - b.top) : b.height + 12;
+    drag = { row, rows, from, to: from, tops, step, h: b.height, top0: b.top, y0: e.clientY, y: e.clientY, s0: scrollY, id: e.pointerId };
+    rows.forEach((r) => { if (r !== row) r.classList.add('shift'); });
     row.classList.add('dragging'); plist.classList.add('is-dragging');
     g.setPointerCapture(e.pointerId);
+    drag.raf = requestAnimationFrame(dragLoop);
   });
-  plist.addEventListener('pointermove', (e) => {
+  plist.addEventListener('pointermove', (e) => { if (drag && e.pointerId === drag.id) drag.y = e.clientY; });
+  const endDrag = (e) => {
     if (!drag || e.pointerId !== drag.id) return;
-    const rows = $$('.prow[data-row-i]', plist).filter((r) => r !== drag.row);
-    const after = rows.find((r) => { const b = r.getBoundingClientRect(); return e.clientY < b.top + b.height / 2; });
-    if (after) { if (drag.row.nextElementSibling !== after) plist.insertBefore(drag.row, after); }
-    else plist.appendChild(drag.row);
-    $$('.feat-split', plist).forEach((x) => x.remove());
-    const r = drag.row.getBoundingClientRect();
-    if (e.clientY < 90) scrollBy(0, -12); else if (e.clientY > innerHeight - 110) scrollBy(0, 12);
-    void r;
-  });
-  const endDrag = (e) => { if (!drag || e.pointerId !== drag.id) return; drag.row.classList.remove('dragging'); plist.classList.remove('is-dragging'); drag = null; commitOrder(); };
+    cancelAnimationFrame(drag.raf);
+    const { row, rows, from, to } = drag; drag = null;
+    const arr = tab === 'experience' ? experience : projects;
+    if (to === from) {
+      row.style.transition = 'transform .25s cubic-bezier(.2,.7,.2,1)'; row.style.transform = '';
+      setTimeout(() => { rows.forEach((r) => { r.classList.remove('shift', 'dragging'); r.style.transform = ''; r.style.transition = ''; }); plist.classList.remove('is-dragging'); }, 260);
+      return;
+    }
+    const order = rows.map((r) => arr[+r.dataset.rowI]);
+    const [m] = order.splice(from, 1); order.splice(to, 0, m);
+    arr.splice(0, arr.length, ...order);
+    if (arr === projects) applyOrder();
+    plist.classList.remove('is-dragging');
+    setDirty(changed()); renderList();
+  };
   plist.addEventListener('pointerup', endDrag);
   plist.addEventListener('pointercancel', endDrag);
   plist.addEventListener('keydown', (e) => {
