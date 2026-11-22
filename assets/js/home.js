@@ -484,7 +484,7 @@
     const box = $('#recGrid'), sec = box && box.closest('.xp-pane');
     if (!box || !window.Site.getSite) return;
     const s = await window.Site.getSite();
-    const items = ((s && s.recognition) || []).filter((r) => r && r.title);
+    const items = ((s && s.recognition) || []).filter((r) => r && r.title && !r.hidden);
     if (!items.length) { const row = $('.xp-tabs-row'); if (row) row.hidden = true; return; }
     const COLS = [
       { kinds: ['education', 'certificate'], name: 'Education & certificates', ac: '#E2B866', ic: '<path d="M2.5 9 12 4.5 21.5 9 12 13.5Z"/><path d="M6.5 11v4.5c0 1.6 2.5 3 5.5 3s5.5-1.4 5.5-3V11M21.5 9v5"/>' },

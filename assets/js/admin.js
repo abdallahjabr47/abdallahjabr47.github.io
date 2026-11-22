@@ -480,12 +480,19 @@
     if (ic) return `<label class="f">${label}<span class="f-ico">${ic.full ? `<svg viewBox="${ic.fvb}" aria-hidden="true">${ic.full}</svg>` : `<svg viewBox="${ic.vb}" aria-hidden="true" style="color:${ic.c === 'ink' ? 'var(--ink)' : ic.c}">${ic.p}</svg>`}${inp}</span>${hint}</label>`;
     return `<label class="f">${label}${inp}${hint}</label>`;
   };
+  const TRASH_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></svg>';
   const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['Shipped', 'Shipped'], ['In progress', 'In progress'], ['Personal', 'Personal']];
   const C = (label, key, val) => `<label class="chk"><input type="checkbox" data-k="${key}" ${val ? 'checked' : ''}> ${label}</label>`;
 
+  /* one image slot, same behaviour everywhere: empty → click the dashed tile; filled → Remove / Replace */
+  function recImgHTML(path) {
+    return `<input type="hidden" data-r="image" value="${esc(path || '')}">${path
+      ? `<span class="rec-th" style="background-image:url('${esc(imgURL(path))}')"></span><span class="rec-ctl"><button type="button" class="del" data-rec-rm>${TRASH_ICON}Remove</button><label>Replace<input type="file" accept="image/*" class="rec-file" hidden></label></span>`
+      : `<label class="rec-th addimg">+ Add image<input type="file" accept="image/*" class="rec-file" hidden></label>`}`;
+  }
   function imgItem(path, cls, withLabel, label) {
     return `<div class="im ${cls}" data-path="${esc(path)}">
-      ${path ? `<span class="th" style="background-image:url('${esc(imgURL(path))}')"></span>` : `<label class="th empty" title="Upload an image for this slot"><span>+ Upload</span><input type="file" accept="image/*" data-slot hidden></label>`}
+      ${path ? `<span class="th" style="background-image:url('${esc(imgURL(path))}')"></span>` : `<label class="th empty" title="Add an image for this slot"><span>+ Add image</span><input type="file" accept="image/*" data-slot hidden></label>`}
       ${withLabel ? `<input type="text" value="${esc(label || '')}" placeholder="Label" data-lbl>` : ''}
       <span class="ctl"><button type="button" data-im="left" aria-label="Move left" title="Move left"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button type="button" data-im="right" aria-label="Move right" title="Move right"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button type="button" class="del" data-im="del" aria-label="Remove image" title="Remove">${TRASH}</button></span>
     </div>`;
@@ -525,7 +532,7 @@
     $('[data-dr-shot]', row).innerHTML = (img ? `<img src="${esc(imgURL(img))}" alt="">` : '<em>Pick a screen</em>') + taps.map((t, n) => `<i class="dr-dot" data-dr-dot="${n}" style="left:${t[0] * 100}%;top:${t[1] * 100}%">${n + 1}</i>`).join('');
   }
   /* one tidy card per item: number, name, move + delete on one line, the fields underneath */
-  const TRASH = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></svg>';
+  const TRASH = TRASH_ICON;
   const riCard = (label, body) => `<div class="rep-item ri" data-row><div class="ri-h"><span class="ri-n"></span><span class="ri-l">${label}</span><span class="ri-acts"><button type="button" class="ri-b" data-mv-row="-1" aria-label="Move up" title="Move up"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button><button type="button" class="ri-b" data-mv-row="1" aria-label="Move down" title="Move down"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button><button type="button" class="ri-b del" data-del-row aria-label="Remove" title="Remove">${TRASH}</button></span></div><div class="ri-body">${body}</div></div>`;
   function repRow(kind, a = {}) {
     if (kind === 'process') return riCard('Step', `<label class="f">Step name<input class="ri-title" data-r="title" value="${esc(a.title || '')}" placeholder="e.g. Research"></label><label class="f">Description<textarea data-r="desc" rows="2" placeholder="What happened in this step">${esc(a.desc || '')}</textarea></label>`);
@@ -535,8 +542,8 @@
       const K = [['certificate', 'Certificate'], ['education', 'Degree / education'], ['award', 'Hackathon, award or fellowship'], ['leadership', 'Leadership & community']];
       const KL = { certificate: 'Certificate', education: 'Degree', award: 'Award', leadership: 'Leadership' };
       const kk = a.kind || 'certificate', open = !a.title;
-      const head = `<div class="rr-h" data-rec-toggle role="button" tabindex="0" aria-expanded="${open}"><span class="rr-mini"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}></span><span class="rr-k k-${kk}">${KL[kk]}</span><span class="rr-ht"><b>${esc(a.title || 'New item')}</b><small>${esc([a.org, a.year].filter(Boolean).join(' · '))}</small></span><button class="rr-del" type="button" data-del-row aria-label="Delete this item" title="Delete"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></svg></button><svg class="rr-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>`;
-      return `<div class="rep-item rec-row${open ? ' open' : ''}" data-row>${head}<div class="rr-b"><label class="f">Type<select data-r="kind">${K.map(([v, l]) => `<option value="${v}"${(a.kind || 'certificate') === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Title<input data-r="title" value="${esc(a.title || '')}" placeholder="Google UX Design Professional Certificate"></label>${rangePick('data-r', 'year', a.year, { present: true, one: true })}<div class="g2"><label class="f">Organisation · place<input data-r="org" value="${esc(a.org || '')}" placeholder="Google · Online"></label><label class="f">Link (optional)<input data-r="link" value="${esc(a.link || '')}" placeholder="https://… certificate link"></label></div><div class="f">Certificate image (optional)<div class="rec-img"><input type="hidden" data-r="image" value="${esc(a.image || '')}"><span class="rec-th"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}>${a.image ? '' : 'No image'}</span><span class="rec-acts"><label class="btn btn-ghost btn-sm">${a.image ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${a.image ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}</span></div><small class="hint" style="margin:0">Shown as a small preview on the site; visitors can click to see it full size.</small></div><label class="f">Short note (optional)<input data-r="note" value="${esc(a.note || '')}" placeholder="Selected from 300+ applicants"></label></div></div>`;
+      const head = `<div class="rr-h" data-rec-toggle role="button" tabindex="0" aria-expanded="${open}"><span class="rr-mini"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}></span><span class="rr-k k-${kk}">${KL[kk]}</span><span class="rr-ht"><b>${esc(a.title || 'New item')}</b><small>${esc([a.org, a.year].filter(Boolean).join(' · '))}</small></span>${a.hidden ? '<span class="rr-off">Hidden</span>' : ''}<button class="rr-eye${a.hidden ? ' off' : ''}" type="button" data-rec-eye aria-pressed="${a.hidden ? 'true' : 'false'}" aria-label="${a.hidden ? 'Show on the website' : 'Hide from the website'}" title="${a.hidden ? 'Hidden — click to show' : 'Hide from the website'}">${a.hidden ? IC.hide : IC.show}</button><button class="rr-del" type="button" data-del-row aria-label="Delete this item" title="Delete"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></svg></button><svg class="rr-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>`;
+      return `<div class="rep-item rec-row${open ? ' open' : ''}${a.hidden ? ' is-off' : ''}" data-row>${head}<input type="hidden" data-r="hidden" value="${a.hidden ? '1' : ''}"><div class="rr-b"><label class="f">Type<select data-r="kind">${K.map(([v, l]) => `<option value="${v}"${(a.kind || 'certificate') === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Title<input data-r="title" value="${esc(a.title || '')}" placeholder="Google UX Design Professional Certificate"></label>${rangePick('data-r', 'year', a.year, { present: true, one: true })}<div class="g2"><label class="f">Organisation · place<input data-r="org" value="${esc(a.org || '')}" placeholder="Google · Online"></label><label class="f">Link (optional)<input data-r="link" value="${esc(a.link || '')}" placeholder="https://… certificate link"></label></div><div class="f">Certificate image (optional)<div class="rec-img">${recImgHTML(a.image)}</div><small class="hint" style="margin:0">Shown as a small preview on the site; visitors can click to see it full size.</small></div><label class="f">Short note (optional)<input data-r="note" value="${esc(a.note || '')}" placeholder="Selected from 300+ applicants"></label></div></div>`;
     }
     if (kind === 'links') { const t = a.type || (/apps\.apple|itunes\.apple/.test(a.url || '') ? 'appstore' : /play\.google/.test(a.url || '') ? 'googleplay' : 'web'); return riCard('Link', `<div class="ri-2 ri-link"><label class="f">Button<select data-r="type">${[['appstore', 'App Store'], ['googleplay', 'Google Play'], ['web', 'Website']].map(([v, l]) => `<option value="${v}"${t === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Link<input data-r="url" value="${esc(a.url || '')}" placeholder="https://…"></label></div>`); }
     if (kind === 'results') return riCard('Result', `<div class="ri-2 ri-res"><label class="f">Value<input data-r="value" value="${esc(a.value || '')}" placeholder="+35%"></label><label class="f">What it measures<input data-r="label" value="${esc(a.label || '')}" placeholder="Weekly active users"></label></div>`);
@@ -575,7 +582,7 @@
   const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
   const monthPick = (label, key, val, empty = 'Pick a month', o = {}) => { const v = o.raw ? (val || '') : (val || '').slice(0, 7); return `<div class="f mp" data-mp${o.present ? ' data-present' : ''}><span>${label}</span><input type="hidden" ${key ? `data-k="${key}"` : 'class="mp-in"'} value="${esc(v)}"><button type="button" class="mp-btn" aria-haspopup="dialog"><span class="mp-v${v ? '' : ' ph'}" data-empty="${esc(empty)}">${v ? ymLabel(v) : esc(empty)}</span>${CAL}</button></div>`; };
   /* start + end month pickers that write one text value ("Mar 2024 — Present") into a hidden field */
-  const rangePick = (attr, key, val, o = {}) => { const [a, b] = rangeSplit(val); const one = o.one && a && !b; return `<div class="rng${one ? ' one' : ''}" data-rng><div class="rng-h"><span class="f">Dates</span>${o.one ? `<label class="rng-one"><input type="checkbox" data-rng-one${one ? ' checked' : ''}><span>One date only</span></label>` : ''}</div><input type="hidden" ${attr}="${key}" value="${esc(val || '')}"><div class="g2">${monthPick(one ? 'Date' : 'Start', '', a, 'Pick a date', { raw: 1 })}${monthPick('End', '', b, o.endEmpty || 'Pick a date', { raw: 1, present: o.present })}</div></div>`; };
+  const rangePick = (attr, key, val, o = {}) => { const [a, b] = rangeSplit(val); const one = o.one && a && !b; return `<div class="rng${one ? ' one' : ''}" data-rng><div class="rng-h"><span class="f">Dates</span></div><input type="hidden" ${attr}="${key}" value="${esc(val || '')}"><div class="g2">${monthPick(one ? 'Date' : 'Start', '', a, 'Pick a date', { raw: 1 })}${monthPick('End', '', b, o.endEmpty || 'Pick a date', { raw: 1, present: o.present })}</div>${o.one ? `<label class="chk rng-one"><input type="checkbox" data-rng-one${one ? ' checked' : ''}> One date only (no end date)</label>` : ''}</div>`; };
   /* app & website kinds: the App Store / Google Play categories plus the usual kinds of websites */
   const KINDS = {
     'Apps': ['Auto & vehicles', 'Beauty', 'Books', 'Business', 'Communication', 'Dating', 'Developer tools', 'Education', 'Entertainment', 'Events', 'Finance', 'Fintech', 'Food & drink', 'Games', 'Graphics & design', 'Health & fitness', 'Healthcare', 'House & home', 'Kids', 'Lifestyle', 'Maps & navigation', 'Medical', 'Music & audio', 'News & magazines', 'Parenting', 'Personalization', 'Photo & video', 'Productivity', 'Real estate', 'Reference', 'Shopping', 'Social', 'Sports', 'Travel', 'Utility', 'Video & streaming', 'Weather'],
@@ -947,7 +954,7 @@
         <span class="cv-meta"><b>${esc(name)}</b><small>${when}${isNew ? ' · <i>new — press Save to put it live</i>' : ' · <i class="ok">Live on the site</i>'}</small></span>
         <span class="cv-act">
           <a class="ib" href="${esc(previews.get(site.cv) || site.cv)}" target="_blank" rel="noopener">View</a>
-          <label class="ib edit" for="cvInput" style="cursor:pointer">Replace</label>
+          <label class="ib" for="cvInput" style="cursor:pointer">Replace</label>
           <button class="ib danger" type="button" id="cvRemove">Remove</button>
         </span></div>`;
       $('#cvRemove').addEventListener('click', async () => {
@@ -1014,7 +1021,7 @@
     }
     if (mode === 'site') {
       $$('#edForm [data-k]').forEach((el) => { site[el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value.trim(); });
-      $$('#edForm [data-rep]').forEach((box) => { site[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); return o; }).filter((o) => Object.values(o).some(Boolean)); });
+      $$('#edForm [data-rep]').forEach((box) => { site[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); if ('hidden' in o) { if (o.hidden) o.hidden = true; else delete o.hidden; } return o; }).filter((o) => Object.keys(o).some((k) => k !== 'hidden' && o[k])); });
       $$('#edForm [data-imgs]').forEach((box) => { if (box.dataset.multi === '1') { const arr = $$('.im', box).map((im) => im.dataset.path).filter(Boolean); if (arr.length || box.dataset.imgs in site) site[box.dataset.imgs] = arr; return; } const im = $('.im', box); const v = im ? im.dataset.path : ''; if (v || box.dataset.imgs in site) site[box.dataset.imgs] = v; });
       return;
     }
@@ -1070,6 +1077,16 @@
   const riGrow = () => {};
   form.addEventListener('input', (e) => { if (e.target.matches && e.target.matches('.ri textarea')) riGrow(e.target); });
   new MutationObserver(() => requestAnimationFrame(() => $$('.ri textarea', form).forEach((t) => { if (!t.dataset.g) { t.dataset.g = '1'; riGrow(t); } }))).observe(form, { childList: true, subtree: true });
+  /* item switched off ("Show on the website" unticked): everything else in the editor fades, edits still work */
+  const markOff = () => {
+    $$('.off-dim', form).forEach((x) => x.classList.remove('off-dim')); $$('.off-note', form).forEach((x) => x.remove());
+    const c = $('[data-k="published"], [data-k="visible"]', form); document.body.classList.toggle('item-off', !!c && !c.checked); if (!c || c.checked) return;
+    let el = c.closest('.chk');
+    while (el && el !== form) { [...el.parentElement.children].forEach((sib) => { if (sib !== el && sib.tagName !== 'LEGEND' && !sib.contains(c)) sib.classList.add('off-dim'); }); el = el.parentElement; }
+    c.closest('.chk').insertAdjacentHTML('afterend', '<p class="off-note">Hidden on the website — visitors won’t see it. Your edits are kept.</p>');
+  };
+  form.addEventListener('change', (e) => { if (e.target.matches('[data-k="published"], [data-k="visible"]')) markOff(); });
+  new MutationObserver(markOff).observe(form, { childList: true });
   const mpClose = () => { $$('.mp-pop').forEach((x) => x.remove()); $$('.mp.open').forEach((x) => x.classList.remove('open')); };
   const mpSet = (mp, v) => { const inp = $('input', mp); inp.value = v; const lb = $('.mp-v', mp); lb.textContent = v ? ymLabel(v) : lb.dataset.empty; lb.classList.toggle('ph', !v); const rng = mp.closest('[data-rng]'); const out = rng ? rng.querySelector(':scope > input') : inp; if (rng) { const [x, y] = $$('.mp-in', rng).map((i) => i.value); out.value = rangeJoin(x, y); } out.dispatchEvent(new Event('input', { bubbles: true })); out.dispatchEvent(new Event('change', { bubbles: true })); };
   const CHEV = (d) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d < 0 ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6'}"/></svg>`;
@@ -1166,6 +1183,8 @@
       if (row.classList.contains('rec-row')) { const t = ($('[data-r="title"]', row) || {}).value || 'this item'; ask({ title: `Delete “${t}”?`, text: 'It’s removed from the website after you press Save.', ok: 'Delete', tone: 'danger' }).then((y) => { if (y) { row.remove(); setDirty(true); } }); return; }
       row.remove(); setDirty(true); return;
     }
+    const eye = e.target.closest('[data-rec-eye]');
+    if (eye) { const row = eye.closest('.rec-row'), inp = $('[data-r="hidden"]', row), off = !inp.value; inp.value = off ? '1' : ''; row.classList.toggle('is-off', off); eye.classList.toggle('off', off); eye.setAttribute('aria-pressed', String(off)); eye.innerHTML = off ? IC.hide : IC.show; eye.title = off ? 'Hidden — click to show' : 'Hide from the website'; eye.setAttribute('aria-label', off ? 'Show on the website' : 'Hide from the website'); const h = $('.rr-off', row); if (off && !h) eye.insertAdjacentHTML('beforebegin', '<span class="rr-off">Hidden</span>'); if (!off && h) h.remove(); setDirty(true); return; }
     const tg = e.target.closest('[data-rec-toggle]');
     if (tg) { const row = tg.closest('.rec-row'); const o = !row.classList.contains('open'); row.classList.toggle('open', o); tg.setAttribute('aria-expanded', String(o)); return; }
     const im = e.target.closest('[data-im]');
@@ -1181,9 +1200,8 @@
   form.addEventListener('input', (e) => { if (e.target.tagName === 'TEXTAREA') grow(e.target); });
   new MutationObserver(() => requestAnimationFrame(() => $$('textarea', form).forEach(grow))).observe(form, { childList: true });
   const drawRecImg = (wrap, path) => {
-    $('[data-r="image"]', wrap).value = path || '';
-    const th = $('.rec-th', wrap); th.style.backgroundImage = path ? `url('${imgURL(path)}')` : ''; th.textContent = path ? '' : 'No image'; const mini = wrap.closest('.rec-row') && $('.rr-mini', wrap.closest('.rec-row')); if (mini) mini.style.backgroundImage = path ? `url('${imgURL(path)}')` : '';
-    $('.rec-acts', wrap).innerHTML = `<label class="btn btn-ghost btn-sm">${path ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${path ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}`;
+    wrap.innerHTML = recImgHTML(path);
+    const mini = wrap.closest('.rec-row') && $('.rr-mini', wrap.closest('.rec-row')); if (mini) mini.style.backgroundImage = path ? `url('${imgURL(path)}')` : '';
   };
   form.addEventListener('click', (e) => { const b = e.target.closest('[data-rec-rm]'); if (!b) return; drawRecImg(b.closest('.rec-img'), ''); setDirty(true); });
   form.addEventListener('change', async (e) => {
