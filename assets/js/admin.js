@@ -153,7 +153,14 @@
     if (v) { if (mark && page && sub) touched.add(page.id + '/' + sub.id); clearTimeout(checkTimer); checkTimer = setTimeout(recheck, 250); tabsReady(); return; }
     dirty = false; touched.clear(); clearTimeout(saveTimer); clearTimeout(checkTimer); if (!saving) status(''); tabsReady();
   }
-  addEventListener('beforeunload', (e) => { if (dirty || saving) { e.preventDefault(); e.returnValue = ''; } });
+  addEventListener('beforeunload', (e) => { if (!leaving && (dirty || saving)) { e.preventDefault(); e.returnValue = ''; } });
+  /* the logo reloads the editor (like the logo on the website), it never leaves the admin */
+  let leaving = false;
+  if ($('#adminHome')) $('#adminHome').addEventListener('click', async (e) => {
+    e.preventDefault();
+    if ((dirty || saving) && !(await ask({ title: 'Reload the editor?', text: 'You have changes that aren’t saved yet. Reloading throws them away.', ok: 'Reload', tone: 'danger' }))) return;
+    leaving = true; location.href = 'admin.html';
+  });
 
   async function gh(path, opts = {}) {
     const res = await fetch(API + path, {
