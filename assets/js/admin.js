@@ -138,7 +138,7 @@
     $('#saveRetry').hidden = !['pending', 'err', 'conflict'].includes(state);
     $('#saveRetry').textContent = state === 'conflict' ? 'Reload' : state === 'err' ? 'Try again' : 'Save';
     $('#saveRetry').classList.toggle('primary', state === 'pending');
-    if (state === 'ok') hideTimer = setTimeout(() => { if (!dirty && !saving) { bar.classList.add('hidden'); document.body.classList.remove('has-savebar'); } }, 3500);
+    if (state === 'ok') hideTimer = setTimeout(() => { if (!dirty && !saving) { bar.classList.add('hidden'); document.body.classList.remove('has-savebar'); } }, 1600);
   }
   function recheck() {
     collect();
@@ -318,7 +318,7 @@
       return `<div class="prow glass${shown ? '' : ' is-hidden'}${p.featured ? ' is-feat' : ''}" data-row-i="${i}">
         <button type="button" class="grip" data-grip="${i}" aria-label="Drag to reorder ${esc(p.title || 'project')}" title="Drag to reorder">${IC.grip}</button>
         <span class="pno" title="${p.featured ? 'On the home page' : shown ? 'On the All work page' : 'Hidden'}">${no || '–'}</span>
-        <span class="pthumb">${coverMini({ title: p.title, tint: p.cover && p.cover.tint, dev: projDev(p), shot: projShot(p, projDev(p)), style: p.cardStyle, idx: i })}</span>
+        <span class="pthumb">${coverMini({ title: p.title, tint: p.cover && p.cover.tint, dev: projDev(p), shot: projShot(p, projDev(p)), style: 'l' })}</span>
         ${icn(p)}
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small><span class="lb lb-${p.type || 'mobile'}">${KIND_LABEL[p.type || 'mobile']}</span>${p.category ? ` <span class="pcat">${esc(p.category.split('·')[0].trim())}</span>` : ''}</small></span>
         <span class="bdgs">${shown ? '' : '<span class="badge-d">Hidden</span>'}</span>
@@ -430,7 +430,7 @@
     if (ic) return `<label class="f">${label}<span class="f-ico">${ic.full ? `<svg viewBox="${ic.fvb}" aria-hidden="true">${ic.full}</svg>` : `<svg viewBox="${ic.vb}" aria-hidden="true" style="color:${ic.c === 'ink' ? 'var(--ink)' : ic.c}">${ic.p}</svg>`}${inp}</span>${hint}</label>`;
     return `<label class="f">${label}${inp}${hint}</label>`;
   };
-  const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['Shipped', 'Shipped'], ['In progress', 'In progress']];
+  const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['Shipped', 'Shipped'], ['In progress', 'In progress'], ['Personal', 'Personal']];
   const C = (label, key, val) => `<label class="chk"><input type="checkbox" data-k="${key}" ${val ? 'checked' : ''}> ${label}</label>`;
 
   function imgItem(path, cls, withLabel, label) {
@@ -494,14 +494,27 @@
   const KIND_LABEL = { mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' };
   /* a small copy of the coloured project card on the website: name, one device, soft orbs */
   function coverMini(o) {
-    const st = ['a', 'b', 'c'].includes(o.style) ? o.style : 'abc'[(o.idx || 0) % 3];
+    const st = ['a', 'b', 'c', 'l'].includes(o.style) ? o.style : 'abc'[(o.idx || 0) % 3];
     const web = o.dev === 'desktop' || o.dev === 'tablet';
     const shot = o.shot ? `<img src="${esc(imgURL(o.shot))}" alt="">` : '';
-    return `<span class="mc st-${web ? 'w' : st}" style="--tint:${esc(o.tint || '#2B3A8F')};--n:${Math.max(4, (o.title || '').length)}"><i class="mc-o o1"></i><i class="mc-o o2"></i><b class="mc-g">${esc(o.title || '')}</b><span class="mc-d ${web ? 'lap' : 'ph'}">${shot || '<em></em>'}</span></span>`;
+    return `<span class="mc st-${st === 'l' ? 'l' : web ? 'w' : st}${web ? ' is-web' : ''}" style="--tint:${esc(o.tint || '#2B3A8F')};--n:${Math.max(4, (o.title || '').length)}"><i class="mc-o o1"></i><i class="mc-o o2"></i><b class="mc-g">${esc(o.title || '')}</b><span class="mc-d ${web ? 'lap' : 'ph'}">${shot || '<em></em>'}</span></span>`;
   }
   const projDev = (p) => { const t = p.type || 'mobile', has = (k) => (p[k] || []).length; const want = p.cardDevice; if (want && want !== 'auto') return want; return t === 'web' ? 'desktop' : has('screens') || t === 'mobile' ? 'mobile' : 'desktop'; };
   const projShot = (p, dev) => (({ mobile: p.screens, tablet: p.tabletScreens, desktop: p.webScreens })[dev] || [])[0] || '';
-  const CATS = ['Social', 'Entertainment', 'Fintech', 'Utility', 'Careers', 'Food & drink', 'Health', 'E-commerce', 'Education', 'Travel', 'Productivity', 'Local business'];
+  /* app & website kinds: the App Store / Google Play categories plus the usual kinds of websites */
+  const KINDS = {
+    'Apps': ['Auto & vehicles', 'Beauty', 'Books', 'Business', 'Communication', 'Dating', 'Developer tools', 'Education', 'Entertainment', 'Events', 'Finance', 'Fintech', 'Food & drink', 'Games', 'Graphics & design', 'Health & fitness', 'Healthcare', 'House & home', 'Kids', 'Lifestyle', 'Maps & navigation', 'Medical', 'Music & audio', 'News & magazines', 'Parenting', 'Personalization', 'Photo & video', 'Productivity', 'Real estate', 'Reference', 'Shopping', 'Social', 'Sports', 'Travel', 'Utility', 'Video & streaming', 'Weather'],
+    'Websites': ['Agency', 'Auction', 'Blog & media', 'Booking & reservations', 'Careers', 'Community & forum', 'Corporate', 'Dashboard & admin', 'Directory', 'E-commerce', 'E-learning', 'Government', 'Landing page', 'Local business', 'Marketplace', 'Non-profit', 'Portfolio', 'Restaurant & café', 'SaaS', 'Ticketing']
+  };
+  function kindPick(cat) {
+    const [main, ...rest] = String(cat).split('·').map((s) => s.trim());
+    const all = [].concat(...Object.values(KINDS));
+    const custom = main && !all.includes(main) ? `<optgroup label="Yours"><option value="${esc(main)}" selected>${esc(main)}</option></optgroup>` : '';
+    return `<label class="f">Kind<select data-kind="main"><option value=""${main ? '' : ' selected'}>Choose…</option>${custom}${Object.entries(KINDS).map(([g, list]) => `<optgroup label="${g}">${list.map((k) => `<option${k === main ? ' selected' : ''}>${esc(k)}</option>`).join('')}</optgroup>`).join('')}</select><small>Shows on the project card.</small></label>
+      <label class="f">Detail (optional)<input data-kind="sub" value="${esc(rest.join(' · '))}" placeholder="Series platform"><small>Shows on the case study only.</small></label>
+      <input type="hidden" data-k="category" value="${esc(cat)}">`;
+  }
+  const CATS = [].concat(...Object.values(KINDS));
   function setupSide(isProject) {
     const side = $('#edSide'), lay = $('#edLayout');
     side.hidden = !isProject; lay.classList.toggle('two', !!isProject);
@@ -529,7 +542,7 @@
       $('.ep-t', side).textContent = title;
       $('.ep-l', side).textContent = val('tagline') || val('category');
       const stv = val('status');
-      $('.ep-flags', side).innerHTML = `${stv ? `<span class="ep-st">${esc(stv)}</span>` : ''}<span class="badge-d pub ${val('published') ? 'on' : ''}">${val('published') ? '✓ Published' : 'Hidden'}</span>${(projects[editing] || {}).featured ? `<span class="badge-d feat">★ Home #${projects[editing].featuredRank}</span>` : ''}`;
+      $('.ep-flags', side).innerHTML = `${stv ? `<span class="ep-st st-${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done', 'Personal': 'pers' })[stv] || 'muted'}">${esc(stv)}</span>` : ''}<span class="badge-d pub ${val('published') ? 'on' : ''}">${val('published') ? '✓ Published' : 'Hidden'}</span>${(projects[editing] || {}).featured ? `<span class="badge-d feat">★ Home #${projects[editing].featuredRank}</span>` : ''}`;
 
     };
     /* which sections still need something */
@@ -569,8 +582,8 @@
     $('#edForm').innerHTML = `
       <fieldset><legend>Basics</legend>
         <div class="g2">${F('Project name *', 'title', p.title)}${F('URL name (slug)', 'slug', p.slug, { hint: 'Auto-filled from the name. Used in the link: project.html#slug' })}</div>
-        <div class="g2">${F('What is it', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Mobile + Website']] })}<label class="f">Kind<input data-k="category" list="catList" value="${esc(p.category || '')}" placeholder="Social · Series platform"><datalist id="catList">${CATS.map((c) => `<option value="${c}">`).join('')}</datalist><small>Pick one or type your own. The first word shows on the card.</small></label></div>
-        <div class="g2">${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES })}<div style="display:flex;flex-direction:column;justify-content:center">${C('Show on the website', 'published', p.published !== false)}</div></div>
+        <div class="g3 kind-row">${F('What is it', 'type', p.type || 'mobile', { select: [['mobile', 'Mobile app'], ['web', 'Website'], ['both', 'Mobile + Website']] })}${kindPick(p.category || '')}</div>
+        <div class="g2"><div>${F('Status', 'status', STATUSES.some(([v]) => v === (p.status || '')) ? (p.status || '') : (p.live ? 'Live' : ''), { select: STATUSES })}<div class="pub-row">${C('Show on the website', 'published', p.published !== false)}</div></div><div></div></div>
         <div class="where-pair">
           <div class="where"><span class="where-tag">On the project card</span>${F('One-liner', 'tagline', p.tagline, { ph: 'A series-based content app', hint: 'A few words under the name on the home page and All work.' })}</div>
           <div class="where"><span class="where-tag">At the top of the case study</span>${F('Summary', 'summary', p.summary, { area: true, rows: 3, hint: 'The idea in two or three sentences, under the project name.' })}</div>
@@ -969,6 +982,9 @@
   /* editor events */
   const form = $('#edForm');
   form.addEventListener('change', (e) => { if (e.target.dataset && e.target.dataset.dr === 'img') { const row = e.target.closest('[data-demo-row]'); row.dataset.img = e.target.value; demoDraw(row); setDirty(true); } });
+  /* Kind: dropdown + optional detail → one category value */
+  const kindSync = (e) => { if (!e.target.dataset || !e.target.dataset.kind) return; const m = $('[data-kind="main"]', form).value, s = $('[data-kind="sub"]', form).value.trim(); const h = $('[data-k="category"]', form); h.value = [m, s].filter(Boolean).join(' · '); setDirty(true); if (form.oninput) form.oninput(); };
+  form.addEventListener('change', kindSync); form.addEventListener('input', kindSync);
   /* drag screens into order (arrows still work on touch) */
   let dragIm = null;
   form.addEventListener('dragstart', (e) => { const im = e.target.closest && e.target.closest('.imgs .im'); if (!im) return; dragIm = im; im.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', ''); } catch (er) {} });
@@ -1213,6 +1229,7 @@
   $('#previewHome').addEventListener('click', () => openPreview('index.html?preview=1'));
 
   /* ---------------- publish (one commit) ---------------- */
+  let lastSaved = '';
   async function autoSave() {
     if (saving) { saveAgain = true; return; }
     collect();
@@ -1236,26 +1253,27 @@
       const sent = [];
       pending.forEach((b64, path) => { if (used.has('"' + path + '"')) { files.push({ path, b64 }); sent.push(path); } });
       if (files.length) {
+        /* everything that doesn't depend on another step runs at the same time */
+        const blobsP = Promise.all(files.map((f) => gh(`${repoPath()}/git/blobs`, { method: 'POST', body: JSON.stringify({ content: f.b64, encoding: 'base64' }) }).then((r) => r.json())));
+        blobsP.catch(() => {});
         const ref = await (await gh(`${repoPath()}/git/ref/heads/${encodeURIComponent(auth.branch)}`)).json();
         const baseCommit = ref.object.sha;
-        /* someone saved from another tab or device since this page loaded? then don't overwrite their work */
-        const base = { [CFG.dataPath || 'data/projects.json']: original, [CONTENT_PATH]: originalContent, [SITE_PATH]: originalSite, [EXP_PATH]: originalExp };
-        for (const f of files) {
-          if (!(f.path in base)) continue;
-          let live;
-          try { live = JSON.parse(await (await gh(`${repoPath()}/contents/${f.path}?ref=${baseCommit}`, { headers: { Accept: 'application/vnd.github.raw+json' } })).text()); } catch (e) { continue; }
-          if (!same(live, base[f.path])) { saving = false; status('conflict', 'Changed from another tab or device. Reload to get the latest — this change wasn’t saved.'); return; }
+        const commitP = gh(`${repoPath()}/git/commits/${baseCommit}`).then((r) => r.json());
+        /* someone saved from another tab or device since this page loaded? then don't overwrite their work
+           (skipped when the branch is still at the commit this page itself last saved) */
+        if (baseCommit !== lastSaved) {
+          const base = { [CFG.dataPath || 'data/projects.json']: original, [CONTENT_PATH]: originalContent, [SITE_PATH]: originalSite, [EXP_PATH]: originalExp };
+          const clash = await Promise.all(files.filter((f) => f.path in base).map(async (f) => {
+            try { const live = JSON.parse(await (await gh(`${repoPath()}/contents/${f.path}?ref=${baseCommit}`, { headers: { Accept: 'application/vnd.github.raw+json' } })).text()); return !same(live, base[f.path]); } catch (e) { return false; }
+          }));
+          if (clash.some(Boolean)) { saving = false; status('conflict', 'Changed from another tab or device. Reload to get the latest — this change wasn’t saved.'); return; }
         }
-        const commit = await (await gh(`${repoPath()}/git/commits/${baseCommit}`)).json();
-        const tree = [];
-        for (let i = 0; i < files.length; i++) {
-          if (files.length > 2) status('saving', `Saving… ${i + 1} of ${files.length}`);
-          const blob = await (await gh(`${repoPath()}/git/blobs`, { method: 'POST', body: JSON.stringify({ content: files[i].b64, encoding: 'base64' }) })).json();
-          tree.push({ path: files[i].path, mode: '100644', type: 'blob', sha: blob.sha });
-        }
+        const [commit, blobs] = await Promise.all([commitP, blobsP]);
+        const tree = files.map((f, n) => ({ path: f.path, mode: '100644', type: 'blob', sha: blobs[n].sha }));
         const newTree = await (await gh(`${repoPath()}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: commit.tree.sha, tree }) })).json();
         const label = page && sub ? `Update ${page.label} · ${sub.label}` : 'Update portfolio content';
         const newCommit = await (await gh(`${repoPath()}/git/commits`, { method: 'POST', body: JSON.stringify({ message: `${label} (via admin)`, tree: newTree.sha, parents: [baseCommit] }) })).json();
+        lastSaved = newCommit.sha;
         await gh(`${repoPath()}/git/refs/heads/${encodeURIComponent(auth.branch)}`, { method: 'PATCH', body: JSON.stringify({ sha: newCommit.sha }) });
       }
       original = snap.p; originalExp = snap.x; originalSite = snap.s; originalContent = snap.c;

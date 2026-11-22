@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122123956">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122125212">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -706,7 +706,7 @@ body.has-savebar{padding-bottom:76px}
 .ep-stage{display:block!important;background:none!important;border:0!important;padding:0}
 .ep-stage .ep-dev{position:absolute;inset:0;width:auto!important;height:auto!important;margin:0!important;border:0!important;border-radius:18px;background:none}
 /* list rows */
-.prow .pthumb{width:92px;height:62px;flex:none;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
+.prow .pthumb{width:108px;height:72px;flex:none;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--line)}
 .prow .pthumb + .ic{display:none}
 .prow .t small{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
 .prow .t small .lb{font-size:11px;padding:3px 8px}
@@ -788,6 +788,17 @@ body.has-savebar{padding-bottom:76px}
 .t-off{width:14px;height:14px;margin-right:6px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;opacity:.65}
 #tabPanel:not([hidden]) + #listHint{margin-top:18px}
 .ep-lbls .lb-mobile,.ep-lbls .lb-web,.ep-lbls .lb-both{background:rgb(255 255 255 / .94)!important;color:#0B0C10!important}
+
+/* list thumbnail: the card in small — name on top, the screen under it */
+.mc.st-l .mc-g{top:9%;left:6%;right:6%;text-align:center;font-size:min(15px,calc(118cqw / var(--n,6)));letter-spacing:-.03em;line-height:1.05;text-overflow:ellipsis}
+.mc.st-l .mc-d.ph{height:62%;left:50%;bottom:-10%;transform:translateX(-50%);border-radius:7px;border-width:2px}
+.mc.st-l.is-web .mc-d{width:74%;height:auto;left:13%;bottom:-8%;border-radius:4px 4px 0 0;border-width:2px}
+.mc.st-l .mc-o.o1{width:30%;left:-8%;bottom:6%}.mc.st-l .mc-o.o2{width:14%;right:6%;top:auto;bottom:22%}
+.mc-d img{position:absolute;inset:0;width:100%!important;height:100%!important;object-fit:cover;object-position:top}
+.pub-row{margin-top:12px}
+.ep-st.st-dev{color:#E8A33D;background:rgb(232 163 61 / .12)}.ep-st.st-done{color:var(--sky);background:rgb(92 155 245 / .12)}.ep-st.st-pers{color:#B79CFF;background:rgb(183 156 255 / .13)}.ep-st.st-muted{color:var(--muted);background:rgb(var(--fg) / .06)}
+[data-theme="light"] .ep-st.st-pers{color:#6A48D7}
+.kind-row{align-items:start}
 </style>
 </head>
 <body>
@@ -883,11 +894,11 @@ body.has-savebar{padding-bottom:76px}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122123956"></script>
-<script src="assets/js/icons.js?v=20261122123956"></script>
-<script src="assets/js/scenes.js?v=20261122123956"></script>
-<script src="assets/js/content.js?v=20261122123956"></script>
-<script src="assets/js/core.js?v=20261122123956"></script>
-<script src="assets/js/admin.js?v=20261122123956"></script>
+<script src="assets/js/config.js?v=20261122125212"></script>
+<script src="assets/js/icons.js?v=20261122125212"></script>
+<script src="assets/js/scenes.js?v=20261122125212"></script>
+<script src="assets/js/content.js?v=20261122125212"></script>
+<script src="assets/js/core.js?v=20261122125212"></script>
+<script src="assets/js/admin.js?v=20261122125212"></script>
 </body>
 </html>

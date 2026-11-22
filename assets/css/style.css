@@ -1911,3 +1911,7 @@ html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height
 /* type label on the coloured cards: one solid look on any colour */
 .pcard.art .sp-badges .lb-mobile,.pcard.art .sp-badges .lb-web,.pcard.art .sp-badges .lb-both{background:rgb(255 255 255 / .94)!important;color:#0B0C10!important;backdrop-filter:none;-webkit-backdrop-filter:none}
 [data-theme="light"] .pcard.art .sp-badges .lb-cat{background:rgb(0 0 0 / .32);color:#fff}
+.status-pill.pers{color:#B79CFF}
+.status-pill.pers::before{content:"";width:7px;height:7px;border-radius:50%;background:#B79CFF}
+[data-theme="light"] .status-pill.pers{color:#6A48D7}
+[data-theme="light"] .status-pill.pers::before{background:#6A48D7}

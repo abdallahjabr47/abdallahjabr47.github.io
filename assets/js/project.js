@@ -173,7 +173,7 @@
           ${has(p.icon) ? `<span class="cs-icon"><img src="${esc(p.icon)}" alt="${esc(p.title)} logo"></span>` : `<span class="cs-icon letter" style="--tint:${esc(tint)}">${esc((p.title || '?').charAt(0))}</span>`}
           <span class="cs-idt"><h1 class="cs-idt-h">${esc(p.title)}</h1><small>Case study ${String(idx + 1).padStart(2, '0')}${has(p.category) ? ' · ' + esc(p.category) : ''}</small></span>
         </div>
-          <div class="cs-side" data-reveal>${p.status ? `<span class="status-pill big ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}${linksHTML(p)}</div>
+          <div class="cs-side" data-reveal>${p.status ? `<span class="status-pill big ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done', 'Personal': 'pers' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}${linksHTML(p)}</div>
         </div>
         ${has(p.summary) || has(p.tagline) ? `<p class="cs-sum" data-reveal style="--d:250ms">${esc(has(p.summary) ? p.summary : p.tagline)}</p>` : ''}
         <div class="cs-meta" data-reveal style="--d:350ms">

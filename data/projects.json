@@ -439,7 +439,7 @@
     "year": "",
     "live": false,
     "liveUrl": "",
-    "status": "",
+    "status": "Personal",
     "published": true,
     "summary": "A mobile app that gives global travelers quick, reliable access to live exchange rates, so they can convert between currencies, manage travel budgets and make informed decisions abroad.",
     "cover": {
@@ -626,7 +626,7 @@
     "year": "",
     "live": false,
     "liveUrl": "",
-    "status": "",
+    "status": "Personal",
     "published": true,
     "summary": "A mobile app that keeps people in sync with time around the world: local time detected automatically, favourite cities at a glance, and a quick converter between any two cities.",
     "cover": {

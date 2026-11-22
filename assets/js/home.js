@@ -61,7 +61,7 @@
       <div class="pc-head">
         <span class="app-icon">${icon}</span>
         <div class="nm"><h3>${esc(p.title)}</h3><p>${esc(p.tagline || p.category || '')}</p></div>
-        ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
+        ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done', 'Personal': 'pers' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
       </div>
     </article>`;
   }
