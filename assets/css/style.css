@@ -1925,3 +1925,8 @@ html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height
 .status-pill.pers::before{content:"";width:7px;height:7px;border-radius:50%;background:#B79CFF}
 [data-theme="light"] .status-pill.pers{color:#6A48D7}
 [data-theme="light"] .status-pill.pers::before{background:#6A48D7}
+
+/* every page ends the same way: the same gap between the last block and the "back to top" + footer */
+main{padding-bottom:0!important;margin-bottom:0!important}
+main > :last-child{padding-bottom:clamp(40px,5vw,64px)!important;margin-bottom:0!important}
+main > :last-child > :last-child,main > :last-child > :last-child > :last-child{margin-bottom:0!important}
