@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122221600">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122222252">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -986,6 +986,19 @@ textarea.ta-long{height:150px!important}
   .adm-nav .nav-right{margin-left:auto}
   .adm{padding-top:156px}
 }
+/* project editor: the side list is a set of tabs — only the chosen section shows (wide screens; phones keep the folding list) */
+@media (min-width:1001px){
+  .ed-layout.two.tabbed #edForm > fieldset:not(.on-tab){display:none!important}
+  .ed-layout.two.tabbed #edForm > fieldset.on-tab{animation:tabIn .28s var(--ease,ease) both}
+  .ed-layout.two.tabbed #edForm > fieldset.on-tab .fs-tog{display:none}
+}
+@keyframes tabIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.fs-foot{display:none}
+@media (min-width:1001px){
+  .ed-layout.two.tabbed .fs-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;padding-top:20px;border-top:1px solid var(--line)}
+}
+.fs-pos{font-size:13px;color:var(--dim,var(--muted));font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.ed-layout.two.tabbed #edForm > fieldset.on-tab{animation:none}}
 </style>
 </head>
 <body>
@@ -1081,11 +1094,11 @@ textarea.ta-long{height:150px!important}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122221600"></script>
-<script src="assets/js/icons.js?v=20261122221600"></script>
-<script src="assets/js/scenes.js?v=20261122221600"></script>
-<script src="assets/js/content.js?v=20261122221600"></script>
-<script src="assets/js/core.js?v=20261122221600"></script>
-<script src="assets/js/admin.js?v=20261122221600"></script>
+<script src="assets/js/config.js?v=20261122222252"></script>
+<script src="assets/js/icons.js?v=20261122222252"></script>
+<script src="assets/js/scenes.js?v=20261122222252"></script>
+<script src="assets/js/content.js?v=20261122222252"></script>
+<script src="assets/js/core.js?v=20261122222252"></script>
+<script src="assets/js/admin.js?v=20261122222252"></script>
 </body>
 </html>

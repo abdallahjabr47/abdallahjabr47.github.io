@@ -607,9 +607,12 @@
       <input type="hidden" data-k="category" value="${esc(cat)}">`;
   }
   const CATS = [].concat(...Object.values(KINDS));
+  /* tab footer buttons and hidden required fields: one listener for every editor that opens */
+  $('#edForm').addEventListener('click', (e) => { const b = e.target.closest('[data-tab-go]'), lay = $('#edLayout'); if (b && lay.showTab) lay.showTab(+b.dataset.tabGo); });
+  $('#edForm').addEventListener('invalid', (e) => { const lay = $('#edLayout'); if (lay.showTabOf) lay.showTabOf(e.target); }, true);
   function setupSide(isProject) {
     const side = $('#edSide'), lay = $('#edLayout');
-    side.hidden = !isProject; lay.classList.toggle('two', !!isProject);
+    side.hidden = !isProject; lay.classList.toggle('two', !!isProject); lay.classList.remove('tabbed'); lay.showTab = lay.showTabOf = null;
     if (!isProject) { side.innerHTML = ''; return; }
     const fsets = $$('#edForm > fieldset');
     fsets.forEach((f, n) => { f.id = 'ed-s-' + n; });
@@ -657,9 +660,23 @@
     const form = $('#edForm');
     form.oninput = drawAll; form.onchange = drawAll;
     new MutationObserver(drawAll).observe(form, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-path'] });
-    $$('.ed-nav a', side).forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); const f = $(a.getAttribute('href')); if (f) f.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
-    const io = new IntersectionObserver((es) => es.forEach((en) => { if (en.isIntersecting) $$('.ed-nav a', side).forEach((a) => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id)); }), { rootMargin: '-30% 0px -60% 0px' });
-    fsets.forEach((f) => io.observe(f));
+    /* the side list works as tabs: one section at a time, edited in place, with Back / Next at the bottom */
+    lay.classList.add('tabbed');
+    fsets.forEach((f, n) => {
+      const prev = fsets[n - 1], next = fsets[n + 1];
+      const lg = (x) => esc($('legend', x).textContent);
+      f.insertAdjacentHTML('beforeend', `<div class="fs-foot">${prev ? `<button type="button" class="btn btn-ghost btn-sm" data-tab-go="${n - 1}"><span aria-hidden="true">←</span> ${lg(prev)}</button>` : '<span></span>'}<span class="fs-pos">${n + 1} / ${fsets.length}</span>${next ? `<button type="button" class="btn btn-primary btn-sm" data-tab-go="${n + 1}">${lg(next)} <span aria-hidden="true">→</span></button>` : '<span></span>'}</div>`);
+    });
+    const showTab = (n, scroll = true) => {
+      n = Math.max(0, Math.min(fsets.length - 1, n));
+      fsets.forEach((f, k) => f.classList.toggle('on-tab', k === n));
+      $$('.ed-nav a', side).forEach((a, k) => { a.classList.toggle('on', k === n); a.setAttribute('aria-current', k === n ? 'step' : 'false'); });
+      if (scroll) { const top = lay.getBoundingClientRect().top + scrollY - 110; if (scrollY > top) scrollTo({ top, behavior: 'instant' }); }
+    };
+    lay.showTabOf = (el) => { const f = el && el.closest('#edForm > fieldset'); if (f && !f.classList.contains('on-tab')) showTab(fsets.indexOf(f), false); };
+    $$('.ed-nav a', side).forEach((a, n) => a.addEventListener('click', (e) => { e.preventDefault(); showTab(n); }));
+    lay.showTab = showTab;
+    showTab(0, false);
   }
 
   let listScroll = 0;
