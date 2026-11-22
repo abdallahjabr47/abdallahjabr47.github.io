@@ -301,19 +301,18 @@
     "headline": "Onboarding that",
     "headlineAccent": "gets out of the way.",
     "tagline": "Login and sign-up flows designed to take new users from download to first value, fast.",
-    "category": "Onboarding UX · Cincy Labs (US)",
+    "category": "Onboarding UX",
     "platform": "Mobile App",
     "type": "mobile",
     "year": "",
     "live": false,
-    "liveUrl": "",
     "status": "Shipped",
     "published": true,
     "summary": "Onboarding, login and sign-up flows for a US app studio — designed to get new users from download to first value as fast as possible.",
     "cover": {
       "image": "",
       "ghost": "RUCKAROO",
-      "tint": "#21A57C"
+      "tint": "#21a57c"
     },
     "company": "Cincy Labs",
     "role": "UX Designer",
@@ -367,7 +366,10 @@
     },
     "tabletScreens": [],
     "cardDevice": "auto",
-    "featuredRank": 4
+    "featuredRank": 4,
+    "cardStyle": "auto",
+    "scene": "auto",
+    "links": []
   },
   {
     "slug": "sip-cafe",
