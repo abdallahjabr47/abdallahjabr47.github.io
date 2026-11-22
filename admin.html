@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122224313">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122224733">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -1018,7 +1018,10 @@ textarea.ta-long{height:150px!important}
   .ed-layout.two.tabbed .ed-prev .ep-t{font-size:22px}
   .ed-layout.two.tabbed .ed-prev .ep-l{font-size:15px;white-space:normal}
   .ed-layout.two.tabbed .ed-nav{grid-column:1;position:sticky;top:100px;align-self:start}
-  .ed-layout.two.tabbed #edForm{grid-column:2}
+  .ed-layout.two.tabbed #edForm{grid-column:2;position:sticky;top:100px;align-self:start;height:calc(100dvh - 124px);overflow-y:auto;overscroll-behavior:contain;border-radius:24px;scrollbar-width:thin;scrollbar-color:rgb(var(--fg) / .18) transparent}
+  body.has-savebar .ed-layout.two.tabbed #edForm{height:calc(100dvh - 200px)}
+  .ed-layout.two.tabbed #edForm > fieldset{margin-bottom:0}
+  .adm:has(#v-edit:not(.hidden) .ed-layout.two.tabbed){padding-bottom:24px}
 }
 /* screen sketch inside device frames that have no screenshots yet */
 .mc-d em.mk{position:absolute;inset:0;background:linear-gradient(180deg,#16181f,#0e1015);container-type:size}
@@ -1132,11 +1135,11 @@ textarea.ta-long{height:150px!important}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122224313"></script>
-<script src="assets/js/icons.js?v=20261122224313"></script>
-<script src="assets/js/scenes.js?v=20261122224313"></script>
-<script src="assets/js/content.js?v=20261122224313"></script>
-<script src="assets/js/core.js?v=20261122224313"></script>
-<script src="assets/js/admin.js?v=20261122224313"></script>
+<script src="assets/js/config.js?v=20261122224733"></script>
+<script src="assets/js/icons.js?v=20261122224733"></script>
+<script src="assets/js/scenes.js?v=20261122224733"></script>
+<script src="assets/js/content.js?v=20261122224733"></script>
+<script src="assets/js/core.js?v=20261122224733"></script>
+<script src="assets/js/admin.js?v=20261122224733"></script>
 </body>
 </html>
