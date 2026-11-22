@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122145126">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122145332">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -854,6 +854,14 @@ input::placeholder,textarea::placeholder{color:rgb(var(--fg) / .3);opacity:1}
 .tl-row{display:flex;flex-direction:column;gap:8px}
 .tl-row>.f{margin:0}
 .mp{position:relative}
+.rng{display:flex;flex-direction:column;gap:8px}
+.rng-h{display:flex;align-items:center;justify-content:space-between;gap:12px}.rng-h .f{margin:0}
+.rng-one{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted);cursor:pointer}
+.rng-one input{width:16px;height:16px;accent-color:var(--sky);margin:0}
+.rng.one .g2>.mp:nth-child(2){display:none}.rng.one .g2{grid-template-columns:1fr}
+.mp-seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:3px;border-radius:11px;background:rgb(var(--fg) / .06);margin-bottom:10px}
+.mp-seg button{height:32px;border-radius:8px;border:0;background:none;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
+.mp-seg button.on{background:var(--field);color:var(--ink);box-shadow:0 1px 0 rgb(0 0 0 / .3),inset 0 0 0 1px var(--line2)}
 .mp-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:13px 16px 13px 14px;border-radius:12px;border:1px solid var(--line2);background:var(--field);color:var(--ink);font:16px/1.5 "Inter",sans-serif;text-align:left;cursor:pointer;transition:border-color .2s}
 .mp-btn:hover,.mp.open .mp-btn{border-color:var(--sky)}
 .mp-btn svg{width:19px;height:19px;flex:none;fill:none;stroke:var(--muted);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -979,11 +987,11 @@ textarea.ta-long{height:150px!important}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122145126"></script>
-<script src="assets/js/icons.js?v=20261122145126"></script>
-<script src="assets/js/scenes.js?v=20261122145126"></script>
-<script src="assets/js/content.js?v=20261122145126"></script>
-<script src="assets/js/core.js?v=20261122145126"></script>
-<script src="assets/js/admin.js?v=20261122145126"></script>
+<script src="assets/js/config.js?v=20261122145332"></script>
+<script src="assets/js/icons.js?v=20261122145332"></script>
+<script src="assets/js/scenes.js?v=20261122145332"></script>
+<script src="assets/js/content.js?v=20261122145332"></script>
+<script src="assets/js/core.js?v=20261122145332"></script>
+<script src="assets/js/admin.js?v=20261122145332"></script>
 </body>
 </html>
