@@ -43,14 +43,16 @@
     const device = pref === 'desktop' ? `<div class="laptop-f"><div class="lid"><div class="scr">${reel}</div></div><div class="base"></div></div>`
       : pref === 'tablet' ? `<div class="tablet-f"><div class="scr">${reel}</div></div>`
       : `<div class="phone-f"><div class="scr"><span class="island"></span>${reel}</div></div>`;
+    /* a website that also works on phones: a small phone in front of the laptop */
+    const sidePhone = pref === 'desktop' && dv.mobile ? `<div class="phone-f phone-side" aria-hidden="true"><div class="scr"><span class="island"></span>${(p.screens && p.screens[0]) ? imgOr(p.screens[0], '', '') : mockPhone(0, p.title)}</div></div>` : '';
     /* cover thumbnail: bold name + one device on the project's colour; style a/b/c varies per project */
     const st = ['a', 'b', 'c'].includes(p.cardStyle) ? p.cardStyle : 'abc'[i % 3];
-    const laptop = '<span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>', phone = `<span class="ta-ghost" aria-hidden="true" style="--n:${Math.max(4, (p.title || '').length)}">${esc(p.title)}</span>` + device;
+    const laptop = '<span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>', phone = `<span class="ta-ghost" aria-hidden="true" style="--n:${Math.max(4, (p.title || '').length)}">${esc(p.title)}</span>` + device + sidePhone;
     const devChips = ['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span class="dv${k === pref ? ' on' : ''}" title="${({ mobile: 'Phone', tablet: 'Tablet', desktop: 'Desktop' })[k]}">${DEV_IC[k]}</span>`).join('');
     const catShort = (p.category || '').split('·')[0].trim();
     const icon = p.icon ? `<img src="${esc(p.icon)}" alt="">` : esc((p.title || '?').charAt(0));
     return `
-    <article class="pcard art st-${st} type-${type} show-${pref}" data-type="${type}" style="--tint:${esc(tint)}" data-reveal>
+    <article class="pcard art st-${st} type-${type} show-${pref}${sidePhone ? ' with-phone' : ''}" data-type="${type}" style="--tint:${esc(tint)}" data-reveal>
       <div class="stage-panel" data-cursor="Explore case ↗" data-href="${href}" data-n="${count}">
         <div class="sp-badges"><span class="l"><span class="lb lb-${type}">${({ mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' })[type] || 'Mobile app'}</span>${catShort ? `<span class="lb lb-cat">${esc(catShort)}</span>` : ''}</span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
         <div class="devices2">${laptop}${phone}</div>

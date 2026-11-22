@@ -318,7 +318,7 @@
       return `<div class="prow glass${shown ? '' : ' is-hidden'}${p.featured ? ' is-feat' : ''}" data-row-i="${i}">
         <button type="button" class="grip" data-grip="${i}" aria-label="Drag to reorder ${esc(p.title || 'project')}" title="Drag to reorder">${IC.grip}</button>
         <span class="pno" title="${p.featured ? 'On the home page' : shown ? 'On the All work page' : 'Hidden'}">${no || '–'}</span>
-        <span class="pthumb">${coverMini({ title: p.title, tint: p.cover && p.cover.tint, dev: projDev(p), shot: projShot(p, projDev(p)), style: 'l' })}</span>
+        <span class="pthumb">${coverMini({ title: p.title, tint: p.cover && p.cover.tint, dev: projDev(p), shot: projShot(p, projDev(p)), phone: projDev(p) === 'desktop' && (p.devices || {}).mobile ? ((p.screens || [])[0] || '') : undefined, style: 'l' })}</span>
         ${icn(p)}
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small><span class="lb lb-${p.type || 'mobile'}">${KIND_LABEL[p.type || 'mobile']}</span>${p.category ? ` <span class="pcat">${esc(p.category.split('·')[0].trim())}</span>` : ''}</small></span>
         <span class="bdgs">${shown ? '' : '<span class="badge-d">Hidden</span>'}</span>
@@ -536,7 +536,7 @@
       const KL = { certificate: 'Certificate', education: 'Degree', award: 'Award', leadership: 'Leadership' };
       const kk = a.kind || 'certificate', open = !a.title;
       const head = `<div class="rr-h" data-rec-toggle role="button" tabindex="0" aria-expanded="${open}"><span class="rr-mini"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}></span><span class="rr-k k-${kk}">${KL[kk]}</span><span class="rr-ht"><b>${esc(a.title || 'New item')}</b><small>${esc([a.org, a.year].filter(Boolean).join(' · '))}</small></span><button class="rr-del" type="button" data-del-row aria-label="Delete this item" title="Delete"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></svg></button><svg class="rr-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></div>`;
-      return `<div class="rep-item rec-row${open ? ' open' : ''}" data-row>${head}<div class="rr-b"><div class="g2"><label class="f">Type<select data-r="kind">${K.map(([v, l]) => `<option value="${v}"${(a.kind || 'certificate') === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Year<input data-r="year" value="${esc(a.year || '')}" placeholder="2024 or 2022 — 2024"></label></div><label class="f">Title<input data-r="title" value="${esc(a.title || '')}" placeholder="Google UX Design Professional Certificate"></label><div class="g2"><label class="f">Organisation · place<input data-r="org" value="${esc(a.org || '')}" placeholder="Google · Online"></label><label class="f">Link (optional)<input data-r="link" value="${esc(a.link || '')}" placeholder="https://… certificate link"></label></div><div class="f">Certificate image (optional)<div class="rec-img"><input type="hidden" data-r="image" value="${esc(a.image || '')}"><span class="rec-th"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}>${a.image ? '' : 'No image'}</span><span class="rec-acts"><label class="btn btn-ghost btn-sm">${a.image ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${a.image ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}</span></div><small class="hint" style="margin:0">Shown as a small preview on the site; visitors can click to see it full size.</small></div><label class="f">Short note (optional)<input data-r="note" value="${esc(a.note || '')}" placeholder="Selected from 300+ applicants"></label></div></div>`;
+      return `<div class="rep-item rec-row${open ? ' open' : ''}" data-row>${head}<div class="rr-b"><label class="f">Type<select data-r="kind">${K.map(([v, l]) => `<option value="${v}"${(a.kind || 'certificate') === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Title<input data-r="title" value="${esc(a.title || '')}" placeholder="Google UX Design Professional Certificate"></label><div class="tl-row"><div class="f">Dates</div>${rangePick('data-r', 'year', a.year, { present: true, endEmpty: 'Optional' })}</div><div class="g2"><label class="f">Organisation · place<input data-r="org" value="${esc(a.org || '')}" placeholder="Google · Online"></label><label class="f">Link (optional)<input data-r="link" value="${esc(a.link || '')}" placeholder="https://… certificate link"></label></div><div class="f">Certificate image (optional)<div class="rec-img"><input type="hidden" data-r="image" value="${esc(a.image || '')}"><span class="rec-th"${a.image ? ` style="background-image:url('${esc(imgURL(a.image))}')"` : ''}>${a.image ? '' : 'No image'}</span><span class="rec-acts"><label class="btn btn-ghost btn-sm">${a.image ? 'Change' : '+ Upload'}<input type="file" accept="image/*" class="rec-file" hidden></label>${a.image ? '<button type="button" class="ib danger" data-rec-rm>Remove</button>' : ''}</span></div><small class="hint" style="margin:0">Shown as a small preview on the site; visitors can click to see it full size.</small></div><label class="f">Short note (optional)<input data-r="note" value="${esc(a.note || '')}" placeholder="Selected from 300+ applicants"></label></div></div>`;
     }
     if (kind === 'links') { const t = a.type || (/apps\.apple|itunes\.apple/.test(a.url || '') ? 'appstore' : /play\.google/.test(a.url || '') ? 'googleplay' : 'web'); return riCard('Link', `<div class="ri-2 ri-link"><label class="f">Button<select data-r="type">${[['appstore', 'App Store'], ['googleplay', 'Google Play'], ['web', 'Website']].map(([v, l]) => `<option value="${v}"${t === v ? ' selected' : ''}>${l}</option>`).join('')}</select></label><label class="f">Link<input data-r="url" value="${esc(a.url || '')}" placeholder="https://…"></label></div>`); }
     if (kind === 'results') return riCard('Result', `<div class="ri-2 ri-res"><label class="f">Value<input data-r="value" value="${esc(a.value || '')}" placeholder="+35%"></label><label class="f">What it measures<input data-r="label" value="${esc(a.label || '')}" placeholder="Weekly active users"></label></div>`);
@@ -551,20 +551,31 @@
     const st = ['a', 'b', 'c', 'l'].includes(o.style) ? o.style : 'abc'[(o.idx || 0) % 3];
     const web = o.dev === 'desktop' || o.dev === 'tablet';
     const shot = o.shot ? `<img src="${esc(imgURL(o.shot))}" alt="">` : '';
-    return `<span class="mc st-${st === 'l' ? 'l' : web ? 'w' : st}${web ? ' is-web' : ''}" style="--tint:${esc(o.tint || '#2B3A8F')};--n:${Math.max(4, (o.title || '').length)}"><i class="mc-o o1"></i><i class="mc-o o2"></i><b class="mc-g">${esc(o.title || '')}</b><span class="mc-d ${web ? 'lap' : 'ph'}">${shot || '<em></em>'}</span></span>`;
+    return `<span class="mc st-${st === 'l' ? 'l' : web ? 'w' : st}${web ? ' is-web' : ''}" style="--tint:${esc(o.tint || '#2B3A8F')};--n:${Math.max(4, (o.title || '').length)}"><i class="mc-o o1"></i><i class="mc-o o2"></i><b class="mc-g">${esc(o.title || '')}</b><span class="mc-d ${web ? 'lap' : 'ph'}">${shot || '<em></em>'}</span>${web && o.phone !== undefined ? `<span class="mc-d ph mc-side">${o.phone ? `<img src="${esc(imgURL(o.phone))}" alt="">` : '<em></em>'}</span>` : ''}</span>`;
   }
   const projDev = (p) => { const t = p.type || 'mobile', has = (k) => (p[k] || []).length; const want = p.cardDevice; if (want && want !== 'auto') return want; return t === 'web' ? 'desktop' : has('screens') || t === 'mobile' ? 'mobile' : 'desktop'; };
   const projShot = (p, dev) => (({ mobile: p.screens, tablet: p.tabletScreens, desktop: p.webScreens })[dev] || [])[0] || '';
   /* timeline from two dates → "2 weeks", "6 months", "1 year 3 months" */
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const ym = (v) => { const m = /^(\d{4})-(\d{2})/.exec(v || ''); return m ? [+m[1], +m[2]] : null; };
+  const ymLabel = (v) => { if (v === 'present') return 'Present'; if (/^\d{4}$/.test(v || '')) return v; const a = ym(v); return a ? `${MONTHS[a[1] - 1]} ${a[0]}` : ''; };
+  /* "Mar 2024 — Present" ⇄ ['2024-03', 'present'] */
+  const ymTok = (t) => { t = (t || '').trim(); if (!t) return ''; if (/present|now|current/i.test(t)) return 'present'; const m = /([A-Za-z]{3})[a-z]*\.?\s+(\d{4})/.exec(t); if (m) { const k = MONTHS.findIndex((x) => x.toLowerCase() === m[1].toLowerCase()); if (k >= 0) return `${m[2]}-${String(k + 1).padStart(2, '0')}`; } const y = /(\d{4})/.exec(t); return y ? y[1] : ''; };
+  const rangeSplit = (str) => { const parts = String(str || '').split(/\s+[—–-]\s+|\s*[—–]\s*/); return [ymTok(parts[0]), ymTok(parts[1])]; };
+  const rangeJoin = (a, b) => a && b ? `${ymLabel(a)} — ${ymLabel(b)}` : ymLabel(a || b);
+  /* timeline from two months (both counted) → "6 months", "1 year 3 months" */
   function tlSpan(s, e) {
-    const a = new Date(s), b = e ? new Date(e) : new Date(); if (isNaN(a) || isNaN(b) || b < a) return '';
-    const days = Math.round((b - a) / 864e5) + 1;
-    if (days < 60) { const w = Math.max(1, Math.round(days / 7)); return `${w} week${w > 1 ? 's' : ''}` + (e ? '' : ' so far'); }
-    let m = (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth()) + (b.getDate() >= a.getDate() ? 0 : -1); m = Math.max(1, m + (b.getDate() - a.getDate() >= 15 ? 1 : 0));
+    const a = ym(s), now = new Date(), b = ym(e) || [now.getFullYear(), now.getMonth() + 1]; if (!a) return '';
+    const m = (b[0] - a[0]) * 12 + (b[1] - a[1]) + 1; if (m < 1) return '';
     const y = Math.floor(m / 12), r = m % 12;
     const out = [y ? `${y} year${y > 1 ? 's' : ''}` : '', r ? `${r} month${r > 1 ? 's' : ''}` : ''].filter(Boolean).join(' ');
     return out + (e ? '' : ' so far');
   }
+  /* month + year picker: a field with a calendar icon that opens a small month grid */
+  const CAL = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>';
+  const monthPick = (label, key, val, empty = 'Pick a month', o = {}) => { const v = o.raw ? (val || '') : (val || '').slice(0, 7); return `<div class="f mp" data-mp${o.present ? ' data-present' : ''}><span>${label}</span><input type="hidden" ${key ? `data-k="${key}"` : 'class="mp-in"'} value="${esc(v)}"><button type="button" class="mp-btn" aria-haspopup="dialog"><span class="mp-v${v ? '' : ' ph'}" data-empty="${esc(empty)}">${v ? ymLabel(v) : esc(empty)}</span>${CAL}</button></div>`; };
+  /* start + end month pickers that write one text value ("Mar 2024 — Present") into a hidden field */
+  const rangePick = (attr, key, val, o = {}) => { const [a, b] = rangeSplit(val); return `<div class="rng" data-rng><input type="hidden" ${attr}="${key}" value="${esc(val || '')}"><div class="g2">${monthPick('Start', '', a, 'Pick a month', { raw: 1 })}${monthPick('End', '', b, o.endEmpty || 'Pick a month', { raw: 1, present: o.present })}</div></div>`; };
   /* app & website kinds: the App Store / Google Play categories plus the usual kinds of websites */
   const KINDS = {
     'Apps': ['Auto & vehicles', 'Beauty', 'Books', 'Business', 'Communication', 'Dating', 'Developer tools', 'Education', 'Entertainment', 'Events', 'Finance', 'Fintech', 'Food & drink', 'Games', 'Graphics & design', 'Health & fitness', 'Healthcare', 'House & home', 'Kids', 'Lifestyle', 'Maps & navigation', 'Medical', 'Music & audio', 'News & magazines', 'Parenting', 'Personalization', 'Photo & video', 'Productivity', 'Real estate', 'Reference', 'Shopping', 'Social', 'Sports', 'Travel', 'Utility', 'Video & streaming', 'Weather'],
@@ -595,9 +606,10 @@
       const want = val('cardDevice');
       const dev = want && want !== 'auto' && on(want) ? want : type === 'mobile' ? (on('mobile') ? 'mobile' : on('tablet') ? 'tablet' : 'desktop') : (on('desktop') ? 'desktop' : on('tablet') ? 'tablet' : 'mobile');
       const shot = first({ mobile: 'screens', tablet: 'tabletScreens', desktop: 'webScreens' }[dev]);
+      if (!$('.ep-stage', side)) return;
       $('.ep-stage', side).style.setProperty('--tint', tint);
       $('.ep-dev', side).className = 'ep-dev';
-      $('.ep-dev', side).innerHTML = coverMini({ title, tint, dev, shot, style: val('cardStyle'), idx: editing });
+      $('.ep-dev', side).innerHTML = coverMini({ title, tint, dev, shot, phone: dev === 'desktop' && on('mobile') ? (first('screens') || '') : undefined, style: val('cardStyle'), idx: editing });
       const cat = (val('category') || '').split('·')[0].trim();
       $('.ep-lbls', side).innerHTML = `<span class="lb lb-${type}">${KIND_LABEL[type] || 'Mobile app'}</span>${cat ? `<span class="lb lb-cat">${esc(cat)}</span>` : ''}`;
       $('.ep-logo', side).innerHTML = icon ? `<img src="${esc(imgURL(icon))}" alt="">` : esc(title.charAt(0));
@@ -685,7 +697,7 @@
         ${F('Tags (comma separated)', 'tags', (p.tags || []).join(', '))}
         <div class="g2">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}</div>
         <div class="g2">${F('Team', 'team', p.team)}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
-        <div class="tl-row"><div class="f">Timeline</div><div class="g2">${F('Start', 'timelineStart', p.timelineStart, { type: 'date' })}${F('End', 'timelineEnd', p.timelineEnd, { type: 'date', hint: 'Leave empty if it’s still going.' })}</div>
+        <div class="tl-row"><div class="f">Timeline</div><div class="g2">${monthPick('Start', 'timelineStart', p.timelineStart)}${monthPick('End', 'timelineEnd', p.timelineEnd, 'Still going')}</div>
           <p class="hint tl-out" data-tl-out></p></div>
       </fieldset>
 
@@ -973,7 +985,7 @@
     $('#edForm').innerHTML = `
       <fieldset><legend>Role</legend>
         <div class="g2">${F('Job title *', 'role', x.role)}${F('Company *', 'company', x.company)}</div>
-        <div class="g3">${F('Dates', 'dates', x.dates, { ph: 'Mar 2024 — Present' })}${F('Location', 'location', x.location, { ph: 'Ramallah, Palestine' })}${F('Type', 'type', x.type, { ph: 'Full-time' })}</div>
+        <div class="g2">${F('Location', 'location', x.location, { ph: 'Ramallah, Palestine' })}${F('Type', 'type', x.type || 'Full-time', { select: [...new Set(['Full-time', 'Part-time', 'Contract', 'Freelance', 'Internship', 'Volunteer', ...experience.map((r) => r.type).filter(Boolean)])].map((t) => [t, t]) })}</div><div class="tl-row"><div class="f">Dates</div>${rangePick('data-k', 'dates', x.dates, { present: true })}</div>
         ${C('Show on the website', 'visible', x.visible !== false)}
         ${F('One-line summary', 'summary', x.summary, { area: true, rows: 2 })}
         ${F('Highlights (one per line — shown when visitors open the role)', 'highlights', (x.highlights || []).join('\n'), { area: true, rows: 7 })}
@@ -1059,7 +1071,24 @@
   const riGrow = () => {};
   form.addEventListener('input', (e) => { if (e.target.matches && e.target.matches('.ri textarea')) riGrow(e.target); });
   new MutationObserver(() => requestAnimationFrame(() => $$('.ri textarea', form).forEach((t) => { if (!t.dataset.g) { t.dataset.g = '1'; riGrow(t); } }))).observe(form, { childList: true, subtree: true });
-  const tlShow = () => { const o = $('[data-tl-out]', form); if (!o) return; const s = ($('[data-k="timelineStart"]', form) || {}).value, e = ($('[data-k="timelineEnd"]', form) || {}).value; const p = projects[editing] || {}; o.textContent = s ? `Shows on the site as: ${tlSpan(s, e) || '—'}` : (p.timeline && !/^\[/.test(p.timeline) ? `Shows on the site as: ${p.timeline} (pick the dates to update it)` : 'Pick the start date — the site shows how long it took.'); };
+  const mpClose = () => { $$('.mp-pop').forEach((x) => x.remove()); $$('.mp.open').forEach((x) => x.classList.remove('open')); };
+  const mpSet = (mp, v) => { const inp = $('input', mp); inp.value = v; const lb = $('.mp-v', mp); lb.textContent = v ? ymLabel(v) : lb.dataset.empty; lb.classList.toggle('ph', !v); const rng = mp.closest('[data-rng]'); const out = rng ? rng.querySelector(':scope > input') : inp; if (rng) { const [x, y] = $$('.mp-in', rng).map((i) => i.value); out.value = rangeJoin(x, y); } out.dispatchEvent(new Event('input', { bubbles: true })); out.dispatchEvent(new Event('change', { bubbles: true })); };
+  const mpOpen = (mp) => {
+    mpClose(); mp.classList.add('open');
+    const raw = $('input', mp).value, cur = ym(raw), now = new Date(); let yr = cur ? cur[0] : /^\d{4}/.test(raw) ? +raw.slice(0, 4) : now.getFullYear();
+    const pop = document.createElement('div'); pop.className = 'mp-pop'; pop.setAttribute('role', 'dialog');
+    const paint = () => { pop.innerHTML = `<div class="mp-h"><button type="button" class="ri-b" data-mp-y="-1" aria-label="Previous year"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><b>${yr}</b><button type="button" class="ri-b" data-mp-y="1" aria-label="Next year"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div><div class="mp-g">${MONTHS.map((m, k) => `<button type="button" data-mp-m="${k + 1}" class="${cur && cur[0] === yr && cur[1] === k + 1 ? 'on' : ''}${now.getFullYear() === yr && now.getMonth() === k ? ' now' : ''}">${m}</button>`).join('')}</div><div class="mp-f">${mp.hasAttribute('data-present') ? `<button type="button" data-mp-present class="${raw === 'present' ? 'on' : ''}">Present</button>` : ''}<button type="button" data-mp-clear>Clear</button></div>`; };
+    paint(); mp.appendChild(pop);
+    pop.addEventListener('click', (e) => { e.stopPropagation(); const y = e.target.closest('[data-mp-y]'), m = e.target.closest('[data-mp-m]');
+      if (y) { yr += +y.dataset.mpY; paint(); return; }
+      if (m) { mpSet(mp, `${yr}-${String(m.dataset.mpM).padStart(2, '0')}`); mpClose(); $('.mp-btn', mp).focus(); return; }
+      if (e.target.closest('[data-mp-present]')) { mpSet(mp, 'present'); mpClose(); return; }
+      if (e.target.closest('[data-mp-clear]')) { mpSet(mp, ''); mpClose(); } });
+  };
+  document.addEventListener('click', (e) => { const b = e.target.closest('.mp-btn'); if (!b) return; const mp = b.closest('[data-mp]'); if (mp.classList.contains('open')) mpClose(); else mpOpen(mp); });
+  document.addEventListener('click', (e) => { if (!e.target.closest('[data-mp]')) mpClose(); }, true);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('.mp-pop')) mpClose(); });
+  const tlShow = () => { const o = $('[data-tl-out]', form); if (!o) return; const s = ($('[data-k="timelineStart"]', form) || {}).value, e = ($('[data-k="timelineEnd"]', form) || {}).value; const p = projects[editing] || {}; o.textContent = s ? `Shows on the site as: ${tlSpan(s, e) || '—'}` : (p.timeline && !/^\[/.test(p.timeline) ? `Shows on the site as: ${p.timeline} (pick the dates to update it)` : 'Pick the start month — leave End empty if it’s still going.'); };
   form.addEventListener('input', (e) => { if (e.target.dataset && /^timeline/.test(e.target.dataset.k || '')) tlShow(); });
   new MutationObserver(() => { if ($('[data-tl-out]', form) && !$('[data-tl-out]', form).textContent) tlShow(); }).observe(form, { childList: true });
   /* Kind: dropdown + optional detail → one category value */

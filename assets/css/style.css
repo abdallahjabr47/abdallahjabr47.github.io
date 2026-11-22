@@ -1782,6 +1782,10 @@ html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height
 /* websites: laptop rising from the bottom */
 .pcard.art.show-desktop .laptop-f{top:auto;bottom:-3%;transform:none;width:90%;left:5%;z-index:3}
 .pcard.art.show-desktop .laptop-f .lid{box-shadow:0 40px 80px rgb(0 0 0 / .4)}
+.pcard.art.with-phone .laptop-f{width:80%;left:4%}
+.pcard.art.with-phone .phone-f.phone-side{left:auto;top:auto;right:5%;bottom:-6%;height:46%;transform:none;z-index:4;border-radius:22px;padding:4px;transition:transform 1s var(--ease)}
+.pcard.art .phone-side .scr{border-radius:18px}
+.pcard.art .phone-side .island{transform:scale(.7);transform-origin:top center}
 .pcard.art.show-desktop .ta-ghost{top:11%;bottom:auto;left:0;right:0;text-align:center;font-size:min(150px,calc(160cqw / var(--n,6)))}
 @media (hover:hover) and (pointer:fine){
   .pcard.art .stage-panel:hover .devices2{transform:none}
@@ -1790,6 +1794,7 @@ html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height
   .pcard.art.st-c .stage-panel:hover .phone-f{transform:perspective(900px) rotateY(-10deg) rotateX(4deg) rotate(-2deg) translateY(-5%)}
   .pcard.art .stage-panel:hover .ta-ghost{transform:translateY(-4%)}
   .pcard.art.show-desktop .stage-panel:hover .laptop-f{transform:translateY(-3%)}
+  .pcard.art.with-phone .stage-panel:hover .phone-f.phone-side{transform:translateY(-6%)}
 }
 .pcard.art .sp-badges .lb{background:rgb(0 0 0 / .4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .pcard.art .sp-badges .lb-cat{color:rgb(255 255 255 / .8)}
