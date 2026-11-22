@@ -164,7 +164,7 @@
 
     let ref = ''; try { ref = document.referrer && new URL(document.referrer).origin === location.origin ? new URL(document.referrer).pathname : ''; } catch (e) {}
     const fromHome = /(^|\/)(index\.html)?$/.test(ref) && ref !== '';
-    const backHref = fromHome ? 'index.html#work' : 'work.html', backLabel = fromHome ? 'Back to home' : 'All work';
+    const backHref = fromHome ? 'index.html' : 'work.html', backLabel = fromHome ? 'Back to home' : 'All work';
     main.innerHTML = `
       <section class="container cs-hero">
         <a class="btn btn-ghost btn-sm cs-back" href="${backHref}" data-reveal><span aria-hidden="true">←</span> ${backLabel}</a>
@@ -286,7 +286,7 @@
     const idx = projects.findIndex((p) => p.slug === slug);
     if (idx === -1) {
       if (!slug && projects.length) { render(projects[0], 0); return; }
-      main.innerHTML = `<section class="container notfound"><h1 class="h-lg">Project <em class="serif">not found</em></h1><a class="btn btn-primary" href="index.html#work">Back to all work <span class="arr">↗</span></a></section>`;
+      main.innerHTML = `<section class="container notfound"><h1 class="h-lg">Project <em class="serif">not found</em></h1><a class="btn btn-primary" href="index.html">Back to home <span class="arr">↗</span></a></section>`;
       return;
     }
     render(projects[idx], idx);
