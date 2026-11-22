@@ -594,7 +594,7 @@
       $('.ep-t', side).textContent = title;
       $('.ep-l', side).textContent = val('tagline') || val('category');
       const stv = val('status');
-      $('.ep-flags', side).innerHTML = `${stv ? `<span class="ep-st st-${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done', 'Personal': 'pers' })[stv] || 'muted'}">${esc(stv)}</span>` : ''}<span class="badge-d pub ${val('published') ? 'on' : ''}">${val('published') ? '✓ Published' : 'Hidden'}</span>${(projects[editing] || {}).featured ? `<span class="badge-d feat">★ Home #${projects[editing].featuredRank}</span>` : ''}`;
+      $('.ep-flags', side).innerHTML = `${stv ? `<span class="ep-st st-${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done', 'Personal': 'pers' })[stv] || 'muted'}">${esc(stv)}</span>` : ''}<span class="badge-d pub ${val('published') ? 'on' : ''}">${val('published') ? '✓ Visible' : 'Hidden'}</span>${(projects[editing] || {}).featured ? `<span class="badge-d feat">★ Home #${projects[editing].featuredRank}</span>` : ''}`;
 
     };
     /* which sections still need something */
