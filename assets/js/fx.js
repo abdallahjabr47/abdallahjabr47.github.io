@@ -150,7 +150,8 @@
     let y = 0; for (let el = head; el; el = el.offsetParent) y += el.offsetTop; // layout position, ignores reveal animations
     return y - 112;
   };
-  const goTo = (sec) => { const y = Math.max(0, anchorY(sec)); if (glide) glide(y); else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' }); };
+  const isTop = (sec) => sec.id === 'top' || sec.id === 'hero' || sec.tagName === 'MAIN';
+  const goTo = (sec) => { const y = isTop(sec) ? 0 : Math.max(0, anchorY(sec)); if (glide) glide(y); else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' }); };
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[href*="#"]');
     if (!a) return;
@@ -164,7 +165,7 @@
   });
   // arriving from another page with #section (e.g. a case study's nav)
   if (location.hash.length > 1) {
-    addEventListener('load', () => { const t = document.getElementById(location.hash.slice(1)); if (t && scrollY > 0) setTimeout(() => window.scrollTo(0, Math.max(0, anchorY(t))), 60); });
+    addEventListener('load', () => { const t = document.getElementById(location.hash.slice(1)); if (t && scrollY > 0) setTimeout(() => window.scrollTo(0, isTop(t) ? 0 : Math.max(0, anchorY(t))), 60); });
   }
 
   /* ---------- 6. smooth wheel scrolling (mouse wheels and trackpads; keyboard and touch untouched) ---------- */
