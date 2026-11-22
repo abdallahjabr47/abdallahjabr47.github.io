@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261122153902">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122171736">
 <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}var d=document.documentElement;d.dataset.theme=t;d.classList.add('js')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -945,6 +945,19 @@ textarea.ta-long{height:150px!important}
 .ed .hint,.ed p.hint,#v-list .hint{font-size:13px;line-height:1.55}
 .wt-run-b .wt-field.c textarea{height:52px!important;min-height:52px;font-size:16px;padding:13px 34px 13px 14px}
 .im input[data-lbl]{height:32px;padding:0 10px;font-size:13px;border-radius:9px}
+/* boxes in the same row share one height */
+.wt-flow,.wt-run-b{align-items:stretch}
+.wt-flow>.wt-field,.wt-run-b>.wt-field{display:flex;flex-direction:column}
+.wt-flow>.wt-field>textarea{flex:1 1 auto}
+.wt-group.list .wt-gb{align-items:stretch}.wt-group.list .wt-gb>.wt-field{display:flex;flex-direction:column}.wt-group.list .wt-gb>.wt-field>textarea{flex:1 1 auto}
+@media (max-width:860px){
+  .wt-run-b>.wt-field:last-child:nth-child(odd){grid-column:1/-1}
+}
+@media (max-width:560px){
+  .rr-h{flex-wrap:wrap;row-gap:10px}
+  .rr-ht{flex:1 1 100%;order:9}
+  .rr-acts{margin-left:auto}
+}
 </style>
 </head>
 <body>
@@ -1040,11 +1053,11 @@ textarea.ta-long{height:150px!important}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261122153902"></script>
-<script src="assets/js/icons.js?v=20261122153902"></script>
-<script src="assets/js/scenes.js?v=20261122153902"></script>
-<script src="assets/js/content.js?v=20261122153902"></script>
-<script src="assets/js/core.js?v=20261122153902"></script>
-<script src="assets/js/admin.js?v=20261122153902"></script>
+<script src="assets/js/config.js?v=20261122171736"></script>
+<script src="assets/js/icons.js?v=20261122171736"></script>
+<script src="assets/js/scenes.js?v=20261122171736"></script>
+<script src="assets/js/content.js?v=20261122171736"></script>
+<script src="assets/js/core.js?v=20261122171736"></script>
+<script src="assets/js/admin.js?v=20261122171736"></script>
 </body>
 </html>
