@@ -9,10 +9,11 @@
   /* ---------- 1. intro: عبدالله writes itself in light, then flies into the logo while the curtain opens (once per visit) ---------- */
   (function intro() {
     const src = $('#sig path');
-    if (!src || reduce || isPreview) return;
+    const unpre = () => document.documentElement.classList.remove('intro-pre');
+    if (!src || reduce || isPreview) { unpre(); return; }
     let seen = false;
     try { seen = sessionStorage.getItem('intro-seen') === '1'; sessionStorage.setItem('intro-seen', '1'); } catch (e) {}
-    if (seen) return;
+    if (seen) { unpre(); return; }
     const d = src.getAttribute('d');
     const lg = $('#logo'), lp = lg && lg.querySelector('path');
     const vb = (lg && lg.getAttribute('viewBox')) || '0 0 430.5 201';
@@ -30,7 +31,7 @@
       </svg>`;
     document.body.appendChild(ov);
     const html = document.documentElement;
-    html.classList.add('intro-on');
+    html.classList.add('intro-on'); unpre();
     requestAnimationFrame(() => requestAnimationFrame(() => ov.classList.add('go')));
     const finish = () => {
       if (ov.classList.contains('out')) return;
