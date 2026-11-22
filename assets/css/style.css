@@ -824,7 +824,7 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
 /* ---------- experience (new rows) ---------- */
 .xp{position:relative;border-top:1px solid var(--line2)}
 .xp::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--line2)}
-.xp::after{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--blue),var(--coral));transform-origin:50% 0;transform:scaleY(var(--xp,0))}
+.xp::after{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;z-index:1;background:linear-gradient(180deg,var(--blue),var(--coral));transform-origin:50% 0;transform:scaleY(var(--xp,0))}
 .xp .xp-row{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr) auto;gap:28px;align-items:start;padding:clamp(26px,3vw,40px) 10px clamp(26px,3vw,40px) clamp(24px,3vw,44px)}
 .xp .xp-row:hover{padding-left:clamp(30px,3.4vw,52px)}
 .xp-main h3{font-size:clamp(21px,2.1vw,30px);letter-spacing:-.03em;line-height:1.1}
@@ -1621,8 +1621,11 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .xp-type{display:inline-flex;align-items:center;gap:6px;margin-left:12px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:600;color:var(--tc);background:color-mix(in srgb,var(--tc) 13%,transparent);vertical-align:1px}
 .xp-type::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--tc)}
 [data-theme="light"] .xp-row.k-full{--tc:#1769E0}[data-theme="light"] .xp-row.k-part{--tc:#1F8A5E}[data-theme="light"] .xp-row.k-intern{--tc:#A9741C}[data-theme="light"] .xp-row.k-contract{--tc:#6A58C4}
-.xp-row::before{content:"";position:absolute;left:-1px;top:22%;bottom:22%;width:3px;border-radius:3px;background:var(--tc);opacity:0;transition:opacity .35s}
-.xp-row:hover::before,.xp-row.open::before{opacity:1}
+/* the row marker sits exactly on the progress line and only beside the row's title, not its open details */
+.xp-row::before{content:none}
+.xp-head{position:relative}
+.xp-head::before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:2px;border-radius:2px;background:var(--tc);opacity:0;transition:opacity .35s;z-index:2}
+.xp-row:hover .xp-head::before,.xp-row.open .xp-head::before{opacity:1}
 .sec{padding-block:clamp(64px,8vw,110px)}.cta3{padding-top:clamp(70px,8vw,110px)}
 .nav-links a.active{font-weight:600}.nav-links a{transition:color .3s,background .3s,font-weight .2s}
 /* football: ball curls into a goal */

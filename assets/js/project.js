@@ -161,7 +161,7 @@
            ${dv.mobile ? (dv.desktop || dv.tablet ? [1] : [0, 1, 2]).map((k) => `<div class="dev-phone" style="${k !== 1 ? 'transform:translateY(-26px);opacity:.75' : 'border-color:var(--sky)'};overflow:hidden">${shots[k] || (k === 1 && shots[0]) ? `<img src="${esc(shots[k] || shots[0])}" alt="" style="width:100%;height:100%;object-fit:cover">` : mockScreen(tint)}</div>`).join('') : ''}
          </div>`;
 
-    const snap = [['My role', p.role], ['Company', p.company], ['Category', p.category], ['Team', p.team], ['Timeline', p.timeline], ['Platform', p.platforms]].filter(([, v]) => has(v));
+    const snap = [['My role', p.role], ['Company', p.company], ['Category', p.category], ['Team', p.team], ['Timeline', p.timeline]].filter(([, v]) => has(v));
 
     let ref = ''; try { ref = document.referrer && new URL(document.referrer).origin === location.origin ? new URL(document.referrer).pathname : ''; } catch (e) {}
     const fromHome = /(^|\/)(index\.html)?$/.test(ref) && ref !== '';
@@ -178,7 +178,7 @@
         </div>
         ${has(p.summary) || has(p.tagline) ? `<p class="cs-sum" data-reveal style="--d:250ms">${esc(has(p.summary) ? p.summary : p.tagline)}</p>` : ''}
         <div class="cs-meta" data-reveal style="--d:350ms">
-          <span class="pill dev-pill">${['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span title="${DEV[k][0]}">${devIc(k)}</span>`).join('')}${esc(p.platform || (type === 'web' ? 'Website' : type === 'both' ? 'Mobile + Website' : 'Mobile app'))}</span>
+          <span class="pill dev-pill">${['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span title="${DEV[k][0]}">${devIc(k)}</span>`).join('')}${esc((type === 'web' ? 'Website' : type === 'both' ? 'Mobile + Website' : 'Mobile app'))}</span>
         </div>
       </section>
       <section class="container">

@@ -460,11 +460,16 @@
       $('.xp-head', row).addEventListener('click', (e) => { if (e.target.closest('a')) return; toggle(); });
     });
     scan(box);
-    onScroll(() => {
+    /* progress line: filled down to the point 70% down the screen; re-measured while a row opens or closes */
+    const fill = () => {
       const r = box.getBoundingClientRect();
       const p = clamp((innerHeight * 0.7 - r.top) / r.height);
-      box.style.setProperty('--xp', p.toFixed(3));
-    });
+      box.style.setProperty('--xp', p.toFixed(4));
+    };
+    const follow = () => { const end = performance.now() + 600; const loop = () => { fill(); if (performance.now() < end) requestAnimationFrame(loop); }; requestAnimationFrame(loop); };
+    $$('.xp-head', box).forEach((h) => h.addEventListener('click', follow));
+    addEventListener('resize', fill);
+    onScroll(fill); fill();
   }
   const draftX = window.Site.previewDraft && window.Site.previewDraft();
   if (draftX && draftX.experience) renderExperience(draftX.experience);

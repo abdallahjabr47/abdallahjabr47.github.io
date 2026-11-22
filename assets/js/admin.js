@@ -473,7 +473,7 @@
       experience.unshift({ id: 'role-' + Date.now().toString(36), visible: true, role: '', company: '', location: '', dates: '', type: 'Full-time', summary: '', highlights: [] });
       return openExpEditor(0, true);
     }
-    projects.push({ slug: '', title: '', headline: '', headlineAccent: '', tagline: '', category: '', platform: 'Mobile App', type: 'mobile', year: '', live: false, liveUrl: '', status: '', published: true, summary: '', cover: { image: '', ghost: '', tint: '#2B3A8F' }, company: '', role: '', team: '', timeline: '', platforms: '', overview: '', problem: '', responsibilities: { product: [], design: [] }, process: [], challenges: [], gallery: { before: [], after: [] }, results: [], learnings: '', icon: '', screens: [], tabletScreens: [], webScreens: [], devices: { mobile: true, tablet: false, desktop: false }, cardDevice: 'auto' });
+    projects.push({ slug: '', title: '', tagline: '', category: '', type: 'mobile', live: false, status: '', published: true, summary: '', cover: { image: '', ghost: '', tint: '#2B3A8F' }, company: '', role: '', team: '', timeline: '', overview: '', problem: '', responsibilities: { product: [], design: [] }, process: [], challenges: [], gallery: { before: [], after: [] }, results: [], learnings: '', icon: '', screens: [], tabletScreens: [], webScreens: [], devices: { mobile: true, tablet: false, desktop: false }, cardDevice: 'auto' });
     openEditor(projects.length - 1, true);
   });
 
@@ -712,8 +712,7 @@
       </fieldset>
 
       <fieldset><legend>Case study header</legend>
-        <div class="g2">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}</div>
-        <div class="g2">${F('Team', 'team', p.team)}${F('Platforms', 'platforms', p.platforms, { ph: 'iOS · Android' })}</div>
+        <div class="g3">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}${F('Team', 'team', p.team, { ph: 'e.g. 2 devs, 1 QA' })}</div>
         <div class="tl-row"><div class="f">Timeline</div><div class="g2">${monthPick('Start', 'timelineStart', p.timelineStart)}${monthPick('End', 'timelineEnd', p.timelineEnd, 'Still going')}</div>
           <p class="hint tl-out" data-tl-out></p></div>
       </fieldset>
@@ -1067,7 +1066,7 @@
     p.slug = slugify(p.slug);
     $$('[data-rep]', form).forEach((box) => {
       p[box.dataset.rep] = $$('[data-row]', box).map((row) => { const o = {}; $$('[data-r]', row).forEach((f) => { o[f.dataset.r] = f.value.trim(); }); return o; }).filter((o) => Object.values(o).some(Boolean));
-      if (box.dataset.rep === 'links') { p.links = p.links.filter((l) => l.url); if (p.links.length) delete p.liveUrl; else { delete p.links; if (p.liveUrl) p.liveUrl = ''; } }
+      if (box.dataset.rep === 'links') { p.links = p.links.filter((l) => l.url); delete p.liveUrl; if (!p.links.length) delete p.links; }
     });
     $$('[data-imgs]', form).forEach((box) => {
       const key = box.dataset.imgs, lab = box.dataset.lab === '1', multi = box.dataset.multi === '1';
