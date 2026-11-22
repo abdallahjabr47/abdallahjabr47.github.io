@@ -489,7 +489,7 @@
   const recEye = (off) => off ? `<button class="ib ico show" type="button" data-rec-eye aria-label="Show on the website" title="Show on the website">${IC.show}</button>` : `<button class="ib ico hide" type="button" data-rec-eye aria-label="Hide from the website" title="Hide from the website">${IC.hide}</button>`;
   function recImgHTML(path) {
     return `<input type="hidden" data-r="image" value="${esc(path || '')}">${path
-      ? `<span class="rec-th" style="background-image:url('${esc(imgURL(path))}')"></span><span class="rec-ctl"><button type="button" class="del" data-rec-rm>${TRASH_ICON}Remove</button><label>Replace<input type="file" accept="image/*" class="rec-file" hidden></label></span>`
+      ? `<span class="rec-th" style="background-image:url('${esc(imgURL(path))}')"></span><span class="rec-ctl"><button type="button" class="del" data-rec-rm>Remove</button><label>Replace<input type="file" accept="image/*" class="rec-file" hidden></label></span>`
       : `<label class="rec-th addimg">+ Add image<input type="file" accept="image/*" class="rec-file" hidden></label>`}`;
   }
   function imgItem(path, cls, withLabel, label) {
@@ -535,6 +535,8 @@
   }
   /* one tidy card per item: number, name, move + delete on one line, the fields underneath */
   const TRASH = TRASH_ICON;
+  /* every remove / delete asks first, in the same dialog */
+  const sure = (title, text, ok = 'Remove') => ask({ title, text: text || 'You can still undo this with Discard until you press Save.', ok, tone: 'danger' });
   const riCard = (label, body) => `<div class="rep-item ri" data-row><div class="ri-h"><span class="ri-n"></span><span class="ri-l">${label}</span><span class="ri-acts"><button type="button" class="ri-b" data-mv-row="-1" aria-label="Move up" title="Move up"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button><button type="button" class="ri-b" data-mv-row="1" aria-label="Move down" title="Move down"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button><button type="button" class="ri-b del" data-del-row aria-label="Remove" title="Remove">${TRASH}</button></span></div><div class="ri-body">${body}</div></div>`;
   function repRow(kind, a = {}) {
     if (kind === 'process') return riCard('Step', `<label class="f">Step name<input class="ri-title" data-r="title" value="${esc(a.title || '')}" placeholder="e.g. Research"></label><label class="f">Description<textarea data-r="desc" rows="2" placeholder="What happened in this step">${esc(a.desc || '')}</textarea></label>`);
@@ -832,7 +834,11 @@
           </section>`).join('')}
         </div>
       </div>`;
-    const grow = (t) => { if (t.dataset.fx || !t.isConnected || !t.offsetWidth) return; t.dataset.fx = '1'; t.style.height = ''; const one = t.clientHeight; if (t.scrollHeight > one + 4) t.classList.add(t.value.length > 220 || /Paragraph|FAQ answer/.test((t.closest('.wt-field') && t.closest('.wt-field').textContent) || '') ? 'ta-long' : 'ta-mid'); };
+    const grow = (t) => { if (t.dataset.fx || !t.isConnected || !t.offsetWidth) return; t.dataset.fx = '1'; t.style.height = ''; const one = t.clientHeight; if (t.scrollHeight > one + 4) t.classList.add(t.value.length > 220 || /Paragraph|FAQ answer/.test((t.closest('.wt-field') && t.closest('.wt-field').textContent) || '') ? 'ta-long' : 'ta-mid'); eqRow(t); };
+    /* cards side by side: the same field gets the same height in every card */
+    const labOf = (t) => ((t.closest('.wt-field') && $('.wt-lab span', t.closest('.wt-field'))) || {}).textContent || '';
+    const eqRow = (t) => { const g = t.closest('.cgrid'); if (!g) return; const cls = t.classList.contains('ta-long') ? 'ta-long' : t.classList.contains('ta-mid') ? 'ta-mid' : ''; if (!cls) return; const l = labOf(t);
+      $$('textarea', g).forEach((x) => { if (x !== t && labOf(x) === l && !x.classList.contains('ta-long')) { x.classList.remove('ta-mid'); x.classList.add(cls); x.dataset.fx = '1'; } }); };
     /* sections that are switched off: dim them and say so */
     const markSec = (sec$) => { const off = !$('[data-sec-show],[data-part-show]', sec$).checked; sec$.classList.toggle('sec-off', off); const note = $('.off-note', sec$); if (off && !note) $('.wt-head', sec$).insertAdjacentHTML('afterend', OFF_NOTE); if (!off && note) note.remove(); };
     $$('.wt-sec', form).forEach(markSec);
@@ -1170,11 +1176,11 @@
     const dRow = e.target.closest('[data-demo-row]');
     if (dRow) {
       const dot = e.target.closest('[data-dr-dot]');
-      if (dot) { const t = JSON.parse(dRow.dataset.taps || '[]'); t.splice(+dot.dataset.drDot, 1); dRow.dataset.taps = JSON.stringify(t); demoDraw(dRow); setDirty(true); return; }
+      if (dot) { sure('Remove this tap?').then((y) => { if (!y) return; const t = JSON.parse(dRow.dataset.taps || '[]'); t.splice(+dot.dataset.drDot, 1); dRow.dataset.taps = JSON.stringify(t); demoDraw(dRow); setDirty(true); }); return; }
       const shot = e.target.closest('[data-dr-shot]');
       if (shot && dRow.dataset.img) { const r = shot.getBoundingClientRect(); const t = JSON.parse(dRow.dataset.taps || '[]'); t.push([+((e.clientX - r.left) / r.width).toFixed(3), +((e.clientY - r.top) / r.height).toFixed(3)]); dRow.dataset.taps = JSON.stringify(t); demoDraw(dRow); setDirty(true); return; }
-      if (e.target.closest('[data-dr-clear]')) { dRow.dataset.taps = '[]'; demoDraw(dRow); setDirty(true); return; }
-      if (e.target.closest('[data-dr-del]')) { dRow.remove(); setDirty(true); return; }
+      if (e.target.closest('[data-dr-clear]')) { if (JSON.parse(dRow.dataset.taps || '[]').length) sure('Clear all taps on this step?', '', 'Clear').then((y) => { if (y) { dRow.dataset.taps = '[]'; demoDraw(dRow); setDirty(true); } }); return; }
+      if (e.target.closest('[data-dr-del]')) { sure('Delete this demo step?', '', 'Delete').then((y) => { if (y) { dRow.remove(); demoSync(); setDirty(true); } }); return; }
       const mv = e.target.closest('[data-dr-mv]');
       if (mv) { if (mv.dataset.drMv === '-1' && dRow.previousElementSibling) dRow.parentNode.insertBefore(dRow, dRow.previousElementSibling); else if (mv.dataset.drMv === '1' && dRow.nextElementSibling) dRow.parentNode.insertBefore(dRow.nextElementSibling, dRow); setDirty(true); return; }
     }
@@ -1186,7 +1192,8 @@
     if (del) {
       const row = del.closest('[data-row]');
       if (row.classList.contains('rec-row')) { const t = ($('[data-r="title"]', row) || {}).value || 'this item'; ask({ title: `Delete “${t}”?`, text: 'It’s removed from the website after you press Save.', ok: 'Delete', tone: 'danger' }).then((y) => { if (y) { row.remove(); setDirty(true); } }); return; }
-      row.remove(); setDirty(true); return;
+      const lbl = (($('.ri-l', row) || {}).textContent || 'item').trim(), n = [...row.parentNode.children].filter((x) => x.matches('[data-row]')).indexOf(row) + 1;
+      sure(`Delete ${lbl.toLowerCase()} ${n}?`, '', 'Delete').then((y) => { if (y) { row.remove(); setDirty(true); } }); return;
     }
     const eye = e.target.closest('[data-rec-eye]');
     if (eye) { const row = eye.closest('.rec-row'), inp = $('[data-r="hidden"]', row), off = !inp.value; inp.value = off ? '1' : ''; row.classList.toggle('is-off', off); eye.outerHTML = recEye(off); const h = $('.rr-h .badge-d', row); if (off && !h) $('.rr-acts', row).insertAdjacentHTML('beforebegin', '<span class="badge-d">Hidden</span>'); if (!off && h) h.remove(); setDirty(true); return; }
@@ -1195,7 +1202,7 @@
     const im = e.target.closest('[data-im]');
     if (im) {
       const item = im.closest('.im'), act = im.dataset.im;
-      if (act === 'del') item.remove();
+      if (act === 'del') { sure('Remove this image?').then((y) => { if (y) { item.remove(); setDirty(true); demoSync(); } }); return; }
       if (act === 'left' && item.previousElementSibling && item.previousElementSibling.classList.contains('im')) item.parentNode.insertBefore(item, item.previousElementSibling);
       if (act === 'right' && item.nextElementSibling && item.nextElementSibling.classList.contains('im')) item.parentNode.insertBefore(item.nextElementSibling, item);
       setDirty(true);
@@ -1208,7 +1215,7 @@
     wrap.innerHTML = recImgHTML(path);
     const mini = wrap.closest('.rec-row') && $('.rr-mini', wrap.closest('.rec-row')); if (mini) mini.style.backgroundImage = path ? `url('${imgURL(path)}')` : '';
   };
-  form.addEventListener('click', (e) => { const b = e.target.closest('[data-rec-rm]'); if (!b) return; drawRecImg(b.closest('.rec-img'), ''); setDirty(true); });
+  form.addEventListener('click', (e) => { const b = e.target.closest('[data-rec-rm]'); if (!b) return; const w = b.closest('.rec-img'); sure('Remove the certificate image?').then((y) => { if (y) { drawRecImg(w, ''); setDirty(true); } }); });
   form.addEventListener('change', async (e) => {
     const input = e.target;
     if (input.classList && input.classList.contains('rec-file') && input.files.length) {
