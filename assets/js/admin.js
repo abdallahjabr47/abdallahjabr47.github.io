@@ -29,7 +29,7 @@
       { id: 'about-text', label: 'About text, numbers & photo', kind: 'site', groups: ['photo2'], keys: ['about'], side: true }] },
     { id: 'experience', label: 'Experience', subs: [
       { id: 'roles', label: 'Experience', kind: 'experience', keys: ['experience'], part: 'experience', partName: 'Experience' },
-      { id: 'learning', label: 'Learning & recognition', kind: 'site', groups: ['recognition'] , part: 'learning', partName: 'Learning & recognition tab' }] },
+      { id: 'learning', label: 'Learning & recognition', kind: 'site', groups: ['recognition'] , part: 'learning', partName: 'Learning & recognition' }] },
     { id: 'product', label: 'Product', subs: [
       { id: 'product-text', label: 'Product management', kind: 'content', keys: ['product'], fnot: '.cycle' },
       { id: 'flow', label: 'How a feature travels', kind: 'content', keys: ['product'], fsel: '.cycle', part: 'flow' },
@@ -290,17 +290,16 @@
     }
     $('#newProject').textContent = tab === 'projects' ? '+ New project' : '+ Add role';
     $('#list-title').innerHTML = `${esc(page.label)} <em class="serif">· ${esc(sub.label)}</em>`;
-    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Drag projects by the handle to order them. The first 5 (in gold) are on the home page; every project is on the All work page. Then press <b>Save</b>.' : 'Use the arrows to set the order. The eye hides a role but keeps it saved. Press <b>Save</b> when you’re done.') + '</span>';
+    $('#listHint').innerHTML = '<span>' + (tab === 'projects' ? 'Drag projects by the handle to order them. The first 5 (in gold) are on the home page; every project is on the All work page. Then press <b>Save</b>.' : 'Drag roles by the handle to order them. The eye hides a role but keeps it saved. Then press <b>Save</b>.') + '</span>';
     placePartSwitch();
     const el = $('#plist');
     if (tab === 'experience') {
       if (!experience.length) { el.innerHTML = '<div class="card-a glass"><p class="muted">No roles yet. Press <b>+ Add role</b>.</p></div>'; return; }
-      el.innerHTML = experience.map((x, i) => `<div class="prow glass">
+      el.innerHTML = experience.map((x, i) => `<div class="prow glass${x.visible === false ? ' is-hidden' : ''}" data-row-i="${i}">
+        <button type="button" class="grip" data-grip="${i}" aria-label="Drag to reorder ${esc(x.role || 'role')}" title="Drag to reorder">${IC.grip}</button>
         <span class="t"><b>${esc(x.role || 'Untitled role')}</b><small>${esc(x.company || '')}${x.dates ? ' · ' + esc(x.dates) : ''}</small></span>
         ${x.visible !== false ? '' : '<span class="badge-d">Hidden</span>'}
         <span class="acts">
-          ${iconBtn('up', i, IC.up, 'Move up', '', i === 0)}${iconBtn('down', i, IC.down, 'Move down', '', i === experience.length - 1)}
-          <span class="acts-sep"></span>
           ${x.visible !== false ? iconBtn('toggle', i, IC.hide, 'Hide from the website', 'hide') : iconBtn('toggle', i, IC.show, 'Show on the website', 'show')}
           ${iconBtn('edit', i, IC.edit, 'Edit', 'edit')}${iconBtn('del', i, IC.del, 'Delete', 'danger')}
         </span></div>`).join('');
@@ -331,14 +330,16 @@
   /* drag a row by its handle (mouse or touch); arrow keys on the handle move it too */
   const plist = $('#plist');
   const commitOrder = () => {
-    const order = $$('.prow[data-row-i]', plist).map((r) => projects[+r.dataset.rowI]);
-    if (order.length !== projects.length) return;
-    projects.splice(0, projects.length, ...order);
-    applyOrder(); setDirty(changed()); renderList();
+    const arr = tab === 'experience' ? experience : projects;
+    const order = $$('.prow[data-row-i]', plist).map((r) => arr[+r.dataset.rowI]);
+    if (order.length !== arr.length) return;
+    arr.splice(0, arr.length, ...order);
+    if (arr === projects) applyOrder();
+    setDirty(changed()); renderList();
   };
   let drag = null;
   plist.addEventListener('pointerdown', (e) => {
-    const g = e.target.closest('[data-grip]'); if (!g || tab !== 'projects') return;
+    const g = e.target.closest('[data-grip]'); if (!g || (tab !== 'projects' && tab !== 'experience')) return;
     e.preventDefault();
     const row = g.closest('.prow');
     drag = { row, id: e.pointerId };
@@ -362,10 +363,11 @@
   plist.addEventListener('keydown', (e) => {
     const g = e.target.closest('[data-grip]'); if (!g || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
     e.preventDefault();
+    const arr = tab === 'experience' ? experience : projects;
     const i = +g.dataset.grip, j = e.key === 'ArrowUp' ? i - 1 : i + 1;
-    if (j < 0 || j >= projects.length) return;
-    [projects[i], projects[j]] = [projects[j], projects[i]];
-    applyOrder(); setDirty(changed()); renderList();
+    if (j < 0 || j >= arr.length) return;
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+    if (arr === projects) applyOrder(); setDirty(changed()); renderList();
     const ng = $(`[data-grip="${j}"]`, plist); if (ng) ng.focus();
   });
   $('#plist').addEventListener('click', async (e) => {
@@ -401,12 +403,14 @@
     const head = sw.closest('.wt-head');
     if (head && !head.nextElementSibling?.classList.contains('part-note')) {
       const extra = sub.kind === 'projects' ? ['the project cards'] : sub.kind === 'experience' ? ['the roles'] : $$('#edForm > fieldset[data-g]').filter((f) => !f.hidden).map((f) => $('legend', f).textContent.replace(/^[A-Z](?=[a-z])/, (m) => m.toLowerCase()));
-      if (extra.length) head.insertAdjacentHTML('afterend', `<p class="part-note">This switch shows or hides the whole section on the website — this text and ${extra.length > 1 ? extra.slice(0, -1).join(', ') + ' and ' + extra[extra.length - 1] : extra[0]} below.</p>`);
+      if (extra.length) head.insertAdjacentHTML('afterend', `<p class="part-note">One switch for the whole section: it shows or hides the text here together with ${extra.length > 1 ? extra.slice(0, -1).join(', ') + ' and ' + extra[extra.length - 1] : extra[0]}.</p>`);
     }
     $('#plist').classList.toggle('is-part-off', off && !$('#plist').hidden);
     $$('#edForm > fieldset[data-g]').forEach((f) => { if (!f.hidden) f.classList.toggle('is-part-off', off); });
     drawTabs();
   }
+  const avMark = () => { const c = $('#edForm [data-k="availabilityOn"]'); if (!c) return; const fs = c.closest('fieldset'); fs.classList.toggle('is-part-off', !c.checked); const n = $('.off-note', fs); if (!c.checked && !n) $('.av-head', fs).insertAdjacentHTML('afterend', OFF_NOTE); if (c.checked && n) n.remove(); };
+  document.addEventListener('change', (e) => { if (e.target.matches && e.target.matches('[data-k="availabilityOn"]')) avMark(); });
   document.addEventListener('change', (e) => { if (e.target.matches && e.target.matches('[data-sec-show]')) { const k = e.target.dataset.secShow; content.hidden = (content.hidden || []).filter((x) => x !== k).concat(e.target.checked ? [] : [k]); syncPartOff(); drawTabs(); } });
   document.addEventListener('change', (e) => {
     const c = e.target.closest && e.target.closest('[data-part-show]'); if (!c) return;
@@ -703,7 +707,7 @@
               /* compact field: no label row, reset + eye sit inside the box */
               const cfield = (f) => { const v = valOf(f); const ed = v !== f.text; const off = offs.includes(f.key); return `<div class="wt-field c${ed ? ' edited' : ''}${off ? ' off' : ''}"><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1">${esc(v)}</textarea><span class="c-act"><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'} title="Back to: ${esc(f.text)}">↺</button><button type="button" class="wt-eye${off ? ' is-off' : ''}" data-off="${esc(f.key)}" aria-pressed="${off}" title="Show or hide this on the website">${EYE_I}</button></span><p class="wt-orig" hidden></p></div>`; };
               /* lay out a list of fields: same-kind short texts in a row, other short ones two per line */
-              const flow = (list) => { let out = '', i = 0; while (i < list.length) { const f = list[i]; if (isShort(f)) { let j = i; while (j < list.length && isShort(list[j]) && list[j].kind === f.kind) j++; if (j - i >= 2) { out += `<div class="wt-run"><div class="wt-run-h">${esc(PLURAL[f.kind] || f.kind + 's')}<small>${j - i}</small></div><div class="wt-run-b" style="--n:${Math.min(j - i, 4)}">${list.slice(i, j).map(cfield).join('')}</div></div>`; i = j; continue; } out += field(f).replace('class="wt-field', 'class="wt-field half'); i++; continue; } out += field(f); i++; } return out; };
+              const flow = (list) => { let out = '', i = 0, halfOpen = false; while (i < list.length) { const f = list[i]; if (isShort(f)) { let j = i; while (j < list.length && isShort(list[j]) && list[j].kind === f.kind) j++; if (j - i >= 2) { out += `<div class="wt-run"><div class="wt-run-h">${esc(PLURAL[f.kind] || f.kind + 's')}<small>${j - i}</small></div><div class="wt-run-b" style="--n:${Math.min(j - i, 4)}">${list.slice(i, j).map(cfield).join('')}</div></div>`; i = j; continue; } const nx = list[i + 1], paired = halfOpen || (nx && isShort(nx) && !(list[i + 2] && isShort(list[i + 2]) && list[i + 2].kind === nx.kind)); out += paired ? field(f).replace('class="wt-field', 'class="wt-field half') : field(f); halfOpen = paired && !halfOpen; i++; continue; } halfOpen = false; out += field(f); i++; } return out; };
               const field = (f) => { const v = valOf(f); const ed = v !== f.text; return `
             <div class="wt-field${ed ? ' edited' : ''}${offs.includes(f.key) ? ' off' : ''}">
               <div class="wt-lab"><span>${esc(f.kind)}</span><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'}>Reset</button><button type="button" class="wt-eye${offs.includes(f.key) ? ' is-off' : ''}" data-off="${esc(f.key)}" aria-pressed="${offs.includes(f.key)}" title="Show or hide this on the website">${EYE_I}</button></div>
@@ -856,6 +860,7 @@
         <input type="file" accept="application/pdf" id="cvInput" hidden>
       </fieldset>`;
     $$('#edForm fieldset[data-g]').forEach((f) => { f.hidden = !!(sub.groups && !sub.groups.includes(f.dataset.g)); });
+    avMark();
     placePartSwitch();
     /* sections whose text and images live on one admin page: the text editor goes first */
     $('#edForm').classList.toggle('combo-side', !!(sub.keys && sub.side));
