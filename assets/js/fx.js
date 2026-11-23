@@ -14,7 +14,6 @@
     let seen = false;
     try { seen = sessionStorage.getItem('intro-seen') === '1'; sessionStorage.setItem('intro-seen', '1'); } catch (e) {}
     if (seen) { unpre(); return; }
-    const d = src.getAttribute('d');
     const lg = $('#logo'), lp = lg && lg.querySelector('path');
     const vb = (lg && lg.getAttribute('viewBox')) || '0 0 430.5 201';
     const ov = document.createElement('div');
@@ -24,14 +23,15 @@
       <svg viewBox="${vb}" class="intro-sig">
         <defs>
           <mask id="im-ar" maskUnits="userSpaceOnUse" x="-60" y="-40" width="600" height="300"><rect class="mk mk-ar" x="-60" y="-40" width="600" height="300" fill="#fff"/></mask>
+          <symbol id="im-sig" viewBox="${vb}"><use href="#sig"/></symbol>
           <mask id="im-en" maskUnits="userSpaceOnUse" x="-60" y="-40" width="600" height="300"><rect class="mk mk-en" x="-60" y="-40" width="600" height="300" fill="#fff"/></mask>
         </defs>
         ${lp ? `<g mask="url(#im-en)"><path class="en" d="${lp.getAttribute('d')}" mask="url(#logoKo)"/></g>` : ''}
-        <g mask="url(#im-ar)"><path class="fill" d="${d}" fill-rule="evenodd"/></g>
+        <g mask="url(#im-ar)"><use href="#im-sig" class="fill"/></g>
       </svg>`;
     document.body.appendChild(ov);
     const html = document.documentElement;
-    html.classList.add('intro-on'); unpre();
+    html.classList.add('intro-on', 'logo-wait'); unpre();
     requestAnimationFrame(() => requestAnimationFrame(() => ov.classList.add('go')));
     const finish = () => {
       if (ov.classList.contains('out')) return;
@@ -42,7 +42,11 @@
       }
       ov.classList.add('out');
       setTimeout(() => html.classList.remove('intro-on'), 150);
-      setTimeout(() => ov.remove(), 1300);
+      /* swap to the real logo the moment the flying one has landed */
+      let done = false;
+      const land = () => { if (done) return; done = true; html.classList.remove('logo-wait'); ov.remove(); };
+      if (sig) sig.addEventListener('transitionend', (e) => { if (e.target === sig) land(); });
+      setTimeout(land, 950);
     };
     setTimeout(finish, 1500);
     ov.addEventListener('click', finish);

@@ -987,8 +987,8 @@ html.js-smooth{scroll-behavior:auto}
 html.intro-on{overflow:hidden}
 /* until the intro is on screen, the page stays covered: nothing of the site shows before the logo */
 html.intro-pre::after{content:"";position:fixed;inset:0;z-index:299;background:var(--bg)}
-html.intro-on .brand .logo{opacity:0}
-.brand .logo{transition:opacity .3s ease .75s,transform .5s cubic-bezier(.2,.8,.2,1)}
+/* the real logo stays hidden until the flying one lands exactly on it, then they swap in the same frame */
+html.logo-wait .brand .logo{opacity:0}
 /* 3D tilt + glare on project panels */
 .stage-panel.tilt-on{transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .6s cubic-bezier(.2,.8,.2,1);will-change:transform}
 .stage-panel.tilt-on.tilting{transition:transform .12s ease-out}
