@@ -102,5 +102,6 @@
       "note": "Visual materials and branding for university tech events"
     }
   ],
-  "availabilityOn": false
+  "availabilityOn": false,
+  "lightMode": false
 }

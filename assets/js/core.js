@@ -270,14 +270,22 @@
   })();
 
   /* ---------- theme ---------- */
-  function setTheme(t) {
+  function paintTheme(t) {
     document.documentElement.dataset.theme = t;
-    try { localStorage.setItem('theme', t); } catch (e) {}
     $$('[data-theme-toggle]').forEach((b) => b.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'));
     $$('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', t === 'dark' ? '#07080B' : '#F4F5F7'));
   }
+  function setTheme(t) { paintTheme(t); try { localStorage.setItem('theme', t); } catch (e) {} }
   $$('[data-theme-toggle]').forEach((b) => b.addEventListener('click', () => setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark')));
-  setTheme(document.documentElement.dataset.theme || 'dark');
+  paintTheme(document.documentElement.dataset.theme || 'dark');
+  /* light mode is switched on or off from the admin (site.json → lightMode); off = always dark, no toggle button */
+  function applyLightMode(on) {
+    const html = document.documentElement, was = html.classList.contains('light-on');
+    try { if (on) localStorage.setItem('light-on', '1'); else localStorage.removeItem('light-on'); } catch (e) {}
+    html.classList.toggle('light-on', on);
+    if (!on) { if (html.dataset.theme !== 'dark') paintTheme('dark'); return; }
+    if (!was) { let t = null; try { t = localStorage.getItem('theme'); } catch (e) {} if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; paintTheme(t); }
+  }
 
   /* ---------- clock + year ---------- */
   function tick() {
@@ -348,6 +356,7 @@
   }
   function applySite(s) {
     if (!s) return;
+    if (!document.querySelector('.adm-nav')) applyLightMode(s.lightMode === true);
     const url = {
       email: s.email ? 'mailto:' + s.email : '',
       emailcta: s.email ? 'mailto:' + s.email + '?subject=' + encodeURIComponent("Hello Abdallah") : '',

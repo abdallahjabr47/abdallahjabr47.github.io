@@ -22,7 +22,8 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     { id: 'top', label: 'Top', subs: [
       { id: 'hero', label: 'Heading, intro & photo', kind: 'site', groups: ['photo'], keys: ['hero'], side: true },
       { id: 'avail', label: 'Availability line', kind: 'site', groups: ['availability'] },
-      { id: 'tools', label: 'Tools strip', kind: 'content', keys: ['tools'] }] },
+      { id: 'tools', label: 'Tools strip', kind: 'content', keys: ['tools'] },
+      { id: 'look', label: 'Light mode', kind: 'site', groups: ['look'] }] },
     { id: 'work', label: 'Work', subs: [
       { id: 'projects', label: 'Selected work', kind: 'projects', keys: ['work'], part: 'work', partName: 'Selected work' },
       { id: 'screens', label: 'Screens that ship', kind: 'site', groups: ['showcase'], keys: ['screens'] },
@@ -949,6 +950,10 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
       <fieldset data-g="showcase"><legend>Screens gallery</legend>
         <p class="hint">Screenshots for the big “Screens that ship” wall on the home page — app screens, web pages, anything you designed. Add as many as you like (10+ looks best), drag them (or use ← →) to order them. Phone and web screenshots can be mixed. If empty, screens from your projects are used.</p>
         ${imgList('showcase', site.showcase || [], '', false, true)}
+      </fieldset>
+      <fieldset data-g="look"><legend>Light mode</legend>
+        <header class="wt-head av-head"><div><small>Website</small><h3>Light mode</h3></div><label class="wt-switch"><input type="checkbox" data-k="lightMode" ${site.lightMode === true ? 'checked' : ''}><span></span>Show on website</label></header>
+        <p class="hint">Off: the website is always dark and the sun/moon button in the top bar is hidden. On: visitors can switch to light mode, and it follows their device setting.</p>
       </fieldset>
       <fieldset data-g="availability"><legend>Availability</legend>
         <header class="wt-head av-head"><div><small>Section</small><h3>Availability</h3></div><label class="wt-switch"><input type="checkbox" data-k="availabilityOn" ${site.availabilityOn === false ? '' : 'checked'}><span></span>Show on website</label></header>

@@ -1936,3 +1936,5 @@ main > :last-child > :last-child,main > :last-child > :last-child > :last-child{
 /* light mode: small labels darker so they stay readable on the pale background (same colours, deeper shade) */
 [data-theme="light"] .scroll-cue{color:var(--muted)}
 [data-theme="light"] .pnote .k{color:color-mix(in srgb,var(--ac) 55%,#0B0C10)}
+/* light mode off (admin → Top → Light mode): the website's sun/moon button is hidden */
+html:not(.light-on) .nav:not(.adm-nav) [data-theme-toggle]{display:none!important}
