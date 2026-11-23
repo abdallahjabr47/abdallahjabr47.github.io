@@ -24,9 +24,10 @@
         <defs>
           <mask id="im-ar" maskUnits="userSpaceOnUse" x="-60" y="-40" width="600" height="300"><rect class="mk mk-ar" x="-60" y="-40" width="600" height="300" fill="#fff"/></mask>
           <symbol id="im-sig" viewBox="${vb}"><use href="#sig"/></symbol>
+          ${lp ? `<symbol id="im-word" viewBox="${vb}"><path d="${lp.getAttribute('d')}" fill="currentColor" mask="url(#logoKo)"/></symbol>` : ''}
           <mask id="im-en" maskUnits="userSpaceOnUse" x="-60" y="-40" width="600" height="300"><rect class="mk mk-en" x="-60" y="-40" width="600" height="300" fill="#fff"/></mask>
         </defs>
-        ${lp ? `<g mask="url(#im-en)"><path class="en" d="${lp.getAttribute('d')}" mask="url(#logoKo)"/></g>` : ''}
+        ${lp ? `<g mask="url(#im-en)"><use href="#im-word" class="en"/></g>` : ''}
         <g mask="url(#im-ar)"><use href="#im-sig" class="fill"/></g>
       </svg>`;
     document.body.appendChild(ov);
