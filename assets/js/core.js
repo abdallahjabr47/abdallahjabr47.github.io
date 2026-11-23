@@ -356,7 +356,7 @@
   }
   function applySite(s) {
     if (!s) return;
-    if (!document.querySelector('.adm-nav')) applyLightMode(s.lightMode === true);
+    applyLightMode(s.lightMode === true);
     const url = {
       email: s.email ? 'mailto:' + s.email : '',
       emailcta: s.email ? 'mailto:' + s.email + '?subject=' + encodeURIComponent("Hello Abdallah") : '',
@@ -409,6 +409,6 @@
     addEventListener('pageshow', (e) => { if (e.persisted) html.classList.remove('pv-leave', 'pv-enter', 'pv-go'); });
   })();
 
-  window.Site = { getSite: () => siteReady, $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, previewDraft, isPreview, reduce, fine };
+  window.Site = { getSite: () => siteReady, lightMode: applyLightMode, $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, previewDraft, isPreview, reduce, fine };
   scan();
 })();

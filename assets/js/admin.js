@@ -248,6 +248,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     originalSite = JSON.stringify(site);
     originalContent = JSON.stringify(content);
     pending.clear();
+    window.Site.lightMode(site.lightMode === true);
     setDirty(false);
     renderList();
   }
@@ -462,6 +463,8 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
   }
   const avMark = () => { const c = $('#edForm [data-k="availabilityOn"]'); if (!c) return; const fs = c.closest('fieldset'); fs.classList.toggle('is-part-off', !c.checked); const n = $('.off-note', fs); if (!c.checked && !n) $('.av-head', fs).insertAdjacentHTML('afterend', OFF_NOTE); if (c.checked && n) n.remove(); };
   document.addEventListener('change', (e) => { if (e.target.matches && e.target.matches('[data-k="availabilityOn"]')) avMark(); });
+  /* the Light mode switch takes effect in the editor straight away */
+  document.addEventListener('change', (e) => { if (e.target.matches && e.target.matches('[data-k="lightMode"]')) window.Site.lightMode(e.target.checked); });
   document.addEventListener('change', (e) => { if (e.target.matches && e.target.matches('[data-sec-show]')) { const k = e.target.dataset.secShow; content.hidden = (content.hidden || []).filter((x) => x !== k).concat(e.target.checked ? [] : [k]); syncPartOff(); drawTabs(); } });
   document.addEventListener('change', (e) => {
     const c = e.target.closest && e.target.closest('[data-part-show]'); if (!c) return;
@@ -952,8 +955,8 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
         ${imgList('showcase', site.showcase || [], '', false, true)}
       </fieldset>
       <fieldset data-g="look"><legend>Light mode</legend>
-        <header class="wt-head av-head"><div><small>Website</small><h3>Light mode</h3></div><label class="wt-switch"><input type="checkbox" data-k="lightMode" ${site.lightMode === true ? 'checked' : ''}><span></span>Show on website</label></header>
-        <p class="hint">Off: the website is always dark and the sun/moon button in the top bar is hidden. On: visitors can switch to light mode, and it follows their device setting.</p>
+        <header class="wt-head av-head"><div><small>Website &amp; editor</small><h3>Light mode</h3></div><label class="wt-switch"><input type="checkbox" data-k="lightMode" ${site.lightMode === true ? 'checked' : ''}><span></span>Show on website</label></header>
+        <p class="hint">Off: the website and this editor are always dark, and the sun/moon button is hidden. On: the button is back, and light or dark follows the device setting.</p>
       </fieldset>
       <fieldset data-g="availability"><legend>Availability</legend>
         <header class="wt-head av-head"><div><small>Section</small><h3>Availability</h3></div><label class="wt-switch"><input type="checkbox" data-k="availabilityOn" ${site.availabilityOn === false ? '' : 'checked'}><span></span>Show on website</label></header>
@@ -1498,7 +1501,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     const ok = await ask({ title: 'Discard unsaved changes?', text: 'Everything you changed since the last save goes back to how it is on the site.', ok: 'Discard', tone: 'danger' });
     if (!ok) return;
     const wasMode = mode, wasIdx = editing;
-    projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent);
+    projects = JSON.parse(original); experience = JSON.parse(originalExp); site = JSON.parse(originalSite); content = JSON.parse(originalContent); window.Site.lightMode(site.lightMode === true);
     content.text = content.text || {}; content.hidden = content.hidden || [];
     pending.clear();
     $('#tabPanel').hidden = true; $('#tabPanel').dataset.sub = '';
