@@ -1274,7 +1274,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     if (slot) {
       const file = input.files[0];
       try {
-        const { b64, url, ext } = await processImage(file, cls === 'sq' ? 512 : cls === 'wide' ? 2400 : 1400);
+        const { b64, url, ext } = await processImage(file, cls === 'sq' ? 192 : cls === 'wide' ? 2400 : 1400);
         const name = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40) || 'image';
         const path = `${CFG.imagesPath || 'assets/uploads'}/${folder}/${Date.now().toString(36)}-${name}.${ext}`;
         pending.set(path, b64); previews.set(path, url);
@@ -1288,7 +1288,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     if (!multi) $$('.im', box).forEach((x) => x.remove());
     for (const file of Array.from(input.files)) {
       try {
-        const { b64, url, ext } = await processImage(file, mode === 'site' ? 1400 : cls === 'sq' ? 512 : cls === 'wide' ? 2400 : 1400);
+        const { b64, url, ext } = await processImage(file, mode === 'site' ? 1400 : cls === 'sq' ? 192 : cls === 'wide' ? 2400 : 1400);
         const name = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40) || 'image';
         const path = `${CFG.imagesPath || 'assets/uploads'}/${folder}/${Date.now().toString(36)}-${name}.${ext}`;
         pending.set(path, b64); previews.set(path, url);
