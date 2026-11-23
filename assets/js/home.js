@@ -100,6 +100,7 @@
     next.addEventListener('click', (e) => { e.stopPropagation(); go(i + 1); });
     let x0 = null, moved = false;
     panel.addEventListener('pointerdown', (e) => { x0 = e.clientX; moved = false; });
+    panel.addEventListener('pointercancel', () => { x0 = null; });
     panel.addEventListener('pointerup', (e) => {
       if (x0 == null) return;
       const dx = e.clientX - x0; x0 = null;

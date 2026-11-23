@@ -1930,3 +1930,6 @@ html.pv-leave::before{content:"";position:fixed;top:0;left:0;z-index:9999;height
 main{padding-bottom:0!important;margin-bottom:0!important}
 main > :last-child{padding-bottom:clamp(40px,5vw,64px)!important;margin-bottom:0!important}
 main > :last-child > :last-child,main > :last-child > :last-child > :last-child{margin-bottom:0!important}
+
+/* phones: a sideways swipe on a project card changes the screen; up/down still scrolls the page */
+.pcard .stage-panel{touch-action:pan-y}
