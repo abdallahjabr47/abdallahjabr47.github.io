@@ -953,7 +953,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
       <fieldset data-g="availability"><legend>Availability</legend>
         <header class="wt-head av-head"><div><small>Section</small><h3>Availability</h3></div><label class="wt-switch"><input type="checkbox" data-k="availabilityOn" ${site.availabilityOn === false ? '' : 'checked'}><span></span>Show on website</label></header>
         <p class="hint">One short line under the buttons at the top of the page, with a green dot.</p>
-        ${F('Availability line', 'availability', site.availability, { ph: 'Open to Product Manager / Product Owner roles · Ramallah or remote' })}
+        ${F('Availability line', 'availability', site.availability, { ph: 'e.g. Based in Ramallah' })}
       </fieldset>
       <fieldset data-g="beyond"><legend>Beyond the screen — card photos (optional)</legend>
         <p class="hint">Each card on the home page has a small animation. Upload a photo or a GIF to show your own work there instead (square-ish, e.g. 1200×900). A GIF plays like a short video.</p>
