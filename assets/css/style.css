@@ -1933,3 +1933,6 @@ main > :last-child > :last-child,main > :last-child > :last-child > :last-child{
 
 /* phones: a sideways swipe on a project card changes the screen; up/down still scrolls the page */
 .pcard .stage-panel{touch-action:pan-y}
+/* light mode: small labels darker so they stay readable on the pale background (same colours, deeper shade) */
+[data-theme="light"] .scroll-cue{color:var(--muted)}
+[data-theme="light"] .pnote .k{color:color-mix(in srgb,var(--ac) 55%,#0B0C10)}
