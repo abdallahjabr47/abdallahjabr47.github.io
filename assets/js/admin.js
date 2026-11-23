@@ -1,5 +1,7 @@
 /* Admin dashboard — edits data/projects.json and uploads images straight into the GitHub repo.
    Every "Publish" makes ONE commit; GitHub Pages then redeploys the site (about a minute). */
+/* the editor never runs inside someone else's frame (clickjacking): GitHub Pages can't send X-Frame-Options, so it's enforced here */
+if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw new Error('framed'); }
 (function () {
   const { $, $$, esc, toast } = window.Site;
   const CFG = window.SITE_CONFIG || {};
@@ -818,18 +820,18 @@
               const isShort = (f) => !/\n/.test(f.text) && f.text.length <= 48 && !/Paragraph|Main heading|FAQ answer/.test(f.kind);
               const PLURAL = { 'Button / tab': 'Buttons & tabs', Button: 'Buttons', Text: 'Texts', Title: 'Titles', 'Small text': 'Small texts', Heading: 'Headings', 'Number caption': 'Number captions', 'Number (counts up)': 'Numbers' };
               /* compact field: no label row, reset + eye sit inside the box */
-              const cfield = (f) => { const v = valOf(f); const ed = v !== f.text; const off = offs.includes(f.key); return `<div class="wt-field c${ed ? ' edited' : ''}${off ? ' off' : ''}"><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1">${esc(v)}</textarea><span class="c-act"><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'} title="Back to: ${esc(f.text)}">↺</button><button type="button" class="wt-eye${off ? ' is-off' : ''}" data-off="${esc(f.key)}" aria-pressed="${off}" title="Show or hide this on the website">${EYE_I}</button></span><p class="wt-orig" hidden></p></div>`; };
+              const cfield = (f) => { const v = valOf(f); const ed = v !== f.text; const off = offs.includes(f.key); return `<div class="wt-field c${ed ? ' edited' : ''}${off ? ' off' : ''}"><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" aria-label="${esc(f.text)}" rows="1">${esc(v)}</textarea><span class="c-act"><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'} title="Back to: ${esc(f.text)}">↺</button><button type="button" class="wt-eye${off ? ' is-off' : ''}" data-off="${esc(f.key)}" aria-pressed="${off}" title="Show or hide this on the website">${EYE_I}</button></span><p class="wt-orig" hidden></p></div>`; };
               /* lay out a list of fields: same-kind short texts in a row, other short ones two per line */
               const flow = (list) => { let out = '', i = 0, halfOpen = false; while (i < list.length) { const f = list[i]; if (isShort(f)) { let j = i; while (j < list.length && isShort(list[j]) && list[j].kind === f.kind) j++; if (j - i >= 2) { out += `<div class="wt-run"><div class="wt-run-h">${esc(PLURAL[f.kind] || f.kind + 's')}<small>${j - i}</small></div><div class="wt-run-b" style="--n:${Math.min(j - i, 4)}">${list.slice(i, j).map(cfield).join('')}</div></div>`; i = j; continue; } const nx = list[i + 1], paired = halfOpen || (nx && isShort(nx) && !(list[i + 2] && isShort(list[i + 2]) && list[i + 2].kind === nx.kind)); out += paired ? field(f).replace('class="wt-field', 'class="wt-field half') : field(f); halfOpen = paired && !halfOpen; i++; continue; } halfOpen = false; out += field(f); i++; } return out; };
               const field = (f) => { const v = valOf(f); const ed = v !== f.text; return `
             <div class="wt-field${ed ? ' edited' : ''}${offs.includes(f.key) ? ' off' : ''}">
               <div class="wt-lab"><span>${esc(f.kind)}</span><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'}>Reset</button><button type="button" class="wt-eye${offs.includes(f.key) ? ' is-off' : ''}" data-off="${esc(f.key)}" aria-pressed="${offs.includes(f.key)}" title="Show or hide this on the website">${EYE_I}</button></div>
-              <textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1">${esc(v)}</textarea>
+              <textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" aria-label="${esc(f.text)}" rows="1">${esc(v)}</textarea>
               <p class="wt-orig"${ed ? '' : ' hidden'}>Original: ${esc(f.text)}</p>
             </div>`; };
               /* tools: small cards with the logo, name and one line each */
               const logo = (el) => { const ic = el && (window.ICONS || {})[el.dataset.icon]; if (!ic) return `<span class="tc-fb">${esc((el && el.dataset.fb) || '•')}</span>`; if (ic.full) return `<svg viewBox="${ic.fvb}" aria-hidden="true">${ic.full}</svg>`; return `<svg viewBox="${ic.vb}" fill="currentColor" style="color:${ic.c === 'ink' ? 'var(--ink)' : ic.c}" aria-hidden="true">${ic.p}</svg>`; };
-              const mini = (f, ph) => { const v = valOf(f); const ed = v !== f.text; return `<div class="wt-field tf${ed ? ' edited' : ''}"><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" rows="1" placeholder="${ph}">${esc(v)}</textarea><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'} title="Back to original">↺</button><p class="wt-orig" hidden></p></div>`; };
+              const mini = (f, ph) => { const v = valOf(f); const ed = v !== f.text; return `<div class="wt-field tf${ed ? ' edited' : ''}"><textarea data-ckey="${esc(f.key)}" data-orig="${esc(f.text)}" aria-label="${esc(f.text)}" rows="1" placeholder="${ph}">${esc(v)}</textarea><button type="button" class="wt-reset" data-reset${ed ? '' : ' hidden'} title="Back to original">↺</button><p class="wt-orig" hidden></p></div>`; };
               const tcard = (run) => { const tool = run[0].el.closest('.tool'); const gk = 'g:' + run[0].key, goff = offs.includes(gk); return `<div class="wt-group tcard${goff ? ' off' : ''}"><div class="wt-gh"><span class="tc-ic">${logo(tool && tool.querySelector('[data-icon]'))}</span><div class="tc-f">${run.map((f, i) => mini(f, i ? 'Short line' : 'Name')).join('')}</div><button type="button" class="wt-eye g${goff ? ' is-off' : ''}" data-off="${esc(gk)}" aria-pressed="${goff}" title="Show / hide this tool">${EYE_I}<span>${goff ? 'Hidden' : 'Shown'}</span></button></div></div>`; };
               let html = '', k = 0, grid = '', lastFam = '';
               const openGrid = (cls) => { if (grid !== cls) { if (grid) html += '</div>'; if (cls) html += `<div class="${cls}">`; grid = cls; } };
@@ -1434,6 +1436,8 @@
     try {
       const files = [];
       if (!same(projects, original)) files.push({ path: CFG.dataPath || 'data/projects.json', b64: b64FromUtf8(JSON.stringify(projects, null, 2) + '\n') });
+      /* the sitemap follows the shown projects, so search engines find every case study */
+      if (!same(projects, original)) { const B = location.origin + location.pathname.replace(/admin\.html$/, ''); const urls = [B, B + 'work.html', ...projects.filter((p) => p.published !== false && p.slug).map((p) => B + 'project.html?p=' + encodeURIComponent(p.slug))]; files.push({ path: 'sitemap.xml', b64: b64FromUtf8('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls.map((u) => `  <url><loc>${u.replace(/&/g, '&amp;')}</loc></url>`).join('\n') + '\n</urlset>\n') }); }
       if (!same(content, originalContent)) files.push({ path: CONTENT_PATH, b64: b64FromUtf8(JSON.stringify(content, null, 2) + '\n') });
       if (!same(site, originalSite)) files.push({ path: SITE_PATH, b64: b64FromUtf8(JSON.stringify(site, null, 2) + '\n') });
       if (!same(experience, originalExp)) files.push({ path: EXP_PATH, b64: b64FromUtf8(JSON.stringify(experience, null, 2) + '\n') });
@@ -1458,6 +1462,12 @@
         }
         const [commit, blobs] = await Promise.all([commitP, blobsP]);
         const tree = files.map((f, n) => ({ path: f.path, mode: '100644', type: 'blob', sha: blobs[n].sha }));
+        /* a replaced or removed CV is deleted from the site too, so an old copy doesn't stay public at its link */
+        const oldCv = (JSON.parse(originalSite || '{}') || {}).cv || '';
+        if (oldCv && oldCv !== site.cv && /^assets\/cv[^/]*\.pdf$/.test(oldCv) && !used.has('"' + oldCv + '"')) {
+          const there = await gh(`${repoPath()}/contents/${oldCv}?ref=${baseCommit}`, { method: 'HEAD' }).then(() => true, () => false);
+          if (there) tree.push({ path: oldCv, mode: '100644', type: 'blob', sha: null });
+        }
         const newTree = await (await gh(`${repoPath()}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: commit.tree.sha, tree }) })).json();
         const label = page && sub ? `Update ${page.label} · ${sub.label}` : 'Update portfolio content';
         const newCommit = await (await gh(`${repoPath()}/git/commits`, { method: 'POST', body: JSON.stringify({ message: `${label} (via admin)`, tree: newTree.sha, parents: [baseCommit] }) })).json();

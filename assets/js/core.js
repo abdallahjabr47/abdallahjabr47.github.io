@@ -91,8 +91,9 @@
       el.style.color = ic.c === 'ink' ? 'var(--ink)' : ic.c;
       el.innerHTML = `<svg viewBox="${ic.vb}" fill="currentColor" aria-hidden="true">${ic.p}</svg>`;
     });
+    /* photos managed in the admin (data-site-img) come from site.json only — no request for a default file that isn't there */
     $$('[data-img]', root).forEach((el) => {
-      if (el.dataset.imgDone) return;
+      if (el.dataset.imgDone || el.hasAttribute('data-site-img')) return;
       el.dataset.imgDone = '1';
       const src = el.dataset.img, im = new Image();
       im.onload = () => { el.style.backgroundImage = 'url("' + src + '")'; el.classList.add('has-img'); };
