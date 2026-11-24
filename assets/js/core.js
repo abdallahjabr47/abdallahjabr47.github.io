@@ -409,6 +409,13 @@
     addEventListener('pageshow', (e) => { if (e.persisted) html.classList.remove('pv-leave', 'pv-enter', 'pv-go'); });
   })();
 
+  /* "← Back to home / All work" buttons: remember that we are going back, so the page returns to the same spot */
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest && e.target.closest('a.cs-back');
+    if (!a) return;
+    try { sessionStorage.setItem('come-back', new URL(a.getAttribute('href'), location.href).pathname); } catch (err) {}
+  }, true);
+
   /* home and All work: Back from a project (or another page) returns to the same spot, not the top */
   (function keepPlace() {
     if (!(document.getElementById('hero') || /work\.html$/.test(location.pathname))) return;
@@ -418,7 +425,10 @@
     let type = '';
     try { const n = performance.getEntriesByType('navigation')[0]; type = n ? n.type : ''; } catch (e) {}
     const isWork = !document.getElementById('hero');
-    if (!(type === 'back_forward' || (isWork && type === 'reload'))) return;
+    /* the page's own "← Back" button counts as going back too */
+    let viaButton = false;
+    try { viaButton = sessionStorage.getItem('come-back') === location.pathname; sessionStorage.removeItem('come-back'); } catch (e) {}
+    if (!(viaButton || type === 'back_forward' || (isWork && type === 'reload'))) return;
     let y = 0; try { y = parseInt(sessionStorage.getItem(key), 10) || 0; } catch (e) {}
     if (y <= 0) return;
     /* projects render a moment later, so keep placing the page until it is tall enough (stop if you scroll yourself) */

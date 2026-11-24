@@ -154,6 +154,7 @@
   if (root.document && document.getElementById('hero')) {
     let reload = false, back = false;
     try { const nav = performance.getEntriesByType('navigation')[0]; reload = nav ? nav.type === 'reload' : performance.navigation.type === 1; back = nav ? nav.type === 'back_forward' : performance.navigation.type === 2; } catch (e) {}
+    try { if (sessionStorage.getItem('come-back') === location.pathname) back = true; } catch (e) {}
     try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
     /* Back from another page is handled in core.js (returns to the same spot) */
     if (!back && (reload || !location.hash)) {
