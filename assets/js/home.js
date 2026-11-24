@@ -586,3 +586,12 @@
     if (location.hash === '#recognition') $('[data-xp-tab="learn"]', xt).click();
   }
 })();
+
+/* hero card: rotate the one-line slides with the quiet step dots */
+(function () {
+  const qs = Array.from(document.querySelectorAll('.hx-q')), dots = Array.from(document.querySelectorAll('.hx-steps i'));
+  if (qs.length < 2 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let k = 0;
+  const go = (n) => { k = n; qs.forEach((q, i) => { q.classList.toggle('on', i === k); q.setAttribute('aria-hidden', String(i !== k)); }); dots.forEach((d, i) => d.classList.toggle('on', i === k)); };
+  setInterval(() => { if (!document.hidden) go((k + 1) % qs.length); }, 5200);
+})();
