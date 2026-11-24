@@ -2027,3 +2027,10 @@ html.vbox-on{overflow:hidden}
 .lightbox[data-dev="tablet"] .lb-scr{height:min(76vh,820px)}
 .lightbox[data-dev="social"] .lb-scr{height:auto}
 @media (max-width:700px){.lp-phone{height:calc(min(120vw,520px) - 20px)}}
+/* card names: one size and one place on every card (below the labels), long names wrap */
+.pcard.art .ta-ghost,.pcard.art.st-a .ta-ghost,.pcard.art.st-b .ta-ghost,.pcard.art.st-c .ta-ghost,.pcard.art.show-desktop .ta-ghost{
+  top:clamp(62px,15%,84px);bottom:auto;left:7%;right:7%;text-align:left;white-space:normal;
+  font-size:min(84px,15cqw);line-height:.9;z-index:2}
+.pcard.art.st-b .phone-f{top:34%}
+@media (hover:none){.pcard.art.st-b .ta-ghost{top:clamp(62px,15%,84px)}.pcard.art.st-b .phone-f{top:34%}}
+@media (min-width:1600px){.pgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
