@@ -563,7 +563,12 @@
         "hold": 1800,
         "img": "assets/uploads/xchange/07-profile.webp"
       }
-    ]
+    ],
+    "video": {
+      "src": "assets/uploads/xchange/walkthrough.mp4",
+      "poster": "assets/uploads/xchange/walkthrough-poster.webp",
+      "title": ""
+    }
   },
   {
     "slug": "worldclockr",
@@ -660,7 +665,103 @@
       "desktop": false
     },
     "tabletScreens": [],
-    "cardDevice": "auto"
+    "cardDevice": "auto",
+    "demo": [
+      {
+        "s": 0,
+        "label": "Your cities at a glance",
+        "note": "Local time first, then each city with its offset and day",
+        "img": "assets/uploads/worldclockr/01-home.webp",
+        "hold": 1800,
+        "taps": [
+          [
+            0.768,
+            0.102
+          ]
+        ]
+      },
+      {
+        "s": 4,
+        "label": "Edit the list",
+        "note": "Remove a city or drag it into a new order",
+        "img": "assets/uploads/worldclockr/05-edit.webp",
+        "hold": 1500,
+        "taps": [
+          [
+            0.893,
+            0.102
+          ]
+        ]
+      },
+      {
+        "s": 5,
+        "label": "Add a city",
+        "note": "Suggested cities with their current time",
+        "img": "assets/uploads/worldclockr/06-add-city.webp",
+        "hold": 1500,
+        "taps": [
+          [
+            0.49,
+            0.363
+          ]
+        ]
+      },
+      {
+        "s": 6,
+        "label": "Search any city",
+        "note": "Results update as you type",
+        "img": "assets/uploads/worldclockr/07-search.webp",
+        "hold": 1300,
+        "taps": [
+          [
+            0.5,
+            0.482
+          ]
+        ]
+      },
+      {
+        "s": 1,
+        "label": "Open the converter",
+        "note": "Pick two cities to compare",
+        "img": "assets/uploads/worldclockr/02-converter.webp",
+        "hold": 1100,
+        "taps": [
+          [
+            0.23,
+            0.282
+          ],
+          [
+            0.735,
+            0.282
+          ]
+        ]
+      },
+      {
+        "s": 2,
+        "label": "See the difference",
+        "note": "The gap in big type, with both local times",
+        "img": "assets/uploads/worldclockr/03-convert-result.webp",
+        "hold": 1700,
+        "taps": [
+          [
+            0.488,
+            0.586
+          ]
+        ]
+      },
+      {
+        "s": 3,
+        "label": "Swap direction",
+        "note": "One tap flips the comparison",
+        "img": "assets/uploads/worldclockr/04-swap.webp",
+        "hold": 1800
+      }
+    ],
+    "video": {
+      "src": "assets/uploads/worldclockr/walkthrough.mp4",
+      "poster": "assets/uploads/worldclockr/walkthrough-poster.webp",
+      "title": ""
+    }
   },
   {
     "slug": "boxchampy",
