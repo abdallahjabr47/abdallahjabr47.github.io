@@ -182,8 +182,8 @@
     document.addEventListener('pointerleave', () => { document.documentElement.classList.remove('has-cursor'); shown = false; });
     addEventListener('pointerdown', () => ring.classList.add('down'));
     addEventListener('pointerup', () => ring.classList.remove('down'));
-    document.addEventListener('pointerover', (e) => {
-      const t = e.target.closest('[data-cursor], a, button, input, label, [role="switch"]');
+    const setFor = (el) => {
+      const t = el && el.closest && el.closest('[data-cursor], a, button, input, label, [role="switch"]');
       const v = t && t.closest('[data-cursor]');
       const btnInside = t && v && t !== v && t.closest('button, a') && v.contains(t.closest('button, a'));
       ring.classList.remove('hover', 'view');
@@ -192,7 +192,10 @@
       if (!t) return;
       if (v && !btnInside) { ring.classList.add('view'); ring.textContent = v.dataset.cursor; document.documentElement.classList.add('has-view'); }
       else ring.classList.add('hover');
-    });
+    };
+    document.addEventListener('pointerover', (e) => setFor(e.target));
+    /* after a click (e.g. a screen opening in the viewer) the mouse has not moved, so re-check what is under it */
+    document.addEventListener('click', () => { [0, 120, 400].forEach((ms) => setTimeout(() => setFor(document.elementFromPoint(mx, my)), ms)); });
     const loop = () => {
       requestAnimationFrame(loop);
       if (Math.abs(mx - rx) < 0.1 && Math.abs(my - ry) < 0.1 && ring.dataset.d === String(ring.classList.contains('down'))) return;
