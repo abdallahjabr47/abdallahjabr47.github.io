@@ -923,6 +923,16 @@
       "assets/uploads/mazadak/03-onboarding-1.webp",
       "assets/uploads/mazadak/04-onboarding-2.webp",
       "assets/uploads/mazadak/05-onboarding-3.webp",
+      "assets/uploads/mazadak/terms.webp",
+      "assets/uploads/mazadak/signup.webp",
+      "assets/uploads/mazadak/signup-error.webp",
+      "assets/uploads/mazadak/signup-cancel.webp",
+      "assets/uploads/mazadak/login-filled.webp",
+      "assets/uploads/mazadak/login-error.webp",
+      "assets/uploads/mazadak/login-wrong.webp",
+      "assets/uploads/mazadak/code.webp",
+      "assets/uploads/mazadak/code-error.webp",
+      "assets/uploads/mazadak/new-password.webp",
       "assets/uploads/mazadak/06-home.webp",
       "assets/uploads/mazadak/07-level-up.webp",
       "assets/uploads/mazadak/08-auction.webp",
@@ -935,7 +945,11 @@
       "assets/uploads/mazadak/15-points-earned.webp",
       "assets/uploads/mazadak/16-merchant-found.webp",
       "assets/uploads/mazadak/17-history.webp",
-      "assets/uploads/mazadak/18-profile.webp"
+      "assets/uploads/mazadak/18-profile.webp",
+      "assets/uploads/mazadak/edit-profile.webp",
+      "assets/uploads/mazadak/notification-settings.webp",
+      "assets/uploads/mazadak/contact-us.webp",
+      "assets/uploads/mazadak/logout.webp"
     ],
     "webScreens": [],
     "devices": {
@@ -962,7 +976,7 @@
       },
       {
         "img": "assets/uploads/mazadak/06-home.webp",
-        "s": 5,
+        "s": 15,
         "label": "Pick an auction",
         "note": "Your points and live auctions",
         "taps": [
@@ -992,7 +1006,7 @@
       },
       {
         "img": "assets/uploads/mazadak/09-matching-bids.webp",
-        "s": 8,
+        "s": 18,
         "label": "See matching bids",
         "note": "Why a bid isn’t unique",
         "loading": 900,
@@ -1007,7 +1021,7 @@
       },
       {
         "img": "assets/uploads/mazadak/11-merchants.webp",
-        "s": 10,
+        "s": 20,
         "label": "Find merchants",
         "note": "Earn points where you shop",
         "taps": [
@@ -1020,14 +1034,14 @@
       },
       {
         "img": "assets/uploads/mazadak/14-scan.webp",
-        "s": 13,
+        "s": 23,
         "label": "Scan the QR code",
         "note": "Scanning starts automatically",
         "hold": 1300
       },
       {
         "img": "assets/uploads/mazadak/15-points-earned.webp",
-        "s": 14,
+        "s": 24,
         "label": "Earn points",
         "note": "Cha-Ching! 40 points added",
         "loading": 900,
@@ -1041,7 +1055,7 @@
       },
       {
         "img": "assets/uploads/mazadak/17-history.webp",
-        "s": 16,
+        "s": 26,
         "label": "Track everything",
         "note": "Won, lost, active and more",
         "hold": 1800
