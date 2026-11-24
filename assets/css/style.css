@@ -1990,3 +1990,11 @@ html.vbox-on{overflow:hidden}
 .cs-icon.letter{background:var(--tint)}
 .sa-icons .app-icon{box-shadow:none}
 .sa-icons .app-icon.more{background:rgb(var(--fg) / .12)}
+
+/* extra designs button + viewer (social posts, stories, cards) */
+.soc-open{display:inline-flex;align-items:center;gap:10px;background:var(--soc);border:1px solid var(--soc);color:#fff;transition:filter .3s,transform .3s var(--ease)}
+.soc-open:hover{filter:brightness(1.12)}
+.soc-open svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8}
+.lightbox[data-dev="social"] .lb-scr{height:auto;width:auto;aspect-ratio:auto;max-width:min(78vw,760px);border-radius:16px;border:0;background:transparent;box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.lightbox[data-dev="social"] .lb-scr img{display:block;width:auto;height:auto;max-width:min(78vw,760px);max-height:min(76vh,760px);object-fit:contain}
+@media (max-width:600px){.lightbox[data-dev="social"] .lb-scr,.lightbox[data-dev="social"] .lb-scr img{max-width:calc(100vw - 32px);max-height:64vh}}

@@ -181,15 +181,20 @@
     /* video: a "Watch the video" button next to the In action / Live preview heading opens it in a viewer */
     const vsrc = p.video && has(p.video.src) ? String(p.video.src).trim() : '';
     const vidBtn = vsrc ? `<button type="button" class="btn btn-ghost vid-open" data-vid-open data-cursor="Play ▶"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the video</button>` : '';
+    /* extra designs (e.g. social posts): a coloured button beside the video button opens them in the viewer */
+    const soc = (p.social && Array.isArray(p.social.images) ? p.social.images : []).map((g) => typeof g === 'string' ? { image: g } : { image: g && (g.image || g.src), label: g && (g.label || g.caption) }).filter((g) => has(g.image));
+    const socLabel = (p.social && has(p.social.label)) ? String(p.social.label).trim() : 'Social media designs';
+    const socBtn = soc.length ? `<button type="button" class="btn soc-open" data-soc-open data-cursor="Open ↗" style="--soc:${esc((p.social && p.social.color) || tint)}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>${esc(socLabel)}</button>` : '';
+    const acts = vidBtn + socBtn;
     let vidPlaced = false;
     /* live preview: full-length website screens scroll inside a browser and a phone frame */
     const lpDesk = (p.webScreens || []).filter(Boolean)[0];
     const lpPhone = (type !== 'mobile') ? (p.screens || []).filter(Boolean)[0] : '';
     if (p.preview !== false && type !== 'mobile' && (lpDesk || lpPhone)) {
-      const both = lpDesk && lpPhone; vidPlaced = !!vidBtn;
+      const both = lpDesk && lpPhone; vidPlaced = !!acts;
       add('preview', 'Live preview', `
         <div class="gal-head"><div style="display:flex;flex-direction:column;gap:16px"><span class="k" data-reveal>%N% · LIVE PREVIEW</span><h2 class="h-md" data-split>Scroll <em class="serif">through it</em></h2></div>
-        <div class="sec-acts">${both ? `<div class="tabs glass dev-tabs lp-tabs" role="group" aria-label="Device"><span class="thumb"></span><button type="button" data-lp="desktop" class="on">${devIc('desktop')}Desktop</button><button type="button" data-lp="mobile">${devIc('mobile')}Phone</button></div>` : ''}${vidBtn}</div></div>
+        <div class="sec-acts">${both ? `<div class="tabs glass dev-tabs lp-tabs" role="group" aria-label="Device"><span class="thumb"></span><button type="button" data-lp="desktop" class="on">${devIc('desktop')}Desktop</button><button type="button" data-lp="mobile">${devIc('mobile')}Phone</button></div>` : ''}${acts}</div></div>
         <div class="lp" data-lp-box data-reveal data-dev="${lpDesk ? 'desktop' : 'mobile'}">
           ${lpDesk ? `<div class="lp-desk" data-lp-pane="desktop"><div class="lp-bar"><i></i><i></i><i></i><span>${esc(p.title || '')}</span></div><div class="lp-view" tabindex="0" aria-label="Desktop page, scrollable"><img src="${esc(lpDesk)}" alt="${esc(p.title || '')} on desktop" loading="lazy"></div></div>` : ''}
           ${lpPhone ? `<div class="lp-phone" data-lp-pane="mobile"><div class="lp-view" tabindex="0" aria-label="Phone page, scrollable"><img src="${esc(lpPhone)}" alt="${esc(p.title || '')} on a phone" loading="lazy"></div></div>` : ''}
@@ -201,12 +206,12 @@
       if (Array.isArray(p.demo) && p.demo.length && has(p.screens)) {
       add('demo', 'In action', `
         <div class="gal-head"><div style="display:flex;flex-direction:column;gap:16px"><span class="k" data-reveal>%N% · IN ACTION</span>
-        <h2 class="h-md" data-split>See it <em class="serif">work</em></h2></div>${vidPlaced ? '' : `<div class="sec-acts">${vidBtn}</div>`}</div>
+        <h2 class="h-md" data-split>See it <em class="serif">work</em></h2></div>${vidPlaced || !acts ? '' : `<div class="sec-acts">${acts}</div>`}</div>
         <div class="demo" data-demo data-reveal>
           <div class="demo-phone"><div class="demo-scr">${p.demo.map((st, k) => `<div class="demo-s" data-k="${k}"><img src="${esc(st.img || p.screens[st.s] || '')}" alt="${esc(st.label || '')}" loading="lazy"></div>`).join('')}<span class="demo-load" aria-hidden="true"><i></i></span><span class="demo-tap" aria-hidden="true"></span></div></div>
           <ol class="demo-steps">${p.demo.map((st, k) => `<li data-k="${k}"><button type="button" data-go="${k}"><span>${String(k + 1).padStart(2, '0')}</span><b>${esc(st.label || 'Step ' + (k + 1))}</b>${has(st.note) ? `<small>${esc(st.note)}</small>` : ''}</button></li>`).join('')}</ol>
         </div>`);
-      vidPlaced = vidPlaced || !!vidBtn;
+      vidPlaced = vidPlaced || !!acts;
     }
       add('process', 'Process', `
         <span class="k" data-reveal>%N% · PROCESS</span>
@@ -234,7 +239,7 @@
     if (sets.length) {
       add('screens', 'All screens', `
         <div class="gal-head"><div style="display:flex;flex-direction:column;gap:16px"><span class="k" data-reveal>%N% · EVERY SCREEN</span><h2 class="h-md" data-split>Across <em class="serif">devices</em></h2></div>
-        <div class="sec-acts">${sets.length > 1 ? `<div class="tabs glass dev-tabs" role="group" aria-label="Device"><span class="thumb"></span>${sets.map(([k], i) => `<button type="button" data-dv="${k}"${i ? '' : ' class="on"'}>${devIc(k)}${DEV[k][0]}</button>`).join('')}</div>` : ''}${vidPlaced ? '' : vidBtn}</div></div>
+        <div class="sec-acts">${sets.length > 1 ? `<div class="tabs glass dev-tabs" role="group" aria-label="Device"><span class="thumb"></span>${sets.map(([k], i) => `<button type="button" data-dv="${k}"${i ? '' : ' class="on"'}>${devIc(k)}${DEV[k][0]}</button>`).join('')}</div>` : ''}${vidPlaced ? '' : acts}</div></div>
         ${sets.map(([k, l], i) => `<div class="dev-grid g-${k}" data-dv-pane="${k}"${i ? ' hidden' : ''}>${l.map((src, j) => `<button class="dshot" type="button" data-set="${k}" data-i="${j}" data-cursor="Open ↗" aria-label="Open ${DEV[k][0].toLowerCase()} screen ${j + 1}"><img src="${esc(src)}" alt="${esc(p.title)} ${DEV[k][0].toLowerCase()} screen ${j + 1}" loading="lazy"></button>`).join('')}</div>`).join('')}`);
     }
     if (has(p.results) || has(p.learnings)) {
@@ -325,6 +330,11 @@
       curDev = set[0];
       openLB(parseInt(b.dataset.i, 10));
     }));
+    $$('[data-soc-open]', main).forEach((b) => b.addEventListener('click', () => {
+      curList = soc.map((g, j) => ({ image: g.image, label: g.label || `${socLabel} · ${j + 1}` }));
+      curDev = 'social';
+      openLB(0);
+    }));
 
     /* lightbox */
     const lb = $('#lightbox');
@@ -336,8 +346,9 @@
       $('.lb-label', lb).textContent = g.label || '';
       $('.lb-count', lb).textContent = `${li + 1} / ${curList.length}`;
     }
-    function openLB(i) { li = i; showLB(); lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false'); $('.lb-close', lb).focus(); }
-    window.__lb = { step: (d) => { li = (li + d + curList.length) % curList.length; showLB(); }, close: () => { lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true'); } };
+    let lbBack = null;
+    function openLB(i) { lbBack = document.activeElement; li = i; showLB(); lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false'); $('.lb-close', lb).focus({ preventScroll: true }); }
+    window.__lb = { step: (d) => { li = (li + d + curList.length) % curList.length; showLB(); }, close: () => { if (!lb.classList.contains('open')) return; lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true'); if (lbBack && lbBack.focus) lbBack.focus({ preventScroll: true }); lbBack = null; } };
 
     /* toc active */
     const tocLinks = $$('.toc a');
@@ -362,6 +373,14 @@
   $('.lb-btn.prev', lb).addEventListener('click', () => window.__lb && window.__lb.step(-1));
   $('.lb-btn.nxt', lb).addEventListener('click', () => window.__lb && window.__lb.step(1));
   lb.addEventListener('click', (e) => { if (e.target === lb) window.__lb && window.__lb.close(); });
+  /* swipe between screens on phones */
+  let sx = null, sy = 0;
+  lb.addEventListener('touchstart', (e) => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, { passive: true });
+  lb.addEventListener('touchend', (e) => {
+    if (sx == null || !window.__lb) return;
+    const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy; sx = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) window.__lb.step(dx < 0 ? 1 : -1);
+  }, { passive: true });
   addEventListener('keydown', (e) => {
     if (!lb.classList.contains('open') || !window.__lb) return;
     /* preventDefault: in a full-screen Safari window, Esc would also leave full screen */

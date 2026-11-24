@@ -328,48 +328,268 @@
   {
     "slug": "sip-cafe",
     "title": "SIP Café",
-    "tagline": "[One line about the website.]",
-    "category": "Food & drink · Café website",
+    "tagline": "A mobile-first ordering website for a café in Ramallah.",
+    "category": "Food & drink · Café ordering website",
     "type": "web",
-    "live": true,
-    "status": "Live",
+    "live": false,
+    "status": "Shipped",
     "published": true,
-    "summary": "A website for a specialty café: [one line on the goal of the site and the result].",
+    "summary": "An ordering website for SIP, a café on Al-Karmel Street in Ramallah: browse the menu, customise a drink, choose how to pay and when you’ll arrive, then follow the order until it’s ready for pickup.",
     "cover": {
       "image": "",
       "ghost": "SIP",
-      "tint": "#C27A45"
+      "tint": "#174734"
     },
-    "company": "[Client]",
-    "role": "UI/UX Designer",
+    "company": "SIP · Freelance client",
+    "role": "Designer & Product",
     "team": "",
-    "timeline": "[Start — End]",
-    "overview": "[Overview]",
-    "problem": "",
+    "timeline": "1 week",
+    "overview": "SIP is a café in Ramallah with a simple promise: “Don’t skip, take a SIP”. I designed its website as an ordering experience. Customers open it on their phone, browse drinks and pastries, pick the size, milk and extra shots, and confirm with their name, phone, payment method and the time they’ll arrive. The site was designed for mobile, tablet and desktop; the mobile designs are shown here. Development was done directly with AI using skills, and the café’s admin panel was built the same way. Screens of the build and the admin will be added later.",
+    "problem": "A small café needs a quick way to take orders before pickup, without phone calls or long message threads, and one clear place for its menu, offers and opening hours.",
     "responsibilities": {
-      "product": [],
-      "design": []
+      "product": [
+        "Defined the ordering flow with the client, from menu to pickup",
+        "Scoped the pages for mobile, tablet and desktop",
+        "Planned the admin panel for the menu and orders",
+        "Developed the site and the admin directly with AI, using skills"
+      ],
+      "design": [
+        "Welcome, cookie consent and opening-hours states",
+        "Menu with categories, sub-categories, New and Discount tabs",
+        "Product options: size, milk, extra shot, notes and quantity",
+        "Cart, checkout with validation, and order status",
+        "Empty, loading, error and no-connection states",
+        "Social media posts, a pass card and a gift voucher in Canva"
+      ]
     },
-    "process": [],
-    "challenges": [],
+    "process": [
+      {
+        "title": "Discover",
+        "desc": "Learned the café’s menu, brand and how customers order today."
+      },
+      {
+        "title": "Map the flow",
+        "desc": "Browse, customise, cart, confirm and pick up, in as few steps as possible."
+      },
+      {
+        "title": "Design",
+        "desc": "Mobile-first screens in the SIP identity: deep green, the pattern band and script headlines."
+      },
+      {
+        "title": "Edge states",
+        "desc": "Closed for now, coming soon, no connection, errors, validation and an empty cart."
+      },
+      {
+        "title": "Build with AI",
+        "desc": "Developed the site and the admin panel directly with AI, using skills, from the designs."
+      },
+      {
+        "title": "Social",
+        "desc": "Posts, a pass card and a gift voucher in Canva so the brand feels the same everywhere."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "Customers order on the move, on their phones.",
+        "solution": "A mobile-first menu: a greeting, category tabs and sub-category chips, with each product opening as a bottom sheet so the menu stays in view."
+      },
+      {
+        "challenge": "Drink options get lost in messages.",
+        "solution": "One sheet for size, milk, extra shots and notes, with the price updating on the Add to cart button."
+      },
+      {
+        "challenge": "The café needs to know who is coming, and when.",
+        "solution": "A short checkout: name, phone, cash or card on arrival, and an arrival time from 5 to 30 minutes, with clear validation messages."
+      },
+      {
+        "challenge": "Customers wonder whether their order is ready.",
+        "solution": "A confirmation that the order is being prepared, then its status on the cart: Pending, Preparing, Ready for Pickup."
+      },
+      {
+        "challenge": "The site still has to make sense when the café is closed or offline.",
+        "solution": "Dedicated states for Closed for now (with the reopening time), Coming soon, no connection, errors and an empty cart."
+      }
+    ],
     "gallery": {
       "before": [],
       "after": []
     },
     "results": [],
-    "learnings": "",
-    "icon": "",
-    "screens": [],
+    "learnings": "SIP was a chance to discover more design skills on a real client project: designing an ordering flow end to end in one week, keeping a small brand consistent from the website to social media, and working with AI to move from design to a working product faster. It also taught me to design the quiet states, like closed, empty and offline, as carefully as the main flow.",
+    "icon": "assets/uploads/sip-cafe/icon.webp",
+    "screens": [
+      "assets/uploads/sip-cafe/04-home.webp",
+      "assets/uploads/sip-cafe/01-welcome.webp",
+      "assets/uploads/sip-cafe/02-cookies.webp",
+      "assets/uploads/sip-cafe/03-closed.webp",
+      "assets/uploads/sip-cafe/05-pastries.webp",
+      "assets/uploads/sip-cafe/06-new.webp",
+      "assets/uploads/sip-cafe/07-product.webp",
+      "assets/uploads/sip-cafe/08-cart.webp",
+      "assets/uploads/sip-cafe/09-checkout.webp",
+      "assets/uploads/sip-cafe/10-confirmed.webp",
+      "assets/uploads/sip-cafe/11-pending.webp",
+      "assets/uploads/sip-cafe/12-ready.webp",
+      "assets/uploads/sip-cafe/13-empty.webp"
+    ],
     "webScreens": [],
     "featured": true,
     "devices": {
       "mobile": true,
-      "tablet": true,
-      "desktop": true
+      "tablet": false,
+      "desktop": false
     },
     "tabletScreens": [],
     "cardDevice": "auto",
-    "featuredRank": 5
+    "featuredRank": 5,
+    "demo": [
+      {
+        "img": "assets/uploads/sip-cafe/01-welcome.webp",
+        "s": 1,
+        "label": "Welcome",
+        "note": "The brand first, one button to start",
+        "taps": [
+          [
+            0.5,
+            0.91
+          ]
+        ],
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/sip-cafe/02-cookies.webp",
+        "s": 2,
+        "label": "Cookie choice",
+        "note": "Accept, deny or adjust the settings",
+        "taps": [
+          [
+            0.283,
+            0.862
+          ]
+        ],
+        "hold": 1200
+      },
+      {
+        "img": "assets/uploads/sip-cafe/demo-home.webp",
+        "s": 0,
+        "label": "Browse the menu",
+        "note": "Drinks, pastries, new items and discounts",
+        "taps": [
+          [
+            0.28,
+            0.485
+          ]
+        ],
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/sip-cafe/07-product.webp",
+        "s": 6,
+        "label": "Choose the options",
+        "note": "Size, milk, extra shot and how many",
+        "taps": [
+          [
+            0.196,
+            0.524
+          ],
+          [
+            0.605,
+            0.839
+          ],
+          [
+            0.5,
+            0.91
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/sip-cafe/08-cart.webp",
+        "s": 7,
+        "label": "Review the cart",
+        "note": "Sub-total, discount and total",
+        "taps": [
+          [
+            0.5,
+            0.908
+          ]
+        ],
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/sip-cafe/demo-checkout.webp",
+        "s": 0,
+        "label": "Check out",
+        "note": "Name, phone, payment and arrival time",
+        "taps": [
+          [
+            0.347,
+            0.845
+          ],
+          [
+            0.5,
+            0.915
+          ]
+        ],
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/sip-cafe/10-confirmed.webp",
+        "s": 9,
+        "label": "Order placed",
+        "note": "Your SIP is being prepared",
+        "loading": 900,
+        "taps": [
+          [
+            0.5,
+            0.626
+          ]
+        ],
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/sip-cafe/11-pending.webp",
+        "s": 10,
+        "label": "Follow the order",
+        "note": "Pending, then preparing",
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/sip-cafe/12-ready.webp",
+        "s": 11,
+        "label": "Ready for pickup",
+        "note": "Time to take a SIP",
+        "hold": 1800
+      }
+    ],
+    "social": {
+      "label": "Social media designs",
+      "color": "#174734",
+      "images": [
+        "assets/uploads/sip-cafe/social/post-01.webp",
+        "assets/uploads/sip-cafe/social/post-02.webp",
+        "assets/uploads/sip-cafe/social/post-03.webp",
+        "assets/uploads/sip-cafe/social/post-04.webp",
+        "assets/uploads/sip-cafe/social/post-05.webp",
+        "assets/uploads/sip-cafe/social/post-06.webp",
+        "assets/uploads/sip-cafe/social/post-07.webp",
+        "assets/uploads/sip-cafe/social/post-08.webp",
+        "assets/uploads/sip-cafe/social/post-09.webp",
+        "assets/uploads/sip-cafe/social/post-10.webp",
+        "assets/uploads/sip-cafe/social/post-11.webp",
+        "assets/uploads/sip-cafe/social/post-12.webp",
+        "assets/uploads/sip-cafe/social/pass-card.webp",
+        "assets/uploads/sip-cafe/social/gift-voucher.webp",
+        "assets/uploads/sip-cafe/social/christmas-1.webp",
+        "assets/uploads/sip-cafe/social/christmas-2.webp",
+        "assets/uploads/sip-cafe/social/christmas-3.webp"
+      ]
+    },
+    "video": {
+      "src": "assets/uploads/sip-cafe/walkthrough.mp4",
+      "poster": "assets/uploads/sip-cafe/walkthrough-poster.webp",
+      "title": ""
+    }
   },
   {
     "slug": "xchange",
