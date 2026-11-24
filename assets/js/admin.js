@@ -660,6 +660,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
       () => val('status') === 'Live' && !$$('#edForm [data-rep="links"] [data-r="url"]').some((i) => i.value.trim()) ? ['a link — it’s marked Live'] : [],
       () => (first('screens') || first('webScreens') || first('tabletScreens') ? [] : ['screens']).concat(first('icon') ? [] : ['app icon']),
       () => [],
+      () => [],
       () => [['role', 'role'], ['timeline', 'timeline']].filter(([k]) => blank(k)).map(([, l]) => l),
       () => [['overview', 'overview'], ['problem', 'problem']].filter(([k]) => blank(k)).map(([, l]) => l),
       () => $$('#edForm [data-rep="process"] [data-row]').length ? [] : ['at least one step'],
@@ -745,6 +746,18 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
         <div class="demo-acts"><button type="button" class="btn btn-ghost btn-sm" data-demo-add>+ Add step</button><button type="button" class="btn btn-ghost btn-sm" data-demo-fill>One step per screen</button></div>
       </fieldset>
 
+      <fieldset data-media-fs><legend>Live preview &amp; video</legend>
+        <div class="pub-row">${C('Show the live preview', 'preview', p.preview !== false)}</div>
+        <p class="hint">For websites: the full-length desktop and phone screens scroll by themselves inside a browser and a phone frame, and visitors can scroll them too. Upload each page as one long screen.</p>
+        <div class="f" style="margin-top:18px">Video (optional)</div>
+        <p class="hint">Shown as a click-to-play section, so it never slows the page down. Upload an MP4 (up to 25 MB), or paste a YouTube or Vimeo link.</p>
+        <div class="vid-row">${F('Video', 'video.src', (p.video && p.video.src) || '', { ph: 'Paste a YouTube or Vimeo link, or upload a file' })}<label class="ib vid-up" for="vidInput">Upload video</label><button type="button" class="ib danger" data-vid-clear${(p.video && p.video.src) ? '' : ' hidden'}>Remove</button></div>
+        <input type="file" accept="video/mp4,video/webm" id="vidInput" hidden>
+        ${F('Video heading', 'video.title', (p.video && p.video.title) || '', { ph: 'Watch it in motion' })}
+        <div class="f">Cover image (optional)</div>${imgList('video.poster', (p.video && p.video.poster) ? [p.video.poster] : [], 'wide', false, false)}
+        <p class="hint">Shown before the video plays. If empty, the first screen is used.</p>
+      </fieldset>
+
       <fieldset><legend>Case study header</legend>
         <div class="g3">${F('My role', 'role', p.role)}${F('Company / client', 'company', p.company)}${F('Team', 'team', p.team, { ph: 'e.g. 2 devs, 1 QA' })}</div>
         <div class="tl-row"><div class="f">Timeline</div><div class="g2">${monthPick('Start', 'timelineStart', p.timelineStart)}${monthPick('End', 'timelineEnd', p.timelineEnd, 'Still going')}</div>
@@ -769,7 +782,36 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
       <fieldset><legend>Results</legend>${rep('results', p.results, 'Add result')}
         ${F('What I learned', 'learnings', p.learnings, { area: true, rows: 3 })}
       </fieldset>`;
+    bindVideo(p);
     setupSide(true);
+  }
+
+  /* project video: upload a file (saved with the next Save) or paste a YouTube / Vimeo link */
+  function bindVideo(p) {
+    const inp = $('#vidInput'), src = $('#edForm [data-k="video.src"]'), clr = $('#edForm [data-vid-clear]');
+    if (!inp || !src) return;
+    const sync = () => { clr.hidden = !src.value.trim(); };
+    src.addEventListener('input', sync);
+    inp.addEventListener('change', (e) => {
+      const file = e.target.files[0]; e.target.value = '';
+      if (!file) return;
+      if (file.size > 25 * 1024 * 1024) { toast('That video is too large (max 25 MB). Try a shorter clip, or upload it to YouTube and paste the link.'); return; }
+      const ext = /webm$/i.test(file.type) ? 'webm' : 'mp4';
+      const slug = slugify(p.slug || ($('#edForm [data-k="title"]') || {}).value || 'project') || 'project';
+      const fr = new FileReader();
+      fr.onload = () => {
+        const old = src.value.trim(); if (old && pending.has(old)) pending.delete(old);
+        const path = `assets/uploads/${slug}/video-${Date.now().toString(36)}.${ext}`;
+        pending.set(path, String(fr.result).split(',')[1]); previews.set(path, URL.createObjectURL(file));
+        src.value = path; sync(); setDirty(true); toast('Video added. Press Save to put it live.');
+      };
+      fr.readAsDataURL(file);
+    });
+    clr.addEventListener('click', async () => {
+      if (!(await ask({ title: 'Remove the video?', text: 'The video section will disappear from this case study.', ok: 'Remove', tone: 'danger' }))) return;
+      const old = src.value.trim(); if (old && pending.has(old)) pending.delete(old);
+      src.value = ''; sync(); setDirty(true);
+    });
   }
 
   /* Profile & links and Website text open right under the tabs, like the lists */
@@ -1113,6 +1155,8 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     });
     ['cardStyle', 'scene'].forEach((k) => { if (!p[k] || p[k] === 'auto') delete p[k]; });
     if (!p.coverShot) delete p.coverShot;
+    if (p.preview !== false) delete p.preview;
+    if (p.video) { p.video.src = String(p.video.src || '').trim(); p.video.title = String(p.video.title || '').trim(); if (!p.video.src) delete p.video; }
     if (p.cover && p.cover.tint) p.cover.tint = p.cover.tint.toUpperCase();
     ['timelineStart', 'timelineEnd'].forEach((k) => { if (!p[k]) delete p[k]; });
     if (p.timelineStart) p.timeline = tlSpan(p.timelineStart, p.timelineEnd);
@@ -1449,7 +1493,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
       if (!same(content, originalContent)) files.push({ path: CONTENT_PATH, b64: b64FromUtf8(JSON.stringify(content, null, 2) + '\n') });
       if (!same(site, originalSite)) files.push({ path: SITE_PATH, b64: b64FromUtf8(JSON.stringify(site, null, 2) + '\n') });
       if (!same(experience, originalExp)) files.push({ path: EXP_PATH, b64: b64FromUtf8(JSON.stringify(experience, null, 2) + '\n') });
-      const used = new Set(JSON.stringify([projects, site, experience]).match(/"[^"]+\.(?:webp|jpg|jpeg|png|svg|gif|pdf)"/g) || []);
+      const used = new Set(JSON.stringify([projects, site, experience]).match(/"[^"]+\.(?:webp|jpg|jpeg|png|svg|gif|pdf|mp4|webm)"/g) || []);
       const sent = [];
       pending.forEach((b64, path) => { if (used.has('"' + path + '"')) { files.push({ path, b64 }); sent.push(path); } });
       if (files.length) {

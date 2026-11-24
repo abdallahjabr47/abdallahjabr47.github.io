@@ -663,6 +663,100 @@
     "cardDevice": "auto"
   },
   {
+    "slug": "boxchampy",
+    "title": "BoxChampy",
+    "tagline": "A one-page site for a boxing gym.",
+    "category": "Sport · Landing page",
+    "type": "web",
+    "live": false,
+    "status": "Personal",
+    "published": true,
+    "summary": "A bold one-page website for a boxing gym, designed as a personal practice project in visual design, typography and responsive layout.",
+    "cover": {
+      "image": "",
+      "ghost": "BOX",
+      "tint": "#EF4444"
+    },
+    "company": "Personal practice project",
+    "role": "UI/UX Designer",
+    "team": "Solo",
+    "timeline": "",
+    "overview": "BoxChampy is a landing page for an imagined boxing gym. I designed it to practise visual design for the web: building a strong first impression with type and photography, guiding the eye down a single page, and carrying one look from desktop to mobile.",
+    "problem": "How might a boxing gym show its energy in the first few seconds, while still making it easy to see what it offers and how to get in touch?",
+    "responsibilities": {
+      "product": [],
+      "design": [
+        "Visual direction and moodboard",
+        "Typography and colour",
+        "Desktop layout",
+        "Mobile version",
+        "Final UI"
+      ]
+    },
+    "process": [
+      {
+        "title": "Explore",
+        "desc": "Collected references from sports and fitness brands to set the mood."
+      },
+      {
+        "title": "Type & colour",
+        "desc": "Chose a tall condensed headline type, black and light grey, and one red accent."
+      },
+      {
+        "title": "Layout",
+        "desc": "Built the page as three clear parts: hero, story, and a closing call to action."
+      },
+      {
+        "title": "Responsive",
+        "desc": "Adapted the same system to a phone screen without losing the bold feel."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "Making the brand feel strong at first glance.",
+        "solution": "A dark, full-width photo with an oversized condensed headline, and red used only on the word that matters: CHAMPION."
+      },
+      {
+        "challenge": "Moving from the hero into the content without a hard break.",
+        "solution": "A diagonal edge between the dark hero and the grey section, with a white card that sits across both."
+      },
+      {
+        "challenge": "Showing what the gym offers without long text.",
+        "solution": "Three quick pillars, Weights, Exercises and Protein, each with a simple line icon and a red label."
+      },
+      {
+        "challenge": "Keeping the same impact on a small screen.",
+        "solution": "On mobile the sections stack, the menu becomes one red button, and the headline, accent and diagonal edge stay the same."
+      }
+    ],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "How much a few strong choices carry a design: one typeface for headlines, one accent colour and one shape repeated across the page made it feel like a real brand on both desktop and mobile.",
+    "icon": "assets/uploads/boxchampy/icon.webp",
+    "screens": [
+      "assets/uploads/boxchampy/02-landing-mobile.webp"
+    ],
+    "webScreens": [
+      "assets/uploads/boxchampy/01-landing-desktop.webp"
+    ],
+    "featured": false,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": true
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto",
+    "video": {
+      "src": "assets/uploads/boxchampy/walkthrough.mp4",
+      "poster": "assets/uploads/boxchampy/walkthrough-poster.webp",
+      "title": ""
+    }
+  },
+  {
     "slug": "afyti",
     "title": "Afyti",
     "tagline": "[One line about the product.]",

@@ -1938,3 +1938,47 @@ main > :last-child > :last-child,main > :last-child > :last-child > :last-child{
 [data-theme="light"] .pnote .k{color:color-mix(in srgb,var(--ac) 55%,#0B0C10)}
 /* light mode off (admin → Top → Light mode): website and admin stay dark, the sun/moon button is hidden */
 html:not(.light-on) [data-theme-toggle]{display:none!important}
+
+/* screen viewer: long screens scroll inside the frame; desktop and tablet get their own frame shape */
+.lb-scr:has(img){display:block;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+.lb-scr:has(img)::-webkit-scrollbar{display:none}
+.lb-scr img{height:auto;min-height:100%;object-position:top}
+.lightbox[data-dev="desktop"] .lb-scr{height:auto;max-height:min(78vh,760px);width:min(80vw,1100px);aspect-ratio:auto;border-radius:14px}
+.lightbox[data-dev="tablet"] .lb-scr{height:min(76vh,820px);aspect-ratio:3/4;border-radius:22px}
+@media (max-width:600px){.lightbox[data-dev="desktop"] .lb-scr{width:calc(100vw - 32px)}}
+/* tall screenshots show their top inside device frames */
+.laptop-f .lid .scr img,.shot .scr img,.dshot img,.dev-desk img,.dev-tab img,.dev-phone img,.phone-f img,.tilt .tile img{object-position:top}
+
+/* ---------- case study: live preview (website screens scroll inside device frames) ---------- */
+.lp{position:relative;margin-top:30px;display:grid;place-items:center;min-height:clamp(380px,46vw,640px);padding:clamp(18px,3vw,40px);border-radius:28px;border:1px solid var(--line);background:radial-gradient(120% 90% at 50% 0%,rgb(var(--fg) / .05),transparent 60%),rgb(var(--fg) / .02);overflow:hidden}
+.lp>[data-lp-pane]{grid-area:1/1;transition:opacity .55s var(--ease),transform .7s var(--ease),filter .55s var(--ease)}
+.lp[data-dev="desktop"]>[data-lp-pane="mobile"],.lp[data-dev="mobile"]>[data-lp-pane="desktop"]{opacity:0;transform:scale(.9) translateY(18px);filter:blur(6px);pointer-events:none}
+.lp-desk{width:min(100%,960px);border-radius:14px;overflow:hidden;background:#0A0B10;border:1px solid rgb(var(--fg) / .14);box-shadow:0 40px 90px rgba(0,0,0,.45)}
+.lp-bar{display:flex;align-items:center;gap:7px;height:34px;padding:0 14px;background:#15171D;border-bottom:1px solid rgb(255 255 255 / .06)}
+.lp-bar i{width:10px;height:10px;border-radius:50%;background:#3A3D46}
+.lp-bar i:nth-child(1){background:#FF5F57}.lp-bar i:nth-child(2){background:#FEBC2E}.lp-bar i:nth-child(3){background:#28C840}
+.lp-bar span{margin:0 auto;transform:translateX(-24px);font-size:12px;color:#9AA0AC;padding:4px 14px;border-radius:7px;background:rgb(255 255 255 / .06);max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lp-desk .lp-view{height:clamp(300px,36vw,540px)}
+.lp-phone{height:clamp(380px,44vw,600px);aspect-ratio:9/19.3;border-radius:42px;padding:9px;background:#0A0B10;border:1px solid rgb(var(--fg) / .16);box-shadow:0 40px 90px rgba(0,0,0,.5)}
+.lp-phone .lp-view{height:100%;border-radius:33px}
+.lp-view{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;outline:none;background:#0E1119}
+.lp-view::-webkit-scrollbar{display:none}
+.lp-view img{display:block;width:100%;height:auto}
+.lp-view:focus-visible{box-shadow:inset 0 0 0 2px var(--sky)}
+.lp-play{position:absolute;right:18px;bottom:18px;display:flex;align-items:center;gap:8px;height:40px;padding:0 16px 0 12px;border-radius:999px;border:1px solid var(--line2);background:rgb(var(--bgc) / .7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:13.5px;font-weight:600;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .35s,transform .35s,background .3s}
+.lp-play svg{width:16px;height:16px;fill:currentColor}
+.lp-play:hover{background:var(--blue);border-color:var(--blue)}
+.lp.lp-user .lp-play{opacity:1;transform:none;pointer-events:auto}
+.lp-hint{margin-top:14px;font-size:13.5px;text-align:center}
+@media (max-width:700px){.lp{padding:14px;min-height:0}.lp-desk .lp-view{height:min(62vw,340px)}.lp-phone{height:min(120vw,520px)}}
+@media (prefers-reduced-motion:reduce){.lp>[data-lp-pane]{transition:opacity .2s}}
+
+/* ---------- case study: video (click to play) ---------- */
+.vid{position:relative;margin-top:30px;aspect-ratio:16/9;border-radius:24px;overflow:hidden;display:grid;place-items:center;background:#07080B}
+.vid-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;filter:brightness(.55) saturate(.9);transform:scale(1.02);transition:transform .8s var(--ease),filter .5s}
+.vid:hover .vid-poster{transform:scale(1.05);filter:brightness(.62)}
+.vid-play{position:relative;z-index:1;width:clamp(68px,8vw,96px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;box-shadow:0 18px 50px rgb(23 105 224 / .45);transition:transform .35s var(--ease)}
+.vid-play svg{width:38%;height:38%;fill:currentColor;transform:translateX(6%)}
+.vid-play:hover{transform:scale(1.08)}
+.vid.playing{background:#000}
+.vid iframe,.vid video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
