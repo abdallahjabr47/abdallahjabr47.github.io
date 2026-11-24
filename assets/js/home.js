@@ -171,7 +171,7 @@
   const cols = $$('.tcol');
   async function buildGallery(list) {
     const tints = list.length ? list.map((p) => (p.cover && p.cover.tint) || '#2B3A8F') : ['#2A1530', '#14254A', '#1D3A33', '#3A2814', '#10343F', '#2E1F18'];
-    const accents = ['linear-gradient(140deg,#2B3A8F,#E2577A)', 'linear-gradient(140deg,#1D6F6A,#0F2F3A)', 'linear-gradient(140deg,#1769E0,#1A2050)', 'linear-gradient(140deg,#8C5A1E,#3A230F)', 'linear-gradient(140deg,#5C9BF5,#0E1119)', 'linear-gradient(140deg,#6A2E8C,#12131E)'];
+    const accents = ['linear-gradient(140deg,#2B3A8F,#E2577A)', 'linear-gradient(140deg,#1D6F6A,#0F2F3A)', 'linear-gradient(140deg,#1452B8,#1A2050)', 'linear-gradient(140deg,#8C5A1E,#3A230F)', 'linear-gradient(140deg,#4F86E6,#0E1119)', 'linear-gradient(140deg,#6A2E8C,#12131E)'];
     let imgs = [];
     try { const s = await window.Site.getSite(); if (s && Array.isArray(s.showcase)) imgs = s.showcase.filter(Boolean); } catch (e) {}
     if (!imgs.length) list.forEach((p) => { (p.webScreens || []).forEach((s) => imgs.push(s)); (p.screens || []).forEach((s) => imgs.push(s)); ((p.gallery && p.gallery.after) || []).forEach((g) => g.image && imgs.push(g.image)); });
@@ -275,7 +275,7 @@
   }
 
   /* =============== design system =============== */
-  const tokens = [['Primary', '#1769E0', '--blue'], ['Sky', '#5C9BF5', '--sky'], ['Mint', '#5FB894', '--mint'], ['Sand', '#D8A960', '--sand'], ['Lilac', '#A497DB', '--lilac'], ['Night', '#07080B', '--bg'], ['Surface', '#12141B', '--panel']];
+  const tokens = [['Primary', '#1452B8', '--blue'], ['Sky', '#4F86E6', '--sky'], ['Mint', '#5FB894', '--mint'], ['Sand', '#D8A960', '--sand'], ['Lilac', '#A497DB', '--lilac'], ['Night', '#07080B', '--bg'], ['Surface', '#12141B', '--panel']];
   const sw = $('#swatches');
   if (sw) {
     sw.innerHTML = tokens.map(([n, h, v]) => `<button class="sw" type="button" data-hex="${h}" aria-label="Copy ${n} ${h}"><i style="background:${h}"></i><span class="sw-n"><b>${n}</b><code>${v}</code></span><small>${h}</small></button>`).join('');

@@ -265,7 +265,7 @@
         if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10;
         const al = p.a * (.6 + .4 * Math.sin(p.tw));
         ctx.beginPath(); ctx.arc(p.x, (p.y - sy % H + H) % H, p.r, 0, 6.283);
-        ctx.fillStyle = p.blue ? `rgba(92,155,245,${al})` : (light ? `rgba(20,24,34,${al * .5})` : `rgba(255,255,255,${al * .7})`);
+        ctx.fillStyle = p.blue ? `rgba(79,134,230,${al})` : (light ? `rgba(20,24,34,${al * .5})` : `rgba(255,255,255,${al * .7})`);
         ctx.fill();
       });
     };
