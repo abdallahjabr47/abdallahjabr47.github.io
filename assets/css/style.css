@@ -215,7 +215,13 @@ body::after{content:"";position:fixed;inset:-100%;z-index:90;pointer-events:none
   background:radial-gradient(120% 80% at 50% 110%,color-mix(in srgb,var(--tint,#2B3A8F) 70%,transparent),transparent 60%),var(--panel);border:1px solid var(--line)}
 .stage-panel::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 1px 0 rgb(var(--fg) / .06);pointer-events:none}
 .sp-badges{position:absolute;top:20px;left:20px;right:20px;z-index:4;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.sp-badges .l{display:flex;gap:8px}
+.sp-badges .l{display:flex;gap:8px;flex-shrink:0}
+.sp-badges .lb{white-space:nowrap}
+.dots{min-width:0;overflow:hidden}
+.dots.bar{align-items:center;gap:8px}
+.dots.bar .trk{width:64px;height:4px;border-radius:4px;background:rgb(var(--fg) / .25);overflow:hidden}
+.dots.bar b{display:block;height:100%;background:var(--ink);border-radius:4px;transition:width .3s var(--ease)}
+.dots.bar em{font-style:normal;font-size:12px;font-weight:600;color:var(--ink);opacity:.85;font-variant-numeric:tabular-nums}
 .sp-badges .tag{padding:7px 14px;border-radius:999px;background:rgb(var(--fg) / .1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:13.5px;font-weight:600}
 .dots{display:flex;gap:6px}
 .dots i{width:7px;height:7px;border-radius:50%;background:rgb(var(--fg) / .28);transition:background .3s,width .3s var(--ease)}

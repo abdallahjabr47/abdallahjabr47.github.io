@@ -55,7 +55,7 @@
     return `
     <article class="pcard art st-${st} type-${type} show-${pref}${sidePhone ? ' with-phone' : ''}" data-type="${type}" style="--tint:${esc(tint)}" data-reveal>
       <div class="stage-panel" data-cursor="Explore case ↗" data-href="${href}" data-n="${count}">
-        <div class="sp-badges"><span class="l"><span class="lb lb-${type}">${({ mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' })[type] || 'Mobile app'}</span>${catShort ? `<span class="lb lb-cat">${esc(catShort)}</span>` : ''}</span><span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span></div>
+        <div class="sp-badges"><span class="l"><span class="lb lb-${type}">${({ mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' })[type] || 'Mobile app'}</span>${catShort ? `<span class="lb lb-cat">${esc(catShort)}</span>` : ''}</span>${count > 6 ? `<span class="dots bar" aria-hidden="true"><span class="trk"><b style="width:${100 / count}%"></b></span><em>1/${count}</em></span>` : `<span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span>`}</div>
         <div class="devices2">${laptop}${phone}</div>
         <button class="sp-arrow a-prev" type="button" aria-label="Previous screen of ${esc(p.title)}" disabled>←</button>
         <button class="sp-arrow a-next" type="button" aria-label="Next screen of ${esc(p.title)}"${count < 2 ? ' disabled' : ''}>→</button>
@@ -94,6 +94,7 @@
       i = clamp(k, 0, n - 1);
       reels.forEach((r) => { const len = r.children.length || 1; r.style.transform = `translateX(-${(i % len) * 100}%)`; });
       dots.forEach((d, j) => d.classList.toggle('on', j === i));
+      const bar = $('.dots.bar', card); if (bar) { bar.querySelector('b').style.width = `${((i + 1) / n) * 100}%`; bar.querySelector('em').textContent = `${i + 1}/${n}`; }
       prev.disabled = i === 0; next.disabled = i >= n - 1;
     };
     prev.addEventListener('click', (e) => { e.stopPropagation(); go(i - 1); });
