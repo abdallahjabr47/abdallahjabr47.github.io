@@ -1209,5 +1209,246 @@
       "poster": "assets/uploads/boxchampy/walkthrough-poster.webp",
       "title": ""
     }
+  },
+  {
+    "slug": "shoof-hazzak",
+    "title": "Shoof Hazzak",
+    "tagline": "An Arabic party quiz game for two teams, played in the browser.",
+    "category": "Games · Party quiz game",
+    "type": "web",
+    "live": true,
+    "status": "Live",
+    "published": true,
+    "summary": "Design and product consulting for شوف حظّك (Shoof Hazzak), a quiz game for evenings with family and friends: two teams, categories they choose, cards with hidden difficulty, bets and steals. The work was done with AI and Claude.",
+    "cover": {
+      "image": "",
+      "ghost": "Hazzak",
+      "tint": "#7C3AED"
+    },
+    "company": "Consulting project",
+    "role": "Design & product consultant",
+    "team": "",
+    "timeline": "1 month",
+    "overview": "Shoof Hazzak is a browser game made for get-togethers. Players split into two teams, pick their categories, choose a card and bet before they see the question, then answer or try to steal the other team’s question. It runs on any screen, from a TV to a laptop, with no download. I consulted on the design and the product, from the game flow and the landing page to the visual direction, working with AI and Claude to move from ideas to working screens quickly.",
+    "problem": "A party game has to be understood in a minute, feel fun and fair for both teams, and explain itself while people play.",
+    "responsibilities": {
+      "product": [
+        "Game flow: teams, categories, hidden-difficulty cards, bets and steals",
+        "Rules that explain themselves during play",
+        "Landing page structure and messaging",
+        "A feedback loop for suggestions, problems and questions",
+        "Working with AI and Claude to move from ideas to working screens"
+      ],
+      "design": [
+        "Visual direction: dark theme, purple accent and a playful character logo",
+        "Arabic-first, right-to-left layouts",
+        "Game board, team scores and difficulty stars",
+        "Responsive landing page for phone and desktop"
+      ]
+    },
+    "process": [
+      {
+        "title": "Understand the game",
+        "desc": "How a round flows, from picking categories to the final score."
+      },
+      {
+        "title": "Shape the flow",
+        "desc": "Fewer steps to start, and rules that appear while playing."
+      },
+      {
+        "title": "Visual direction",
+        "desc": "A dark, playful look with one purple accent and a character logo."
+      },
+      {
+        "title": "Build with AI",
+        "desc": "Screens and the landing page made with AI and Claude, then refined."
+      },
+      {
+        "title": "Listen",
+        "desc": "A feedback form and support emails so players can suggest and report."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "New players need to start without a long explanation.",
+        "solution": "Four short steps on the landing page, and rules the game explains as you play."
+      },
+      {
+        "challenge": "Luck and knowledge both have to matter.",
+        "solution": "Cards with hidden difficulty and bets before the question, so a team that knows less can still win."
+      },
+      {
+        "challenge": "Everyone in the room should see the game.",
+        "solution": "One shared screen that works on a TV, laptop or phone, in the browser with no download."
+      },
+      {
+        "challenge": "Players want a say in the questions.",
+        "solution": "A feedback form for suggestions, problems and questions, plus contact emails for support and partnerships."
+      }
+    ],
+    "results": [],
+    "learnings": "Shoof Hazzak let me discover more design skills in a new space: games. I learned how much rules, pacing and small moments like betting and stealing shape the experience, how to design Arabic-first right-to-left screens, and how working with AI speeds up the path from an idea to something people can play.",
+    "icon": "assets/uploads/shoof-hazzak/icon.webp",
+    "screens": [
+      "assets/uploads/shoof-hazzak/01-home-phone.jpg",
+      "assets/uploads/shoof-hazzak/02-hero.webp",
+      "assets/uploads/shoof-hazzak/03-board.webp",
+      "assets/uploads/shoof-hazzak/04-how.webp",
+      "assets/uploads/shoof-hazzak/05-pricing.webp",
+      "assets/uploads/shoof-hazzak/06-why.webp",
+      "assets/uploads/shoof-hazzak/07-categories.webp",
+      "assets/uploads/shoof-hazzak/08-about.webp",
+      "assets/uploads/shoof-hazzak/09-feedback.webp",
+      "assets/uploads/shoof-hazzak/10-faq.webp"
+    ],
+    "webScreens": [
+      "assets/uploads/shoof-hazzak/web-01-home.webp"
+    ],
+    "tabletScreens": [],
+    "featured": false,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": true
+    },
+    "cardDevice": "auto",
+    "links": [
+      {
+        "type": "web",
+        "url": "https://shoofhazzak.com/"
+      }
+    ],
+    "video": {
+      "src": "assets/uploads/shoof-hazzak/walkthrough.mp4",
+      "poster": "assets/uploads/shoof-hazzak/walkthrough-poster.webp",
+      "title": ""
+    },
+    "gallery": {
+      "before": [],
+      "after": []
+    }
+  },
+  {
+    "slug": "portfolio-site",
+    "title": "Portfolio & CMS",
+    "tagline": "My portfolio and its admin, designed and built with AI.",
+    "category": "Personal · Portfolio website + admin",
+    "type": "web",
+    "live": true,
+    "status": "Live",
+    "published": true,
+    "summary": "The website you’re on, and the private admin behind it. I designed both and built them with Claude, guided by design skills, my own instructions and custom skills, so every project gets the same full case study and I can update everything without touching code.",
+    "cover": {
+      "image": "",
+      "ghost": "Portfolio",
+      "tint": "#1769E0"
+    },
+    "company": "Personal project",
+    "role": "Designer & Product",
+    "team": "Solo, working with Claude",
+    "timeline": "1 week",
+    "overview": "I wanted a portfolio that shows how products work, not only how they look. I designed the website and an admin panel for it, then built them with Claude: I set the direction, the design system and the rules, and reviewed every change with previews before it went live. The site has a home page, a work gallery and case studies with live previews, interactive demos, walkthrough videos and design viewers. The admin edits every section and project and publishes straight to GitHub. I also wrote custom skills, such as one that interviews me before adding a project and applies the same standard every time.",
+    "problem": "A portfolio goes stale when every update needs code, and case studies made of static screenshots don’t show how a product actually works.",
+    "responsibilities": {
+      "product": [
+        "Defined the structure: home, work gallery, case studies and the admin",
+        "Wrote the instructions and custom skills Claude follows",
+        "Set one standard for every case study, from icon to video",
+        "Reviewed every change with previews before publishing"
+      ],
+      "design": [
+        "Design system: dark theme, one blue accent, glass cards and an Arabic calligraphy logo",
+        "Home, work and case-study pages for phone and desktop",
+        "Live preview, In action demos, video and design viewers",
+        "Admin: section editor, project editor, uploads and missing-info markers",
+        "Phone screens kept at 375 × 812, the same size as my Figma designs"
+      ]
+    },
+    "process": [
+      {
+        "title": "Define",
+        "desc": "What a visitor should understand in a minute, and what I need to update often."
+      },
+      {
+        "title": "Design system",
+        "desc": "Type, colour, spacing, cards and motion, set once and reused everywhere."
+      },
+      {
+        "title": "Build with Claude",
+        "desc": "Pages built with AI from my direction, design skills and instructions."
+      },
+      {
+        "title": "Admin",
+        "desc": "A private editor for every section and project that publishes to GitHub."
+      },
+      {
+        "title": "Skills",
+        "desc": "Custom skills so new projects follow the same full standard."
+      },
+      {
+        "title": "Review and ship",
+        "desc": "Previews on desktop and phone before anything goes live."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "Updating the site shouldn’t need code.",
+        "solution": "An admin panel that edits every section and project, uploads images and videos, and publishes straight to GitHub."
+      },
+      {
+        "challenge": "Every project should look complete and consistent.",
+        "solution": "A custom skill that interviews me first, then fills every section, icon, demo and video to the same standard."
+      },
+      {
+        "challenge": "Static screenshots don’t show how a product works.",
+        "solution": "In action demos with taps, scrolling live previews, walkthrough videos and full-screen viewers."
+      },
+      {
+        "challenge": "The admin must stay private and safe.",
+        "solution": "Access with a key limited to this one repository, never stored in the code, and every remove asks first."
+      }
+    ],
+    "results": [],
+    "learnings": "Building this portfolio was a way to discover more design skills and learn something new: directing AI like a teammate, writing clear instructions and skills, and turning them into a design system that stays consistent. It taught me that good results come from a clear standard and careful review, not from the tool alone.",
+    "icon": "assets/uploads/portfolio-site/icon.webp",
+    "screens": [
+      "assets/uploads/portfolio-site/01-home-phone.jpg",
+      "assets/uploads/portfolio-site/02-admin-login.webp",
+      "assets/uploads/portfolio-site/03-admin-home.webp",
+      "assets/uploads/portfolio-site/04-admin-list.webp",
+      "assets/uploads/portfolio-site/05-admin-edit.webp",
+      "assets/uploads/portfolio-site/06-case.webp"
+    ],
+    "webScreens": [
+      "assets/uploads/portfolio-site/web-01-home.jpg",
+      "assets/uploads/portfolio-site/web-02-admin-login.webp",
+      "assets/uploads/portfolio-site/web-03-admin-home.webp",
+      "assets/uploads/portfolio-site/web-04-admin-list.webp",
+      "assets/uploads/portfolio-site/web-05-admin-edit.webp",
+      "assets/uploads/portfolio-site/web-06-case.webp"
+    ],
+    "tabletScreens": [],
+    "featured": false,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": true
+    },
+    "cardDevice": "auto",
+    "links": [
+      {
+        "type": "web",
+        "url": "https://abdallahjabr47.github.io"
+      }
+    ],
+    "video": {
+      "src": "assets/uploads/portfolio-site/walkthrough.mp4",
+      "poster": "assets/uploads/portfolio-site/walkthrough-poster.webp",
+      "title": ""
+    },
+    "gallery": {
+      "before": [],
+      "after": []
+    }
   }
 ]
