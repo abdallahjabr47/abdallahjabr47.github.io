@@ -270,7 +270,7 @@
     "type": "mobile",
     "live": false,
     "status": "Shipped",
-    "published": true,
+    "published": false,
     "summary": "Onboarding, login and sign-up flows for a US app studio — designed to get new users from download to first value as fast as possible.",
     "cover": {
       "image": "",
@@ -315,15 +315,14 @@
     "icon": "",
     "screens": [],
     "webScreens": [],
-    "featured": true,
+    "featured": false,
     "devices": {
       "mobile": true,
       "tablet": false,
       "desktop": false
     },
     "tabletScreens": [],
-    "cardDevice": "auto",
-    "featuredRank": 4
+    "cardDevice": "auto"
   },
   {
     "slug": "sip-cafe",
@@ -441,7 +440,7 @@
     },
     "tabletScreens": [],
     "cardDevice": "auto",
-    "featuredRank": 5,
+    "featuredRank": 4,
     "demo": [
       {
         "img": "assets/uploads/sip-cafe/01-welcome.webp",
@@ -681,7 +680,7 @@
       "assets/uploads/xchange/07-profile.webp"
     ],
     "webScreens": [],
-    "featured": false,
+    "featured": true,
     "devices": {
       "mobile": true,
       "tablet": false,
@@ -788,7 +787,141 @@
       "src": "assets/uploads/xchange/walkthrough.mp4",
       "poster": "assets/uploads/xchange/walkthrough-poster.webp",
       "title": ""
-    }
+    },
+    "featuredRank": 5
+  },
+  {
+    "slug": "afyti",
+    "title": "Afyti",
+    "tagline": "[One line about the product.]",
+    "category": "Healthcare · Doctors app",
+    "type": "mobile",
+    "live": false,
+    "status": "",
+    "published": true,
+    "summary": "A doctors app with its own design system: [one line on who it serves and what you designed].",
+    "cover": {
+      "image": "",
+      "ghost": "AFYTI",
+      "tint": "#17A9BB"
+    },
+    "company": "[Client]",
+    "role": "UI/UX Designer",
+    "team": "",
+    "timeline": "[Start — End]",
+    "overview": "[Overview]",
+    "problem": "",
+    "responsibilities": {
+      "product": [],
+      "design": []
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": [],
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
+  },
+  {
+    "slug": "mazadak",
+    "title": "Mazadak",
+    "tagline": "[One line about the auction experience.]",
+    "category": "Marketplace · Auctions",
+    "type": "mobile",
+    "live": false,
+    "status": "",
+    "published": true,
+    "summary": "An auction app: [one line on the bidding experience and the trust problems you solved].",
+    "cover": {
+      "image": "",
+      "ghost": "MAZADAK",
+      "tint": "#E8962A"
+    },
+    "company": "[Client]",
+    "role": "[Your role]",
+    "team": "",
+    "timeline": "[Start — End]",
+    "overview": "[Overview]",
+    "problem": "",
+    "responsibilities": {
+      "product": [],
+      "design": []
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": [],
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto"
+  },
+  {
+    "slug": "minicity",
+    "title": "MiniCity",
+    "tagline": "[One line about the app.]",
+    "category": "Local business · Directory",
+    "type": "mobile",
+    "live": false,
+    "status": "",
+    "published": true,
+    "summary": "A directory that puts every merchant’s information in one place, with map, explore, search and QR codes.",
+    "cover": {
+      "image": "",
+      "ghost": "MiniCity",
+      "tint": "#22A89B"
+    },
+    "company": "[Client]",
+    "role": "[Your role]",
+    "team": "",
+    "timeline": "[Duration]",
+    "overview": "[Overview]",
+    "problem": "",
+    "responsibilities": {
+      "product": [],
+      "design": []
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": [],
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto",
+    "featured": false
   },
   {
     "slug": "worldclockr",
@@ -1076,138 +1209,5 @@
       "poster": "assets/uploads/boxchampy/walkthrough-poster.webp",
       "title": ""
     }
-  },
-  {
-    "slug": "afyti",
-    "title": "Afyti",
-    "tagline": "[One line about the product.]",
-    "category": "Healthcare · Doctors app",
-    "type": "mobile",
-    "live": false,
-    "status": "",
-    "published": false,
-    "summary": "A doctors app with its own design system: [one line on who it serves and what you designed].",
-    "cover": {
-      "image": "",
-      "ghost": "AFYTI",
-      "tint": "#17A9BB"
-    },
-    "company": "[Client]",
-    "role": "UI/UX Designer",
-    "team": "",
-    "timeline": "[Start — End]",
-    "overview": "[Overview]",
-    "problem": "",
-    "responsibilities": {
-      "product": [],
-      "design": []
-    },
-    "process": [],
-    "challenges": [],
-    "gallery": {
-      "before": [],
-      "after": []
-    },
-    "results": [],
-    "learnings": "",
-    "icon": "",
-    "screens": [],
-    "webScreens": [],
-    "devices": {
-      "mobile": true,
-      "tablet": false,
-      "desktop": false
-    },
-    "tabletScreens": [],
-    "cardDevice": "auto"
-  },
-  {
-    "slug": "mazadak",
-    "title": "Mazadak",
-    "tagline": "[One line about the auction experience.]",
-    "category": "Marketplace · Auctions",
-    "type": "mobile",
-    "live": false,
-    "status": "",
-    "published": false,
-    "summary": "An auction app: [one line on the bidding experience and the trust problems you solved].",
-    "cover": {
-      "image": "",
-      "ghost": "MAZADAK",
-      "tint": "#E8962A"
-    },
-    "company": "[Client]",
-    "role": "[Your role]",
-    "team": "",
-    "timeline": "[Start — End]",
-    "overview": "[Overview]",
-    "problem": "",
-    "responsibilities": {
-      "product": [],
-      "design": []
-    },
-    "process": [],
-    "challenges": [],
-    "gallery": {
-      "before": [],
-      "after": []
-    },
-    "results": [],
-    "learnings": "",
-    "icon": "",
-    "screens": [],
-    "webScreens": [],
-    "devices": {
-      "mobile": true,
-      "tablet": false,
-      "desktop": false
-    },
-    "tabletScreens": [],
-    "cardDevice": "auto"
-  },
-  {
-    "slug": "minicity",
-    "title": "MiniCity",
-    "tagline": "[One line about the app.]",
-    "category": "Local business · Directory",
-    "type": "mobile",
-    "live": false,
-    "status": "",
-    "published": false,
-    "summary": "A directory that puts every merchant’s information in one place, with map, explore, search and QR codes.",
-    "cover": {
-      "image": "",
-      "ghost": "MiniCity",
-      "tint": "#22A89B"
-    },
-    "company": "[Client]",
-    "role": "[Your role]",
-    "team": "",
-    "timeline": "[Duration]",
-    "overview": "[Overview]",
-    "problem": "",
-    "responsibilities": {
-      "product": [],
-      "design": []
-    },
-    "process": [],
-    "challenges": [],
-    "gallery": {
-      "before": [],
-      "after": []
-    },
-    "results": [],
-    "learnings": "",
-    "icon": "",
-    "screens": [],
-    "webScreens": [],
-    "devices": {
-      "mobile": true,
-      "tablet": false,
-      "desktop": false
-    },
-    "tabletScreens": [],
-    "cardDevice": "auto",
-    "featured": false
   }
 ]
