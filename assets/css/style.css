@@ -2052,3 +2052,6 @@ html.vbox-on{overflow:hidden}
 .hiw-top + .sec{padding-top:clamp(40px,6vw,80px)}
 .nav-links a[aria-current="page"]{color:var(--ink)}
 .hiw-lead{max-width:640px;margin-top:16px;color:var(--muted);font-size:clamp(16px,1.4vw,19px);line-height:1.6}
+/* All work page: 4 per row on desktop */
+@media (min-width:1100px){.work-all .pgrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(24px,2.4vw,36px) clamp(12px,1.3vw,20px)}}
+@media (min-width:1100px) and (max-width:1300px){.work-all .pcard .sp-badges .lb-cat{display:none}}
