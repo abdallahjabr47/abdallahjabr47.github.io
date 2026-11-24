@@ -2034,3 +2034,5 @@ html.vbox-on{overflow:hidden}
 .pcard.art.st-b .phone-f{top:34%}
 @media (hover:none){.pcard.art.st-b .ta-ghost{top:clamp(62px,15%,84px)}.pcard.art.st-b .phone-f{top:34%}}
 @media (min-width:1600px){.pgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.xp-tabs button{white-space:nowrap}.xp-tabs .tl-s{display:none}
+@media (max-width:600px){.xp-tabs .tl-l{display:none}.xp-tabs .tl-s{display:inline}}

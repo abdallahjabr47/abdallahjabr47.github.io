@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261124233159">
+<link rel="stylesheet" href="assets/css/style.css?v=20261124233645">
 <script>(function(){var t,on;try{t=localStorage.getItem('theme');on=localStorage.getItem('light-on')==='1'}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}if(!on)t='dark';var d=document.documentElement;d.dataset.theme=t;d.classList.add('js');if(on)d.classList.add('light-on')})()</script>
 </head>
 <body>
@@ -232,9 +232,12 @@
       </div>
       <p class="side" data-reveal>Developer → Designer → Product. Open a role for the details.</p>
     </div>
-    <div class="xp-tabs-row" data-part="learning" data-reveal><div class="tabs glass xp-tabs" role="tablist" aria-label="Experience and learning"><span class="thumb" aria-hidden="true"></span><button type="button" class="on" role="tab" aria-selected="true" data-xp-tab="work">Work experience</button><button type="button" role="tab" aria-selected="false" data-xp-tab="learn">Learning &amp; recognition</button></div></div>
+    <div class="xp-tabs-row" data-part="learning" data-reveal><div class="tabs glass xp-tabs" role="tablist" aria-label="Experience and learning"><span class="thumb" aria-hidden="true"></span><button type="button" class="on" role="tab" aria-selected="true" data-xp-tab="work"><span class="tl-l">Work experience</span><span class="tl-s">Work</span></button><button type="button" role="tab" aria-selected="false" data-xp-tab="intern">Internships</button><button type="button" role="tab" aria-selected="false" data-xp-tab="learn"><span class="tl-l">Learning &amp; recognition</span><span class="tl-s">Learning</span></button></div></div>
     <div class="xp-pane" data-xp-pane="work">
     <div class="xp" id="xp" aria-live="polite"></div>
+    </div>
+    <div class="xp-pane" data-xp-pane="intern" hidden>
+    <div class="xp" id="xpIntern" aria-live="polite"></div>
     </div>
     <div class="xp-pane" data-xp-pane="learn" hidden>
       <div class="rec-grid" id="recGrid"></div>
@@ -560,12 +563,12 @@
   </div>
 </footer>
 
-<script src="assets/js/content.js?v=20261124233159"></script>
-<script src="assets/js/config.js?v=20261124233159"></script>
-<script src="assets/js/icons.js?v=20261124233159"></script>
-<script src="assets/js/scenes.js?v=20261124233159"></script>
-<script src="assets/js/core.js?v=20261124233159"></script>
-<script src="assets/js/fx.js?v=20261124233159" defer></script>
-<script src="assets/js/home.js?v=20261124233159"></script>
+<script src="assets/js/content.js?v=20261124233645"></script>
+<script src="assets/js/config.js?v=20261124233645"></script>
+<script src="assets/js/icons.js?v=20261124233645"></script>
+<script src="assets/js/scenes.js?v=20261124233645"></script>
+<script src="assets/js/core.js?v=20261124233645"></script>
+<script src="assets/js/fx.js?v=20261124233645" defer></script>
+<script src="assets/js/home.js?v=20261124233645"></script>
 </body>
 </html>

@@ -438,9 +438,16 @@
 
   /* =============== experience =============== */
   function renderExperience(list) {
-    const box = $('#xp');
+    const all = list.filter((x) => x.visible !== false);
+    const isIntern = (x) => /intern/i.test(x.type || '');
+    const interns = all.filter(isIntern);
+    renderXpList($('#xp'), all.filter((x) => !isIntern(x)), 'xp');
+    renderXpList($('#xpIntern'), interns, 'xpi');
+    const tab = $('[data-xp-tab="intern"]');
+    if (tab) { tab.hidden = !interns.length; const xt = $('.xp-tabs'); if (xt) requestAnimationFrame(() => placeThumb(xt)); }
+  }
+  function renderXpList(box, rows, pfx) {
     if (!box) return;
-    const rows = list.filter((x) => x.visible !== false);
     box.innerHTML = rows.map((x, i) => {
       const current = /present|now/i.test(x.dates || '');
       const hl = (x.highlights || []).length;
@@ -452,9 +459,9 @@
         <div class="xp-head">
           <div class="xp-main"><h3>${esc(x.role)}</h3><p class="xp-meta">${meta}</p></div>
           <span class="xp-date${current ? ' now' : ''}">${esc(x.dates)}</span>
-          ${more ? `<button class="xp-tog" type="button" aria-expanded="false" aria-controls="xp-hl-${i}" aria-label="Show details for ${esc(x.role)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>` : '<span></span>'}
+          ${more ? `<button class="xp-tog" type="button" aria-expanded="false" aria-controls="${pfx}-hl-${i}" aria-label="Show details for ${esc(x.role)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>` : '<span></span>'}
         </div>
-        ${more ? `<div class="xp-hl" id="xp-hl-${i}"><div class="xp-body">${x.summary ? `<p>${esc(x.summary)}</p>` : ''}${hl ? `<ul>${x.highlights.map((h) => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}</div></div>` : ''}
+        ${more ? `<div class="xp-hl" id="${pfx}-hl-${i}"><div class="xp-body">${x.summary ? `<p>${esc(x.summary)}</p>` : ''}${hl ? `<ul>${x.highlights.map((h) => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}</div></div>` : ''}
       </div>`;
     }).join('');
     $$('.xp-row', box).forEach((row) => {
