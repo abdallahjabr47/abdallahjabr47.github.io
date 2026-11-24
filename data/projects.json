@@ -832,38 +832,111 @@
   {
     "slug": "mazadak",
     "title": "Mazadak",
-    "tagline": "[One line about the auction experience.]",
-    "category": "Marketplace · Auctions",
+    "tagline": "An auction app where you bid with points, not cash.",
+    "category": "Auctions · Points & rewards app",
     "type": "mobile",
     "live": false,
-    "status": "",
+    "status": "Shipped",
     "published": true,
-    "summary": "An auction app: [one line on the bidding experience and the trust problems you solved].",
+    "summary": "A mobile auction app where people earn points from local merchants and spend them on bids. The highest unique bid wins, so luck and strategy both matter.",
     "cover": {
       "image": "",
-      "ghost": "MAZADAK",
-      "tint": "#E8962A"
+      "ghost": "Mazadak",
+      "tint": "#F2416B"
     },
-    "company": "[Client]",
-    "role": "[Your role]",
-    "team": "",
-    "timeline": "[Start — End]",
-    "overview": "[Overview]",
-    "problem": "",
+    "company": "Personal practice project",
+    "role": "Designer & Product",
+    "team": "Solo",
+    "timeline": "2 months",
+    "overview": "Mazadak (Arabic for “your auction”) turns shopping into a game. Customers scan a merchant’s QR code to collect points, then use those points to bid on products. Each bid costs points, every user gets a limited number of bids, and the highest unique bid wins when the auction ends. I designed the product end to end: onboarding, sign-up and login, the auction flow with every state, merchants, QR scanning, history and profile, in Arabic and English.",
+    "problem": "Auctions usually reward whoever has the most money. How might we make them fair and fun, and give local merchants a reason for customers to come back?",
     "responsibilities": {
-      "product": [],
-      "design": []
+      "product": [
+        "Defined the points economy: earning, bid cost, bid limits and levels",
+        "Designed the “highest unique bid wins” rule and how it is explained",
+        "Mapped every auction state: active, extended, failed and ended",
+        "Planned the merchant side: offers, QR codes and points per purchase"
+      ],
+      "design": [
+        "Onboarding, language choice, sign-up, login and password recovery",
+        "Home feed with auction cards, points balance and level-ups",
+        "Auction details with countdown, progress, bid controls and results",
+        "Matching-bids comparison so users understand why a bid isn’t unique",
+        "Merchants, merchant profiles, QR scanning, history and profile",
+        "Every error, empty and permission state, in Arabic and English"
+      ]
     },
-    "process": [],
-    "challenges": [],
+    "process": [
+      {
+        "title": "Define the rules",
+        "desc": "Points, bid costs, limits and how a unique bid wins."
+      },
+      {
+        "title": "Map the flows",
+        "desc": "From onboarding to earning points, bidding and seeing the result."
+      },
+      {
+        "title": "Wireframe",
+        "desc": "Auction details first, since every state lives on that screen."
+      },
+      {
+        "title": "Design system",
+        "desc": "A light, warm interface with one pink accent and clear status colours."
+      },
+      {
+        "title": "Edge states",
+        "desc": "Errors, empty lists, permissions and out-of-points cases."
+      },
+      {
+        "title": "Prototype",
+        "desc": "Linked the full flow to test it end to end."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "“Highest unique bid wins” is new to most people.",
+        "solution": "Onboarding explains it in three steps, the rules sit right above the bid input, and a comparison sheet shows which bids matched yours."
+      },
+      {
+        "challenge": "An auction changes a lot over its life.",
+        "solution": "One details screen with clear status tags (Active, Extended, Failed, Ended), a progress bar toward the bid target and a live countdown."
+      },
+      {
+        "challenge": "Users must always know what they can still do.",
+        "solution": "Points balance and bid progress (1/5) next to the bid button, with warnings when bids or points run out."
+      },
+      {
+        "challenge": "Earning points has to feel rewarding.",
+        "solution": "Scan a merchant’s QR code, get a “Cha-Ching!” moment with the points earned, and level up as points grow."
+      }
+    ],
     "gallery": {
       "before": [],
       "after": []
     },
     "results": [],
-    "learnings": "",
-    "icon": "",
-    "screens": [],
+    "learnings": "Mazadak was a chance to discover more design skills on a product with real rules behind it: designing a points economy, explaining an unusual mechanic simply, and handling every state an auction can be in. It also taught me how much small moments, like a level-up or a “Cha-Ching!”, make a product feel alive.",
+    "icon": "assets/uploads/mazadak/icon.webp",
+    "screens": [
+      "assets/uploads/mazadak/01-splash.webp",
+      "assets/uploads/mazadak/02-language.webp",
+      "assets/uploads/mazadak/03-onboarding-1.webp",
+      "assets/uploads/mazadak/04-onboarding-2.webp",
+      "assets/uploads/mazadak/05-onboarding-3.webp",
+      "assets/uploads/mazadak/06-home.webp",
+      "assets/uploads/mazadak/07-level-up.webp",
+      "assets/uploads/mazadak/08-auction.webp",
+      "assets/uploads/mazadak/09-matching-bids.webp",
+      "assets/uploads/mazadak/10-auction-won.webp",
+      "assets/uploads/mazadak/11-merchants.webp",
+      "assets/uploads/mazadak/12-merchant.webp",
+      "assets/uploads/mazadak/13-scan-permission.webp",
+      "assets/uploads/mazadak/14-scan.webp",
+      "assets/uploads/mazadak/15-points-earned.webp",
+      "assets/uploads/mazadak/16-merchant-found.webp",
+      "assets/uploads/mazadak/17-history.webp",
+      "assets/uploads/mazadak/18-profile.webp"
+    ],
     "webScreens": [],
     "devices": {
       "mobile": true,
@@ -871,7 +944,114 @@
       "desktop": false
     },
     "tabletScreens": [],
-    "cardDevice": "auto"
+    "cardDevice": "auto",
+    "featured": false,
+    "demo": [
+      {
+        "img": "assets/uploads/mazadak/03-onboarding-1.webp",
+        "s": 2,
+        "label": "Bid smart, win big",
+        "note": "Bid with points, not cash",
+        "taps": [
+          [
+            0.5,
+            0.911
+          ]
+        ],
+        "hold": 1400
+      },
+      {
+        "img": "assets/uploads/mazadak/06-home.webp",
+        "s": 5,
+        "label": "Pick an auction",
+        "note": "Your points and live auctions",
+        "taps": [
+          [
+            0.5,
+            0.283
+          ]
+        ],
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/mazadak/demo-bid.webp",
+        "s": 0,
+        "label": "Place a bid",
+        "note": "Set the amount, then bid",
+        "taps": [
+          [
+            0.853,
+            0.718
+          ],
+          [
+            0.5,
+            0.844
+          ]
+        ],
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/mazadak/09-matching-bids.webp",
+        "s": 8,
+        "label": "See matching bids",
+        "note": "Why a bid isn’t unique",
+        "loading": 900,
+        "hold": 1600
+      },
+      {
+        "img": "assets/uploads/mazadak/demo-ended.webp",
+        "s": 0,
+        "label": "Auction ended",
+        "note": "The highest unique bid wins",
+        "hold": 1600
+      },
+      {
+        "img": "assets/uploads/mazadak/11-merchants.webp",
+        "s": 10,
+        "label": "Find merchants",
+        "note": "Earn points where you shop",
+        "taps": [
+          [
+            0.5,
+            0.38
+          ]
+        ],
+        "hold": 1400
+      },
+      {
+        "img": "assets/uploads/mazadak/14-scan.webp",
+        "s": 13,
+        "label": "Scan the QR code",
+        "note": "Scanning starts automatically",
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/mazadak/15-points-earned.webp",
+        "s": 14,
+        "label": "Earn points",
+        "note": "Cha-Ching! 40 points added",
+        "loading": 900,
+        "taps": [
+          [
+            0.5,
+            0.666
+          ]
+        ],
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/mazadak/17-history.webp",
+        "s": 16,
+        "label": "Track everything",
+        "note": "Won, lost, active and more",
+        "hold": 1800
+      }
+    ],
+    "video": {
+      "src": "assets/uploads/mazadak/walkthrough.mp4",
+      "poster": "assets/uploads/mazadak/walkthrough-poster.webp",
+      "title": ""
+    }
   },
   {
     "slug": "minicity",
