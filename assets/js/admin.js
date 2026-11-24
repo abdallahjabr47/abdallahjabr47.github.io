@@ -661,7 +661,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
       () => (first('screens') || first('webScreens') || first('tabletScreens') ? [] : ['screens']).concat(first('icon') ? [] : ['app icon']),
       () => [],
       () => [],
-      () => [['role', 'role'], ['timeline', 'timeline']].filter(([k]) => blank(k)).map(([, l]) => l),
+      () => [['role', 'role']].filter(([k]) => blank(k)).map(([, l]) => l).concat(val('timelineStart') || String((projects[editing] || {}).timeline || '').trim() ? [] : ['timeline']),
       () => [['overview', 'overview'], ['problem', 'problem']].filter(([k]) => blank(k)).map(([, l]) => l),
       () => $$('#edForm [data-rep="process"] [data-row]').length ? [] : ['at least one step'],
       () => $$('#edForm [data-rep="challenges"] [data-row]').length ? [] : ['at least one challenge']
@@ -750,12 +750,12 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
         <div class="pub-row">${C('Show the live preview', 'preview', p.preview !== false)}</div>
         <p class="hint">For websites: the full-length desktop and phone screens scroll by themselves inside a browser and a phone frame, and visitors can scroll them too. Upload each page as one long screen.</p>
         <div class="f" style="margin-top:18px">Video (optional)</div>
-        <p class="hint">Shown as a click-to-play section, so it never slows the page down. Upload an MP4 (up to 25 MB), or paste a YouTube or Vimeo link.</p>
+        <p class="hint">Visitors get a “Watch the video” button next to the In action / Live preview heading; it opens the video full screen, and nothing loads until they press it. Upload an MP4 (up to 25 MB), or paste a YouTube or Vimeo link.</p>
         <div class="vid-row">${F('Video', 'video.src', (p.video && p.video.src) || '', { ph: 'Paste a YouTube or Vimeo link, or upload a file' })}<label class="ib vid-up" for="vidInput">Upload video</label><button type="button" class="ib danger" data-vid-clear${(p.video && p.video.src) ? '' : ' hidden'}>Remove</button></div>
         <input type="file" accept="video/mp4,video/webm" id="vidInput" hidden>
-        ${F('Video heading', 'video.title', (p.video && p.video.title) || '', { ph: 'Watch it in motion' })}
+        ${F('Caption under the video (optional)', 'video.title', (p.video && p.video.title) || '', { ph: 'e.g. Full walkthrough, 20 seconds' })}
         <div class="f">Cover image (optional)</div>${imgList('video.poster', (p.video && p.video.poster) ? [p.video.poster] : [], 'wide', false, false)}
-        <p class="hint">Shown before the video plays. If empty, the first screen is used.</p>
+        <p class="hint">Shown before the video starts. If empty, the video's first frame is used.</p>
       </fieldset>
 
       <fieldset><legend>Case study header</legend>

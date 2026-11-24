@@ -111,18 +111,43 @@
     if ('IntersectionObserver' in window) new IntersectionObserver((es) => { inView = es[0].isIntersecting; if (inView) { pauseUntil = Math.max(pauseUntil, performance.now() + 700); go(); } else stop(); }, { threshold: .45 }).observe(box);
   }
 
-  /* video: YouTube / Vimeo links play in a privacy-friendly player; uploaded files play natively */
-  function wireVideo() {
-    const box = $('[data-vid]'); if (!box) return;
-    $('.vid-play', box).addEventListener('click', () => {
-      const src = box.dataset.vid; let html;
+  /* video viewer: full-screen like the screen viewer; Esc closes it without leaving a full-screen browser window */
+  function wireVideo(p) {
+    const btns = $$('[data-vid-open]'); if (!btns.length) return;
+    const src = String(p.video.src).trim();
+    let box = $('#videobox');
+    if (!box) {
+      box = document.createElement('div');
+      box.className = 'lightbox vbox'; box.id = 'videobox';
+      box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', 'Video'); box.setAttribute('aria-hidden', 'true');
+      box.innerHTML = `<div class="vbox-frame"><div class="vbox-media"></div>${has(p.video.title) ? `<b class="lb-label">${esc(p.video.title)}</b>` : ''}</div><button class="lb-btn lb-close" type="button" aria-label="Close video">✕</button>`;
+      document.body.appendChild(box);
+    }
+    const media = $('.vbox-media', box);
+    let back = null;
+    const open = (e) => {
+      back = e && e.currentTarget;
       const yt = src.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/))([\w-]{6,})/);
       const vm = src.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-      if (yt) html = `<iframe src="https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0" title="Video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
-      else if (vm) html = `<iframe src="https://player.vimeo.com/video/${vm[1]}?autoplay=1" title="Video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-      else html = `<video src="${esc(src)}" controls autoplay playsinline preload="metadata"></video>`;
-      box.innerHTML = html; box.classList.add('playing');
-    });
+      media.innerHTML = yt ? `<iframe src="https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0" title="Video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`
+        : vm ? `<iframe src="https://player.vimeo.com/video/${vm[1]}?autoplay=1" title="Video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`
+        : `<video src="${esc(src)}"${p.video.poster ? ` poster="${esc(p.video.poster)}"` : ''} controls autoplay playsinline preload="metadata"></video>`;
+      box.classList.add('open'); box.setAttribute('aria-hidden', 'false'); document.documentElement.classList.add('vbox-on');
+      $('.lb-close', box).focus({ preventScroll: true });
+    };
+    const close = () => {
+      if (!box.classList.contains('open')) return;
+      box.classList.remove('open'); box.setAttribute('aria-hidden', 'true'); document.documentElement.classList.remove('vbox-on');
+      setTimeout(() => { if (!box.classList.contains('open')) media.innerHTML = ''; }, 350);
+      if (back) back.focus({ preventScroll: true });
+    };
+    btns.forEach((b) => b.addEventListener('click', open));
+    $('.lb-close', box).addEventListener('click', close);
+    box.addEventListener('click', (e) => { if (e.target === box) close(); });
+    addEventListener('keydown', (e) => {
+      if (!box.classList.contains('open')) return;
+      if (e.key === 'Escape') { e.preventDefault(); close(); }
+    }, true);
   }
 
   function render(p, idx) {
@@ -153,14 +178,18 @@
         ${has(p.role) ? `<p class="cs-text" data-reveal>${esc(p.role)}</p>` : ''}
         ${cards.length ? `<div class="roles">${cards.join('')}</div>` : ''}`);
     }
+    /* video: a "Watch the video" button next to the In action / Live preview heading opens it in a viewer */
+    const vsrc = p.video && has(p.video.src) ? String(p.video.src).trim() : '';
+    const vidBtn = vsrc ? `<button type="button" class="btn btn-ghost vid-open" data-vid-open data-cursor="Play ▶"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>Watch the video</button>` : '';
+    let vidPlaced = false;
     /* live preview: full-length website screens scroll inside a browser and a phone frame */
     const lpDesk = (p.webScreens || []).filter(Boolean)[0];
     const lpPhone = (type !== 'mobile') ? (p.screens || []).filter(Boolean)[0] : '';
     if (p.preview !== false && type !== 'mobile' && (lpDesk || lpPhone)) {
-      const both = lpDesk && lpPhone;
+      const both = lpDesk && lpPhone; vidPlaced = !!vidBtn;
       add('preview', 'Live preview', `
         <div class="gal-head"><div style="display:flex;flex-direction:column;gap:16px"><span class="k" data-reveal>%N% · LIVE PREVIEW</span><h2 class="h-md" data-split>Scroll <em class="serif">through it</em></h2></div>
-        ${both ? `<div class="tabs glass dev-tabs lp-tabs" role="group" aria-label="Device"><span class="thumb"></span><button type="button" data-lp="desktop" class="on">${devIc('desktop')}Desktop</button><button type="button" data-lp="mobile">${devIc('mobile')}Phone</button></div>` : ''}</div>
+        <div class="sec-acts">${both ? `<div class="tabs glass dev-tabs lp-tabs" role="group" aria-label="Device"><span class="thumb"></span><button type="button" data-lp="desktop" class="on">${devIc('desktop')}Desktop</button><button type="button" data-lp="mobile">${devIc('mobile')}Phone</button></div>` : ''}${vidBtn}</div></div>
         <div class="lp" data-lp-box data-reveal data-dev="${lpDesk ? 'desktop' : 'mobile'}">
           ${lpDesk ? `<div class="lp-desk" data-lp-pane="desktop"><div class="lp-bar"><i></i><i></i><i></i><span>${esc(p.title || '')}</span></div><div class="lp-view" tabindex="0" aria-label="Desktop page, scrollable"><img src="${esc(lpDesk)}" alt="${esc(p.title || '')} on desktop" loading="lazy"></div></div>` : ''}
           ${lpPhone ? `<div class="lp-phone" data-lp-pane="mobile"><div class="lp-view" tabindex="0" aria-label="Phone page, scrollable"><img src="${esc(lpPhone)}" alt="${esc(p.title || '')} on a phone" loading="lazy"></div></div>` : ''}
@@ -171,12 +200,13 @@
     if (has(p.process)) {
       if (Array.isArray(p.demo) && p.demo.length && has(p.screens)) {
       add('demo', 'In action', `
-        <span class="k" data-reveal>%N% · IN ACTION</span>
-        <h2 class="h-md" data-split>See it <em class="serif">work</em></h2>
+        <div class="gal-head"><div style="display:flex;flex-direction:column;gap:16px"><span class="k" data-reveal>%N% · IN ACTION</span>
+        <h2 class="h-md" data-split>See it <em class="serif">work</em></h2></div>${vidPlaced ? '' : `<div class="sec-acts">${vidBtn}</div>`}</div>
         <div class="demo" data-demo data-reveal>
           <div class="demo-phone"><div class="demo-scr">${p.demo.map((st, k) => `<div class="demo-s" data-k="${k}"><img src="${esc(st.img || p.screens[st.s] || '')}" alt="${esc(st.label || '')}" loading="lazy"></div>`).join('')}<span class="demo-load" aria-hidden="true"><i></i></span><span class="demo-tap" aria-hidden="true"></span></div></div>
           <ol class="demo-steps">${p.demo.map((st, k) => `<li data-k="${k}"><button type="button" data-go="${k}"><span>${String(k + 1).padStart(2, '0')}</span><b>${esc(st.label || 'Step ' + (k + 1))}</b>${has(st.note) ? `<small>${esc(st.note)}</small>` : ''}</button></li>`).join('')}</ol>
         </div>`);
+      vidPlaced = vidPlaced || !!vidBtn;
     }
       add('process', 'Process', `
         <span class="k" data-reveal>%N% · PROCESS</span>
@@ -188,18 +218,6 @@
         <span class="k" data-reveal>%N% · CHALLENGES</span>
         <h2 class="h-md" data-split>Problems <em class="serif">&amp; solutions</em></h2>
         ${p.challenges.map((c, i) => `<div class="chal glass" data-reveal><div><small style="color:var(--red)">CHALLENGE ${String(i + 1).padStart(2, '0')}</small><p>${esc(c.challenge)}</p></div><div><small style="color:var(--green)">SOLUTION</small><p style="color:var(--ink2)">${esc(c.solution)}</p></div></div>`).join('')}`);
-    }
-    /* video: click to play, nothing loads until then */
-    const vsrc = p.video && has(p.video.src) ? String(p.video.src).trim() : '';
-    if (vsrc) {
-      const poster = (p.video && p.video.poster) || (p.webScreens || [])[0] || (p.screens || [])[0] || '';
-      add('video', 'Video', `
-        <span class="k" data-reveal>%N% · VIDEO</span>
-        <h2 class="h-md" data-split>${has(p.video.title) ? esc(p.video.title) : `Watch it <em class="serif">in motion</em>`}</h2>
-        <div class="vid glass" data-vid="${esc(vsrc)}" data-reveal>
-          ${poster ? `<img class="vid-poster" src="${esc(poster)}" alt="" loading="lazy">` : ''}
-          <button type="button" class="vid-play" aria-label="Play the video"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg></button>
-        </div>`);
     }
     const gal = p.gallery || {};
     const before = (gal.before || []).filter((g) => g && (g.label || g.image));
@@ -216,7 +234,7 @@
     if (sets.length) {
       add('screens', 'All screens', `
         <div class="gal-head"><div style="display:flex;flex-direction:column;gap:16px"><span class="k" data-reveal>%N% · EVERY SCREEN</span><h2 class="h-md" data-split>Across <em class="serif">devices</em></h2></div>
-        ${sets.length > 1 ? `<div class="tabs glass dev-tabs" role="group" aria-label="Device"><span class="thumb"></span>${sets.map(([k], i) => `<button type="button" data-dv="${k}"${i ? '' : ' class="on"'}>${devIc(k)}${DEV[k][0]}</button>`).join('')}</div>` : ''}</div>
+        <div class="sec-acts">${sets.length > 1 ? `<div class="tabs glass dev-tabs" role="group" aria-label="Device"><span class="thumb"></span>${sets.map(([k], i) => `<button type="button" data-dv="${k}"${i ? '' : ' class="on"'}>${devIc(k)}${DEV[k][0]}</button>`).join('')}</div>` : ''}${vidPlaced ? '' : vidBtn}</div></div>
         ${sets.map(([k, l], i) => `<div class="dev-grid g-${k}" data-dv-pane="${k}"${i ? ' hidden' : ''}>${l.map((src, j) => `<button class="dshot" type="button" data-set="${k}" data-i="${j}" data-cursor="Open ↗" aria-label="Open ${DEV[k][0].toLowerCase()} screen ${j + 1}"><img src="${esc(src)}" alt="${esc(p.title)} ${DEV[k][0].toLowerCase()} screen ${j + 1}" loading="lazy"></button>`).join('')}</div>`).join('')}`);
     }
     if (has(p.results) || has(p.learnings)) {
@@ -270,7 +288,7 @@
 `;
 
     wireDemo(p);
-    wirePreview(); wireVideo();
+    wirePreview(); if (p.video && has(p.video.src)) wireVideo(p);
     /* gallery */
     const galEl = $('#gallery');
     let galList = after.length ? after : before;

@@ -447,7 +447,7 @@
       "after": []
     },
     "results": [],
-    "learnings": "",
+    "learnings": "Designing xchange while taking the Google UX Design certificate taught me to follow the full user-centred process from research to testing. It sharpened my skills in designing for speed and clarity, especially showing rates and numbers people can trust at a glance, and gave me practice building a complete app flow, from onboarding to rate alerts.",
     "icon": "assets/uploads/xchange/icon.webp",
     "coverShot": "assets/uploads/xchange/05-charts.webp",
     "screens": [
@@ -646,8 +646,8 @@
       "after": []
     },
     "results": [],
-    "learnings": "",
-    "icon": "",
+    "learnings": "WorldClockr was a chance to explore new design skills on a small, focused product: keeping a utility app simple, making time differences easy to read at a glance, and designing everyday patterns like search, reordering and editing a list. It reminded me that the clearest solution often means removing steps, not adding features.",
+    "icon": "assets/uploads/worldclockr/icon.webp",
     "screens": [
       "assets/uploads/worldclockr/01-home.webp",
       "assets/uploads/worldclockr/02-converter.webp",
@@ -781,7 +781,7 @@
     "company": "Personal practice project",
     "role": "UI/UX Designer",
     "team": "Solo",
-    "timeline": "",
+    "timeline": "1 day",
     "overview": "BoxChampy is a landing page for an imagined boxing gym. I designed it to practise visual design for the web: building a strong first impression with type and photography, guiding the eye down a single page, and carrying one look from desktop to mobile.",
     "problem": "How might a boxing gym show its energy in the first few seconds, while still making it easy to see what it offers and how to get in touch?",
     "responsibilities": {
@@ -835,7 +835,7 @@
       "after": []
     },
     "results": [],
-    "learnings": "How much a few strong choices carry a design: one typeface for headlines, one accent colour and one shape repeated across the page made it feel like a real brand on both desktop and mobile.",
+    "learnings": "BoxChampy helped me discover more visual design skills beyond app UI: working with bold type and photography, building one page that guides the eye, and carrying one look from desktop to mobile. Designing it in a single day also showed how much a few strong choices can carry a design: one headline typeface, one accent colour and one shape repeated across the page.",
     "icon": "assets/uploads/boxchampy/icon.webp",
     "screens": [
       "assets/uploads/boxchampy/02-landing-mobile.webp"
