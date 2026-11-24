@@ -409,6 +409,32 @@
     addEventListener('pageshow', (e) => { if (e.persisted) html.classList.remove('pv-leave', 'pv-enter', 'pv-go'); });
   })();
 
+  /* home and All work: Back from a project (or another page) returns to the same spot, not the top */
+  (function keepPlace() {
+    if (!(document.getElementById('hero') || /work\.html$/.test(location.pathname))) return;
+    const key = 'y:' + location.pathname;
+    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+    addEventListener('pagehide', () => { try { sessionStorage.setItem(key, String(Math.round(scrollY))); } catch (e) {} });
+    let type = '';
+    try { const n = performance.getEntriesByType('navigation')[0]; type = n ? n.type : ''; } catch (e) {}
+    const isWork = !document.getElementById('hero');
+    if (!(type === 'back_forward' || (isWork && type === 'reload'))) return;
+    let y = 0; try { y = parseInt(sessionStorage.getItem(key), 10) || 0; } catch (e) {}
+    if (y <= 0) return;
+    /* projects render a moment later, so keep placing the page until it is tall enough (stop if you scroll yourself) */
+    let stop = false; const quit = () => { stop = true; };
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach((t) => addEventListener(t, quit, { once: true, passive: true }));
+    const t0 = Date.now();
+    const place = () => {
+      if (stop) return;
+      const max = document.documentElement.scrollHeight - innerHeight;
+      scrollTo(0, Math.min(y, max));
+      if ((max < y || Math.abs(scrollY - y) > 2) && Date.now() - t0 < 2500) requestAnimationFrame(place);
+      else setTimeout(() => { if (!stop && Math.abs(scrollY - y) > 2) scrollTo(0, y); }, 300);
+    };
+    place(); addEventListener('load', place);
+  })();
+
   window.Site = { getSite: () => siteReady, lightMode: applyLightMode, $, $$, clamp, esc, scan, onScroll, splitText, toast, loadProjects, previewDraft, isPreview, reduce, fine };
   scan();
 })();

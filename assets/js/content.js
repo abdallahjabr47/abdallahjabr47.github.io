@@ -152,10 +152,11 @@
 
   /* home page: a refresh always starts at the top, never at #work or another section */
   if (root.document && document.getElementById('hero')) {
-    let reload = false;
-    try { const nav = performance.getEntriesByType('navigation')[0]; reload = nav ? nav.type === 'reload' : performance.navigation.type === 1; } catch (e) {}
+    let reload = false, back = false;
+    try { const nav = performance.getEntriesByType('navigation')[0]; reload = nav ? nav.type === 'reload' : performance.navigation.type === 1; back = nav ? nav.type === 'back_forward' : performance.navigation.type === 2; } catch (e) {}
     try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
-    if (reload || !location.hash) {
+    /* Back from another page is handled in core.js (returns to the same spot) */
+    if (!back && (reload || !location.hash)) {
       if (location.hash) history.replaceState(null, '', location.pathname + location.search);
       root.scrollTo(0, 0);
       root.addEventListener('load', () => root.scrollTo(0, 0));
