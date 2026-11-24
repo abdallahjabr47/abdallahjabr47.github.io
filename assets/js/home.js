@@ -126,6 +126,7 @@
 
   function renderProjects(list) {
     const grid = $('#projects');
+    if (!grid) return;
     if (!list.length) { grid.innerHTML = '<p class="muted">No projects yet — add your first one from the admin page.</p>'; return; }
     const all = grid.hasAttribute('data-all');
     let shown = list, rest = [];
