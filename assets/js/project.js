@@ -267,7 +267,8 @@
   lb.addEventListener('click', (e) => { if (e.target === lb) window.__lb && window.__lb.close(); });
   addEventListener('keydown', (e) => {
     if (!lb.classList.contains('open') || !window.__lb) return;
-    if (e.key === 'Escape') window.__lb.close();
+    /* preventDefault: in a full-screen Safari window, Esc would also leave full screen */
+    if (e.key === 'Escape') { e.preventDefault(); window.__lb.close(); }
     if (e.key === 'ArrowRight') window.__lb.step(1);
     if (e.key === 'ArrowLeft') window.__lb.step(-1);
   });

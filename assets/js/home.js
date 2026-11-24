@@ -528,7 +528,7 @@
         const on = wrap.classList.toggle('zoom');
         if (on) requestAnimationFrame(() => { wrap.scrollLeft = fx * wrap.scrollWidth - wrap.clientWidth / 2; wrap.scrollTop = fy * wrap.scrollHeight - wrap.clientHeight / 2; });
       });
-      addEventListener('keydown', (e) => { if (e.key === 'Escape' && !cv.hidden) close(); });
+      addEventListener('keydown', (e) => { if (e.key === 'Escape' && !cv.hidden) { e.preventDefault(); close(); } });
     }
     box.addEventListener('click', (e) => {
       const b = e.target.closest('.rec-cert'); if (!b) return;
