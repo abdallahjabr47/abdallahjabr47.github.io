@@ -1056,38 +1056,141 @@
   {
     "slug": "minicity",
     "title": "MiniCity",
-    "tagline": "[One line about the app.]",
-    "category": "Local business · Directory",
+    "tagline": "Discover local merchants, events and offers in your city.",
+    "category": "City guide · Local merchants app",
     "type": "mobile",
     "live": false,
-    "status": "",
+    "status": "Shipped",
     "published": true,
-    "summary": "A directory that puts every merchant’s information in one place, with map, explore, search and QR codes.",
+    "summary": "A city guide app that brings local merchants, their offers and events into one place: follow places you like, get their updates in channels, find events near you and scan a merchant’s QR code to open their page.",
     "cover": {
       "image": "",
       "ghost": "MiniCity",
-      "tint": "#22A89B"
+      "tint": "#2F6FEB"
     },
-    "company": "[Client]",
-    "role": "[Your role]",
+    "company": "Freelance client",
+    "role": "Designer & Product",
     "team": "",
-    "timeline": "[Duration]",
-    "overview": "[Overview]",
-    "problem": "",
+    "timeline": "2 months",
+    "overview": "MiniCity helps people find what’s around them: restaurants, cafés, clinics and shops, with their hours, ratings and social links. Merchants post stories and ads, share updates and polls in their own channels, and publish events people can mark as interested or going. I designed the product end to end for two apps: the user app shown here and a merchant app to manage pages, events and scans, both in English and Arabic.",
+    "problem": "Local businesses struggle to reach people nearby, and people have no single place to see what’s open, what’s new and what’s happening in their city.",
     "responsibilities": {
-      "product": [],
-      "design": []
+      "product": [
+        "Defined the two sides of the product: users and merchants",
+        "Mapped the flows for discovery, following, events and QR scanning",
+        "Planned channels so merchants can talk to their followers",
+        "Designed for English and Arabic from the start"
+      ],
+      "design": [
+        "Onboarding, language and permission screens",
+        "Home feed with stories, ads, today’s event and categories",
+        "Search with filters, list and map views",
+        "Merchant pages with follow, rating, sharing and working hours",
+        "Events calendar, event details, interested and going",
+        "QR scan, merchant channels with polls, and all empty and error states"
+      ]
     },
-    "process": [],
-    "challenges": [],
+    "process": [
+      {
+        "title": "Discover",
+        "desc": "Who uses the city guide, and what merchants need from it."
+      },
+      {
+        "title": "Map both apps",
+        "desc": "User and merchant flows, and how they connect."
+      },
+      {
+        "title": "Wireframe",
+        "desc": "Home, search and merchant pages first."
+      },
+      {
+        "title": "Design system",
+        "desc": "A clean light interface, one blue accent and a floating tab bar."
+      },
+      {
+        "title": "Arabic version",
+        "desc": "Every screen mirrored for right-to-left."
+      },
+      {
+        "title": "Edge states",
+        "desc": "Loading, no internet, errors, permissions and empty lists."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "Lots of places, and people want the right one fast.",
+        "solution": "Category chips, filters for open now, distance and rating, and a list or map view."
+      },
+      {
+        "challenge": "Merchants need a way to stay in touch.",
+        "solution": "Channels where followers get updates, photos, links and polls, plus stories and ads on the home feed."
+      },
+      {
+        "challenge": "Events are easy to miss.",
+        "solution": "A calendar strip with today’s events, and Interested or Going in one tap."
+      },
+      {
+        "challenge": "Opening a shop’s page in person should be instant.",
+        "solution": "Scan the merchant’s QR code and their page opens right away."
+      }
+    ],
     "gallery": {
       "before": [],
       "after": []
     },
     "results": [],
-    "learnings": "",
-    "icon": "",
-    "screens": [],
+    "learnings": "MiniCity was a chance to discover more design skills on a bigger product: designing two connected apps, a user app and a merchant app, in English and Arabic. It taught me how to keep a large set of flows consistent with one design system, and to think about both sides of a marketplace at the same time.",
+    "icon": "assets/uploads/minicity/icon.webp",
+    "screens": [
+      "assets/uploads/minicity/01-welcome.webp",
+      "assets/uploads/minicity/select-language.webp",
+      "assets/uploads/minicity/02-onboarding.webp",
+      "assets/uploads/minicity/onboarding-2.webp",
+      "assets/uploads/minicity/onboarding-3.webp",
+      "assets/uploads/minicity/terms.webp",
+      "assets/uploads/minicity/account-type.webp",
+      "assets/uploads/minicity/login-filled.webp",
+      "assets/uploads/minicity/login-error.webp",
+      "assets/uploads/minicity/signup.webp",
+      "assets/uploads/minicity/signup-error.webp",
+      "assets/uploads/minicity/signup-cancel.webp",
+      "assets/uploads/minicity/code.webp",
+      "assets/uploads/minicity/code-error.webp",
+      "assets/uploads/minicity/new-password.webp",
+      "assets/uploads/minicity/new-password-filled.webp",
+      "assets/uploads/minicity/03-home.webp",
+      "assets/uploads/minicity/04-ad-story.webp",
+      "assets/uploads/minicity/loading.webp",
+      "assets/uploads/minicity/no-internet.webp",
+      "assets/uploads/minicity/error-state.webp",
+      "assets/uploads/minicity/toast-error.webp",
+      "assets/uploads/minicity/05-search-filter.webp",
+      "assets/uploads/minicity/choose-location.webp",
+      "assets/uploads/minicity/06-search-list.webp",
+      "assets/uploads/minicity/07-merchant.webp",
+      "assets/uploads/minicity/working-hours.webp",
+      "assets/uploads/minicity/share-merchant.webp",
+      "assets/uploads/minicity/08-rate.webp",
+      "assets/uploads/minicity/09-events.webp",
+      "assets/uploads/minicity/10-event-details.webp",
+      "assets/uploads/minicity/event-options.webp",
+      "assets/uploads/minicity/favorites.webp",
+      "assets/uploads/minicity/favorites-empty.webp",
+      "assets/uploads/minicity/11-scan.webp",
+      "assets/uploads/minicity/12-scan-result.webp",
+      "assets/uploads/minicity/notifications.webp",
+      "assets/uploads/minicity/13-channel.webp",
+      "assets/uploads/minicity/channels-search-ar.webp",
+      "assets/uploads/minicity/channel-options-ar.webp",
+      "assets/uploads/minicity/channels-empty-ar.webp",
+      "assets/uploads/minicity/edit-profile.webp",
+      "assets/uploads/minicity/profile-photo.webp",
+      "assets/uploads/minicity/language.webp",
+      "assets/uploads/minicity/notification-settings.webp",
+      "assets/uploads/minicity/contact-us.webp",
+      "assets/uploads/minicity/contact-issue-type.webp",
+      "assets/uploads/minicity/contact-sent.webp"
+    ],
     "webScreens": [],
     "devices": {
       "mobile": true,
@@ -1096,7 +1199,152 @@
     },
     "tabletScreens": [],
     "cardDevice": "auto",
-    "featured": false
+    "featured": false,
+    "demo": [
+      {
+        "img": "assets/uploads/minicity/02-onboarding.webp",
+        "s": 2,
+        "label": "Find local merchants",
+        "note": "Everything in your city, in one place",
+        "taps": [
+          [
+            0.5,
+            0.91
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/minicity/03-home.webp",
+        "s": 16,
+        "label": "Home",
+        "note": "Stories, today’s event and categories",
+        "taps": [
+          [
+            0.15,
+            0.21
+          ]
+        ],
+        "hold": 1500
+      },
+      {
+        "img": "assets/uploads/minicity/04-ad-story.webp",
+        "s": 17,
+        "label": "Merchant stories",
+        "note": "Ads and offers from places nearby",
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/minicity/05-search-filter.webp",
+        "s": 22,
+        "label": "Search and filter",
+        "note": "Open now, distance, rating",
+        "taps": [
+          [
+            0.5,
+            0.93
+          ]
+        ],
+        "hold": 1400
+      },
+      {
+        "img": "assets/uploads/minicity/06-search-list.webp",
+        "s": 24,
+        "label": "Pick a place",
+        "note": "Follow the ones you like",
+        "taps": [
+          [
+            0.35,
+            0.28
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/minicity/07-merchant.webp",
+        "s": 25,
+        "label": "Merchant page",
+        "note": "Hours, social links and bio",
+        "taps": [
+          [
+            0.57,
+            0.92
+          ]
+        ],
+        "hold": 1400
+      },
+      {
+        "img": "assets/uploads/minicity/08-rate.webp",
+        "s": 28,
+        "label": "Rate your visit",
+        "note": "One tap to share how it went",
+        "taps": [
+          [
+            0.17,
+            0.886
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/minicity/09-events.webp",
+        "s": 29,
+        "label": "Events",
+        "note": "What’s happening today",
+        "taps": [
+          [
+            0.45,
+            0.787
+          ]
+        ],
+        "hold": 1400
+      },
+      {
+        "img": "assets/uploads/minicity/10-event-details.webp",
+        "s": 30,
+        "label": "Event details",
+        "note": "Interested or going",
+        "hold": 1400
+      },
+      {
+        "img": "assets/uploads/minicity/11-scan.webp",
+        "s": 34,
+        "label": "Scan a QR code",
+        "note": "Scanning starts automatically",
+        "hold": 1200
+      },
+      {
+        "img": "assets/uploads/minicity/12-scan-result.webp",
+        "s": 35,
+        "label": "Merchant found",
+        "note": "Open their page right away",
+        "taps": [
+          [
+            0.5,
+            0.62
+          ]
+        ],
+        "hold": 1400
+      },
+      {
+        "img": "assets/uploads/minicity/13-channel.webp",
+        "s": 37,
+        "label": "Merchant channel",
+        "note": "Updates and polls from places you follow",
+        "taps": [
+          [
+            0.11,
+            0.35
+          ]
+        ],
+        "hold": 1800
+      }
+    ],
+    "video": {
+      "src": "assets/uploads/minicity/walkthrough.mp4",
+      "poster": "assets/uploads/minicity/walkthrough-poster.webp",
+      "title": ""
+    }
   },
   {
     "slug": "worldclockr",
