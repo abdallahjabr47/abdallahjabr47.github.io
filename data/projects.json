@@ -145,6 +145,58 @@
     "featuredRank": 1
   },
   {
+    "slug": "foras",
+    "title": "Foras.ps",
+    "tagline": "Platform redesign and design system",
+    "category": "Careers · Opportunities platform",
+    "type": "web",
+    "live": true,
+    "status": "Live",
+    "published": true,
+    "summary": "Led the full redesign and rebuild of the Foras.ps platform — new sitemap, information architecture and a design system built from scratch.",
+    "cover": {
+      "image": "",
+      "ghost": "FORAS",
+      "tint": "#1E93D2"
+    },
+    "company": "Foras Palestine",
+    "role": "UI/UX Designer",
+    "team": "",
+    "timeline": "6 months",
+    "overview": "I led the full redesign, revamp and rebuild of the existing Foras.ps platform, from requirements to sign-off — presenting decisions to stakeholders and iterating on feedback and usability testing.",
+    "problem": "[e.g. How might we make the whole platform easier to navigate and faster to extend?]",
+    "responsibilities": {
+      "product": [
+        "Gathered and analysed requirements with stakeholders"
+      ],
+      "design": [
+        "Ran user research and competitor analysis",
+        "Created a new sitemap and information architecture for the entire platform",
+        "Built the Foras design system from scratch — components, styles and guidelines"
+      ]
+    },
+    "process": [],
+    "challenges": [],
+    "gallery": {
+      "before": [],
+      "after": []
+    },
+    "results": [],
+    "learnings": "",
+    "icon": "",
+    "screens": [],
+    "webScreens": [],
+    "featured": true,
+    "devices": {
+      "mobile": true,
+      "tablet": true,
+      "desktop": true
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto",
+    "featuredRank": 2
+  },
+  {
     "slug": "momyt-meet",
     "title": "Momyt Meet",
     "tagline": "Meetups and finding new friends",
@@ -205,58 +257,6 @@
       "mobile": true,
       "tablet": false,
       "desktop": false
-    },
-    "tabletScreens": [],
-    "cardDevice": "auto",
-    "featuredRank": 2
-  },
-  {
-    "slug": "foras",
-    "title": "Foras.ps",
-    "tagline": "Platform redesign and design system",
-    "category": "Careers · Opportunities platform",
-    "type": "web",
-    "live": true,
-    "status": "Live",
-    "published": true,
-    "summary": "Led the full redesign and rebuild of the Foras.ps platform — new sitemap, information architecture and a design system built from scratch.",
-    "cover": {
-      "image": "",
-      "ghost": "FORAS",
-      "tint": "#1E93D2"
-    },
-    "company": "Foras Palestine",
-    "role": "UI/UX Designer",
-    "team": "",
-    "timeline": "6 months",
-    "overview": "I led the full redesign, revamp and rebuild of the existing Foras.ps platform, from requirements to sign-off — presenting decisions to stakeholders and iterating on feedback and usability testing.",
-    "problem": "[e.g. How might we make the whole platform easier to navigate and faster to extend?]",
-    "responsibilities": {
-      "product": [
-        "Gathered and analysed requirements with stakeholders"
-      ],
-      "design": [
-        "Ran user research and competitor analysis",
-        "Created a new sitemap and information architecture for the entire platform",
-        "Built the Foras design system from scratch — components, styles and guidelines"
-      ]
-    },
-    "process": [],
-    "challenges": [],
-    "gallery": {
-      "before": [],
-      "after": []
-    },
-    "results": [],
-    "learnings": "",
-    "icon": "",
-    "screens": [],
-    "webScreens": [],
-    "featured": true,
-    "devices": {
-      "mobile": true,
-      "tablet": true,
-      "desktop": true
     },
     "tabletScreens": [],
     "cardDevice": "auto",
