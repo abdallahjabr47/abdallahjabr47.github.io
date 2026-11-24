@@ -320,7 +320,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     }
     if (!projects.length) { el.innerHTML = '<div class="card-a glass"><p class="muted">No projects yet. Press <b>+ New project</b> to add your first one.</p></div>'; return; }
     const feats = featList();
-    const icn = (p) => { const tint = (p.cover && p.cover.tint) || '#2B3A8F'; return `<span class="ic" style="background:linear-gradient(140deg,${esc(tint)},#0E1119)">${p.icon ? `<img src="${esc(imgURL(p.icon))}" alt="">` : esc((p.title || '?').charAt(0))}</span>`; };
+    const icn = (p) => { const tint = (p.cover && p.cover.tint) || '#2B3A8F'; return `<span class="ic" style="background:${p.icon ? 'transparent' : esc(tint)}">${p.icon ? `<img src="${esc(imgURL(p.icon))}" alt="">` : esc((p.title || '?').charAt(0))}</span>`; };
     const nf = feats.length;
     applyOrder();
     let num = 0, lastFeat = -1;

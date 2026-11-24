@@ -1983,3 +1983,10 @@ html:not(.light-on) [data-theme-toggle]{display:none!important}
 .vbox-media video,.vbox-media iframe{display:block;width:100%;height:100%;border:0;background:#000}
 html.vbox-on{overflow:hidden}
 @media (max-width:600px){.sec-acts{justify-content:flex-start}.vbox-frame{width:calc(100vw - 24px)}}
+
+/* ---------- app icons: round, flat, no border or glass (site-wide) ---------- */
+.app-icon,.cs-icon{border-radius:50%!important;border:0;box-shadow:none;background:var(--tint,#2B3A8F)}
+.app-icon:has(img),.cs-icon:has(img){background:transparent}
+.cs-icon.letter{background:var(--tint)}
+.sa-icons .app-icon{box-shadow:none}
+.sa-icons .app-icon.more{background:rgb(var(--fg) / .12)}
