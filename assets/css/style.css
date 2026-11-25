@@ -2201,3 +2201,7 @@ html.hiw-lock{overflow:hidden}
 .shot .scr{padding:5px;background:#0A0B10;border-radius:15% / 7%}
 .shot .scr img{border-radius:11.7% / 5.4%}
 .g-mobile .dshot img{border-radius:11.7% / 5.4%}
+/* native cursor while a dialog/embed is open (custom cursor can't follow over iframes) */
+html.hiw-lock .cursor-dot,html.hiw-lock .cursor-ring,html.embed .cursor-dot,html.embed .cursor-ring{display:none!important}
+@media (pointer:fine){html.hiw-lock,html.hiw-lock *,html.embed,html.embed *{cursor:auto!important}
+html.hiw-lock a,html.hiw-lock button,html.hiw-lock [role=button],html.embed a,html.embed button{cursor:pointer!important}}
