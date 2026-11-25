@@ -2372,3 +2372,4 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 .testi.few .hc{width:min(700px,100%)}
 .testi.few .hc{width:min(610px,100%)}
 .testi .who img,.testi .who .av{box-shadow:none}
+.testi.few .hc blockquote{font-size:15px;line-height:1.65}
