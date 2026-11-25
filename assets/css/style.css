@@ -2197,7 +2197,8 @@ html.hiw-lock{overflow:hidden}
 .cs-cover .dev-phone{box-sizing:content-box;padding:7px 7px 0;background:#0A0B10;border:1px solid rgb(var(--fg) / .2);border-bottom:0;border-radius:15% 15% 0 0 / 7% 7% 0 0}
 .cs-cover .dev-phone>img{border-radius:11.7% 11.7% 0 0 / 5.4% 5.4% 0 0}
 .lb[data-dev="mobile"] .lb-scr,.lightbox[data-dev="mobile"] .lb-scr{padding:12px;background:#0A0B10;border:1px solid rgb(255 255 255 / .16);border-radius:15% / 7%}
-.lb-scr img{border-radius:11.7% / 5.4%}
+.lightbox[data-dev="mobile"] .lb-scr img,.lb[data-dev="mobile"] .lb-scr img{border-radius:11.7% / 5.4%}
+.lightbox[data-dev="desktop"] .lb-scr img,.lightbox[data-dev="tablet"] .lb-scr img{border-radius:10px}
 .shot .scr{padding:5px;background:#0A0B10;border-radius:15% / 7%}
 .shot .scr img{border-radius:11.7% / 5.4%}
 .g-mobile .dshot img{border-radius:11.7% / 5.4%}
