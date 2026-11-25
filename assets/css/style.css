@@ -2376,3 +2376,6 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 .testi.few .hc blockquote{font-size:14px}
 .testi.mq .hc{width:560px}.testi.mq .hc blockquote{font-size:14px}@media (max-width:640px){.testi.mq .hc{width:300px}}
 .testi.mq .hc{width:610px}
+/* coming soon: lilac label at the bottom of the card, hover says "Case study coming soon" */
+.pcard.is-soon .soon-tag{top:auto;bottom:18px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:7px;padding:8px 15px;font-size:13px;font-weight:600;color:#C8A2FF;background:rgb(200 162 255 / .14);border:1px solid rgb(200 162 255 / .36);box-shadow:none}
+.pcard.is-soon .soon-tag svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}

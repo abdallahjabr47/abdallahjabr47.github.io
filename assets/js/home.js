@@ -56,7 +56,7 @@
     const rtl = /[\u0600-\u06FF]/.test(p.title || '');
     return `
     <article class="pcard art st-${st} type-${type} show-${pref}${sidePhone ? ' with-phone' : ''}${soon ? ' is-soon' : ''}${rtl ? ' is-rtl' : ''}" data-type="${type}" style="--tint:${esc(tint)}"${soon ? ' aria-disabled="true"' : ''} data-reveal>
-      <div class="stage-panel"${soon ? ' data-cursor="Coming soon"' : ` data-cursor="Explore case ↗" data-href="${href}"`} data-n="${count}">${soon ? '<span class="soon-tag">Case study coming soon</span>' : ''}
+      <div class="stage-panel"${soon ? ' data-cursor="Case study coming soon"' : ` data-cursor="Explore case ↗" data-href="${href}"`} data-n="${count}">${soon ? '<span class="soon-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Coming soon</span>' : ''}
         <div class="sp-badges"><span class="l"><span class="lb lb-${type}">${({ mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' })[type] || 'Mobile app'}</span>${catShort ? `<span class="lb lb-cat">${esc(catShort)}</span>` : ''}</span>${count > 6 ? `<span class="dots bar" aria-hidden="true"><span class="trk"><b style="width:${100 / count}%"></b></span><em>1/${count}</em></span>` : `<span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span>`}</div>
         <div class="devices2">${laptop}${phone}</div>
         <button class="sp-arrow a-prev" type="button" aria-label="Previous screen of ${esc(p.title)}" disabled>←</button>
