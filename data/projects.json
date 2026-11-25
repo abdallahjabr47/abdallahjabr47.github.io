@@ -263,286 +263,6 @@
     "featuredRank": 3
   },
   {
-    "slug": "ruckaroo",
-    "title": "Ruckaroo",
-    "tagline": "A rucking app that turns walking with weight into a scored, social workout.",
-    "category": "Fitness · Rucking",
-    "type": "mobile",
-    "live": true,
-    "status": "Live",
-    "published": true,
-    "summary": "A fitness app for rucking (walking with weight on your back) with a Ruck Score, badges, an AI coach, stats and a community.",
-    "cover": {
-      "image": "",
-      "ghost": "Ruckaroo",
-      "tint": "#0F6B55"
-    },
-    "company": "Freelance client",
-    "role": "Product Designer (UI/UX)",
-    "team": "",
-    "timeline": "1 month",
-    "overview": "Ruckaroo is a mobile app for rucking: walking, hiking or training with weight on your back. It calculates a Ruck Score from your pack weight, distance, terrain and body data, rewards every ruck with a badge, and connects to Apple Watch. I designed the whole app experience, from the first-time onboarding and sign-up to the personal plan, plus the App Store screenshots that sell it.",
-    "problem": "Most people have never heard of rucking, and most fitness apps only count steps. How might we explain a new kind of workout in a few screens, collect the personal data the Ruck Score needs, and still get people to their plan without losing them on the way?",
-    "responsibilities": {
-      "product": [
-        "Shaping the onboarding story: what rucking is, why it beats walking, what makes the app different",
-        "Deciding which personal data to ask for and in what order",
-        "Defining every state: empty, filled, error, loading and dialogs"
-      ],
-      "design": [
-        "General onboarding and education screens",
-        "Sign up, login, forgot password and confirmation code flows",
-        "Personal onboarding: name, @handle, birthday, gender, weight, height, goal and challenge",
-        "Plan building, notifications and review prompts",
-        "App Store screenshots",
-        "Illustrations and visual style"
-      ]
-    },
-    "process": [
-      {
-        "title": "Understand the sport",
-        "desc": "Learned how rucking works and what the Ruck Score is built on (pack weight, distance and pace, terrain, body weight, heart rate, temperature and humidity) so the screens explain it in plain words."
-      },
-      {
-        "title": "Tell the story first",
-        "desc": "Opened with short education screens: what rucking is, walking versus rucking, the badges and the wearable, before asking the user for anything."
-      },
-      {
-        "title": "Collect data step by step",
-        "desc": "One question per screen with a progress bar, unit toggles (lbs/kg, ft-in/cm), pickers instead of typing, and a clear empty state for every step."
-      },
-      {
-        "title": "Design every state",
-        "desc": "Default, typing, filled and error states for every form, plus loading, cancel dialogs and success screens."
-      },
-      {
-        "title": "Sell it in the store",
-        "desc": "Designed a set of App Store screenshots that each carry one benefit: calories, science, Ruck Score, coach, stats, sharing and syncing."
-      }
-    ],
-    "challenges": [
-      {
-        "challenge": "Rucking is new to most users, so the value is not obvious.",
-        "solution": "Education screens with a simple comparison (walking vs rucking) and a five-level badge system before any sign-up friction."
-      },
-      {
-        "challenge": "The Ruck Score needs a lot of personal data, which can feel like a long form.",
-        "solution": "Split it into single-question screens with pickers, unit toggles and a progress bar, and explained why each answer matters."
-      },
-      {
-        "challenge": "Many form fields and edge cases across auth flows.",
-        "solution": "Defined a consistent set of field states and error messages reused across sign up, login and password recovery."
-      }
-    ],
-    "results": [],
-    "learnings": "Designing for a sport most people do not know yet taught me to lead with the story before the form. I practised building a long onboarding that still feels light, designing every form state carefully, and turning product benefits into a set of App Store screenshots.",
-    "icon": "assets/uploads/ruckaroo/icon.webp",
-    "screens": [
-      "assets/uploads/ruckaroo/01-splash.webp",
-      "assets/uploads/ruckaroo/02-what-is-rucking.webp",
-      "assets/uploads/ruckaroo/03-walking-vs-rucking.webp",
-      "assets/uploads/ruckaroo/04-progress.webp",
-      "assets/uploads/ruckaroo/05-wearable.webp",
-      "assets/uploads/ruckaroo/06-badges.webp",
-      "assets/uploads/ruckaroo/07-signup.webp",
-      "assets/uploads/ruckaroo/08-signup-error.webp",
-      "assets/uploads/ruckaroo/09-signup-cancel.webp",
-      "assets/uploads/ruckaroo/10-login.webp",
-      "assets/uploads/ruckaroo/11-login-filled.webp",
-      "assets/uploads/ruckaroo/12-login-error.webp",
-      "assets/uploads/ruckaroo/13-forgot.webp",
-      "assets/uploads/ruckaroo/14-forgot-error.webp",
-      "assets/uploads/ruckaroo/15-code-error.webp",
-      "assets/uploads/ruckaroo/16-new-password.webp",
-      "assets/uploads/ruckaroo/17-new-password-filled.webp",
-      "assets/uploads/ruckaroo/18-password-updated.webp",
-      "assets/uploads/ruckaroo/19-name.webp",
-      "assets/uploads/ruckaroo/20-handle.webp",
-      "assets/uploads/ruckaroo/21-born.webp",
-      "assets/uploads/ruckaroo/22-identify.webp",
-      "assets/uploads/ruckaroo/23-weight.webp",
-      "assets/uploads/ruckaroo/24-height.webp",
-      "assets/uploads/ruckaroo/25-goal.webp",
-      "assets/uploads/ruckaroo/26-goal-picked.webp",
-      "assets/uploads/ruckaroo/27-challenge.webp",
-      "assets/uploads/ruckaroo/28-great-goal.webp",
-      "assets/uploads/ruckaroo/29-community.webp",
-      "assets/uploads/ruckaroo/30-building.webp",
-      "assets/uploads/ruckaroo/31-review.webp"
-    ],
-    "webScreens": [],
-    "featured": false,
-    "devices": {
-      "mobile": true,
-      "tablet": false,
-      "desktop": false
-    },
-    "tabletScreens": [],
-    "cardDevice": "auto",
-    "social": {
-      "label": "App Store screenshots",
-      "color": "#0F6B55",
-      "images": [
-        "assets/uploads/ruckaroo/store/01-burn.webp",
-        "assets/uploads/ruckaroo/store/02-science.webp",
-        "assets/uploads/ruckaroo/store/03-score.webp",
-        "assets/uploads/ruckaroo/store/04-weight.webp",
-        "assets/uploads/ruckaroo/store/05-coach.webp",
-        "assets/uploads/ruckaroo/store/06-stats.webp",
-        "assets/uploads/ruckaroo/store/07-share.webp",
-        "assets/uploads/ruckaroo/store/08-journey.webp",
-        "assets/uploads/ruckaroo/store/09-sync.webp"
-      ]
-    },
-    "demo": [
-      {
-        "img": "assets/uploads/ruckaroo/01-splash.webp",
-        "s": 0,
-        "label": "Open the app",
-        "note": "Splash while it loads",
-        "loading": 1400,
-        "hold": 500
-      },
-      {
-        "img": "assets/uploads/ruckaroo/02-what-is-rucking.webp",
-        "s": 1,
-        "label": "What is rucking?",
-        "note": "Short education first",
-        "taps": [
-          [
-            0.5,
-            0.91
-          ]
-        ],
-        "hold": 1300
-      },
-      {
-        "img": "assets/uploads/ruckaroo/03-walking-vs-rucking.webp",
-        "s": 2,
-        "label": "Walking vs rucking",
-        "note": "Why it is worth it",
-        "taps": [
-          [
-            0.5,
-            0.91
-          ]
-        ],
-        "hold": 1300
-      },
-      {
-        "img": "assets/uploads/ruckaroo/06-badges.webp",
-        "s": 5,
-        "label": "Earn a badge",
-        "note": "Five levels for every ruck",
-        "taps": [
-          [
-            0.5,
-            0.92
-          ]
-        ],
-        "hold": 1300
-      },
-      {
-        "img": "assets/uploads/ruckaroo/07-signup.webp",
-        "s": 6,
-        "label": "Create an account",
-        "note": "Name, email, password",
-        "taps": [
-          [
-            0.5,
-            0.34
-          ]
-        ],
-        "hold": 1300
-      },
-      {
-        "img": "assets/uploads/ruckaroo/19-name.webp",
-        "s": 18,
-        "label": "What should we call you?",
-        "note": "One question per screen",
-        "taps": [
-          [
-            0.5,
-            0.91
-          ]
-        ],
-        "hold": 1300
-      },
-      {
-        "img": "assets/uploads/ruckaroo/23-weight.webp",
-        "s": 22,
-        "label": "Body weight",
-        "note": "Pickers with lbs/kg toggle",
-        "taps": [
-          [
-            0.5,
-            0.59
-          ],
-          [
-            0.5,
-            0.91
-          ]
-        ],
-        "hold": 1300
-      },
-      {
-        "img": "assets/uploads/ruckaroo/25-goal.webp",
-        "s": 24,
-        "label": "Primary goal",
-        "note": "Pick what matters to you",
-        "taps": [
-          [
-            0.4,
-            0.37
-          ]
-        ],
-        "hold": 1300
-      },
-      {
-        "img": "assets/uploads/ruckaroo/26-goal-picked.webp",
-        "s": 25,
-        "label": "Goal picked",
-        "note": "Continue lights up",
-        "taps": [
-          [
-            0.5,
-            0.91
-          ]
-        ],
-        "hold": 1300
-      },
-      {
-        "img": "assets/uploads/ruckaroo/30-building.webp",
-        "s": 29,
-        "label": "Building your plan",
-        "note": "Your plan is ready",
-        "hold": 900
-      },
-      {
-        "img": "assets/uploads/ruckaroo/29-community.webp",
-        "s": 28,
-        "label": "You are not alone",
-        "note": "Join the community",
-        "taps": [
-          [
-            0.5,
-            0.91
-          ]
-        ],
-        "hold": 1600
-      }
-    ],
-    "video": {
-      "src": "assets/uploads/ruckaroo/walkthrough.mp4",
-      "poster": "assets/uploads/ruckaroo/walkthrough-poster.webp",
-      "title": "Ruckaroo walkthrough"
-    },
-    "gallery": {
-      "after": [],
-      "before": []
-    }
-  },
-  {
     "slug": "sip-cafe",
     "title": "SIP Café",
     "tagline": "A mobile-first ordering website for a café in Ramallah.",
@@ -1004,6 +724,286 @@
     "featuredRank": 5
   },
   {
+    "slug": "ruckaroo",
+    "title": "Ruckaroo",
+    "tagline": "A rucking app that turns walking with weight into a scored, social workout.",
+    "category": "Fitness · Rucking",
+    "type": "mobile",
+    "live": true,
+    "status": "Live",
+    "published": false,
+    "summary": "A fitness app for rucking (walking with weight on your back) with a Ruck Score, badges, an AI coach, stats and a community.",
+    "cover": {
+      "image": "",
+      "ghost": "Ruckaroo",
+      "tint": "#0F6B55"
+    },
+    "company": "Freelance client",
+    "role": "Product Designer (UI/UX)",
+    "team": "",
+    "timeline": "1 month",
+    "overview": "Ruckaroo is a mobile app for rucking: walking, hiking or training with weight on your back. It calculates a Ruck Score from your pack weight, distance, terrain and body data, rewards every ruck with a badge, and connects to Apple Watch. I designed the whole app experience, from the first-time onboarding and sign-up to the personal plan, plus the App Store screenshots that sell it.",
+    "problem": "Most people have never heard of rucking, and most fitness apps only count steps. How might we explain a new kind of workout in a few screens, collect the personal data the Ruck Score needs, and still get people to their plan without losing them on the way?",
+    "responsibilities": {
+      "product": [
+        "Shaping the onboarding story: what rucking is, why it beats walking, what makes the app different",
+        "Deciding which personal data to ask for and in what order",
+        "Defining every state: empty, filled, error, loading and dialogs"
+      ],
+      "design": [
+        "General onboarding and education screens",
+        "Sign up, login, forgot password and confirmation code flows",
+        "Personal onboarding: name, @handle, birthday, gender, weight, height, goal and challenge",
+        "Plan building, notifications and review prompts",
+        "App Store screenshots",
+        "Illustrations and visual style"
+      ]
+    },
+    "process": [
+      {
+        "title": "Understand the sport",
+        "desc": "Learned how rucking works and what the Ruck Score is built on (pack weight, distance and pace, terrain, body weight, heart rate, temperature and humidity) so the screens explain it in plain words."
+      },
+      {
+        "title": "Tell the story first",
+        "desc": "Opened with short education screens: what rucking is, walking versus rucking, the badges and the wearable, before asking the user for anything."
+      },
+      {
+        "title": "Collect data step by step",
+        "desc": "One question per screen with a progress bar, unit toggles (lbs/kg, ft-in/cm), pickers instead of typing, and a clear empty state for every step."
+      },
+      {
+        "title": "Design every state",
+        "desc": "Default, typing, filled and error states for every form, plus loading, cancel dialogs and success screens."
+      },
+      {
+        "title": "Sell it in the store",
+        "desc": "Designed a set of App Store screenshots that each carry one benefit: calories, science, Ruck Score, coach, stats, sharing and syncing."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "Rucking is new to most users, so the value is not obvious.",
+        "solution": "Education screens with a simple comparison (walking vs rucking) and a five-level badge system before any sign-up friction."
+      },
+      {
+        "challenge": "The Ruck Score needs a lot of personal data, which can feel like a long form.",
+        "solution": "Split it into single-question screens with pickers, unit toggles and a progress bar, and explained why each answer matters."
+      },
+      {
+        "challenge": "Many form fields and edge cases across auth flows.",
+        "solution": "Defined a consistent set of field states and error messages reused across sign up, login and password recovery."
+      }
+    ],
+    "results": [],
+    "learnings": "Designing for a sport most people do not know yet taught me to lead with the story before the form. I practised building a long onboarding that still feels light, designing every form state carefully, and turning product benefits into a set of App Store screenshots.",
+    "icon": "assets/uploads/ruckaroo/icon.webp",
+    "screens": [
+      "assets/uploads/ruckaroo/01-splash.webp",
+      "assets/uploads/ruckaroo/02-what-is-rucking.webp",
+      "assets/uploads/ruckaroo/03-walking-vs-rucking.webp",
+      "assets/uploads/ruckaroo/04-progress.webp",
+      "assets/uploads/ruckaroo/05-wearable.webp",
+      "assets/uploads/ruckaroo/06-badges.webp",
+      "assets/uploads/ruckaroo/07-signup.webp",
+      "assets/uploads/ruckaroo/08-signup-error.webp",
+      "assets/uploads/ruckaroo/09-signup-cancel.webp",
+      "assets/uploads/ruckaroo/10-login.webp",
+      "assets/uploads/ruckaroo/11-login-filled.webp",
+      "assets/uploads/ruckaroo/12-login-error.webp",
+      "assets/uploads/ruckaroo/13-forgot.webp",
+      "assets/uploads/ruckaroo/14-forgot-error.webp",
+      "assets/uploads/ruckaroo/15-code-error.webp",
+      "assets/uploads/ruckaroo/16-new-password.webp",
+      "assets/uploads/ruckaroo/17-new-password-filled.webp",
+      "assets/uploads/ruckaroo/18-password-updated.webp",
+      "assets/uploads/ruckaroo/19-name.webp",
+      "assets/uploads/ruckaroo/20-handle.webp",
+      "assets/uploads/ruckaroo/21-born.webp",
+      "assets/uploads/ruckaroo/22-identify.webp",
+      "assets/uploads/ruckaroo/23-weight.webp",
+      "assets/uploads/ruckaroo/24-height.webp",
+      "assets/uploads/ruckaroo/25-goal.webp",
+      "assets/uploads/ruckaroo/26-goal-picked.webp",
+      "assets/uploads/ruckaroo/27-challenge.webp",
+      "assets/uploads/ruckaroo/28-great-goal.webp",
+      "assets/uploads/ruckaroo/29-community.webp",
+      "assets/uploads/ruckaroo/30-building.webp",
+      "assets/uploads/ruckaroo/31-review.webp"
+    ],
+    "webScreens": [],
+    "featured": false,
+    "devices": {
+      "mobile": true,
+      "tablet": false,
+      "desktop": false
+    },
+    "tabletScreens": [],
+    "cardDevice": "auto",
+    "social": {
+      "label": "App Store screenshots",
+      "color": "#0F6B55",
+      "images": [
+        "assets/uploads/ruckaroo/store/01-burn.webp",
+        "assets/uploads/ruckaroo/store/02-science.webp",
+        "assets/uploads/ruckaroo/store/03-score.webp",
+        "assets/uploads/ruckaroo/store/04-weight.webp",
+        "assets/uploads/ruckaroo/store/05-coach.webp",
+        "assets/uploads/ruckaroo/store/06-stats.webp",
+        "assets/uploads/ruckaroo/store/07-share.webp",
+        "assets/uploads/ruckaroo/store/08-journey.webp",
+        "assets/uploads/ruckaroo/store/09-sync.webp"
+      ]
+    },
+    "demo": [
+      {
+        "img": "assets/uploads/ruckaroo/01-splash.webp",
+        "s": 0,
+        "label": "Open the app",
+        "note": "Splash while it loads",
+        "loading": 1400,
+        "hold": 500
+      },
+      {
+        "img": "assets/uploads/ruckaroo/02-what-is-rucking.webp",
+        "s": 1,
+        "label": "What is rucking?",
+        "note": "Short education first",
+        "taps": [
+          [
+            0.5,
+            0.91
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/ruckaroo/03-walking-vs-rucking.webp",
+        "s": 2,
+        "label": "Walking vs rucking",
+        "note": "Why it is worth it",
+        "taps": [
+          [
+            0.5,
+            0.91
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/ruckaroo/06-badges.webp",
+        "s": 5,
+        "label": "Earn a badge",
+        "note": "Five levels for every ruck",
+        "taps": [
+          [
+            0.5,
+            0.92
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/ruckaroo/07-signup.webp",
+        "s": 6,
+        "label": "Create an account",
+        "note": "Name, email, password",
+        "taps": [
+          [
+            0.5,
+            0.34
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/ruckaroo/19-name.webp",
+        "s": 18,
+        "label": "What should we call you?",
+        "note": "One question per screen",
+        "taps": [
+          [
+            0.5,
+            0.91
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/ruckaroo/23-weight.webp",
+        "s": 22,
+        "label": "Body weight",
+        "note": "Pickers with lbs/kg toggle",
+        "taps": [
+          [
+            0.5,
+            0.59
+          ],
+          [
+            0.5,
+            0.91
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/ruckaroo/25-goal.webp",
+        "s": 24,
+        "label": "Primary goal",
+        "note": "Pick what matters to you",
+        "taps": [
+          [
+            0.4,
+            0.37
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/ruckaroo/26-goal-picked.webp",
+        "s": 25,
+        "label": "Goal picked",
+        "note": "Continue lights up",
+        "taps": [
+          [
+            0.5,
+            0.91
+          ]
+        ],
+        "hold": 1300
+      },
+      {
+        "img": "assets/uploads/ruckaroo/30-building.webp",
+        "s": 29,
+        "label": "Building your plan",
+        "note": "Your plan is ready",
+        "hold": 900
+      },
+      {
+        "img": "assets/uploads/ruckaroo/29-community.webp",
+        "s": 28,
+        "label": "You are not alone",
+        "note": "Join the community",
+        "taps": [
+          [
+            0.5,
+            0.91
+          ]
+        ],
+        "hold": 1600
+      }
+    ],
+    "video": {
+      "src": "assets/uploads/ruckaroo/walkthrough.mp4",
+      "poster": "assets/uploads/ruckaroo/walkthrough-poster.webp",
+      "title": "Ruckaroo walkthrough"
+    },
+    "gallery": {
+      "after": [],
+      "before": []
+    }
+  },
+  {
     "slug": "afyti",
     "title": "Afyti",
     "tagline": "[One line about the product.]",
@@ -1011,7 +1011,7 @@
     "type": "mobile",
     "live": false,
     "status": "",
-    "published": true,
+    "published": false,
     "summary": "A doctors app with its own design system: [one line on who it serves and what you designed].",
     "cover": {
       "image": "",
@@ -1875,7 +1875,7 @@
     "type": "web",
     "live": true,
     "status": "Live",
-    "published": true,
+    "published": false,
     "summary": "Design and product consulting for شوف حظّك (Shoof Hazzak), a quiz game for evenings with family and friends: two teams, categories they choose, cards with hidden difficulty, bets and steals. The work was done with AI and Claude.",
     "cover": {
       "image": "",
