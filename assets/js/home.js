@@ -603,10 +603,13 @@
       tr.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; sx = e.clientX; sl = tr.scrollLeft; moved = false; tr.classList.add('drag'); });
       addEventListener('pointermove', (e) => { if (sx === null) return; const dx = e.clientX - sx; if (Math.abs(dx) > 3) moved = true; tr.scrollLeft = sl - dx; });
       addEventListener('pointerup', (e) => { if (sx === null) return; const dx = e.clientX - sx; tr.classList.remove('drag'); sx = null; go(Math.abs(dx) > 50 ? cur : cur); setTimeout(() => { moved = false; }, 0); });
-      const pause = (v) => { hold = v; arm(); };
-      box.addEventListener('mouseenter', () => pause(true)); box.addEventListener('mouseleave', () => pause(false));
-      box.addEventListener('focusin', () => pause(true)); box.addEventListener('focusout', (e) => { if (!box.contains(e.relatedTarget)) pause(false); });
-      tr.addEventListener('touchstart', () => pause(true), { passive: true }); tr.addEventListener('touchend', () => setTimeout(() => pause(false), 2500), { passive: true });
+      /* the visitor stops on it (hover, touch, click, keys): stay still until they scroll the page up or down */
+      let stopY = null;
+      const stop = () => { hold = true; stopY = scrollY; clearTimeout(timer); };
+      box.addEventListener('mouseenter', stop); box.addEventListener('focusin', stop);
+      tr.addEventListener('pointerdown', stop); tr.addEventListener('touchstart', stop, { passive: true });
+      $$('button', box).forEach((b) => b.addEventListener('click', stop));
+      addEventListener('scroll', () => { if (hold && stopY !== null && Math.abs(scrollY - stopY) > 140 && !box.matches(':hover')) { hold = false; stopY = null; arm(); } }, { passive: true });
       document.addEventListener('visibilitychange', arm);
       new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; arm(); }).observe(box);
       requestAnimationFrame(() => { go(0, false); mark(); });
