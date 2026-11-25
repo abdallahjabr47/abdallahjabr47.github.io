@@ -2379,3 +2379,5 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 /* coming soon: lilac label at the bottom of the card, hover says "Case study coming soon" */
 .pcard.is-soon .soon-tag{top:auto;bottom:18px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:7px;padding:8px 15px;font-size:13px;font-weight:600;color:#C8A2FF;background:rgb(200 162 255 / .14);border:1px solid rgb(200 162 255 / .36);box-shadow:none}
 .pcard.is-soon .soon-tag svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.pcard.is-soon .soon-tag{left:auto;right:14px;bottom:14px;transform:none;gap:5px;padding:5px 10px;font-size:11px;letter-spacing:.01em}
+.pcard.is-soon .soon-tag svg{width:11px;height:11px}
