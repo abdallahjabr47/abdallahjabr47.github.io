@@ -2369,3 +2369,4 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 @media (max-width:640px){.testi .hc{width:290px;padding:22px 20px 18px}.testi.few .hc{width:100%}}
 @media (prefers-reduced-motion:reduce){.mq-row{animation:none}}
 .sec-head.testi-head{display:flex;justify-content:center;text-align:center}.sec-head.testi-head .left{max-width:none;margin:0 auto}
+.testi.few .hc{width:min(700px,100%)}
