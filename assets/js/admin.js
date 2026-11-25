@@ -333,7 +333,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
         <span class="pthumb">${coverMini({ title: p.title, tint: p.cover && p.cover.tint, dev: projDev(p), shot: projShot(p, projDev(p)), phone: projDev(p) === 'desktop' && (p.devices || {}).mobile ? projShot(p, 'mobile') : undefined, style: 'l' })}</span>
         ${icn(p)}
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small><span class="lb lb-${p.type || 'mobile'}">${KIND_LABEL[p.type || 'mobile']}</span>${p.category ? ` <span class="pcat">${esc(p.category.split('·')[0].trim())}</span>` : ''}</small></span>
-        <span class="bdgs">${shown ? '' : '<span class="badge-d">Hidden</span>'}</span>
+        <span class="bdgs">${shown ? '' : '<span class="badge-d">Hidden</span>'}${p.status === 'Coming soon' ? '<span class="badge-d">Coming soon</span>' : ''}</span>
         <span class="acts">
           ${shown ? iconBtn('toggle', i, IC.hide, 'Hide from the website', 'hide') : iconBtn('toggle', i, IC.show, 'Show on the website', 'show')}
           ${iconBtn('edit', i, IC.edit, 'Edit', 'edit')}${iconBtn('del', i, IC.del, 'Delete', 'danger')}
@@ -495,7 +495,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     return `<label class="f">${label}${inp}${hint}</label>`;
   };
   const TRASH_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9l1-12.5M10 11v5M14 11v5"/></svg>';
-  const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['Shipped', 'Shipped'], ['In progress', 'In progress'], ['Personal', 'Personal']];
+  const STATUSES = [['', 'None (no status)'], ['Live', 'Live'], ['Shipped', 'Shipped'], ['In progress', 'In progress'], ['Personal', 'Personal'], ['Coming soon', 'Coming soon (shown greyed out, not clickable)']];
   const C = (label, key, val) => `<label class="chk"><input type="checkbox" data-k="${key}" ${val ? 'checked' : ''}> ${label}</label>`;
 
   /* one image slot, same behaviour everywhere: empty → click the dashed tile; filled → Remove / Replace */

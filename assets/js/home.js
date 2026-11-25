@@ -52,19 +52,20 @@
     const devChips = ['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span class="dv${k === pref ? ' on' : ''}" title="${({ mobile: 'Phone', tablet: 'Tablet', desktop: 'Desktop' })[k]}">${DEV_IC[k]}</span>`).join('');
     const catShort = (p.category || '').split('·')[0].trim();
     const icon = p.icon ? `<img src="${esc(p.icon)}" alt="">` : esc((p.title || '?').charAt(0));
+    const soon = p.status === 'Coming soon';
     return `
-    <article class="pcard art st-${st} type-${type} show-${pref}${sidePhone ? ' with-phone' : ''}" data-type="${type}" style="--tint:${esc(tint)}" data-reveal>
-      <div class="stage-panel" data-cursor="Explore case ↗" data-href="${href}" data-n="${count}">
+    <article class="pcard art st-${st} type-${type} show-${pref}${sidePhone ? ' with-phone' : ''}${soon ? ' is-soon' : ''}" data-type="${type}" style="--tint:${esc(tint)}"${soon ? ' aria-disabled="true"' : ''} data-reveal>
+      <div class="stage-panel"${soon ? ' data-cursor="Coming soon"' : ` data-cursor="Explore case ↗" data-href="${href}"`} data-n="${count}">${soon ? '<span class="soon-tag">Case study coming soon</span>' : ''}
         <div class="sp-badges"><span class="l"><span class="lb lb-${type}">${({ mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' })[type] || 'Mobile app'}</span>${catShort ? `<span class="lb lb-cat">${esc(catShort)}</span>` : ''}</span>${count > 6 ? `<span class="dots bar" aria-hidden="true"><span class="trk"><b style="width:${100 / count}%"></b></span><em>1/${count}</em></span>` : `<span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span>`}</div>
         <div class="devices2">${laptop}${phone}</div>
         <button class="sp-arrow a-prev" type="button" aria-label="Previous screen of ${esc(p.title)}" disabled>←</button>
         <button class="sp-arrow a-next" type="button" aria-label="Next screen of ${esc(p.title)}"${count < 2 ? ' disabled' : ''}>→</button>
-        <a class="explore" href="${href}">Explore case <span aria-hidden="true">↗</span></a>
+        ${soon ? '' : `<a class="explore" href="${href}">Explore case <span aria-hidden="true">↗</span></a>`}
       </div>
       <div class="pc-head">
         <span class="app-icon">${icon}</span>
         <div class="nm"><h3>${esc(p.title)}</h3><p>${esc(p.tagline || p.category || '')}</p></div>
-        ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done', 'Personal': 'pers' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
+        ${p.status ? `<span class="status-pill ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done', 'Personal': 'pers', 'Coming soon': 'soon' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}
       </div>
     </article>`;
   }
@@ -119,7 +120,7 @@
     }
     [prev, next].forEach((b) => b.addEventListener('click', () => { stop(false); }));
     panel.addEventListener('click', (e) => {
-      if (moved || e.target.closest('button, a')) return;
+      if (moved || e.target.closest('button, a') || !panel.dataset.href) return;
       (window.SiteGo || ((h) => { location.href = h; }))(panel.dataset.href);
     });
   }
@@ -404,7 +405,7 @@
   function renderIndex(list) {
     if (!indexList) return;
     indexList.innerHTML = list.map((p, i) => `
-      <li><a class="ix-row" href="project.html#${encodeURIComponent(p.slug)}" data-i="${i}">
+      <li><a class="ix-row${p.status === 'Coming soon' ? ' is-soon' : ''}" ${p.status === 'Coming soon' ? 'aria-disabled="true" tabindex="-1"' : `href="project.html#${encodeURIComponent(p.slug)}"`} data-i="${i}">
         <span class="ix-n">${String(i + 1).padStart(2, '0')}</span>
         <span class="ix-t">${esc(p.title)}</span>
         <span class="ix-c">${esc((p.category || '').split('·')[0].trim())}</span>

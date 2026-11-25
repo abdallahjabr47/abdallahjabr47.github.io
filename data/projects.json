@@ -5,8 +5,8 @@
     "tagline": "A series-based content app",
     "category": "Social · Series platform",
     "type": "mobile",
-    "live": true,
-    "status": "Live",
+    "live": false,
+    "status": "Coming soon",
     "published": true,
     "summary": "A content app that grew into a series-based platform. I shipped Series, Anonymous, an in-app Wallet, and Verification and Premium subscriptions.",
     "cover": {
@@ -202,8 +202,8 @@
     "tagline": "Meetups and finding new friends",
     "category": "Social · Meetups",
     "type": "mobile",
-    "live": true,
-    "status": "Live",
+    "live": false,
+    "status": "Coming soon",
     "published": true,
     "summary": "A social app for meetups and new friends. I defined the end-to-end meetup flow — create, invite, join, coordinate — and the Find feature for people nearby.",
     "cover": {
