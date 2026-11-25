@@ -2251,3 +2251,19 @@ html.hiw-lock a,html.hiw-lock button,html.hiw-lock [role=button],html.embed a,ht
 @media (max-width:640px){.cs-cover .sc-top .sc-cur b{font-size:10px}}
 .pr-act{min-height:36px;padding-inline:14px;display:inline-flex;align-items:center}
 @media (min-width:861px){.hero.hx .hx-card{max-width:1080px;margin-inline:auto}.hx-q{font-size:clamp(32px,3.7vw,56px)}}
+/* hero background: slow orbits + flowing lines behind the content */
+.hx-bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;color:var(--sky);-webkit-mask:linear-gradient(to left,#000 25%,rgb(0 0 0 / .35) 60%,transparent 90%);mask:linear-gradient(to left,#000 25%,rgb(0 0 0 / .35) 60%,transparent 90%)}
+.hx-card>.hx-main{position:relative;z-index:1}
+.hb-r circle{fill:none;stroke:rgb(var(--fg) / .13);stroke-width:1;vector-effect:non-scaling-stroke}
+.hb-r .hb-dot{fill:var(--sky);stroke:none;filter:drop-shadow(0 0 6px var(--sky))}
+.hb-r{transform-box:view-box;transform-origin:800px 250px;animation:hbSpin 40s linear infinite}
+.hb-r.r1{animation-duration:28s;animation-direction:reverse}.hb-r.r2{animation-duration:52s}.hb-r.r3{animation-duration:70s;animation-direction:reverse}.hb-r.r4{animation-duration:90s}
+.hb-r.r0{animation-delay:-10s}.hb-r.r2{animation-delay:-20s}.hb-r.r3{animation-delay:-33s}.hb-r.r4{animation-delay:-50s}
+@keyframes hbSpin{to{transform:rotate(360deg)}}
+.hb-w{fill:none;stroke:url(#hbG);stroke-width:1.4;vector-effect:non-scaling-stroke;stroke-dasharray:180 820;opacity:.75;animation:hbFlow 9s linear infinite}
+.hb-w.w1{animation-duration:12s;animation-delay:-4s;opacity:.4}.hb-w.w2{animation-duration:15s;animation-delay:-8s;opacity:.3}
+@keyframes hbFlow{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+[data-theme="light"] .hx-bg{color:var(--blue)}[data-theme="light"] .hb-r .hb-dot{fill:var(--blue)}
+@media (prefers-reduced-motion:reduce){.hb-r,.hb-w{animation:none}}
+@media (min-width:861px){.hx-slides{padding-bottom:64px}}
+@media (max-width:860px){.hx-slides{padding-bottom:38px}.hx-bg{-webkit-mask:linear-gradient(to top,#000 10%,transparent 70%);mask:linear-gradient(to top,#000 10%,transparent 70%)}}
