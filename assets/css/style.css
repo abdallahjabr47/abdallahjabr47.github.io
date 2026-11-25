@@ -2125,3 +2125,4 @@ html.vbox-on{overflow:hidden}
 .hx-q{font-size:clamp(36px,5vw,76px)}
 @media (max-width:860px){.hx-av{width:64px;height:64px}.hx-who b{font-size:19px}.hx-who small{font-size:13.5px}.hx-top>span{display:none}.hx-main{padding:26px 22px 30px}}
 @media (max-width:560px){.hx .hero-ctas{flex-wrap:nowrap}.hx .hero-ctas .btn{padding-inline:18px;font-size:15px}}
+.wid{align-items:start}.wid-card{box-shadow:none}
