@@ -2150,3 +2150,4 @@ html.hiw-lock{overflow:hidden}
 .hx-who .hx-links{margin-top:14px}
 @media (max-width:860px){.hx-av{width:76px;height:76px}}
 .hx-who{align-items:center}.hx-av{margin-top:0;width:88px;height:88px}
+.hx-place{display:block;margin-top:4px;font-size:13.5px;color:color-mix(in srgb,var(--muted) 70%,transparent)}
