@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Alexandria:wght@400..600&family=Cairo:wght@700..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=20261125122852">
+<link rel="stylesheet" href="assets/css/style.css?v=20261125122903">
 <script>(function(){var t,on;try{t=localStorage.getItem('theme');on=localStorage.getItem('light-on')==='1'}catch(e){}if(t!=='light'&&t!=='dark'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}if(!on)t='dark';var d=document.documentElement;d.dataset.theme=t;d.classList.add('js');if(on)d.classList.add('light-on')})()</script>
 <style>
 .masked{-webkit-text-security:disc;font-family:monospace}
@@ -72,8 +72,8 @@ body::after{opacity:.04}
 .badge-d{padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700;background:rgb(var(--fg) / .08);color:var(--muted)}
 .badge-d.hid,.badge-d.soon{display:inline-flex;align-items:center;gap:6px}
 .badge-d svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.badge-d.hid{background:rgb(255 95 87 / .12);color:#FF7A72;box-shadow:inset 0 0 0 1px rgb(255 95 87 / .28)}
-.badge-d.soon{background:rgb(124 77 255 / .16);color:#A88BFF;box-shadow:inset 0 0 0 1px rgb(124 77 255 / .32)}
+.badge-d.hid{background:rgb(var(--fg) / .08);color:var(--muted)}
+.badge-d.soon{background:rgb(200 162 255 / .16);color:#C8A2FF;box-shadow:inset 0 0 0 1px rgb(200 162 255 / .34)}
 .bdgs{display:inline-flex;gap:6px;flex-wrap:wrap}
 .badge-d.on{background:rgba(61,220,151,.15);color:var(--ok)}
 .badge-d.feat{background:rgb(242 181 68 / .14);color:#F2B544;margin-left:6px}
@@ -1148,11 +1148,11 @@ textarea.ta-long{height:150px!important}
   <div class="sv-in"><span class="sv-ic" aria-hidden="true"></span><span class="msg" id="saveMsg"></span><span class="sv-acts"><button type="button" class="sv-discard" id="saveDiscard" hidden>Discard</button><button type="button" class="sv-retry" id="saveRetry" hidden>Retry</button></span></div>
 </div>
 
-<script src="assets/js/config.js?v=20261125122852"></script>
-<script src="assets/js/icons.js?v=20261125122852"></script>
-<script src="assets/js/scenes.js?v=20261125122852"></script>
-<script src="assets/js/content.js?v=20261125122852"></script>
-<script src="assets/js/core.js?v=20261125122852"></script>
-<script src="assets/js/admin.js?v=20261125122852"></script>
+<script src="assets/js/config.js?v=20261125122903"></script>
+<script src="assets/js/icons.js?v=20261125122903"></script>
+<script src="assets/js/scenes.js?v=20261125122903"></script>
+<script src="assets/js/content.js?v=20261125122903"></script>
+<script src="assets/js/core.js?v=20261125122903"></script>
+<script src="assets/js/admin.js?v=20261125122903"></script>
 </body>
 </html>
