@@ -2386,3 +2386,4 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 .pcard.is-soon .soon-tag.lb svg{width:11px;height:11px}
 [data-theme="light"] .pcard.is-soon .soon-tag.lb{color:#5B2DC8!important;background:#EFE6FF!important}
 @media (max-width:640px){.pcard.is-soon .soon-tag.lb{font-size:11px!important;padding:4px 8px!important}}
+.pg-project .nav .nav-links,.pg-project .nav .burger{display:none!important}
