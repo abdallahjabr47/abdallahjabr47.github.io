@@ -48,7 +48,7 @@
     const sidePhone = pref === 'desktop' && dv.mobile ? `<div class="phone-f phone-side" aria-hidden="true"><div class="scr"><span class="island"></span>${(p.screens && p.screens[0]) ? imgOr(first(p.screens)[0], '', '') : mockPhone(0, p.title)}</div></div>` : '';
     /* cover thumbnail: bold name + one device on the project's colour; style a/b/c varies per project */
     const st = ['a', 'b', 'c'].includes(p.cardStyle) ? p.cardStyle : 'abc'[i % 3];
-    const laptop = '<span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>', phone = `<span class="ta-ghost" aria-hidden="true" style="--n:${Math.max(4, (p.title || '').length)}">${esc(p.title)}</span>` + device + sidePhone;
+    const laptop = '<span class="orb o1"></span><span class="orb o2"></span><span class="orb o3"></span>', phone = `<span class="ta-ghost" aria-hidden="true" style="--n:${Math.max(4, (p.title || '').length)}">${/[\u0600-\u06FF]/.test(p.title || '') ? esc(p.title).split(' ').join('<br>') : esc(p.title)}</span>` + device + sidePhone;
     const devChips = ['mobile', 'tablet', 'desktop'].filter((k) => dv[k]).map((k) => `<span class="dv${k === pref ? ' on' : ''}" title="${({ mobile: 'Phone', tablet: 'Tablet', desktop: 'Desktop' })[k]}">${DEV_IC[k]}</span>`).join('');
     const catShort = (p.category || '').split('·')[0].trim();
     const icon = p.icon ? `<img src="${esc(p.icon)}" alt="">` : esc((p.title || '?').charAt(0));
