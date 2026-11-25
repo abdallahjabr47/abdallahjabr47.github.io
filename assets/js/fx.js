@@ -88,7 +88,7 @@
   /* ---------- 3. magnetic buttons ---------- */
   (function magnetic() {
     if (!fine || reduce) return;
-    const els = $$('.hero .btn, .cta-circle, .nav .cv, .xp-cv .btn');
+    const els = $$('.cta-circle, .nav .cv, .xp-cv .btn');
     els.forEach((el) => {
       if (el.dataset.magDone) return;
       el.dataset.magDone = '1';

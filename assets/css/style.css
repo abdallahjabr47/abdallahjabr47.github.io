@@ -2171,3 +2171,5 @@ html.hiw-lock{overflow:hidden}
 .hx-who .hx-place::before{content:"";width:6px;height:6px;border-radius:50%;background:#3DDC97}
 .hx-av{width:88px;height:88px}
 @media (max-width:860px){.hx-who{gap:14px}.hx-who>div{gap:4px}.hx-who b{font-size:19px}.hx-who small{font-size:13.5px}.hx-who .hx-place{font-size:12.5px}.hx-av{width:70px;height:70px}}
+/* logos without a background sit on a soft grey disc */
+.app-icon:has(img),.cs-icon:has(img){background:rgb(var(--fg) / .08)!important}
