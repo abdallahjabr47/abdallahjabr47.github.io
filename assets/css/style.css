@@ -2267,3 +2267,8 @@ html.hiw-lock a,html.hiw-lock button,html.hiw-lock [role=button],html.embed a,ht
 @media (prefers-reduced-motion:reduce){.hb-r,.hb-w{animation:none}}
 @media (min-width:861px){.hx-slides{padding-bottom:64px}}
 @media (max-width:860px){.hx-slides{padding-bottom:38px}.hx-bg{-webkit-mask:linear-gradient(to top,#000 10%,transparent 70%);mask:linear-gradient(to top,#000 10%,transparent 70%)}}
+/* burger: two centered lines that cross into a clean X */
+@media (max-width:900px){.burger{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:color-mix(in srgb,var(--bg) 60%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);position:relative;z-index:2}}
+.burger span+span{margin-top:0}
+@media (max-width:900px){.nav .nav-links{background:color-mix(in srgb,var(--bg) 94%,#1b2233);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line2);box-shadow:0 30px 60px -20px rgb(0 0 0 / .6)}
+[data-theme="light"] .nav .nav-links{background:color-mix(in srgb,#fff 96%,var(--bg))}}
