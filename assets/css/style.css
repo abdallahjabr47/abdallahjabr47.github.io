@@ -2389,3 +2389,4 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 .pg-project .nav .nav-links,.pg-project .nav .burger{display:none!important}
 .testi.mq .hc blockquote,.testi.few .hc blockquote{font-size:15px}
 .testi.mq{padding-block:14px 30px;margin-block:-14px -30px}
+.testi.mq .hc blockquote,.testi.few .hc blockquote{font-size:16px}
