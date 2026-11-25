@@ -2381,3 +2381,8 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 .pcard.is-soon .soon-tag svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .pcard.is-soon .soon-tag{left:auto;right:14px;bottom:14px;transform:none;gap:5px;padding:5px 10px;font-size:11px;letter-spacing:.01em}
 .pcard.is-soon .soon-tag svg{width:11px;height:11px}
+/* coming soon label = same chip as "Mobile app" / "Social", lilac */
+.pcard.is-soon .soon-tag.lb{position:absolute;top:auto;left:auto;right:16px;bottom:16px;transform:none;z-index:6;display:inline-flex;align-items:center;gap:4px;padding:4px 9px!important;font-size:11.5px!important;font-weight:700;line-height:1.3;letter-spacing:.01em;border:0!important;box-shadow:none!important;color:#D7BCFF!important;background:rgb(124 77 255 / .32)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.pcard.is-soon .soon-tag.lb svg{width:11px;height:11px}
+[data-theme="light"] .pcard.is-soon .soon-tag.lb{color:#5B2DC8!important;background:#EFE6FF!important}
+@media (max-width:640px){.pcard.is-soon .soon-tag.lb{font-size:11px!important;padding:4px 8px!important}}
