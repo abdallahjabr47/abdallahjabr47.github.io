@@ -731,7 +731,7 @@
     "type": "mobile",
     "live": true,
     "status": "Live",
-    "published": false,
+    "published": true,
     "summary": "A fitness app for rucking (walking with weight on your back) with a Ruck Score, badges, an AI coach, stats and a community.",
     "cover": {
       "image": "",
