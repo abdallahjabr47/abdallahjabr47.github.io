@@ -2249,3 +2249,4 @@ html.hiw-lock a,html.hiw-lock button,html.hiw-lock [role=button],html.embed a,ht
 
 .cs-cover .sc-top{z-index:2}
 @media (max-width:640px){.cs-cover .sc-top .sc-cur b{font-size:10px}}
+.pr-act{min-height:36px;padding-inline:14px;display:inline-flex;align-items:center}
