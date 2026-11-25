@@ -1869,7 +1869,7 @@
   },
   {
     "slug": "shoof-hazzak",
-    "title": "Shoof Hazzak",
+    "title": "شوف حظّك",
     "tagline": "An Arabic party quiz game for two teams, played in the browser.",
     "category": "Games · Party quiz game",
     "type": "web",
@@ -1879,7 +1879,7 @@
     "summary": "Design and product consulting for شوف حظّك (Shoof Hazzak), a quiz game for evenings with family and friends: two teams, categories they choose, cards with hidden difficulty, bets and steals. The work was done with AI and Claude.",
     "cover": {
       "image": "",
-      "ghost": "Hazzak",
+      "ghost": "شوف حظّك",
       "tint": "#7C3AED"
     },
     "company": "Consulting project",

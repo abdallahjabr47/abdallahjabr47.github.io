@@ -36,7 +36,7 @@
 }
 *{box-sizing:border-box;min-width:0}
 html{overflow-x:hidden;scroll-behavior:smooth;scroll-padding-top:90px;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 'Manrope','Inter',system-ui,-apple-system,sans-serif;font-optical-sizing:auto;overflow-x:clip;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 'Manrope','Alexandria','Inter',system-ui,-apple-system,sans-serif;font-optical-sizing:auto;overflow-x:clip;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 html,body{transition:background-color .4s}
@@ -2173,3 +2173,12 @@ html.hiw-lock{overflow:hidden}
 @media (max-width:860px){.hx-who{gap:14px}.hx-who>div{gap:4px}.hx-who b{font-size:19px}.hx-who small{font-size:13.5px}.hx-who .hx-place{font-size:12.5px}.hx-av{width:70px;height:70px}}
 /* logos without a background sit on a soft grey disc */
 .app-icon:has(img),.cs-icon:has(img){background:rgb(var(--fg) / .08)!important}
+
+/* Arabic project names: read right to left, the orb moves to the left */
+.pcard.art.is-rtl .ta-ghost{direction:rtl;text-align:right;font-family:'Alexandria','Manrope',sans-serif;font-weight:700;letter-spacing:0;line-height:1.15}
+.pcard.art.is-rtl .orb.o2{right:auto;left:9%}
+.pcard.art.is-rtl .orb.o3{right:auto;left:28%}
+.pcard.is-rtl .pc-head h3{font-family:'Alexandria','Manrope',sans-serif;font-weight:600}
+.cs-rtl{direction:rtl;font-family:'Alexandria','Manrope',sans-serif}
+.cs-idt-h[dir=rtl]{font-family:"Alexandria","Manrope",sans-serif}
+.cs-idt-h[dir=rtl]{text-align:left}.ghost.cs-rtl{letter-spacing:0!important;direction:rtl}.pcard.is-rtl .pc-head h3{letter-spacing:0}

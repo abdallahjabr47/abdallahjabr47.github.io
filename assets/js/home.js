@@ -53,8 +53,9 @@
     const catShort = (p.category || '').split('·')[0].trim();
     const icon = p.icon ? `<img src="${esc(p.icon)}" alt="">` : esc((p.title || '?').charAt(0));
     const soon = p.status === 'Coming soon';
+    const rtl = /[\u0600-\u06FF]/.test(p.title || '');
     return `
-    <article class="pcard art st-${st} type-${type} show-${pref}${sidePhone ? ' with-phone' : ''}${soon ? ' is-soon' : ''}" data-type="${type}" style="--tint:${esc(tint)}"${soon ? ' aria-disabled="true"' : ''} data-reveal>
+    <article class="pcard art st-${st} type-${type} show-${pref}${sidePhone ? ' with-phone' : ''}${soon ? ' is-soon' : ''}${rtl ? ' is-rtl' : ''}" data-type="${type}" style="--tint:${esc(tint)}"${soon ? ' aria-disabled="true"' : ''} data-reveal>
       <div class="stage-panel"${soon ? ' data-cursor="Coming soon"' : ` data-cursor="Explore case ↗" data-href="${href}"`} data-n="${count}">${soon ? '<span class="soon-tag">Case study coming soon</span>' : ''}
         <div class="sp-badges"><span class="l"><span class="lb lb-${type}">${({ mobile: 'Mobile app', web: 'Website', both: 'Mobile + Website' })[type] || 'Mobile app'}</span>${catShort ? `<span class="lb lb-cat">${esc(catShort)}</span>` : ''}</span>${count > 6 ? `<span class="dots bar" aria-hidden="true"><span class="trk"><b style="width:${100 / count}%"></b></span><em>1/${count}</em></span>` : `<span class="dots" aria-hidden="true">${Array.from({ length: count }, (_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</span>`}</div>
         <div class="devices2">${laptop}${phone}</div>

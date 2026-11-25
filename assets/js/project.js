@@ -254,7 +254,7 @@
     const dv = (p.devices && (p.devices.mobile || p.devices.tablet || p.devices.desktop)) ? p.devices : { mobile: type !== 'web', tablet: false, desktop: type !== 'mobile' };
     const coverInner = p.cover && p.cover.image
       ? `<img src="${esc(p.cover.image)}" alt="${esc(p.title)} cover">`
-      : `${window.Scenes ? window.Scenes.html(p) : ''}<span class="ghost" aria-hidden="true">${esc(p.title)}</span><div class="devices" style="gap:28px">
+      : `${window.Scenes ? window.Scenes.html(p) : ''}<span class="ghost${/[\u0600-\u06FF]/.test(p.title || '') ? ' cs-rtl' : ''}" aria-hidden="true">${esc(p.title)}</span><div class="devices" style="gap:28px">
            ${dv.desktop ? `<div class="dev-desk">${p.webScreens && p.webScreens[0] ? `<img src="${esc(p.webScreens[0])}" alt="" style="width:100%;height:100%;object-fit:cover">` : 'Desktop'}</div>` : ''}
            ${dv.tablet ? `<div class="dev-tab">${p.tabletScreens && p.tabletScreens[0] ? `<img src="${esc(p.tabletScreens[0])}" alt="" style="width:100%;height:100%;object-fit:cover">` : 'Tablet'}</div>` : ''}
            ${dv.mobile ? (dv.desktop || dv.tablet ? [1] : [0, 1, 2]).map((k) => `<div class="dev-phone" style="${k !== 1 ? 'transform:translateY(-26px);opacity:.75' : 'border-color:var(--sky)'};overflow:hidden">${shots[k] || (k === 1 && shots[0]) ? `<img src="${esc(shots[k] || shots[0])}" alt="" style="width:100%;height:100%;object-fit:cover">` : mockScreen(tint)}</div>`).join('') : ''}
@@ -271,7 +271,7 @@
         <div class="cs-idrow">
         <div class="cs-id" data-reveal>
           ${has(p.icon) ? `<span class="cs-icon"><img src="${esc(p.icon)}" alt="${esc(p.title)} logo"></span>` : `<span class="cs-icon letter" style="--tint:${esc(tint)}">${esc((p.title || '?').charAt(0))}</span>`}
-          <span class="cs-idt"><h1 class="cs-idt-h">${esc(p.title)}</h1><small>Case study ${String(idx + 1).padStart(2, '0')}${has(p.category) ? ' · ' + esc(p.category) : ''}</small></span>
+          <span class="cs-idt"><h1 class="cs-idt-h"${/[\u0600-\u06FF]/.test(p.title || '') ? ' dir="rtl" lang="ar"' : ''}>${esc(p.title)}</h1><small>Case study ${String(idx + 1).padStart(2, '0')}${has(p.category) ? ' · ' + esc(p.category) : ''}</small></span>
         </div>
           <div class="cs-side" data-reveal>${p.status ? `<span class="status-pill big ${({ 'Live': 'live', 'In progress': 'dev', 'Shipped': 'done', 'Personal': 'pers' })[p.status] || (p.live ? 'live' : 'muted')}">${esc(p.status)}</span>` : ''}${linksHTML(p)}</div>
         </div>
