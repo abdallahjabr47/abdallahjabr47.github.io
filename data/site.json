@@ -103,5 +103,37 @@
     }
   ],
   "availabilityOn": false,
-  "lightMode": false
+  "lightMode": false,
+  "showcase": [
+    "assets/uploads/foras/01-home-en.webp",
+    "assets/uploads/sip-cafe/04-home.webp",
+    "assets/uploads/xchange/03-home.webp",
+    "assets/uploads/ruckaroo/01-splash.webp",
+    "assets/uploads/mazadak/06-home.webp",
+    "assets/uploads/minicity/03-home.webp",
+    "assets/uploads/worldclockr/01-home.webp",
+    "assets/uploads/boxchampy/02-landing-mobile.webp",
+    "assets/uploads/portfolio-site/01-home-phone.jpg",
+    "assets/uploads/foras/02-home-ar.webp",
+    "assets/uploads/sip-cafe/07-product.webp",
+    "assets/uploads/xchange/04-convert.webp",
+    "assets/uploads/ruckaroo/04-progress.webp",
+    "assets/uploads/mazadak/08-auction.webp",
+    "assets/uploads/minicity/06-search-list.webp",
+    "assets/uploads/worldclockr/02-converter.webp",
+    "assets/uploads/foras/04-search-en.webp",
+    "assets/uploads/sip-cafe/08-cart.webp",
+    "assets/uploads/xchange/05-charts.webp",
+    "assets/uploads/ruckaroo/06-badges.webp",
+    "assets/uploads/mazadak/11-merchants.webp",
+    "assets/uploads/minicity/07-merchant.webp",
+    "assets/uploads/worldclockr/06-add-city.webp",
+    "assets/uploads/foras/06-detail-en.webp",
+    "assets/uploads/sip-cafe/12-ready.webp",
+    "assets/uploads/ruckaroo/25-goal.webp",
+    "assets/uploads/mazadak/18-profile.webp",
+    "assets/uploads/minicity/09-events.webp",
+    "assets/uploads/foras/11-profile-en.webp",
+    "assets/uploads/foras/14-dash-en.webp"
+  ]
 }
