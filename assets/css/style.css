@@ -2337,3 +2337,7 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 .sn-dots button{width:8px;height:8px;padding:0;border:0;border-radius:8px;background:rgb(var(--fg) / .22);cursor:pointer;transition:width .4s,background .4s}
 .sn-dots button.on{width:26px;background:var(--sky)}
 @media (prefers-reduced-motion:reduce){.sn-track .hc{transition:none}}
+/* side cards fade out at the edges: only the centred card is clearly visible */
+.sn-track{-webkit-mask:linear-gradient(90deg,transparent 0,transparent 18%,#000 36%,#000 64%,transparent 82%,transparent 100%);mask:linear-gradient(90deg,transparent 0,transparent 18%,#000 36%,#000 64%,transparent 82%,transparent 100%)}
+.sn-track .hc:not(.on){opacity:.28}
+@media (max-width:640px){.sn-track{-webkit-mask:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);mask:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%)}}
