@@ -2186,3 +2186,5 @@ html.hiw-lock{overflow:hidden}
 .ghost.cs-rtl,.cs-idt-h[dir=rtl],.pcard.is-rtl .pc-head h3{font-family:'Cairo','Alexandria',sans-serif;font-weight:800}
 .pcard.art.is-rtl .ta-ghost{line-height:1.2}
 .hiw-card{position:relative;overflow:hidden}.hiw-card>*{position:relative;z-index:1}
+/* no camera cut-out over the screens: designs already carry their own status bar */
+.phone-f .island{display:none}
