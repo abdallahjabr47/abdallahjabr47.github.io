@@ -167,6 +167,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
 
   async function gh(path, opts = {}) {
     const res = await fetch(API + path, {
+      cache: 'no-store',
       ...opts,
       headers: { Authorization: 'Bearer ' + auth.token, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', ...(opts.headers || {}) }
     });
@@ -1476,7 +1477,34 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
   $('#previewHome').addEventListener('click', () => openPreview('index.html?preview=1'));
 
   /* ---------------- publish (one commit) ---------------- */
-  let lastSaved = '';
+  let lastSaved = '', lastParent = '';
+  /* three-way merge: keep both sides' edits; a real clash only when the same field changed on both */
+  const eqJ = (a, b) => (a === undefined || b === undefined) ? a === b : JSON.stringify(canon(a)) === JSON.stringify(canon(b));
+  const isObj = (v) => v && typeof v === 'object' && !Array.isArray(v);
+  const itemKey = (x) => isObj(x) ? (x.slug || x.id || '') : '';
+  function merge3(base, mine, theirs) {
+    if (eqJ(mine, theirs) || eqJ(theirs, base)) return mine;
+    if (eqJ(mine, base)) return theirs;
+    if (isObj(base) && isObj(mine) && isObj(theirs)) {
+      const out = {};
+      [...new Set([...Object.keys(mine), ...Object.keys(theirs), ...Object.keys(base)])].forEach((k) => { const v = merge3(base[k], mine[k], theirs[k]); if (v !== undefined) out[k] = v; });
+      return out;
+    }
+    if ([base, mine, theirs].every((a) => Array.isArray(a) && a.every(itemKey))) {
+      const B = new Map(base.map((x) => [itemKey(x), x])), T = new Map(theirs.map((x) => [itemKey(x), x])), M = new Map(mine.map((x) => [itemKey(x), x]));
+      const out = [];
+      mine.forEach((x) => {
+        const k = itemKey(x);
+        if (!B.has(k)) return out.push(x);
+        if (!T.has(k)) { if (eqJ(x, B.get(k))) return; throw new Error('clash'); }
+        out.push(merge3(B.get(k), x, T.get(k)));
+      });
+      theirs.forEach((x, i) => { const k = itemKey(x); if (!M.has(k) && !B.has(k)) out.splice(Math.min(i, out.length), 0, x); });
+      B.forEach((x, k) => { if (!M.has(k) && T.has(k) && !eqJ(T.get(k), x)) throw new Error('clash'); });
+      return out;
+    }
+    throw new Error('clash');
+  }
   async function autoSave() {
     if (saving) { saveAgain = true; return; }
     collect();
@@ -1489,8 +1517,37 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     const dup = slugs.find((x, i) => slugs.indexOf(x) !== i);
     if (dup) return status('err', `Not saved yet: two projects use the same URL name “${dup}”.`);
     saving = true; status('saving');
-    const snap = { p: JSON.stringify(projects), x: JSON.stringify(experience), s: JSON.stringify(site), c: JSON.stringify(content) };
+    let synced = false;
+    const editSlug = mode === 'project' && projects[editing] ? projects[editing].slug : null;
     try {
+      /* where the site is now (never a cached answer) */
+      const ref = await (await gh(`${repoPath()}/git/ref/heads/${encodeURIComponent(auth.branch)}`)).json();
+      let baseCommit = ref.object.sha;
+      /* GitHub can still report the commit from before this page's own last save for a moment: build on our save, not on that */
+      if (lastSaved && baseCommit === lastParent) baseCommit = lastSaved;
+      /* saved from another tab or device since this page loaded? merge their changes with ours instead of overwriting or refusing */
+      if (baseCommit !== lastSaved) {
+        const slots = [
+          [CFG.dataPath || 'data/projects.json', () => projects, (v) => { projects = v; }, () => original, (v) => { original = v; }],
+          [CONTENT_PATH, () => content, (v) => { content = v; }, () => originalContent, (v) => { originalContent = v; }],
+          [SITE_PATH, () => site, (v) => { site = v; }, () => originalSite, (v) => { originalSite = v; }],
+          [EXP_PATH, () => experience, (v) => { experience = v; }, () => originalExp, (v) => { originalExp = v; }]
+        ];
+        const lives = await Promise.all(slots.map(async ([path]) => {
+          try { return JSON.parse(await (await gh(`${repoPath()}/contents/${path}?ref=${baseCommit}`, { headers: { Accept: 'application/vnd.github.raw+json' } })).text()); } catch (e) { return undefined; }
+        }));
+        const next = [];
+        for (let n = 0; n < slots.length; n++) {
+          const [, get, , getO] = slots[n]; const live = lives[n];
+          if (live === undefined || same(live, getO())) { next.push(null); continue; }
+          let m;
+          try { m = merge3(JSON.parse(getO()), get(), live); } catch (e) { saving = false; status('conflict', 'The same thing was changed in another tab or device. Reload to get the latest — this change wasn’t saved.'); return; }
+          next.push([m, live]);
+        }
+        next.forEach((r, n) => { if (!r) return; const [, get, set, , setO] = slots[n]; if (!eqJ(r[0], get())) synced = true; set(r[0]); setO(JSON.stringify(r[1])); });
+        if (synced) { content.text = content.text || {}; content.hidden = content.hidden || []; }
+      }
+    const snap = { p: JSON.stringify(projects), x: JSON.stringify(experience), s: JSON.stringify(site), c: JSON.stringify(content) };
       const files = [];
       if (!same(projects, original)) files.push({ path: CFG.dataPath || 'data/projects.json', b64: b64FromUtf8(JSON.stringify(projects, null, 2) + '\n') });
       /* the sitemap follows the shown projects, so search engines find every case study */
@@ -1505,18 +1562,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
         /* everything that doesn't depend on another step runs at the same time */
         const blobsP = Promise.all(files.map((f) => gh(`${repoPath()}/git/blobs`, { method: 'POST', body: JSON.stringify({ content: f.b64, encoding: 'base64' }) }).then((r) => r.json())));
         blobsP.catch(() => {});
-        const ref = await (await gh(`${repoPath()}/git/ref/heads/${encodeURIComponent(auth.branch)}`)).json();
-        const baseCommit = ref.object.sha;
         const commitP = gh(`${repoPath()}/git/commits/${baseCommit}`).then((r) => r.json());
-        /* someone saved from another tab or device since this page loaded? then don't overwrite their work
-           (skipped when the branch is still at the commit this page itself last saved) */
-        if (baseCommit !== lastSaved) {
-          const base = { [CFG.dataPath || 'data/projects.json']: original, [CONTENT_PATH]: originalContent, [SITE_PATH]: originalSite, [EXP_PATH]: originalExp };
-          const clash = await Promise.all(files.filter((f) => f.path in base).map(async (f) => {
-            try { const live = JSON.parse(await (await gh(`${repoPath()}/contents/${f.path}?ref=${baseCommit}`, { headers: { Accept: 'application/vnd.github.raw+json' } })).text()); return !same(live, base[f.path]); } catch (e) { return false; }
-          }));
-          if (clash.some(Boolean)) { saving = false; status('conflict', 'Changed from another tab or device. Reload to get the latest — this change wasn’t saved.'); return; }
-        }
         const [commit, blobs] = await Promise.all([commitP, blobsP]);
         const tree = files.map((f, n) => ({ path: f.path, mode: '100644', type: 'blob', sha: blobs[n].sha }));
         /* a replaced or removed CV is deleted from the site too, so an old copy doesn't stay public at its link */
@@ -1528,15 +1574,24 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
         const newTree = await (await gh(`${repoPath()}/git/trees`, { method: 'POST', body: JSON.stringify({ base_tree: commit.tree.sha, tree }) })).json();
         const label = page && sub ? `Update ${page.label} · ${sub.label}` : 'Update portfolio content';
         const newCommit = await (await gh(`${repoPath()}/git/commits`, { method: 'POST', body: JSON.stringify({ message: `${label} (via admin)`, tree: newTree.sha, parents: [baseCommit] }) })).json();
-        lastSaved = newCommit.sha;
         await gh(`${repoPath()}/git/refs/heads/${encodeURIComponent(auth.branch)}`, { method: 'PATCH', body: JSON.stringify({ sha: newCommit.sha }) });
-      }
+        lastSaved = newCommit.sha; lastParent = baseCommit;
+      } else if (synced) lastSaved = baseCommit;
       original = snap.p; originalExp = snap.x; originalSite = snap.s; originalContent = snap.c;
       sent.forEach((path) => pending.delete(path));
       saving = false;
       dirty = changed();
+      if (synced) {
+        /* show what came in from the other tab */
+        window.Site.lightMode(site.lightMode === true);
+        const ei = editSlug ? projects.findIndex((x) => x.slug === editSlug) : -1;
+        if (mode === 'project' && ei >= 0) openEditor(ei);
+        else if (mode === 'exp' && editing >= 0 && experience[editing]) openExpEditor(editing);
+        else renderList();
+        dirty = changed();
+      }
       if (dirty) status('pending');
-      else { touched.clear(); tabsReady(); status('ok'); }
+      else { touched.clear(); tabsReady(); status('ok', synced ? 'Saved — and synced with changes from your other tab or device.' : undefined); }
     } catch (err) {
       saving = false;
       status('err', 'Couldn’t save: ' + err.message);
