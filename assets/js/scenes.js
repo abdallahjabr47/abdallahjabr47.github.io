@@ -27,11 +27,24 @@
   S.health = () => `<svg class="sc-ecg" viewBox="0 0 400 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M0 60 H120 L135 60 L145 30 L158 88 L170 18 L182 60 H260 L272 60 L280 44 L290 72 L298 60 H400"/></svg>`;
   S.city = () => `${[[12, 30], [84, 26], [8, 64], [88, 60]].map(([x, y], i) => `<span class="sc-pin" style="--x:${x}%;--y:${y}%;--dl:-${i * 0.8}s"><i>⌂</i></span>`).join('')}
     ${[[20, 46], [74, 42]].map(([x, y], i) => `<span class="sc-qr bob" style="--x:${x}%;--y:${y}%;--dl:-${i * 2}s"></span>`).join('')}`;
+  const arrow = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 1.5l5 12.5 1.9-5.1 5.1-1.9z"/></svg>';
+  S.build = () => `<div class="sc-grid"></div>
+    <div class="sc-sel"><i></i><i></i><i></i><i></i><span>Case study</span></div>
+    <span class="sc-code bob" style="--x:74%;--y:24%;--dl:-2s"><span class="sc-type">&lt;CaseStudy live /&gt;</span></span>
+    <span class="sc-pill sc-save bob" style="--x:5%;--y:62%;--dl:-4s"><em>●</em> Saved · published</span>
+    ${[[80, 52, 0], [10, 40, 1], [86, 70, 2]].map(([x, y, i]) => `<span class="sc-blk" style="--x:${x}%;--y:${y}%;--i:${i}"><i></i><b></b><b></b></span>`).join('')}`;
+  S.quiz = () => `${rows(10, (i) => `<i class="sc-float" style="--x:${(i * 87) % 94 + 3}%;--d:${10 + (i % 4) * 2}s;--dl:-${(i * 1.6).toFixed(1)}s;--s:${(0.8 + (i % 3) * 0.4).toFixed(2)};--b:${i % 3 === 1 ? 3 : 0}px">${['؟', '?', '+50', '؟', '+45'][i % 5]}</i>`)}
+    <div class="sc-opts" dir="rtl">${['أ', 'ب', 'ج', 'د'].map((t, i) => `<span class="${i === 2 ? 'ok' : ''}" style="--i:${i}">${t}</span>`).join('')}</div>
+    <svg class="sc-timer" viewBox="0 0 100 100" aria-hidden="true"><circle class="t0" cx="50" cy="50" r="44"/><circle class="t1" cx="50" cy="50" r="44" pathLength="1"/><text x="50" y="58" text-anchor="middle">⏱</text></svg>`;
+  S.boxing = () => `${rows(5, (i) => `<i class="sc-streak" style="--y:${18 + i * 15}%;--dl:-${(i * 0.9).toFixed(1)}s;--w:${30 + (i % 3) * 14}%"></i>`)}
+    ${[[9, 44], [91, 30], [92, 64], [7, 72]].map(([x, y], i) => `<span class="sc-hit" style="--x:${x}%;--y:${y}%;--dl:-${(i * 0.65).toFixed(2)}s"></span>`).join('')}
+    <span class="sc-pill sc-round bob" style="--x:5%;--y:24%"><em>●</em> ROUND 3 <b>02:59</b></span>`;
+  const TOP = { build: () => `<span class="sc-cur c1">${arrow}<b>Abdallah</b></span><span class="sc-cur c2">${arrow}<b>Claude</b></span>` };
   S.aurora = () => `<span class="sc-blob b1"></span><span class="sc-blob b2"></span><span class="sc-blob b3"></span>`;
-  const BY_SLUG = { xchange: 'currency', worldclockr: 'clock', redz: 'series', 'momyt-meet': 'meetups', foras: 'careers', ruckaroo: 'onboarding', 'sip-cafe': 'cafe', mazadak: 'auction', afyti: 'health', minicity: 'city' };
+  const BY_SLUG = { xchange: 'currency', worldclockr: 'clock', redz: 'series', 'momyt-meet': 'meetups', foras: 'careers', ruckaroo: 'onboarding', 'sip-cafe': 'cafe', mazadak: 'auction', afyti: 'health', minicity: 'city', 'portfolio-site': 'build', 'shoof-hazzak': 'quiz', boxchampy: 'boxing' };
   window.Scenes = {
-    list: [['auto', 'Automatic'], ['currency', 'Money / exchange'], ['clock', 'Time / clocks'], ['series', 'Video / series'], ['meetups', 'People / meetups'], ['careers', 'Jobs / opportunities'], ['onboarding', 'Steps / onboarding'], ['cafe', 'Café / food'], ['auction', 'Auction / bids'], ['health', 'Health'], ['city', 'Map / places'], ['aurora', 'Soft light']],
+    list: [['auto', 'Automatic'], ['currency', 'Money / exchange'], ['clock', 'Time / clocks'], ['series', 'Video / series'], ['meetups', 'People / meetups'], ['careers', 'Jobs / opportunities'], ['onboarding', 'Steps / onboarding'], ['cafe', 'Café / food'], ['auction', 'Auction / bids'], ['health', 'Health'], ['city', 'Map / places'], ['build', 'Design / build'], ['quiz', 'Quiz / game'], ['boxing', 'Sport / boxing'], ['aurora', 'Soft light']],
     key: (p) => (p.scene && p.scene !== 'auto' && S[p.scene]) ? p.scene : (BY_SLUG[p.slug] || 'aurora'),
-    html: (p) => { const k = window.Scenes.key(p); return `<div class="sc sc-${k}" aria-hidden="true">${S[k]()}</div>`; }
+    html: (p) => { const k = window.Scenes.key(p); return `<div class="sc sc-${k}" aria-hidden="true">${S[k]()}</div>${TOP[k] ? `<div class="sc sc-top sc-${k}" aria-hidden="true">${TOP[k]()}</div>` : ''}`; }
   };
 })();
