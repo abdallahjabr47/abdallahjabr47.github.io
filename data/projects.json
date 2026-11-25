@@ -1283,7 +1283,8 @@
       "src": "assets/uploads/mazadak/walkthrough.mp4",
       "poster": "assets/uploads/mazadak/walkthrough-poster.webp",
       "title": ""
-    }
+    },
+    "coverShot": "assets/uploads/mazadak/06-home.webp"
   },
   {
     "slug": "minicity",
@@ -1576,7 +1577,8 @@
       "src": "assets/uploads/minicity/walkthrough.mp4",
       "poster": "assets/uploads/minicity/walkthrough-poster.webp",
       "title": ""
-    }
+    },
+    "coverShot": "assets/uploads/minicity/03-home.webp"
   },
   {
     "slug": "worldclockr",
