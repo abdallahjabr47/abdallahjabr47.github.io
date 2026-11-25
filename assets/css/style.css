@@ -2390,3 +2390,4 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 .testi.mq .hc blockquote,.testi.few .hc blockquote{font-size:15px}
 .testi.mq{padding-block:14px 30px;margin-block:-14px -30px}
 .testi.mq .hc blockquote,.testi.few .hc blockquote{font-size:16px}
+.testi .hc .who{margin-top:auto;padding-top:14px}
