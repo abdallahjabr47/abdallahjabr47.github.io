@@ -2162,3 +2162,12 @@ html.hiw-lock{overflow:hidden}
 .status-pill.soon{color:var(--muted)}
 .ix-row.is-soon{opacity:.45;pointer-events:none}
 .pcard.is-soon{--tint:#3B3F4A!important}.pcard.is-soon .stage-panel::after{display:none}.pcard.is-soon .devices2,.pcard.is-soon .sp-badges{filter:grayscale(1) brightness(.8)}
+/* identity row: even rhythm */
+.hx-who{gap:20px;align-items:center}
+.hx-who>div{display:flex;flex-direction:column;gap:6px}
+.hx-who b{font-size:23px;line-height:1.1;margin:0}
+.hx-who small{font-size:15.5px;line-height:1.3;margin:0;color:var(--ink);opacity:.72}
+.hx-who .hx-place{display:inline-flex;align-items:center;gap:6px;margin:0;font-size:14px;line-height:1.3;color:var(--muted)}
+.hx-who .hx-place::before{content:"";width:6px;height:6px;border-radius:50%;background:#3DDC97}
+.hx-av{width:88px;height:88px}
+@media (max-width:860px){.hx-who{gap:14px}.hx-who>div{gap:4px}.hx-who b{font-size:19px}.hx-who small{font-size:13.5px}.hx-who .hx-place{font-size:12.5px}.hx-av{width:70px;height:70px}}
