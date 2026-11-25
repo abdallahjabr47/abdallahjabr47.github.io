@@ -595,3 +595,26 @@
   const go = (n) => { k = n; qs.forEach((q, i) => { q.classList.toggle('on', i === k); q.setAttribute('aria-hidden', String(i !== k)); }); dots.forEach((d, i) => d.classList.toggle('on', i === k)); };
   setInterval(() => { if (!document.hidden) go((k + 1) % qs.length); }, 5200);
 })();
+
+/* How I work: open each part in a large dialog instead of a new page */
+(function () {
+  const dlg = document.getElementById('hiwDlg'); if (!dlg) return;
+  const frame = dlg.querySelector('iframe'), title = dlg.querySelector('#hiwTitle'), x = dlg.querySelector('.hiw-x');
+  const names = { product: 'Product management', skills: 'Skills & design system' };
+  let opener = null;
+  const close = () => { dlg.classList.remove('open'); document.documentElement.classList.remove('hiw-lock'); setTimeout(() => { dlg.hidden = true; }, 300); if (opener) opener.focus(); };
+  document.querySelectorAll('[data-hiw]').forEach((a) => a.addEventListener('click', (e) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault(); opener = a;
+    const k = a.dataset.hiw, th = document.documentElement.dataset.theme || '';
+    const src = `how-i-work.html?embed=${k}${th ? '&theme=' + th : ''}`;
+    if (frame.getAttribute('src') !== src) frame.src = src;
+    title.textContent = names[k] || 'How I work';
+    dlg.hidden = false; document.documentElement.classList.add('hiw-lock');
+    requestAnimationFrame(() => dlg.classList.add('open')); x.focus();
+  }));
+  x.addEventListener('click', close);
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !dlg.hidden) { e.preventDefault(); close(); } });
+  frame.addEventListener('load', () => { try { frame.contentWindow.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); close(); } }); } catch (_) {} });
+})();

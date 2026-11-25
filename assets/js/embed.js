@@ -1,0 +1,1 @@
+(function(){var m=/[?&]embed=(product|skills)/.exec(location.search);if(!m)return;var d=document.documentElement;d.classList.add('embed');d.dataset.embed=m[1];try{var th=new URLSearchParams(location.search).get('theme');if(th)d.dataset.theme=th;}catch(e){}})();

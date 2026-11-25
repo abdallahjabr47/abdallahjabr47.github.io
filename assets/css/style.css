@@ -2103,7 +2103,7 @@ html.vbox-on{overflow:hidden}
 @media (max-width:860px){.wid{grid-template-columns:1fr}.wid-card{padding:4px 22px}}
 /* ===== footer: three parts ===== */
 .footer .container.fx3{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}
-.footer .f-ar{font-family:'Alexandria','Noto Kufi Arabic','SF Arabic','Geeza Pro','Segoe UI',Tahoma,sans-serif;color:var(--muted)}
+.footer .f-ar{color:var(--muted)}
 .footer .fx3>span:first-child{color:var(--muted)}
 .footer .f-r{display:flex;justify-content:flex-end;align-items:center;gap:8px;color:var(--muted)}
 .footer .live{width:7px;height:7px;border-radius:50%;background:#3DDC97;box-shadow:0 0 0 3px rgb(61 220 151 / .2)}
@@ -2126,3 +2126,20 @@ html.vbox-on{overflow:hidden}
 @media (max-width:860px){.hx-av{width:64px;height:64px}.hx-who b{font-size:19px}.hx-who small{font-size:13.5px}.hx-top>span{display:none}.hx-main{padding:26px 22px 30px}}
 @media (max-width:560px){.hx .hero-ctas{flex-wrap:nowrap}.hx .hero-ctas .btn{padding-inline:18px;font-size:15px}}
 .wid{align-items:start}.wid-card{box-shadow:none}
+/* How I work: embedded mode + home dialog */
+html.embed .nav,html.embed .footer,html.embed .hiw-top,html.embed .bg-dots,html.embed .cursor,html.embed .cur,html.embed .scroll-prog,html.embed .intro,html.embed .to-top{display:none!important}
+html.embed body{background:transparent}
+html.embed section[data-grp]{display:none}
+html[data-embed="product"] section[data-grp="product"],html[data-embed="skills"] section[data-grp="skills"]{display:block}
+html.embed section[data-grp]:first-of-type,html.embed section[data-grp]{padding-top:40px}
+.hiw-dlg{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:clamp(10px,3vw,40px);background:rgb(4 6 10 / .66);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .3s}
+.hiw-dlg.open{opacity:1}
+.hiw-panel{position:relative;width:min(1240px,100%);height:min(88vh,1000px);display:flex;flex-direction:column;border-radius:28px;overflow:hidden;background:var(--bg);border:1px solid var(--line2);transform:translateY(18px) scale(.985);transition:transform .4s var(--ease)}
+.hiw-dlg.open .hiw-panel{transform:none}
+.hiw-dh{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line)}
+.hiw-dh b{font-size:16px;font-weight:700}
+.hiw-x{width:40px;height:40px;border-radius:50%;border:1px solid var(--line2);font-size:22px;line-height:1;color:var(--ink);display:grid;place-items:center}
+.hiw-x:hover{background:rgb(var(--fg) / .06)}
+.hiw-panel iframe{flex:1;width:100%;border:0;background:var(--bg)}
+html.hiw-lock{overflow:hidden}
+@media (max-width:640px){.hiw-panel{height:92vh;border-radius:20px}}
