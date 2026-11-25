@@ -1420,7 +1420,7 @@ details[open] .rec-x{animation:recIn .35s var(--ease)}
 .br-chip{padding:9px 15px;border-radius:999px;border:1px solid var(--line2);font-size:14px;font-weight:600;color:var(--ink2);transition:background .25s,border-color .25s,color .25s,transform .25s var(--ease)}
 .br-chip:hover{border-color:rgb(79 134 230 / .6)}
 .br-chip.on{background:var(--tab-on);border-color:transparent;color:var(--tab-on-ink)}
-.br-chip.on::before{content:"✓ ";font-weight:800}
+.br-chip.on::before{content:"✓";display:inline-block;margin-right:6px;font-weight:800}
 .br-chip:active{transform:scale(.96)}
 .br-note{display:flex;flex-direction:column;gap:10px}
 .br-note textarea{resize:vertical;min-height:84px;padding:12px 14px;border-radius:14px;border:1px solid var(--line2);background:rgb(var(--fg) / .03);color:var(--ink);font:inherit;font-size:15px;line-height:1.5}
