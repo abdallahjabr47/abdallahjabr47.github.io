@@ -759,7 +759,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
         <div class="f" style="margin-top:18px">Extra designs button (optional)</div>
         <p class="hint">A coloured button next to “Watch the video” that opens these images full screen, like social media posts, stories or printed cards. Leave the images empty to hide the button.</p>
         <div class="ri-2">${F('Button text', 'social.label', (p.social && p.social.label) || '', { ph: 'Social media designs' })}${F('Button colour', 'social.color', (p.social && p.social.color) || '', { ph: 'e.g. #174734 (empty = project colour)' })}</div>
-        ${imgList('social.images', (p.social && p.social.images) || [], 'wide')}
+        ${imgList('social.images', (p.social && p.social.images) || [], 'wide', ((p.social && p.social.images) || []).some((g) => g && typeof g === 'object'))}
       </fieldset>
 
       <fieldset><legend>Case study header</legend>
@@ -1161,7 +1161,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     if (!p.coverShot) delete p.coverShot;
     if (p.preview !== false) delete p.preview;
     if (p.video) { p.video.src = String(p.video.src || '').trim(); p.video.title = String(p.video.title || '').trim(); if (!p.video.src) delete p.video; }
-    if (p.social) { const so = p.social; so.label = String(so.label || '').trim(); so.color = String(so.color || '').trim(); so.images = (so.images || []).filter(Boolean); if (!so.images.length) delete p.social; else { if (!so.label) delete so.label; if (!so.color) delete so.color; } }
+    if (p.social) { const so = p.social; so.label = String(so.label || '').trim(); so.color = String(so.color || '').trim(); so.images = (so.images || []).filter((g) => g && (typeof g === "string" || g.image)); if (!so.images.length) delete p.social; else { if (!so.label) delete so.label; if (!so.color) delete so.color; } }
     if (p.cover && p.cover.tint) p.cover.tint = p.cover.tint.toUpperCase();
     ['timelineStart', 'timelineEnd'].forEach((k) => { if (!p[k]) delete p[k]; });
     if (p.timelineStart) p.timeline = tlSpan(p.timelineStart, p.timelineEnd);

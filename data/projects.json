@@ -1974,13 +1974,91 @@
       }
     ],
     "video": {
-      "src": "assets/uploads/shoof-hazzak/walkthrough.mp4",
-      "poster": "assets/uploads/shoof-hazzak/walkthrough-poster.webp",
-      "title": ""
+      "src": "assets/uploads/shoof-hazzak/gameplay.mp4",
+      "poster": "assets/uploads/shoof-hazzak/gameplay-poster.webp",
+      "title": "How a game night plays out"
     },
     "gallery": {
       "before": [],
       "after": []
+    },
+    "social": {
+      "label": "Gameplay screens",
+      "color": "#7C4DFF",
+      "images": [
+        {
+          "image": "assets/uploads/shoof-hazzak/game/01-setup.webp",
+          "label": "Name the teams"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/02-categories.webp",
+          "label": "Pick 6 categories"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/03-free-game.webp",
+          "label": "First game is free"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/04-draw.webp",
+          "label": "The draw picks who starts"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/05-board.webp",
+          "label": "Choose a category"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/06-bet.webp",
+          "label": "Bet 5, 3 or 1 star before you see it"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/07-question.webp",
+          "label": "45 seconds to answer"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/08-steal.webp",
+          "label": "Time is up: the other team can steal"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/09-answer.webp",
+          "label": "Reveal the answer, mark who got it"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/10-scored.webp",
+          "label": "Stars land on the board"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/11-bomb.webp",
+          "label": "Lifeline: Bomb throws the question over"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/12-two-answers.webp",
+          "label": "Lifeline: two tries"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/13-nobody.webp",
+          "label": "Nobody knew it"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/14-charades.webp",
+          "label": "Charades round: act it out"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/15-charades-result.webp",
+          "label": "Guessed it"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/16-winner.webp",
+          "label": "Winner"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/17-buy.webp",
+          "label": "Out of games: choose a pack"
+        },
+        {
+          "image": "assets/uploads/shoof-hazzak/game/18-guide.webp",
+          "label": "In-game guide"
+        }
+      ]
     }
   },
   {
