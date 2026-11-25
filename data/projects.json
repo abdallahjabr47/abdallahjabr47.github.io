@@ -147,13 +147,13 @@
   {
     "slug": "foras",
     "title": "Foras.ps",
-    "tagline": "Platform redesign and design system",
+    "tagline": "A redesign of Palestine’s opportunities platform, for seekers and the companies that hire them.",
     "category": "Careers · Opportunities platform",
     "type": "web",
     "live": true,
     "status": "Live",
     "published": true,
-    "summary": "Led the full redesign and rebuild of the Foras.ps platform — new sitemap, information architecture and a design system built from scratch.",
+    "summary": "A full redesign of Foras.ps, the platform that gathers jobs, internships, scholarships and training for Palestinian youth: a new website, profiles for opportunity seekers, and a workspace for companies and institutions, in Arabic and English.",
     "cover": {
       "image": "",
       "ghost": "FORAS",
@@ -161,40 +161,180 @@
     },
     "company": "Foras Palestine",
     "role": "UI/UX Designer",
-    "team": "",
-    "timeline": "6 months",
-    "overview": "I led the full redesign, revamp and rebuild of the existing Foras.ps platform, from requirements to sign-off — presenting decisions to stakeholders and iterating on feedback and usability testing.",
-    "problem": "[e.g. How might we make the whole platform easier to navigate and faster to extend?]",
+    "team": "Product, development and content teams at Foras",
+    "timeline": "4 months",
+    "overview": "Foras.ps brings together every kind of opportunity in Palestine: jobs, internships, scholarships, workshops, competitions and conferences. I redesigned the whole platform. The public website helps visitors search, filter and read opportunities and blog posts. Opportunity seekers get a profile where they apply, save opportunities, follow companies and choose which alerts they receive. Companies and institutions get their own workspace with a dashboard, their opportunities, applications from seekers, subscriptions and payments. Every page was designed in English and Arabic (right to left), for desktop and for mobile.",
+    "problem": "How might we help young Palestinians find the right opportunity quickly, and give the companies posting them one clear place to publish, review applicants and manage their plan, in both Arabic and English?",
     "responsibilities": {
       "product": [
-        "Gathered and analysed requirements with stakeholders"
+        "Gathered and analysed requirements with stakeholders",
+        "Defined the three user types and what each one needs: visitor, opportunity seeker and company or institution",
+        "Created a new sitemap and information architecture for the whole platform",
+        "Presented design decisions and iterated on feedback and usability testing"
       ],
       "design": [
         "Ran user research and competitor analysis",
-        "Created a new sitemap and information architecture for the entire platform",
-        "Built the Foras design system from scratch — components, styles and guidelines"
+        "Designed the public website: home, search and filters, opportunity details, blog, about, FAQ, contact, sign in and sign up",
+        "Designed the opportunity seeker profile: main information, applied and saved opportunities, followed companies, notifications, alert settings and applying for an opportunity",
+        "Designed the company and institution workspace: dashboard, opportunities, adding an opportunity, applications, subscriptions and ads, and payment",
+        "Built the Foras design system: colours, typography, inputs, buttons, cards, icons and page parts",
+        "Designed every page in English and Arabic (RTL), for desktop and mobile, including empty and error states"
       ]
     },
-    "process": [],
-    "challenges": [],
+    "process": [
+      {
+        "title": "Research",
+        "desc": "Talked with stakeholders, reviewed the old platform and studied similar job and opportunity sites."
+      },
+      {
+        "title": "Structure",
+        "desc": "A new sitemap and information architecture, built around three users: visitors, seekers and companies."
+      },
+      {
+        "title": "Design system",
+        "desc": "Colours, type, inputs, buttons, cards and page parts, so every page is built from the same pieces."
+      },
+      {
+        "title": "Design the website",
+        "desc": "Home, search with filters, opportunity details, blog and the account pages, desktop first."
+      },
+      {
+        "title": "Profiles",
+        "desc": "A seeker profile and a company workspace that share one layout: a profile card, a side menu and the content."
+      },
+      {
+        "title": "Arabic and mobile",
+        "desc": "Every page mirrored for Arabic (RTL) and adapted to mobile, with filters and menus moved into the header."
+      },
+      {
+        "title": "Test and hand off",
+        "desc": "Usability testing, iterations on feedback, then hand-off to development."
+      }
+    ],
+    "challenges": [
+      {
+        "challenge": "Many kinds of opportunity, each with its own details.",
+        "solution": "One card and one details page for every type, with search results filtered by category, major, location and company."
+      },
+      {
+        "challenge": "Three very different users on one platform.",
+        "solution": "Seekers and companies share the same account layout, a profile card and a side menu, so each one only sees the tools they need."
+      },
+      {
+        "challenge": "Companies need to publish and follow applicants without leaving the site.",
+        "solution": "A workspace with a dashboard of numbers, a step-by-step form to add an opportunity, and an applications view where each applicant opens with their CV, answers and notes."
+      },
+      {
+        "challenge": "Arabic and English on every page.",
+        "solution": "Every page was designed in both languages, with the layout fully mirrored for Arabic rather than just translated."
+      },
+      {
+        "challenge": "Empty pages for new users.",
+        "solution": "Clear empty states, like no applied opportunities or no statistics yet, that point to the next step and show the latest opportunities."
+      }
+    ],
     "gallery": {
       "before": [],
       "after": []
     },
     "results": [],
-    "learnings": "",
-    "icon": "",
-    "screens": [],
-    "webScreens": [],
+    "learnings": "Foras taught me to design a large platform end to end: starting from the information architecture, building a design system before the pages, and keeping three different users in mind at once. Designing every page in Arabic and English, on desktop and mobile, showed me how much a layout changes when it is mirrored, and how important consistent components are when the number of pages grows.",
+    "icon": "assets/uploads/foras/icon.webp",
+    "screens": [
+      "assets/uploads/foras/01-home-en.webp",
+      "assets/uploads/foras/02-home-ar.webp",
+      "assets/uploads/foras/03-search-form-en.webp",
+      "assets/uploads/foras/04-search-en.webp",
+      "assets/uploads/foras/05-search-empty-en.webp",
+      "assets/uploads/foras/06-detail-en.webp",
+      "assets/uploads/foras/07-detail-ar.webp",
+      "assets/uploads/foras/08-blog-en.webp",
+      "assets/uploads/foras/09-about-en.webp",
+      "assets/uploads/foras/10-signin-en.webp",
+      "assets/uploads/foras/11-profile-en.webp",
+      "assets/uploads/foras/12-applied-en.webp",
+      "assets/uploads/foras/13-applied-ar.webp",
+      "assets/uploads/foras/14-dash-en.webp",
+      "assets/uploads/foras/15-dash-ar.webp",
+      "assets/uploads/foras/16-addopp-en.webp",
+      "assets/uploads/foras/17-admin-en.webp",
+      "assets/uploads/foras/18-admin-ar.webp"
+    ],
+    "webScreens": [
+      "assets/uploads/foras/web-01-home-full.webp",
+      "assets/uploads/foras/web-02-w-category-en.webp",
+      "assets/uploads/foras/web-03-w-search-en.webp",
+      "assets/uploads/foras/web-04-w-search-empty-en.webp",
+      "assets/uploads/foras/web-05-w-detail-en.webp",
+      "assets/uploads/foras/web-06-w-scholarship-en.webp",
+      "assets/uploads/foras/web-07-w-companies-en.webp",
+      "assets/uploads/foras/web-08-w-company-page-en.webp",
+      "assets/uploads/foras/web-09-w-blog-en.webp",
+      "assets/uploads/foras/web-10-w-blogpost-en.webp",
+      "assets/uploads/foras/web-11-w-about-en.webp",
+      "assets/uploads/foras/web-12-w-faq-en.webp",
+      "assets/uploads/foras/web-13-w-contact-en.webp",
+      "assets/uploads/foras/web-14-w-signin-en.webp",
+      "assets/uploads/foras/web-15-w-signup-en.webp",
+      "assets/uploads/foras/web-16-w-signup-seeker-en.webp",
+      "assets/uploads/foras/web-17-w-signup-company-en.webp",
+      "assets/uploads/foras/web-18-s-profile-en.webp",
+      "assets/uploads/foras/web-19-s-applied-list-en.webp",
+      "assets/uploads/foras/web-20-s-applied-empty-en.webp",
+      "assets/uploads/foras/web-21-s-saved-en.webp",
+      "assets/uploads/foras/web-22-s-following-en.webp",
+      "assets/uploads/foras/web-23-s-notif-en.webp",
+      "assets/uploads/foras/web-24-s-settings-en.webp",
+      "assets/uploads/foras/web-25-s-alerts-en.webp",
+      "assets/uploads/foras/web-26-s-apply1-en.webp",
+      "assets/uploads/foras/web-27-s-apply2-en.webp",
+      "assets/uploads/foras/web-28-c-dash-en.webp",
+      "assets/uploads/foras/web-29-c-info-en.webp",
+      "assets/uploads/foras/web-30-c-opps-en.webp",
+      "assets/uploads/foras/web-31-c-addopp-en.webp",
+      "assets/uploads/foras/web-32-c-opp-popup-en.webp",
+      "assets/uploads/foras/web-33-c-apps-en.webp",
+      "assets/uploads/foras/web-34-c-app-popup-en.webp",
+      "assets/uploads/foras/web-35-c-subs-en.webp",
+      "assets/uploads/foras/web-36-c-payment-en.webp",
+      "assets/uploads/foras/web-37-c-settings-en.webp",
+      "assets/uploads/foras/web-38-a-team-en.webp",
+      "assets/uploads/foras/web-39-a-info-en.webp",
+      "assets/uploads/foras/web-40-a-company-en.webp",
+      "assets/uploads/foras/web-41-w-home-ar.webp",
+      "assets/uploads/foras/web-42-w-search-ar.webp",
+      "assets/uploads/foras/web-43-w-detail-ar.webp",
+      "assets/uploads/foras/web-44-w-blog-ar.webp",
+      "assets/uploads/foras/web-45-w-signin-ar.webp",
+      "assets/uploads/foras/web-46-s-profile-ar.webp",
+      "assets/uploads/foras/web-47-s-applied-list-ar.webp",
+      "assets/uploads/foras/web-48-c-dash-empty-ar.webp",
+      "assets/uploads/foras/web-49-c-opps-ar.webp",
+      "assets/uploads/foras/web-50-c-addopp-ar.webp",
+      "assets/uploads/foras/web-51-c-apps-ar.webp",
+      "assets/uploads/foras/web-52-a-info-ar.webp"
+    ],
     "featured": true,
     "devices": {
       "mobile": true,
-      "tablet": true,
+      "tablet": false,
       "desktop": true
     },
     "tabletScreens": [],
     "cardDevice": "auto",
-    "featuredRank": 2
+    "featuredRank": 2,
+    "coverShot": "assets/uploads/foras/web-01-home-full.webp",
+    "links": [
+      {
+        "type": "web",
+        "url": "https://foras.ps/home"
+      }
+    ],
+    "video": {
+      "src": "assets/uploads/foras/walkthrough.mp4",
+      "poster": "assets/uploads/foras/walkthrough-poster.webp",
+      "title": ""
+    }
   },
   {
     "slug": "momyt-meet",
