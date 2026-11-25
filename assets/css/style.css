@@ -2273,3 +2273,6 @@ html.hiw-lock a,html.hiw-lock button,html.hiw-lock [role=button],html.embed a,ht
 .burger span+span{margin-top:0}
 @media (max-width:900px){.nav .nav-links{background:color-mix(in srgb,var(--bg) 94%,#1b2233);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line2);box-shadow:0 30px 60px -20px rgb(0 0 0 / .6)}
 [data-theme="light"] .nav .nav-links{background:color-mix(in srgb,#fff 96%,var(--bg))}}
+/* no custom cursor inside viewers: native pointer only */
+html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.vbox-on .cursor-dot,html.vbox-on .cursor-ring,html:has(.cert-lb.open) .cursor-dot,html:has(.cert-lb.open) .cursor-ring{display:none!important}
+@media (pointer:fine){html:has(.lightbox.open) *,html.vbox-on *{cursor:auto!important}html:has(.lightbox.open) button,html:has(.lightbox.open) a,html.vbox-on button{cursor:pointer!important}}
