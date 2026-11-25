@@ -564,65 +564,53 @@
     const s = await window.Site.getSite();
     const list = ((s && s.testimonials) || []).filter((t) => t && t.quote);
     if (!list.length) return;
+    const n = list.length;
+    const ini = (t) => esc((t.name || '?').trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase());
     const card = (t, i) => `
-      <figure class="tq glass" data-i="${i}"${list.length > 1 ? ` role="group" aria-roledescription="slide" aria-label="${i + 1} of ${list.length}"` : ''}>
+      <figure class="hc" data-i="${i}"${n > 1 ? ` role="group" aria-roledescription="slide" aria-label="${i + 1} of ${n}"` : ''}>
         <span class="qm" aria-hidden="true">“</span>
         <blockquote>${esc(t.quote)}</blockquote>
-        <figcaption><span class="av" aria-hidden="true">${esc((t.name || '?').trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase())}</span><span><b>${esc(t.name || '')}</b><small>${esc(t.role || '')}</small></span></figcaption>
+        <figcaption class="who">${t.image ? `<img src="${esc(t.image)}" alt="" loading="lazy" decoding="async">` : `<span class="av" aria-hidden="true">${ini(t)}</span>`}<span><b>${esc(t.name || '')}</b><small>${esc(t.role || '')}</small></span></figcaption>
       </figure>`;
-    if (list.length === 1) { box.className = 'testi one'; box.innerHTML = card(list[0], 0); box.firstElementChild.setAttribute('data-reveal', ''); }
+    if (n === 1) { box.className = 'testi one'; box.innerHTML = card(list[0], 0); box.firstElementChild.setAttribute('data-reveal', ''); }
     else {
-      /* a deck: cards stacked behind each other, rotating on their own; arrows, dots, swipe and keys to switch */
-      const n = list.length;
-      box.className = 'testi deck-wrap';
+      /* swipe carousel: the centred card is active, it moves on its own; arrows, dots, drag, swipe and keys to switch */
+      box.className = 'testi sn';
       box.setAttribute('aria-roledescription', 'carousel'); box.setAttribute('aria-label', 'Testimonials');
-      box.innerHTML = `<div class="deck" data-reveal tabindex="0">${list.map(card).join('')}</div>
-        <div class="deck-ui" data-reveal>
-          <span class="deck-n"><b>01</b> / ${String(n).padStart(2, '0')}</span>
-          <div class="deck-dots" role="tablist">${list.map((t, i) => `<button type="button" role="tab" aria-label="Show ${esc(t.name || 'testimonial ' + (i + 1))}"><i></i></button>`).join('')}</div>
-          <div class="deck-arrows"><button type="button" class="deck-prev" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><button type="button" class="deck-next" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
-        </div>`;
-      const deck = $('.deck', box), cards = $$('.tq', deck), dots = $$('.deck-dots button', box), num = $('.deck-n b', box);
+      box.innerHTML = `<div class="sn-track" tabindex="0" data-reveal>${list.map(card).join('')}</div>
+        <div class="sn-ui" data-reveal><button type="button" class="sn-ar" data-d="-1" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="sn-dots">${list.map((t, i) => `<button type="button" aria-label="Show ${esc(t.name || 'testimonial ' + (i + 1))}"></button>`).join('')}</div>
+        <button type="button" class="sn-ar" data-d="1" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>`;
+      const tr = $('.sn-track', box), cs = $$('.hc', tr), ds = $$('.sn-dots button', box);
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let cur = 0, timer = 0, paused = false, dir = 1;
-      const fit = () => { deck.style.height = Math.max(...cards.map((c) => c.offsetHeight)) + 'px'; };
-      const show = (k, d = 1) => {
-        dir = d; cur = (k + n) % n;
-        cards.forEach((c, i) => {
-          const pos = (i - cur + n) % n;
-          let v = pos <= 2 ? String(pos) : 'hide';
-          if (n > 2 && pos === n - 1) v = 'prev';
-          c.dataset.pos = v; c.dataset.dir = dir > 0 ? 'f' : 'b';
-          c.setAttribute('aria-hidden', String(pos !== 0)); c.inert = pos !== 0;
-        });
-        dots.forEach((b, i) => { b.classList.toggle('on', i === cur); b.setAttribute('aria-selected', String(i === cur)); });
-        num.textContent = String(cur + 1).padStart(2, '0');
-        restart();
+      let cur = 0, timer = 0, hold = false, onScreen = false;
+      const go = (k, smooth = true) => { cur = (k + n) % n; const c = cs[cur]; tr.scrollTo({ left: c.offsetLeft - (tr.clientWidth - c.offsetWidth) / 2, behavior: smooth && !reduce ? 'smooth' : 'auto' }); arm(); };
+      const mark = () => {
+        const mid = tr.scrollLeft + tr.clientWidth / 2; let best = 0, d = 1e9;
+        cs.forEach((c, i) => { const x = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid); if (x < d) { d = x; best = i; } });
+        cur = best;
+        cs.forEach((c, i) => { c.classList.toggle('on', i === best); c.setAttribute('aria-hidden', String(i !== best)); });
+        ds.forEach((b, i) => { b.classList.toggle('on', i === best); b.setAttribute('aria-current', String(i === best)); });
       };
-      const restart = () => {
-        clearTimeout(timer);
-        box.classList.remove('run'); void box.offsetWidth;
-        if (reduce || paused) return;
-        box.classList.add('run'); timer = setTimeout(() => show(cur + 1, 1), 6000);
-      };
-      const pause = (v) => { paused = v; box.classList.toggle('paused', v); restart(); };
-      $('.deck-next', box).addEventListener('click', () => show(cur + 1, 1));
-      $('.deck-prev', box).addEventListener('click', () => show(cur - 1, -1));
-      dots.forEach((b, i) => b.addEventListener('click', () => show(i, i >= cur ? 1 : -1)));
-      deck.addEventListener('click', (e) => { const c = e.target.closest('.tq'); if (c && c.dataset.pos !== '0') show(+c.dataset.i, 1); });
-      deck.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') { e.preventDefault(); show(cur + 1, 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); show(cur - 1, -1); } });
+      const arm = () => { clearTimeout(timer); if (!reduce && !hold && onScreen && !document.hidden) timer = setTimeout(() => go(cur + 1), 5000); };
+      let raf = 0; tr.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(mark); }, { passive: true });
+      $$('.sn-ar', box).forEach((b) => b.addEventListener('click', () => go(cur + +b.dataset.d)));
+      ds.forEach((b, i) => b.addEventListener('click', () => go(i)));
+      cs.forEach((c, i) => c.addEventListener('click', () => { if (i !== cur && !moved) go(i); }));
+      tr.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); go(cur + (e.key === 'ArrowRight' ? 1 : -1)); } });
+      /* drag with the mouse (touch scrolls natively) */
+      let sx = null, sl = 0, moved = false;
+      tr.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; sx = e.clientX; sl = tr.scrollLeft; moved = false; tr.classList.add('drag'); });
+      addEventListener('pointermove', (e) => { if (sx === null) return; const dx = e.clientX - sx; if (Math.abs(dx) > 3) moved = true; tr.scrollLeft = sl - dx; });
+      addEventListener('pointerup', (e) => { if (sx === null) return; const dx = e.clientX - sx; tr.classList.remove('drag'); sx = null; go(Math.abs(dx) > 50 ? cur : cur); setTimeout(() => { moved = false; }, 0); });
+      const pause = (v) => { hold = v; arm(); };
       box.addEventListener('mouseenter', () => pause(true)); box.addEventListener('mouseleave', () => pause(false));
       box.addEventListener('focusin', () => pause(true)); box.addEventListener('focusout', (e) => { if (!box.contains(e.relatedTarget)) pause(false); });
-      document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else restart(); });
-      /* swipe / drag */
-      let sx = null, dx = 0;
-      deck.addEventListener('pointerdown', (e) => { sx = e.clientX; dx = 0; });
-      addEventListener('pointermove', (e) => { if (sx === null) return; dx = e.clientX - sx; const f = cards[cur]; if (Math.abs(dx) > 4) { f.style.transition = 'none'; f.style.transform = `translateX(${dx}px) rotate(${dx / 40}deg)`; } });
-      addEventListener('pointerup', () => { if (sx === null) return; const f = cards[cur]; f.style.transition = ''; f.style.transform = ''; if (Math.abs(dx) > 60) show(cur + (dx < 0 ? 1 : -1), dx < 0 ? 1 : -1); sx = null; });
-      /* only run while on screen */
-      new IntersectionObserver(([en]) => { if (en.isIntersecting) { if (!paused) restart(); } else clearTimeout(timer); }).observe(box);
-      fit(); addEventListener('resize', fit); if (document.fonts) document.fonts.ready.then(fit);
-      show(0);
+      tr.addEventListener('touchstart', () => pause(true), { passive: true }); tr.addEventListener('touchend', () => setTimeout(() => pause(false), 2500), { passive: true });
+      document.addEventListener('visibilitychange', arm);
+      new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; arm(); }).observe(box);
+      requestAnimationFrame(() => { go(0, false); mark(); });
+      addEventListener('resize', () => go(cur, false));
     }
     sec.hidden = false;
     scan(sec);

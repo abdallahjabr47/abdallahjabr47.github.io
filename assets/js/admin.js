@@ -555,7 +555,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
   function repRow(kind, a = {}) {
     if (kind === 'process') return riCard('Step', `<label class="f">Step name<input class="ri-title" data-r="title" value="${esc(a.title || '')}" placeholder="e.g. Research"></label><label class="f">Description<textarea data-r="desc" rows="2" placeholder="What happened in this step">${esc(a.desc || '')}</textarea></label>`);
     if (kind === 'challenges') return riCard('Challenge', `<div class="ri-2"><label class="f">Challenge<textarea data-r="challenge" rows="2" placeholder="What was hard">${esc(a.challenge || '')}</textarea></label><label class="f">Solution<textarea data-r="solution" rows="2" placeholder="How you solved it">${esc(a.solution || '')}</textarea></label></div>`);
-    if (kind === 'testimonials') return riCard('Testimonial', `<label class="f">Quote<textarea data-r="quote" rows="2" placeholder="What they said about working with you">${esc(a.quote || '')}</textarea></label><div class="ri-2"><label class="f">Name<input data-r="name" value="${esc(a.name || '')}" placeholder="Full name"></label><label class="f">Role &amp; company<input data-r="role" value="${esc(a.role || '')}" placeholder="CTO, Homyt"></label></div>`);
+    if (kind === 'testimonials') return riCard('Testimonial', `<label class="f">Quote<textarea data-r="quote" rows="2" placeholder="What they said about working with you">${esc(a.quote || '')}</textarea></label><div class="ri-2"><label class="f">Name<input data-r="name" value="${esc(a.name || '')}" placeholder="Full name"></label><label class="f">Role &amp; company<input data-r="role" value="${esc(a.role || '')}" placeholder="CTO, Homyt"></label></div><div class="f"><span>Profile photo <small>(optional, square works best)</small></span><div class="rec-img t-photo">${recImgHTML(a.image || '')}</div></div>`);
     if (kind === 'recognition') {
       const K = [['certificate', 'Certificate'], ['education', 'Degree / education'], ['award', 'Hackathon, award or fellowship'], ['leadership', 'Leadership & community']];
       const KL = { certificate: 'Certificate', education: 'Degree', award: 'Award', leadership: 'Leadership' };
@@ -1314,15 +1314,16 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
     wrap.innerHTML = recImgHTML(path);
     const mini = wrap.closest('.rec-row') && $('.rr-mini', wrap.closest('.rec-row')); if (mini) mini.style.backgroundImage = path ? `url('${imgURL(path)}')` : '';
   };
-  form.addEventListener('click', (e) => { const b = e.target.closest('[data-rec-rm]'); if (!b) return; const w = b.closest('.rec-img'); sure('Remove the certificate image?').then((y) => { if (y) { drawRecImg(w, ''); setDirty(true); } }); });
+  form.addEventListener('click', (e) => { const b = e.target.closest('[data-rec-rm]'); if (!b) return; const w = b.closest('.rec-img'); sure(b.closest('.t-photo') ? 'Remove the profile photo?' : 'Remove the certificate image?').then((y) => { if (y) { drawRecImg(w, ''); setDirty(true); } }); });
   form.addEventListener('change', async (e) => {
     const input = e.target;
     if (input.classList && input.classList.contains('rec-file') && input.files.length) {
       const file = input.files[0], wrap = input.closest('.rec-img');
       try {
-        const { b64, url, ext } = await processImage(file, 1600);
-        const name = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40) || 'certificate';
-        const path = `${CFG.imagesPath || 'assets/uploads'}/certs/${Date.now().toString(36)}-${name}.${ext}`;
+        const isP = !!wrap.closest('.t-photo');
+        const { b64, url, ext } = await processImage(file, isP ? 400 : 1600);
+        const name = file.name.replace(/\.[^.]+$/, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40) || (isP ? 'photo' : 'certificate');
+        const path = `${CFG.imagesPath || 'assets/uploads'}/${isP ? 'testimonials' : 'certs'}/${Date.now().toString(36)}-${name}.${ext}`;
         pending.set(path, b64); previews.set(path, url);
         drawRecImg(wrap, path); setDirty(true);
       } catch (err) { toast('Could not read ' + file.name); }
