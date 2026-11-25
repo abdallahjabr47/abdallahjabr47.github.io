@@ -334,7 +334,7 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
         <span class="pthumb">${coverMini({ title: p.title, tint: p.cover && p.cover.tint, dev: projDev(p), shot: projShot(p, projDev(p)), phone: projDev(p) === 'desktop' && (p.devices || {}).mobile ? projShot(p, 'mobile') : undefined, style: 'l' })}</span>
         ${icn(p)}
         <span class="t"><b>${esc(p.title || 'Untitled')}</b><small><span class="lb lb-${p.type || 'mobile'}">${KIND_LABEL[p.type || 'mobile']}</span>${p.category ? ` <span class="pcat">${esc(p.category.split('·')[0].trim())}</span>` : ''}</small></span>
-        <span class="bdgs">${shown ? '' : '<span class="badge-d">Hidden</span>'}${p.status === 'Coming soon' ? '<span class="badge-d">Coming soon</span>' : ''}</span>
+        <span class="bdgs">${shown ? '' : '<span class="badge-d hid"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 6.1A10 10 0 0 1 12 6c5 0 9 4.5 10 6a17 17 0 0 1-3.2 3.7M6.2 7.6C4.1 9 2.6 11 2 12c1 1.5 5 6 10 6 1.6 0 3-.4 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>Hidden</span>'}${p.status === 'Coming soon' ? '<span class="badge-d soon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Coming soon</span>' : ''}</span>
         <span class="acts">
           ${shown ? iconBtn('toggle', i, IC.hide, 'Hide from the website', 'hide') : iconBtn('toggle', i, IC.show, 'Show on the website', 'show')}
           ${iconBtn('edit', i, IC.edit, 'Edit', 'edit')}${iconBtn('del', i, IC.del, 'Delete', 'danger')}
@@ -840,7 +840,13 @@ if (window.top !== window.self) { document.documentElement.innerHTML = ''; throw
   let wtUnbind = null;
   /* the page structure is read once and kept: switching tabs never waits for the network again */
   let idxDocP = null;
-  const getIdxDoc = () => idxDocP || (idxDocP = fetch('index.html?v=' + Date.now(), { cache: 'no-store' }).then((r) => r.text()).then((t) => new DOMParser().parseFromString(t, 'text/html')).catch((e) => { idxDocP = null; throw e; }));
+  /* page text lives on two pages: the home page, and How I work (Product, Principles, Skills, Design system) */
+  const loadDoc = (u) => fetch(u + '?v=' + Date.now(), { cache: 'no-store' }).then((r) => r.text()).then((t) => new DOMParser().parseFromString(t, 'text/html'));
+  const getIdxDoc = () => idxDocP || (idxDocP = Promise.all([loadDoc('index.html'), loadDoc('how-i-work.html').catch(() => null)]).then(([doc, hiw]) => {
+    const main = doc.querySelector('main'), hm = hiw && hiw.querySelector('main');
+    if (main && hm) Array.from(hm.children).forEach((s) => { if (!s.classList.contains('hiw-top')) main.appendChild(doc.importNode(s, true)); });
+    return doc;
+  }).catch((e) => { idxDocP = null; throw e; }));
   async function openContentEditor(host) {
     if (!host) { editing = 0; mode = 'content'; embedPanel('content', 'Website <em class="serif">text</em>'); }
     const form = $('#edForm');
