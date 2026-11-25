@@ -2371,3 +2371,4 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 .sec-head.testi-head{display:flex;justify-content:center;text-align:center}.sec-head.testi-head .left{max-width:none;margin:0 auto}
 .testi.few .hc{width:min(700px,100%)}
 .testi.few .hc{width:min(610px,100%)}
+.testi .who img,.testi .who .av{box-shadow:none}
