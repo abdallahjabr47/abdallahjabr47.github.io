@@ -2185,3 +2185,4 @@ html.hiw-lock{overflow:hidden}
 .pcard.art.is-rtl .ta-ghost{font-family:'Cairo','Alexandria',sans-serif;font-weight:900;line-height:1;font-size:min(96px,20cqw)}
 .ghost.cs-rtl,.cs-idt-h[dir=rtl],.pcard.is-rtl .pc-head h3{font-family:'Cairo','Alexandria',sans-serif;font-weight:800}
 .pcard.art.is-rtl .ta-ghost{line-height:1.2}
+.hiw-card{position:relative;overflow:hidden}.hiw-card>*{position:relative;z-index:1}
