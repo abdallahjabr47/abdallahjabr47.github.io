@@ -2186,7 +2186,3 @@ html.hiw-lock{overflow:hidden}
 .ghost.cs-rtl,.cs-idt-h[dir=rtl],.pcard.is-rtl .pc-head h3{font-family:'Cairo','Alexandria',sans-serif;font-weight:800}
 .pcard.art.is-rtl .ta-ghost{line-height:1.2}
 .hiw-card{position:relative;overflow:hidden}.hiw-card>*{position:relative;z-index:1}
-/* cover: name sits above the devices, never behind their screens */
-.cs-cover .ghost{top:clamp(28px,6%,56px);font-size:clamp(52px,9.5vw,150px)}
-.cs-cover .devices{transform:translateY(clamp(60px,11%,110px))}
-@media (max-width:720px){.cs-cover .devices{transform:translateY(30px)}}
