@@ -2082,7 +2082,7 @@
     "role": "Designer & Product",
     "team": "Solo, working with Claude",
     "timeline": "1 week",
-    "overview": "I wanted a portfolio that shows how products work, not only how they look. I designed the website and an admin panel for it, then built them with Claude: I set the direction, the design system and the rules, and reviewed every change with previews before it went live. The site has a home page, a work gallery and case studies with live previews, interactive demos, walkthrough videos and design viewers. The admin edits every section and project and publishes straight to GitHub. I also wrote custom skills, such as one that interviews me before adding a project and applies the same standard every time.",
+    "overview": "I wanted a portfolio that shows how products work, not only how they look. I designed the website and an admin panel for it, then built them with Claude: I set the direction, the design system and the rules, and reviewed every change with previews before it went live. The site has a home page with a hero card and a short What I do, a How I work section that opens in a dialog, a work gallery and case studies with live previews, interactive demos, walkthrough videos and design viewers. Projects that are not ready yet can stay on the page as Coming soon. The admin edits every section and project and publishes straight to GitHub. I also wrote custom skills, such as one that interviews me before adding a project and applies the same standard every time.",
     "problem": "A portfolio goes stale when every update needs code, and case studies made of static screenshots don’t show how a product actually works.",
     "responsibilities": {
       "product": [
@@ -2092,8 +2092,9 @@
         "Reviewed every change with previews before publishing"
       ],
       "design": [
-        "Design system: dark theme, one blue accent, glass cards and an Arabic calligraphy logo",
+        "Design system: dark and light themes, one cobalt-blue accent, Manrope type, glass cards and an Arabic calligraphy logo",
         "Home, work and case-study pages for phone and desktop",
+        "Hero card with rotating lines, What I do above the projects, and a How I work dialog",
         "Live preview, In action demos, video and design viewers",
         "Admin: section editor, project editor, uploads and missing-info markers",
         "Phone screens kept at 375 × 812, the same size as my Figma designs"
@@ -2148,19 +2149,21 @@
     "icon": "assets/uploads/portfolio-site/icon.webp",
     "screens": [
       "assets/uploads/portfolio-site/01-home-phone.jpg",
-      "assets/uploads/portfolio-site/02-admin-login.webp",
-      "assets/uploads/portfolio-site/03-admin-home.webp",
-      "assets/uploads/portfolio-site/04-admin-list.webp",
-      "assets/uploads/portfolio-site/05-admin-edit.webp",
-      "assets/uploads/portfolio-site/06-case.webp"
+      "assets/uploads/portfolio-site/02-work-phone.jpg",
+      "assets/uploads/portfolio-site/03-case.webp",
+      "assets/uploads/portfolio-site/04-admin-login.webp",
+      "assets/uploads/portfolio-site/05-admin-home.webp",
+      "assets/uploads/portfolio-site/06-admin-list.webp",
+      "assets/uploads/portfolio-site/07-admin-edit.webp"
     ],
     "webScreens": [
       "assets/uploads/portfolio-site/web-01-home.jpg",
-      "assets/uploads/portfolio-site/web-02-admin-login.webp",
-      "assets/uploads/portfolio-site/web-03-admin-home.webp",
-      "assets/uploads/portfolio-site/web-04-admin-list.webp",
-      "assets/uploads/portfolio-site/web-05-admin-edit.webp",
-      "assets/uploads/portfolio-site/web-06-case.webp"
+      "assets/uploads/portfolio-site/web-02-work.jpg",
+      "assets/uploads/portfolio-site/web-03-case.webp",
+      "assets/uploads/portfolio-site/web-04-admin-login.webp",
+      "assets/uploads/portfolio-site/web-05-admin-home.webp",
+      "assets/uploads/portfolio-site/web-06-admin-list.webp",
+      "assets/uploads/portfolio-site/web-07-admin-edit.webp"
     ],
     "tabletScreens": [],
     "featured": false,

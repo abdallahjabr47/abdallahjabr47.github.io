@@ -235,7 +235,7 @@
         <div class="gallery" id="gallery"></div>`);
     }
     const dvs = (p.devices && (p.devices.mobile || p.devices.tablet || p.devices.desktop)) ? p.devices : { mobile: type !== 'web', tablet: false, desktop: type !== 'mobile' };
-    const sets = [['mobile', p.screens], ['tablet', p.tabletScreens], ['desktop', p.webScreens]].filter(([k, l]) => dvs[k] && Array.isArray(l) && l.filter(Boolean).length).map(([k, l]) => [k, l.filter(Boolean)]);
+    const sets = [['desktop', p.webScreens], ['tablet', p.tabletScreens], ['mobile', p.screens]].filter(([k, l]) => dvs[k] && Array.isArray(l) && l.filter(Boolean).length).map(([k, l]) => [k, l.filter(Boolean)]);
     if (sets.length) {
       add('screens', 'All screens', `
         <div class="gal-head"><div style="display:flex;flex-direction:column;gap:16px"><span class="k" data-reveal>%N% · EVERY SCREEN</span><h2 class="h-md" data-split>Across <em class="serif">devices</em></h2></div>
