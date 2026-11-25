@@ -9,7 +9,15 @@
   "github": "",
   "cv": "assets/cv-mwo8m07w.pdf",
   "availability": "",
-  "testimonials": [],
+  "testimonials": [
+    {
+      "quote": "I trained Abdallah during the Skills for Success Program at AMIDEAST, where he stood out as one of the most committed participants and was selected to travel to the United States for a bootcamp. Eager to learn and passionate about UI/UX and product, he turns feedback into real progress. He is hardworking, persistent, and a positive team player.",
+      "name": "Afnan Mahmoud",
+      "role": "Freelance consultant & trainer",
+      "url": "https://www.instagram.com/afnanym/",
+      "image": "assets/uploads/testimonials/afnan-mahmoud.webp"
+    }
+  ],
   "recognition": [
     {
       "kind": "education",

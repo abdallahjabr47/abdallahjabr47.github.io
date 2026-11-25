@@ -570,50 +570,22 @@
       <figure class="hc" data-i="${i}"${n > 1 ? ` role="group" aria-roledescription="slide" aria-label="${i + 1} of ${n}"` : ''}>
         <span class="qm" aria-hidden="true">“</span>
         <blockquote>${esc(t.quote)}</blockquote>
-        <figcaption class="who">${t.image ? `<img src="${esc(t.image)}" alt="" loading="lazy" decoding="async">` : `<span class="av" aria-hidden="true">${ini(t)}</span>`}<span><b>${esc(t.name || '')}</b><small>${esc(t.role || '')}</small></span></figcaption>
+        <figcaption class="who">${t.image ? `<img src="${esc(t.image)}" alt="" loading="lazy" decoding="async">` : `<span class="av" aria-hidden="true">${ini(t)}</span>`}<span><b>${t.url ? `<a href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.name || '')}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>` : esc(t.name || '')}</b><small>${esc(t.role || '')}</small></span></figcaption>
       </figure>`;
-    if (n === 1) { box.className = 'testi one'; box.innerHTML = card(list[0], 0); box.firstElementChild.setAttribute('data-reveal', ''); }
-    else {
-      /* swipe carousel: the centred card is active, it moves on its own; arrows, dots, drag, swipe and keys to switch */
-      box.className = 'testi sn';
-      box.setAttribute('aria-roledescription', 'carousel'); box.setAttribute('aria-label', 'Testimonials');
-      box.innerHTML = `<div class="sn-track" tabindex="0" data-reveal>${list.map(card).join('')}</div>
-        <div class="sn-ui" data-reveal><button type="button" class="sn-ar" data-d="-1" aria-label="Previous"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
-        <div class="sn-dots">${list.map((t, i) => `<button type="button" aria-label="Show ${esc(t.name || 'testimonial ' + (i + 1))}"></button>`).join('')}</div>
-        <button type="button" class="sn-ar" data-d="1" aria-label="Next"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>`;
-      const tr = $('.sn-track', box), cs = $$('.hc', tr), ds = $$('.sn-dots button', box);
-      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let cur = 0, timer = 0, hold = false, onScreen = false;
-      const go = (k, smooth = true) => { cur = (k + n) % n; const c = cs[cur]; tr.scrollTo({ left: c.offsetLeft - (tr.clientWidth - c.offsetWidth) / 2, behavior: smooth && !reduce ? 'smooth' : 'auto' }); arm(); };
-      const mark = () => {
-        const mid = tr.scrollLeft + tr.clientWidth / 2; let best = 0, d = 1e9;
-        cs.forEach((c, i) => { const x = Math.abs(c.offsetLeft + c.offsetWidth / 2 - mid); if (x < d) { d = x; best = i; } });
-        cur = best;
-        cs.forEach((c, i) => { c.classList.toggle('on', i === best); c.setAttribute('aria-hidden', String(i !== best)); });
-        ds.forEach((b, i) => { b.classList.toggle('on', i === best); b.setAttribute('aria-current', String(i === best)); });
-      };
-      const arm = () => { clearTimeout(timer); if (!reduce && !hold && onScreen && !document.hidden) timer = setTimeout(() => go(cur + 1), 5000); };
-      let raf = 0; tr.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(mark); }, { passive: true });
-      $$('.sn-ar', box).forEach((b) => b.addEventListener('click', () => go(cur + +b.dataset.d)));
-      ds.forEach((b, i) => b.addEventListener('click', () => go(i)));
-      cs.forEach((c, i) => c.addEventListener('click', () => { if (i !== cur && !moved) go(i); }));
-      tr.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); go(cur + (e.key === 'ArrowRight' ? 1 : -1)); } });
-      /* drag with the mouse (touch scrolls natively) */
-      let sx = null, sl = 0, moved = false;
-      tr.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; sx = e.clientX; sl = tr.scrollLeft; moved = false; tr.classList.add('drag'); });
-      addEventListener('pointermove', (e) => { if (sx === null) return; const dx = e.clientX - sx; if (Math.abs(dx) > 3) moved = true; tr.scrollLeft = sl - dx; });
-      addEventListener('pointerup', (e) => { if (sx === null) return; const dx = e.clientX - sx; tr.classList.remove('drag'); sx = null; go(Math.abs(dx) > 50 ? cur : cur); setTimeout(() => { moved = false; }, 0); });
-      /* the visitor stops on it (hover, touch, click, keys): stay still until they scroll the page up or down */
-      let stopY = null;
-      const stop = () => { hold = true; stopY = scrollY; clearTimeout(timer); };
-      box.addEventListener('mouseenter', stop); box.addEventListener('focusin', stop);
-      tr.addEventListener('pointerdown', stop); tr.addEventListener('touchstart', stop, { passive: true });
-      $$('button', box).forEach((b) => b.addEventListener('click', stop));
-      addEventListener('scroll', () => { if (hold && stopY !== null && Math.abs(scrollY - stopY) > 140 && !box.matches(':hover')) { hold = false; stopY = null; arm(); } }, { passive: true });
-      document.addEventListener('visibilitychange', arm);
-      new IntersectionObserver(([en]) => { onScreen = en.isIntersecting; arm(); }).observe(box);
-      requestAnimationFrame(() => { go(0, false); mark(); });
-      addEventListener('resize', () => go(cur, false));
+    if (n < 2) {
+      /* one: a still, centred card */
+      box.className = 'testi few'; box.innerHTML = list.map(card).join('');
+      $$('.hc', box).forEach((c) => c.setAttribute('data-reveal', ''));
+    } else {
+      /* two or more: one row gliding sideways; hover pauses, a click holds it */
+      const reps = Math.max(1, Math.ceil(6 / n));
+      const set = Array.from({ length: reps }, (_, r) => list.map((t, i) => card(t, i)).join('')).join('');
+      box.className = 'testi mq';
+      box.innerHTML = `<div class="mq-row" style="--dur:${n * reps * 9}s"><div class="mq-set">${set}</div><div class="mq-set" aria-hidden="true">${set}</div></div>`;
+      $$('.mq-set[aria-hidden] .hc', box).forEach((c) => { c.removeAttribute('role'); $$('a', c).forEach((x) => x.tabIndex = -1); });
+      box.addEventListener('click', (e) => { if (e.target.closest('a')) return; box.classList.toggle('held'); });
+      box.addEventListener('focusin', () => box.classList.add('held'));
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) box.classList.add('held');
     }
     sec.hidden = false;
     scan(sec);

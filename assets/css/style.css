@@ -2341,3 +2341,31 @@ html:has(.lightbox.open) .cursor-dot,html:has(.lightbox.open) .cursor-ring,html.
 .sn-track{-webkit-mask:linear-gradient(90deg,transparent 0,transparent 18%,#000 36%,#000 64%,transparent 82%,transparent 100%);mask:linear-gradient(90deg,transparent 0,transparent 18%,#000 36%,#000 64%,transparent 82%,transparent 100%)}
 .sn-track .hc:not(.on){opacity:.28}
 @media (max-width:640px){.sn-track{-webkit-mask:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);mask:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%)}}
+/* single testimonial: wide feature card */
+.testi.one .hc{width:auto;max-width:none;padding:clamp(30px,4vw,48px) clamp(28px,4.5vw,56px);gap:28px}
+.testi.one .hc blockquote{font-size:clamp(18px,1.6vw,22px);line-height:1.7}
+.testi.one .hc .qm{font-size:170px;top:-30px;right:30px}
+.testi .who b a{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.testi .who b a svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.2;opacity:.55;transition:opacity .2s,transform .2s}
+.testi .who b a:hover{color:var(--sky)}.testi .who b a:hover svg{opacity:1;transform:translate(2px,-2px)}
+.testi.one{max-width:none}.testi.one .hc blockquote{max-width:1040px}
+/* ---------- testimonials v3: centred heading, two-row marquee (Dribbble-style) ---------- */
+.testi-head{justify-content:center;text-align:center}.testi-head .left{display:flex;flex-direction:column;align-items:center}
+.testi .hc{width:380px;padding:26px 26px 22px;gap:18px;border-radius:20px}
+.testi .hc .qm{position:static;font:700 54px/.6 Georgia,serif;color:var(--sky);opacity:.9;height:22px}
+.testi .hc blockquote{font-size:15.5px;line-height:1.65;color:var(--ink2)}
+.testi .who img,.testi .who .av{width:42px;height:42px}
+.testi.few{display:flex;justify-content:center;flex-wrap:wrap;gap:20px;max-width:none}
+.testi.few .hc{width:min(560px,100%)}
+.testi.few .hc blockquote{font-size:16.5px}
+.testi.mq{display:flex;flex-direction:column;gap:20px;margin-inline:calc(50% - 50vw);width:100vw;max-width:none;-webkit-mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+.mq-row{display:flex;width:max-content;animation:mqMove var(--dur,40s) linear infinite}
+.mq-row.rev{animation-direction:reverse}
+.mq-set{display:flex;gap:20px;padding-right:20px}
+.testi.mq:hover .mq-row,.testi.mq.held .mq-row{animation-play-state:paused}
+.testi.mq .hc{transition:transform .35s var(--ease),border-color .35s,box-shadow .35s}
+.testi.mq .hc:hover{transform:translateY(-4px);border-color:rgb(79 134 230 / .45);box-shadow:0 24px 50px -24px rgb(79 134 230 / .45)}
+@keyframes mqMove{to{transform:translateX(-50%)}}
+@media (max-width:640px){.testi .hc{width:290px;padding:22px 20px 18px}.testi.few .hc{width:100%}}
+@media (prefers-reduced-motion:reduce){.mq-row{animation:none}}
+.sec-head.testi-head{display:flex;justify-content:center;text-align:center}.sec-head.testi-head .left{max-width:none;margin:0 auto}
