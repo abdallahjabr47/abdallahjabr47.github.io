@@ -2143,3 +2143,9 @@ html.embed section[data-grp]:first-of-type,html.embed section[data-grp]{padding-
 .hiw-panel iframe{flex:1;width:100%;border:0;background:var(--bg)}
 html.hiw-lock{overflow:hidden}
 @media (max-width:640px){.hiw-panel{height:92vh;border-radius:20px}}
+.hx-who{align-items:flex-start}
+.hx-av{width:100px;height:100px;border:0;box-shadow:none;margin-top:-4px}
+.hx-who b{line-height:1.15}
+.hx-who small{margin-top:0;line-height:1.35}
+.hx-who .hx-links{margin-top:14px}
+@media (max-width:860px){.hx-av{width:76px;height:76px}}
