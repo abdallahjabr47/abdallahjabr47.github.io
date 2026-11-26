@@ -51,6 +51,17 @@
     ]
   },
   {
+    "id": "pgf",
+    "visible": true,
+    "role": "Teacher Assistant & IT Coordinator",
+    "company": "Paltel Group Foundation",
+    "location": "Ramallah, Palestine",
+    "dates": "Jul 2018 — Nov 2022",
+    "type": "Part-time",
+    "summary": "Mentored 80+ high school students in programming and web development through Code for Palestine, and owned IT coordination for PGF's coding and entrepreneurship programs.",
+    "highlights": []
+  },
+  {
     "id": "edtech",
     "visible": true,
     "role": "Artificial Intelligence Trainer",
@@ -59,17 +70,6 @@
     "dates": "Jun 2021 — Feb 2022",
     "type": "Part-time",
     "summary": "Co-delivered a coding bootcamp with a UK Computer Science specialist, teaching programming and game development (Scratch, Micro:bit) to 30+ students across 2 cohorts.",
-    "highlights": []
-  },
-  {
-    "id": "pgf",
-    "visible": true,
-    "role": "Teacher Assistant & IT Coordinator",
-    "company": "Paltel Group Foundation",
-    "location": "Ramallah, Palestine",
-    "dates": "Jul 2018 — Nov 2022",
-    "type": "Part-time",
-    "summary": "Mentored 80+ high-school students in programming and web development through Code for Palestine, and owned IT coordination for PGF's programs.",
     "highlights": []
   },
   {
