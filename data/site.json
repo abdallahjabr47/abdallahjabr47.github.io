@@ -14,20 +14,22 @@
       "quote": "One of the most committed participants in AMIDEAST’s Skills for Success Program, Abdallah was selected for a bootcamp in the United States. Curious, persistent, hardworking, a valuable team player, genuinely positive with the people around him, and quick to act on feedback, he brings real passion to UI/UX and product.",
       "name": "Afnan Mahmoud",
       "role": "Freelance consultant & trainer",
+      "url": "",
       "image": "assets/uploads/testimonials/afnan-mahmoud.webp"
     },
     {
       "quote": "At Homyt, I led the development of two social apps while Abdallah owned product management, UI/UX, and requirements. I worked closely with him; he combines logical thinking with strong product sense and a sharp design eye, and turns complex requirements into intuitive experiences. A reliable, valuable teammate and an addition to any team.",
       "name": "Layth Abufarha",
       "role": "Software Engineering Lead",
+      "url": "",
       "image": "assets/uploads/testimonials/layth-abufarha.webp"
     }
   ],
   "recognition": [
     {
       "kind": "education",
-      "year": "2018 — 2022",
       "title": "B.Sc. Computer Science",
+      "year": "2018 — 2022",
       "org": "Birzeit University",
       "link": "",
       "image": "",
@@ -35,8 +37,8 @@
     },
     {
       "kind": "certificate",
-      "year": "2024",
       "title": "Google UX Design Professional Certificate",
+      "year": "2024",
       "org": "Google · Online",
       "link": "https://coursera.org/verify/professional-cert/OG33YPLM15K1",
       "image": "assets/uploads/certs/google-ux.webp",
@@ -44,8 +46,8 @@
     },
     {
       "kind": "certificate",
-      "year": "2023",
       "title": "Front-end Development with React",
+      "year": "2023",
       "org": "Gaza Sky Geeks · Nablus",
       "link": "https://drive.google.com/file/d/1t72JJkfJUiSb18QiIg7W8_ktQV3xmnIc/view",
       "image": "assets/uploads/certs/react.webp",
@@ -53,8 +55,8 @@
     },
     {
       "kind": "certificate",
-      "year": "2022",
       "title": "Employability & Business English Training",
+      "year": "2022",
       "org": "Amideast · Ramallah",
       "link": "https://drive.google.com/file/d/12ZXlfF_49Y7wtqUCwGxIbVtGEs36c4sl/view",
       "image": "assets/uploads/certs/amideast.webp",
@@ -62,8 +64,8 @@
     },
     {
       "kind": "certificate",
-      "year": "2021",
       "title": "Google Digital & Social Media Marketing",
+      "year": "2021",
       "org": "Google · Online",
       "link": "",
       "image": "assets/uploads/certs/google-digital.webp",
@@ -71,8 +73,8 @@
     },
     {
       "kind": "award",
-      "year": "2019",
       "title": "KOICA Startup Support Program Global Hackathon",
+      "year": "2019",
       "org": "KOICA · Seoul, South Korea",
       "link": "https://drive.google.com/file/d/1nGaOxUThLWoWMY1iMhFc-RccyKNOqvex/view",
       "image": "assets/uploads/certs/koica.webp",
@@ -80,8 +82,8 @@
     },
     {
       "kind": "award",
-      "year": "2022",
       "title": "Professional Development Immersion Program",
+      "year": "2022",
       "org": "Amideast & Legacy International · Washington, D.C. / New York",
       "link": "https://drive.google.com/file/d/1p3YQfrs35-vt9l5rmg8w8ufdvuGRrDcy/view",
       "image": "assets/uploads/certs/pdip.webp",
@@ -89,8 +91,8 @@
     },
     {
       "kind": "award",
-      "year": "2015 — 2017",
       "title": "Code for Palestine Graduate",
+      "year": "2015 — 2017",
       "org": "Paltel Group Foundation · 3-year tech program",
       "link": "",
       "image": "assets/uploads/certs/code-for-palestine.webp",
@@ -98,8 +100,8 @@
     },
     {
       "kind": "leadership",
-      "year": "2022 — 2024",
       "title": "Co-founder, Birzeit Hub",
+      "year": "2022 — 2024",
       "org": "Global Shapers · World Economic Forum",
       "link": "",
       "image": "",
@@ -107,8 +109,8 @@
     },
     {
       "kind": "leadership",
-      "year": "2021 — 2022",
       "title": "Designer, Marketing Team",
+      "year": "2021 — 2022",
       "org": "Google Developer Student Clubs · Birzeit University",
       "link": "",
       "image": "",
