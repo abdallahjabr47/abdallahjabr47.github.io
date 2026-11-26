@@ -75,13 +75,15 @@
   {
     "id": "gsg",
     "visible": true,
-    "role": "Front-end Development with React — Intern",
+    "role": "Front-end Developer Intern (React)",
     "company": "Gaza Sky Geeks",
     "location": "Ramallah, Palestine",
     "dates": "Feb 2023 — Jun 2023",
     "type": "Internship",
     "summary": "Built full-stack projects with React, including a Spotify clone powered by the Spotify Web API.",
-    "highlights": []
+    "highlights": [
+      "Completed a 300-hour intensive program, building full-stack projects with a React front end, including a Spotify clone integrated with the Spotify Web API, and studying back-end and computer science foundations: OOP, data structures, algorithms, databases, design patterns, and system design."
+    ]
   },
   {
     "id": "blue",
