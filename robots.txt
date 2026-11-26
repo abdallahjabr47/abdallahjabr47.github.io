@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /admin.html
 
-Sitemap: https://abdallahjabr47.github.io/sitemap.xml
+Sitemap: https://abdallahjabr.com/sitemap.xml
